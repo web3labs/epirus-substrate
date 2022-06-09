@@ -14,19 +14,19 @@ import SearchBox from "./SearchBox"
 const blockchain = [
   {
     name: "Accounts",
-    description: "Get a better understanding of where your traffic is coming from.",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     href: "#",
     icon: UserIcon
   },
   {
     name: "Contracts",
-    description: "Get a better understanding of where your traffic is coming from.",
+    description: "Pellentesque auctor vehicula justo vitae consectetur.",
     href: "#",
     icon: DocumentReportIcon
   },
   {
     name: "Codes",
-    description: "Get a better understanding of where your traffic is coming from.",
+    description: "Mauris euismod feugiat eros eget mollis.",
     href: "#",
     icon: CodeIcon
   }
