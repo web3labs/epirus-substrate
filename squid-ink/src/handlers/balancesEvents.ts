@@ -1,12 +1,14 @@
 import * as ss58 from "@subsquid/ss58";
 import { EventHandlerContext } from "@subsquid/substrate-processor";
-import { Balance } from "../model";
+import { Account, Balance, Events, Extrinsic } from "../model";
 import { BalancesTransferEvent } from "../types/events";
 import { SystemAccountStorage } from "../types/storage";
-import { getOrCreateAccount } from "./storeUtils"
+import { getOrCreateAccount } from "./storeUtils";
 import { createExtrinsic, createEvent } from "./utils";
 
-export async function balancesTransferEventHandler(ctx: EventHandlerContext): Promise<void> {
+export async function balancesTransferEventHandler(
+  ctx: EventHandlerContext
+): Promise<void> {
   console.log("Got balances transfer event!");
   const { store, block, event, extrinsic } = ctx;
   const ev = new BalancesTransferEvent(ctx);
@@ -21,29 +23,34 @@ export async function balancesTransferEventHandler(ctx: EventHandlerContext): Pr
   const fromBalances = await accountStorage.getAsV100(from);
   const toBalances = await accountStorage.getAsV100(to);
 
-  const fromAcc = await getOrCreateAccount(ctx.store, fromAddress, new Balance({
-    free: fromBalances.data.free,
-    reserved: fromBalances.data.reserved,
-    miscFrozen: fromBalances.data.miscFrozen,
-    feeFrozen: fromBalances.data.feeFrozen
-  }));
+  const fromAcc = await getOrCreateAccount(
+    ctx.store,
+    fromAddress,
+    new Balance({
+      free: fromBalances.data.free,
+      reserved: fromBalances.data.reserved,
+      miscFrozen: fromBalances.data.miscFrozen,
+      feeFrozen: fromBalances.data.feeFrozen,
+    })
+  );
 
-  const toAcc = await getOrCreateAccount(ctx.store, toAddress, new Balance({
-    free: toBalances.data.free,
-    reserved: toBalances.data.reserved,
-    miscFrozen: toBalances.data.miscFrozen,
-    feeFrozen: toBalances.data.feeFrozen
-  }));
+  const toAcc = await getOrCreateAccount(
+    ctx.store,
+    toAddress,
+    new Balance({
+      free: toBalances.data.free,
+      reserved: toBalances.data.reserved,
+      miscFrozen: toBalances.data.miscFrozen,
+      feeFrozen: toBalances.data.feeFrozen,
+    })
+  );
 
-  const entities: any[] = [
-    fromAcc,
-    toAcc
-  ]
+  const entities: Array<Account | Extrinsic | Events> = [fromAcc, toAcc];
 
   if (extrinsic) {
     const extrinsicEntity = createExtrinsic(extrinsic, block);
     const eventEntity = createEvent(extrinsicEntity, event);
-    entities.push(extrinsicEntity, eventEntity)
+    entities.push(extrinsicEntity, eventEntity);
   }
 
   await store.save(entities);

@@ -29,7 +29,8 @@ module.exports = {
     }
   },
   rules: {
-    quotes: [2, "double", { avoidEscape: true }],
-    "jsx-quotes": [2, "prefer-double"]
+    quotes: ["error", "double", { avoidEscape: true }],
+    "jsx-quotes": ["error", "prefer-double"],
+    indent: ["error", 2]
   }
 }

@@ -1,18 +1,21 @@
 import * as ss58 from "@subsquid/ss58";
-import {
-  EventHandlerContext,
-} from "@subsquid/substrate-processor";
+import { EventHandlerContext } from "@subsquid/substrate-processor";
 import { Activity, Contract, ContractCode } from "../model";
-import { ContractsCodeStoredEvent, ContractsInstantiatedEvent } from "../types/events";
-import { 
+import {
+  ContractsCodeStoredEvent,
+  ContractsInstantiatedEvent,
+} from "../types/events";
+import {
   ContractsCodeStorageStorage,
   ContractsContractInfoOfStorage,
-  ContractsOwnerInfoOfStorage
+  ContractsOwnerInfoOfStorage,
 } from "../types/storage";
-import { getOrCreateAccount } from "./storeUtils"
+import { getOrCreateAccount } from "./storeUtils";
 import { createExtrinsic, createEvent, uintArrayToString } from "./utils";
 
-export async function contractsInstantiatedEventHandler(ctx: EventHandlerContext): Promise<void> {
+export async function contractsInstantiatedEventHandler(
+  ctx: EventHandlerContext
+): Promise<void> {
   console.log("Got contracts initiated event!");
   const ev = new ContractsInstantiatedEvent(ctx);
   const { deployer, contract } = ev.asV100;
@@ -35,16 +38,16 @@ export async function contractsInstantiatedEventHandler(ctx: EventHandlerContext
         where: { id: uintArrayToString(contractInfo.codeHash) },
       });
 
-      let contractEntity = new Contract({
+      const contractEntity = new Contract({
         id: contractAddress,
         trieId: contractInfo.trieId,
         account: contractAccount,
         deployer: deployerAccount,
         deployedOn: extrinsicEntity.createdAt,
         createdFrom: extrinsicEntity,
-        contractCode: contractCodeEntity
+        contractCode: contractCodeEntity,
       });
-    
+
       const entities = [
         deployerAccount,
         contractAccount,
@@ -58,9 +61,9 @@ export async function contractsInstantiatedEventHandler(ctx: EventHandlerContext
           to: contractAddress,
           createdAt: extrinsicEntity.createdAt,
           from: extrinsicEntity.signer,
-          args: extrinsicEntity.args
+          args: extrinsicEntity.args,
         }),
-      ]
+      ];
       await store.save(entities);
     } else {
       // TODO: handle no contract info !! :_(
@@ -68,7 +71,9 @@ export async function contractsInstantiatedEventHandler(ctx: EventHandlerContext
   }
 }
 
-export async function contractsCodeStoredEventHandler(ctx: EventHandlerContext): Promise<void> {
+export async function contractsCodeStoredEventHandler(
+  ctx: EventHandlerContext
+): Promise<void> {
   const ev = new ContractsCodeStoredEvent(ctx);
   const { codeHash } = ev.asV100;
   const { extrinsic, store, block, event } = ctx;
@@ -87,15 +92,15 @@ export async function contractsCodeStoredEventHandler(ctx: EventHandlerContext):
       id: uintArrayToString(codeHash),
       code: storageInfo?.code,
       // TODO here the account won't be created...
-      owner: ownerInfo && await getOrCreateAccount(store, ss58.codec("substrate").encode(ownerInfo.owner)),
-      createdFrom: extrinsicEntity
+      owner:
+        ownerInfo &&
+        (await getOrCreateAccount(
+          store,
+          ss58.codec("substrate").encode(ownerInfo.owner)
+        )),
+      createdFrom: extrinsicEntity,
     });
 
-    await store.save([
-      extrinsicEntity,
-      eventEntity,
-      contractCodeEntity
-    ]);
+    await store.save([extrinsicEntity, eventEntity, contractCodeEntity]);
   }
 }
-

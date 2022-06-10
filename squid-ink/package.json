@@ -7,12 +7,15 @@
     "db:migrate": "npx sqd db migrate",
     "schema:reset": "",
     "processor:migrate": "echo skip",
-    "processor:start": "node lib/processor.js",
+    "processor:start": "node -r dotenv/config lib/processor.js",
     "processor:docker-run": "bash scripts/docker-run.sh",
     "query-node:start": "squid-graphql-server",
     "lint": "npm run lint:prod -- --fix",
     "lint:prod": "eslint . --ext .ts --ignore-path .gitignore --max-warnings 0"
   },
+  "eslint.workingDirectories": [
+    { "directory": "./", "changeProcessCWD": true }
+  ],
   "dependencies": {
     "@polkadot/keyring": "^9.4.1",
     "@polkadot/util": "^9.4.1",

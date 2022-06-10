@@ -1,35 +1,38 @@
 import moment from "moment"
 import React from "react"
-import { shortenHexString } from "../../formats/text"
-import { ContractExtrinsic } from "../../types/Extrinsics"
+// import { shortenHexString } from "../../formats/text"
 import AccountAddress from "./AccountAddress"
 import CodeBadge from "../badges/CodeBadge"
+import { Activity } from "../../types/contracts"
 
-function additionalDetails ({ data, method, codeHash }: ContractExtrinsic) {
-  switch (method) {
+function additionalDetails ({ action, args }: Activity) {
+  return null
+  /*
+  switch (action) {
     case "call": return data.slice(0, 10)
     case "instantiate": return shortenHexString(codeHash)
     case "instantiateWithCode": return shortenHexString(codeHash)
     default: return null
   }
+  */
 }
 
-export default function ExtrinsicRow ({ extrinsic }: { extrinsic: ContractExtrinsic }) {
-  const { id, signer, dest, method, createdAt, value } = extrinsic
+export default function ActivityRow ({ activity }: { activity: Activity }) {
+  const { id, from, to, action, createdAt } = activity
 
   return (
     <li key={id} className="pb-2 pt-4 pl-4 pr-4">
       <div className="grid grid-cols-3 gap-2 items-center">
         <div>
-          <AccountAddress address={signer} />
+          <AccountAddress address={from} />
         </div>
 
         <div className="text-sm capitalize">
-          {method}
+          {action}
         </div>
 
         <div>
-          <AccountAddress address={dest} badge={CodeBadge()} />
+          <AccountAddress address={to} badge={CodeBadge()} />
         </div>
       </div>
       <div className="grid grid-cols-3 gap-2 items-center">
@@ -38,10 +41,10 @@ export default function ExtrinsicRow ({ extrinsic }: { extrinsic: ContractExtrin
         </div>
 
         <div className="text-gray-400 text-xs pl-1 font-mono">
-          {additionalDetails(extrinsic)}
+          {additionalDetails(activity)}
         </div>
         <div className="text-sm flex justify-end">
-          {value} ROC
+          0 UNIT
         </div>
       </div>
     </li>

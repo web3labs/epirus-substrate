@@ -1,14 +1,13 @@
 import { Store } from "@subsquid/substrate-processor";
 import { Account, Balance } from "../model";
 
-
 export async function getOrCreateAccount(
   store: Store,
   id: string,
   balance?: Balance
 ): Promise<Account> {
-  let account = await getOrCreate(store, Account, id);
-  if (balance != undefined) {
+  const account = await getOrCreate(store, Account, id);
+  if (balance) {
     account.balance = balance;
   }
   return account;
@@ -32,5 +31,5 @@ export async function getOrCreate<T extends { id: string }>(
 }
 
 type EntityConstructor<T> = {
-  new (...args: any[]): T;
+  new (...args: T[]): T;
 };

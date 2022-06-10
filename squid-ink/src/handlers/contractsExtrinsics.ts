@@ -4,8 +4,9 @@ import * as utils from "./utils";
 import { ContractCall, Activity } from "../model";
 import { createExtrinsic } from "./utils";
 
-
-export async function contractsCallExtrinsicHandler(ctx: ExtrinsicHandlerContext): Promise<void> {
+export async function contractsCallExtrinsicHandler(
+  ctx: ExtrinsicHandlerContext
+): Promise<void> {
   console.log("Got contracts call extrinsic!");
   const ex = new ContractsCallCall(ctx);
   const { store, extrinsic, block } = ctx;
@@ -16,7 +17,7 @@ export async function contractsCallExtrinsicHandler(ctx: ExtrinsicHandlerContext
     id: extrinsicEntity.id,
     contractAddress: contractAddr,
     createdAt: extrinsicEntity.createdAt,
-    extrinsic: extrinsicEntity
+    extrinsic: extrinsicEntity,
   });
 
   const activityEntity = new Activity({
@@ -26,14 +27,8 @@ export async function contractsCallExtrinsicHandler(ctx: ExtrinsicHandlerContext
     createdAt: extrinsicEntity.createdAt,
     from: extrinsicEntity.signer,
     to: contractAddr,
-    args: extrinsicEntity.args
+    args: extrinsicEntity.args,
   });
 
-  await store.save([
-    extrinsicEntity,
-    contractCallEntity,
-    activityEntity
-  ]);
+  await store.save([extrinsicEntity, contractCallEntity, activityEntity]);
 }
-
-
