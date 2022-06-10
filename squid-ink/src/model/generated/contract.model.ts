@@ -31,6 +31,7 @@ export class Contract {
   @ManyToOne_(() => ContractCode, {nullable: false})
   contractCode!: ContractCode
 
+  @Index_()
   @Column_("timestamp with time zone", {nullable: false})
   deployedOn!: Date
 

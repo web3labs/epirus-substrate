@@ -1,4 +1,4 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_} from "typeorm"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, Index as Index_} from "typeorm"
 import * as marshal from "./marshal"
 import {Args} from "./_args"
 
@@ -11,18 +11,22 @@ export class Activity {
   @PrimaryColumn_()
   id!: string
 
+  @Index_()
   @Column_("text", {nullable: false})
   type!: string
 
   @Column_("text", {nullable: false})
   action!: string
 
+  @Index_()
   @Column_("text", {nullable: true})
   to!: string | undefined | null
 
+  @Index_()
   @Column_("text", {nullable: true})
   from!: string | undefined | null
 
+  @Index_()
   @Column_("timestamp with time zone", {nullable: false})
   createdAt!: Date
 

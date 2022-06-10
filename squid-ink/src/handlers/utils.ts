@@ -2,8 +2,8 @@ import * as ss58 from "@subsquid/ss58";
 const { encodeAddress } = require('@polkadot/keyring');
 import { isHex, hexToU8a } from "@polkadot/util"
 import { MultiAddress } from "../types/v100";
-import { ExtrinsicArg, SubstrateBlock, SubstrateExtrinsic } from "@subsquid/substrate-processor";
-import { Args, Extrinsic } from "../model";
+import { EventParam, ExtrinsicArg, SubstrateBlock, SubstrateEvent, SubstrateExtrinsic } from "@subsquid/substrate-processor";
+import { Args, Extrinsic, Events } from "../model";
 
 export function uintArrayToString(input: Uint8Array | Uint16Array | Uint32Array) {
   return `0x${Buffer.from(input).toString('hex')}`;
@@ -19,9 +19,22 @@ export function getAddressFromMultiAddress(addr: MultiAddress): string {
 
 }
 
+export function createEvent(extrinsicEntity: Extrinsic, event: SubstrateEvent): Events {
+  const { id, name, method, blockNumber, indexInBlock, params } = event;
+  return new Events({
+    id,
+    extrinsic: extrinsicEntity,
+    name,
+    method,
+    blockNumber: blockNumber.toString(),
+    indexInBlock: indexInBlock.toString(),
+    createdAt: extrinsicEntity.createdAt,
+    params: castArgsToArgsType(params)
+  });
+}
+
 export function createExtrinsic(ext: SubstrateExtrinsic, block: SubstrateBlock): Extrinsic {
   const { id, indexInBlock, hash, name, method, signer, signature, args, tip, section, versionInfo } = ext;
-  const converted: Args[] = castArgsToArgsType(args);
   return new Extrinsic({
     id,
     hash,
@@ -36,11 +49,11 @@ export function createExtrinsic(ext: SubstrateExtrinsic, block: SubstrateBlock):
     blockHash: block.hash.toString(),
     createdAt: new Date(block.timestamp),
     indexInBlock: indexInBlock.toString(),
-    args: converted
+    args: castArgsToArgsType(args)
   });
 }
 
-export function castArgsToArgsType(args: ExtrinsicArg[]): Args[] {
+export function castArgsToArgsType(args: ExtrinsicArg[] | EventParam[]): Args[] {
   const converted: Args[] = [];
 
   for (let i = 0; i < args.length; i++) {

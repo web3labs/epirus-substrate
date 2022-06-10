@@ -82,7 +82,7 @@ type Events @entity {
   method: String!
   blockNumber: String!
   indexInBlock: String!
-  blockcreatedAt: DateTime!
+  createdAt: DateTime!
   params: [Args!]
 }
 

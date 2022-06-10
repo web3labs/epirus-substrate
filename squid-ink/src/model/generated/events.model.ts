@@ -29,7 +29,7 @@ export class Events {
   indexInBlock!: string
 
   @Column_("timestamp with time zone", {nullable: false})
-  blockcreatedAt!: Date
+  createdAt!: Date
 
   @Column_("jsonb", {transformer: {to: obj => obj == null ? undefined : obj.map((val: any) => val.toJSON()), from: obj => obj == null ? undefined : marshal.fromList(obj, val => new Args(undefined, marshal.nonNull(val)))}, nullable: true})
   params!: (Args)[] | undefined | null
