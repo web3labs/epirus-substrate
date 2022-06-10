@@ -1,2 +1,2 @@
-chain: cd substrate/substrate-node-contracts && ./run-private-net.sh
-archive: cd squid-ink/archive && docker-compose up -d
+chain: cd substrate/substrate-node-contracts && ./scripts/run-private-network.sh
+archive: cd squid-ink/archive && docker-compose up
