@@ -3,8 +3,15 @@ import List from "./components/List"
 import React from "react"
 import MockCalls from "./_mocks/MockExtrinsics"
 
+import { createClient, Provider } from "urql"
+
+const client = createClient({
+  url: process.env.SQUID_ENDPOINT || "http://localhost:4350/graphql"
+})
+
 function App () {
   return (
+    <Provider value={client}>
     <div className="v-screen h-screen bg-neutral-200">
       <div className="relative bg-white pt-3 md:pb-3 border-b border-neutral-300">
         <div className="max-w-7xl mx-auto md:px-4">
@@ -18,6 +25,7 @@ function App () {
         </div>
       </main>
     </div>
+    </Provider>
   )
 }
 
