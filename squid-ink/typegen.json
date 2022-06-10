@@ -1,0 +1,28 @@
+{
+  "outDir": "src/types",
+  "chainVersions": "devChainVersions.json",
+  "typesBundle": "kusama",
+  "events": [
+    "balances.Transfer",
+    "balances.Endowed",
+    "balances.Deposit",
+    "balances.Withdraw",
+    "contracts.Instantiated",
+    "contracts.ContractEmitted",
+    "contracts.CodeStored"
+  ],
+  "calls": [
+    "contracts.instantiate_with_code",
+    "contracts.instantiate",
+    "contracts.call",
+    "contracts.upload_code",
+    "contracts.remove_code"
+  ],
+  "storage": [
+    "Contracts.CodeStorage",
+    "Contracts.OwnerInfoOf",
+    "Contracts.ContractInfoOf",
+    "Balances.Account",
+    "System.Account"
+  ]
+}

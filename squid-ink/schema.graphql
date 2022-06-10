@@ -1,0 +1,93 @@
+type Account @entity {
+  "Account address"
+  id: ID!
+  balance: Balance
+  contract: Contract @derivedFrom(field: "account")
+  contractsDeployed: [Contract!] @derivedFrom(field: "deployer")
+  codesOwned: [ContractCode!] @derivedFrom(field: "owner")
+  tags: [String!]
+}
+
+type Balance {
+  free: BigInt!
+  reserved: BigInt!
+  miscFrozen: BigInt!
+  feeFrozen: BigInt!
+}
+
+type Contract @entity {
+  "Contract address"
+  id: ID!
+  trieId: Bytes!
+  account: Account! @unique
+  deployer: Account!
+  contractCode: ContractCode!
+  deployedOn: DateTime! @index
+  salt: String
+  createdFrom: Extrinsic!
+}
+
+type ContractCode @entity {
+  "Code Hash"
+  id: ID!
+  code: Bytes!
+  owner: Account!
+  uploadedOn: DateTime 
+  removedOn: DateTime
+  storageDeposit: BigInt
+  contractsDeployed: [Contract!] @derivedFrom(field: "contractCode")
+  createdFrom: Extrinsic!
+}
+
+type ContractCall @entity {
+  "Extrinsic ID"
+  id: ID!
+  contractAddress: String!
+  createdAt: DateTime! 
+  extrinsic: Extrinsic!
+}
+
+type Extrinsic @entity {
+  id: ID!
+  name: String!
+  method: String!
+  section: String!
+  blockHash: String!
+  blockNumber: String!
+  versionInfo: String!
+  indexInBlock: String
+  hash: String
+  createdAt: DateTime!
+  signature: String
+  signer: String!
+  tip: BigInt
+  args: [Args!]
+  events: [Events!] @derivedFrom(field: "extrinsic")
+}
+
+type Activity @entity{
+  id: ID!
+  type: String! @index
+  action: String!
+  to: String @index
+  from: String @index
+  createdAt: DateTime! @index
+  args: [Args!]
+}
+
+type Events @entity {
+  id: ID!
+  extrinsic: Extrinsic!
+  name: String!
+  method: String!
+  blockNumber: String!
+  indexInBlock: String!
+  blockcreatedAt: DateTime!
+  params: [Args!]
+}
+
+type Args {
+  type: String!
+  name: String!
+  value: String
+}
