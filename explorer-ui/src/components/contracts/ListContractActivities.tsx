@@ -1,5 +1,5 @@
-import React, { useEffect } from "react"
-import { useQuery } from "urql"
+import React from "react"
+import useSquid from "../../hooks/useSquid"
 import { Activity } from "../../types/contracts"
 import { Edge, Page, PageQuery } from "../../types/pagination"
 import List, { ListFooter, ListHeader } from "../List"
@@ -39,22 +39,11 @@ const DefaultPageQuery : PageQuery = {
   after: "2"
 }
 
-export default function ListContractActivity ({ query = DefaultPageQuery } : {query?: PageQuery}) {
-  const [result, reexecuteQuery] = useQuery({
+export default function ListContractActivities ({ query = DefaultPageQuery } : {query?: PageQuery}) {
+  const [result] = useSquid({
     query: LATEST_ACTIVITIES,
     variables: { ...query }
   })
-
-  useEffect(() => {
-    if (result.fetching) return
-
-    // Refresh every second...
-    const timerId = setInterval(() => {
-      reexecuteQuery({ requestPolicy: "cache-and-network" })
-    }, 1000000)
-
-    return () => clearTimeout(timerId)
-  }, [result.fetching, reexecuteQuery])
 
   const { data, fetching, error } = result
 

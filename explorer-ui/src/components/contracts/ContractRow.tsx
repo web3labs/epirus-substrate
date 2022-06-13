@@ -12,18 +12,18 @@ export default function ContractRow ({ contract }: { contract: Contract }) {
     <li key={id} className="pb-2 pt-4 pl-4 pr-4">
       <div className="grid grid-cols-3 gap-2 items-center">
         <div>
-          <AccountAddress address={deployer.id}>
-            {deployer.account && <CodeBadge />}
+          <AccountAddress address={account.id}>
+            <CodeBadge />
           </AccountAddress>
         </div>
 
         <div className="text-sm capitalize">
-          Deployed
+          Deployed By
         </div>
 
         <div>
-          <AccountAddress address={account.id}>
-            <CodeBadge />
+          <AccountAddress address={deployer.id}>
+            {deployer.account && <CodeBadge />}
           </AccountAddress>
         </div>
       </div>
@@ -36,7 +36,7 @@ export default function ContractRow ({ contract }: { contract: Contract }) {
           {shortenHexString(contract.contractCode.id)}
         </div>
         <div className="text-sm flex justify-end">
-           ...
+          -
         </div>
       </div>
     </li>

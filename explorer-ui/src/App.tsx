@@ -7,8 +7,9 @@ import {
 } from "react-router-dom"
 
 import { createClient, Provider } from "urql"
-import ListContractActivity from "./components/contracts/ListContractActivity"
-import ListContract from "./components/contracts/ListContract"
+import ListContractActivities from "./components/contracts/ListContractActivities"
+import ListContracts from "./components/contracts/ListContracts"
+import { ListHeader } from "./components/List"
 
 const client = createClient({
   url: process.env.SQUID_ENDPOINT || "http://localhost:4350/graphql"
@@ -16,13 +17,25 @@ const client = createClient({
 
 function HomePage () {
   return (<div className="flex flex-col space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-2">
-    <ListContractActivity />
-    <ListContract />
+    <ListContractActivities />
+    <ListContracts header={
+      <ListHeader
+        title="Latest Contracts"
+        description="Contracts deployed"/>
+    }/>
   </div>)
 }
 
 function ContractsPage () {
-  return (<div>Contracts</div>)
+  return (<div>
+    <ListContracts
+      query={{ first: 25 }}
+      header={
+        <ListHeader
+          title="Contracts"
+        />
+      } />
+  </div>)
 }
 
 function App () {

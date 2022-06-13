@@ -1,9 +1,9 @@
-import React, { useEffect } from "react"
-import { useQuery } from "urql"
+import React from "react"
 import { Contract } from "../../types/contracts"
 import { Edge, Page, PageQuery } from "../../types/pagination"
 import ContractRow from "./ContractRow"
-import List, { ListHeader } from "../List"
+import List from "../List"
+import useSquid from "../../hooks/useSquid"
 
 const QUERY = `
 query($first: Int!, $after: String = "", $orderBy: [ContractOrderByInput!]! = [deployedOn_DESC]) {
@@ -42,28 +42,13 @@ query($first: Int!, $after: String = "", $orderBy: [ContractOrderByInput!]! = [d
 }
 `
 
-export default function ListContract ({ query = { first: 5 } } : {query?: PageQuery}) {
-  const [result, reexecuteQuery] = useQuery({
+export default function ListContracts ({ query = { first: 5 }, header } : {query?: PageQuery, header?:JSX.Element}) {
+  const [result] = useSquid({
     query: QUERY,
     variables: { ...query }
   })
 
-  useEffect(() => {
-    if (result.fetching) return
-
-    // Refresh every second...
-    const timerId = setInterval(() => {
-      reexecuteQuery({ requestPolicy: "cache-and-network" })
-    }, 1000000)
-
-    return () => clearTimeout(timerId)
-  }, [result.fetching, reexecuteQuery])
-
   const { data, fetching, error } = result
-
-  const latestContractsHeader = <ListHeader
-    title="Latest Contracts"
-    description="Contracts deployed"/>
 
   if (fetching) {
     return <p>...</p>
@@ -73,7 +58,7 @@ export default function ListContract ({ query = { first: 5 } } : {query?: PageQu
   const page : Page<Contract> = data?.contractsConnection
 
   return (
-    <List header={latestContractsHeader}>
+    <List header={header}>
       {page?.edges.map(({ node } : Edge<Contract>) => (
         <ContractRow key={node.id} contract={node} />
       ))}
