@@ -1,51 +1,49 @@
 import * as ss58 from "@subsquid/ss58";
+import { toHex } from "@subsquid/util-internal-hex";
 import { EventHandlerContext } from "@subsquid/substrate-processor";
-import { Activity, Contract, ContractCode } from "../model";
+import { Contract, ContractCode } from "../model";
+import { getOrCreateAccount } from "../entities/retrievers";
+import { createExtrinsic, createEvent, createActivity } from "../entities";
 import {
-  ContractsCodeStoredEvent,
-  ContractsInstantiatedEvent,
-} from "../types/events";
-import {
-  ContractsCodeStorageStorage,
-  ContractsContractInfoOfStorage,
-  ContractsOwnerInfoOfStorage,
-} from "../types/storage";
-import { getOrCreateAccount } from "./storeUtils";
-import { createExtrinsic, createEvent, uintArrayToString } from "./utils";
+  EnhancedCodeStorageStorage,
+  EnhancedContractInfoOfStorage,
+  EnhancedContractsCodeStoredEvent,
+  EnhancedContractsInstantiatedEvent,
+  EnhancedOwnerInfoOfStorage,
+} from "../enhanced-types";
 
 export async function contractsInstantiatedEventHandler(
   ctx: EventHandlerContext
 ): Promise<void> {
-  console.log("Got contracts initiated event!");
-  const ev = new ContractsInstantiatedEvent(ctx);
-  const { deployer, contract } = ev.asV100;
+  console.log("Got contracts instantiated event!");
+  const { deployer, contract } = new EnhancedContractsInstantiatedEvent(
+    ctx
+  ).resolve();
   const { store, extrinsic, block, event } = ctx;
 
   if (extrinsic) {
     const extrinsicEntity = createExtrinsic(extrinsic, block);
     const eventEntity = createEvent(extrinsicEntity, event);
-    // Store deployer and contract accounts
-    const deployerAddress = ss58.codec("substrate").encode(deployer);
-    const contractAddress = ss58.codec("substrate").encode(contract);
-    const deployerAccount = await getOrCreateAccount(store, deployerAddress);
-    const contractAccount = await getOrCreateAccount(store, contractAddress);
 
-    // Get code hash of contract
-    const codeHashStorage = new ContractsContractInfoOfStorage(ctx);
-    const contractInfo = await codeHashStorage.getAsV100(contract);
-    if (contractInfo) {
+    const deployerAccount = await getOrCreateAccount(store, deployer);
+    const contractAccount = await getOrCreateAccount(store, contract);
+
+    try {
+      const { codeHash, trieId, storageDeposit } =
+        await new EnhancedContractInfoOfStorage(ctx).get(contract);
       const contractCodeEntity = await ctx.store.get(ContractCode, {
-        where: { id: uintArrayToString(contractInfo.codeHash) },
+        where: { id: toHex(codeHash) },
       });
 
       const contractEntity = new Contract({
-        id: contractAddress,
-        trieId: contractInfo.trieId,
+        id: contract,
+        trieId,
         account: contractAccount,
         deployer: deployerAccount,
-        deployedOn: extrinsicEntity.createdAt,
+        createdAt: extrinsicEntity.createdAt,
         createdFrom: extrinsicEntity,
         contractCode: contractCodeEntity,
+        storageDeposit,
       });
 
       const entities = [
@@ -54,19 +52,16 @@ export async function contractsInstantiatedEventHandler(
         extrinsicEntity,
         eventEntity,
         contractEntity,
-        new Activity({
-          id: contractEntity.id,
-          type: "Contract",
-          action: extrinsicEntity.name,
-          to: contractAddress,
-          createdAt: extrinsicEntity.createdAt,
-          from: extrinsicEntity.signer,
-          args: extrinsicEntity.args,
-        }),
+        createActivity(
+          contractEntity.id,
+          "Contract",
+          extrinsicEntity,
+          contract
+        ),
       ];
       await store.save(entities);
-    } else {
-      // TODO: handle no contract info !! :_(
+    } catch (error) {
+      console.log(error);
     }
   }
 }
@@ -74,31 +69,27 @@ export async function contractsInstantiatedEventHandler(
 export async function contractsCodeStoredEventHandler(
   ctx: EventHandlerContext
 ): Promise<void> {
-  const ev = new ContractsCodeStoredEvent(ctx);
-  const { codeHash } = ev.asV100;
+  const { codeHash } = new EnhancedContractsCodeStoredEvent(ctx).resolve();
   const { extrinsic, store, block, event } = ctx;
   if (extrinsic) {
     const extrinsicEntity = createExtrinsic(extrinsic, block);
     const eventEntity = createEvent(extrinsicEntity, event);
     // Get code info
-    const codeStorage = new ContractsCodeStorageStorage(ctx);
-    const storageInfo = await codeStorage.getAsV100(codeHash);
+    const storageInfo = await new EnhancedCodeStorageStorage(ctx).get(codeHash);
 
     // Get owner info
-    const ownerStorage = new ContractsOwnerInfoOfStorage(ctx);
-    const ownerInfo = await ownerStorage.getAsV100(codeHash);
+    const ownerInfo = await new EnhancedOwnerInfoOfStorage(ctx).get(codeHash);
 
     const contractCodeEntity = new ContractCode({
-      id: uintArrayToString(codeHash),
+      id: codeHash,
       code: storageInfo?.code,
       // TODO here the account won't be created...
-      owner:
-        ownerInfo &&
-        (await getOrCreateAccount(
-          store,
-          ss58.codec("substrate").encode(ownerInfo.owner)
-        )),
+      owner: await getOrCreateAccount(
+        store,
+        ss58.codec("substrate").encode(ownerInfo.owner)
+      ),
       createdFrom: extrinsicEntity,
+      createdAt: extrinsicEntity.createdAt,
     });
 
     await store.save([extrinsicEntity, eventEntity, contractCodeEntity]);

@@ -1,31 +1,28 @@
-import * as ss58 from "@subsquid/ss58";
 import { EventHandlerContext } from "@subsquid/substrate-processor";
 import { Account, Balance, Events, Extrinsic } from "../model";
-import { BalancesTransferEvent } from "../types/events";
-import { SystemAccountStorage } from "../types/storage";
-import { getOrCreateAccount } from "./storeUtils";
-import { createExtrinsic, createEvent } from "./utils";
+import { getOrCreateAccount, createExtrinsic, createEvent } from "../entities";
+import {
+  EnhancedBalancesTransferEvent,
+  EnhancedSystemAccountStorage,
+} from "../enhanced-types";
 
 export async function balancesTransferEventHandler(
   ctx: EventHandlerContext
 ): Promise<void> {
   console.log("Got balances transfer event!");
   const { store, block, event, extrinsic } = ctx;
-  const ev = new BalancesTransferEvent(ctx);
-  const { from, to } = ev.asV100;
-  const fromAddress = ss58.codec("substrate").encode(from);
-  const toAddress = ss58.codec("substrate").encode(to);
+  const { from, to } = new EnhancedBalancesTransferEvent(ctx).resolve();
 
   // Balances could also be stored in Balances.Account storage (either/or)
   // It is defined in the runtime config of balances pallet `type AccountStore = System;`
   // We should check if one is empty (all balances = 0), then use the other
-  const accountStorage = new SystemAccountStorage(ctx);
-  const fromBalances = await accountStorage.getAsV100(from);
-  const toBalances = await accountStorage.getAsV100(to);
+  const accountStorage = new EnhancedSystemAccountStorage(ctx);
+  const fromBalances = await accountStorage.get(from);
+  const toBalances = await accountStorage.get(to);
 
   const fromAcc = await getOrCreateAccount(
     ctx.store,
-    fromAddress,
+    from,
     new Balance({
       free: fromBalances.data.free,
       reserved: fromBalances.data.reserved,
@@ -36,7 +33,7 @@ export async function balancesTransferEventHandler(
 
   const toAcc = await getOrCreateAccount(
     ctx.store,
-    toAddress,
+    to,
     new Balance({
       free: toBalances.data.free,
       reserved: toBalances.data.reserved,
