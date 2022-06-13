@@ -21,7 +21,9 @@ function App () {
         <main className="max-w-7xl mx-auto md:px-4 pt-6">
           <div className="flex flex-col space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-2">
             <LatestContractActivity />
-            <List title="Latest Contracts" items={[]} />
+            <List>
+              <div>TBD</div>
+            </List>
           </div>
         </main>
       </div>

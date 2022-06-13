@@ -17,6 +17,33 @@ function additionalDetails ({ action, args }: Activity) {
   */
 }
 
+export function ActivityRowSkeleton ({ size = 5 }: {size?: number}) {
+  const skeletons : JSX.Element[] = []
+  for (let i = 0; i < size; i++) {
+    skeletons.push(<li key={`arsk-${i}`} className="pb-2 pt-4 pl-4 pr-4">
+      <div className="grid grid-cols-3 gap-2 items-center">
+        <div className="flex items-center space-x-3">
+          <div className="h-10 w-10 skeleton rounded-full"></div>
+          <div className="h-3 skeleton w-[50%]"></div>
+        </div>
+        <div className="h-3 skeleton w-[50%] "></div>
+        <div className="flex items-center space-x-3">
+          <div className="h-10 w-10 skeleton rounded-full"></div>
+          <div className="h-3 skeleton w-[50%]"></div>
+        </div>
+      </div>
+      <div className="grid grid-cols-3 gap-2 items-center pt-2">
+        <div className="h-3 skeleton w-[35%]"></div>
+        <div className="h-3 skeleton w-0"></div>
+        <div className="h-3 skeleton w-[35%] ml-auto"></div>
+      </div>
+    </li>)
+  }
+  return (<>
+    {skeletons}
+  </>)
+}
+
 export default function ActivityRow ({ activity }: { activity: Activity }) {
   const { id, from, to, action, createdAt } = activity
 
