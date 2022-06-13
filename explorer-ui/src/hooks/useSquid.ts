@@ -4,7 +4,7 @@ import { PageQuery } from "../types/pagination"
 
 interface Props {
   query: string,
-  variables: PageQuery,
+  variables: PageQuery | object,
   refresh?: {
     millis: number,
     disabled: boolean

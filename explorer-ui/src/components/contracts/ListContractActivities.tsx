@@ -6,7 +6,7 @@ import List, { ListFooter, ListHeader } from "../List"
 import Skeleton from "../loading/Skeleton"
 import ActivityRow, { ActivityRowSkeleton } from "./ActivityRow"
 
-const LATEST_ACTIVITIES = `
+const QUERY = `
 query($first: Int!, $after: String = "", $orderBy: [ActivityOrderByInput!]! = [createdAt_DESC]) {
   activitiesConnection(orderBy: $orderBy, after: $after, first: $first) {
     totalCount
@@ -35,13 +35,13 @@ query($first: Int!, $after: String = "", $orderBy: [ActivityOrderByInput!]! = [c
 }
 `
 const DefaultPageQuery : PageQuery = {
-  first: 2,
-  after: "2"
+  first: 5,
+  after: ""
 }
 
 export default function ListContractActivities ({ query = DefaultPageQuery } : {query?: PageQuery}) {
   const [result] = useSquid({
-    query: LATEST_ACTIVITIES,
+    query: QUERY,
     variables: { ...query }
   })
 

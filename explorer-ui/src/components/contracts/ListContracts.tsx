@@ -1,5 +1,5 @@
 import React from "react"
-import { Contract } from "../../types/contracts"
+import { LightContract } from "../../types/contracts"
 import { Edge, Page, PageQuery } from "../../types/pagination"
 import ContractRow from "./ContractRow"
 import List from "../List"
@@ -55,11 +55,11 @@ export default function ListContracts ({ query = { first: 5 }, header } : {query
   }
   if (error) return <p>Oh no... {error.message}</p>
 
-  const page : Page<Contract> = data?.contractsConnection
+  const page : Page<LightContract> = data?.contractsConnection
 
   return (
     <List header={header}>
-      {page?.edges.map(({ node } : Edge<Contract>) => (
+      {page?.edges.map(({ node } : Edge<LightContract>) => (
         <ContractRow key={node.id} contract={node} />
       ))}
     </List>

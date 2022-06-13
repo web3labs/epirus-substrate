@@ -14,7 +14,7 @@ export interface Activity {
     args: Arg[]
 }
 
-export interface Contract {
+export type LightContract = {
     id: string,
     account: {
         id: string
@@ -25,12 +25,45 @@ export interface Contract {
       id: string
     }
     createdFrom: {
-        blockNumber: number
+        blockNumber: string
     }
     deployer: {
         id: string,
         account?: {
           id: string
         } | null
+    }
+}
+
+export interface Contract extends LightContract {
+  salt: string
+    trieId : string
+    contractCode: {
+      code: string
+      id: string
+      removedOn : Date
+      storageDeposit: string
+      uploadedOn: Date
+    }
+    account: {
+      balance: {
+        reserved: string
+        miscFrozen:string
+        free:string
+        feeFrozen:string
+      }
+      id:string
+      tags:string[]
+    }
+    createdFrom: {
+      blockHash: string
+      blockNumber: string
+      id:string
+      hash:string
+      name:string
+      signer:string
+      signature:string
+      tip:string
+      versionInfo:string
     }
 }

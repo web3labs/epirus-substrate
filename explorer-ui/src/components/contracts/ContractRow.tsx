@@ -1,21 +1,22 @@
 import moment from "moment"
 import React from "react"
+import { NavLink } from "react-router-dom"
 import { shortenHexString } from "../../formats/text"
-import { Contract } from "../../types/contracts"
+import { LightContract } from "../../types/contracts"
 import CodeBadge from "../badges/CodeBadge"
 import AccountAddress from "../substrate/AccountAddress"
 
-export default function ContractRow ({ contract }: { contract: Contract }) {
+export default function ContractRow ({ contract }: { contract: LightContract }) {
   const { id, deployedOn, deployer, account } = contract
 
   return (
-    <li key={id} className="pb-2 pt-4 pl-4 pr-4">
+    <li key={id} className="font-mono pb-2 pt-4 pl-4 pr-4">
       <div className="grid grid-cols-3 gap-2 items-center">
-        <div>
+        <NavLink to={`/contracts/${account.id}`} className="link">
           <AccountAddress address={account.id}>
             <CodeBadge />
           </AccountAddress>
-        </div>
+        </NavLink>
 
         <div className="text-sm capitalize">
           Deployed By

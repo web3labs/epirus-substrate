@@ -1,9 +1,16 @@
+const { fontFamily } = require("tailwindcss/defaultTheme")
+
 module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}"
   ],
   theme: {
-    extend: {}
+    fontFamily: {
+      mono: [
+        "JetBrains Mono",
+        ...fontFamily.mono
+      ]
+    }
   },
   variants: {
     width: ["responsive", "hover", "focus"]

@@ -10,6 +10,7 @@ import { createClient, Provider } from "urql"
 import ListContractActivities from "./components/contracts/ListContractActivities"
 import ListContracts from "./components/contracts/ListContracts"
 import { ListHeader } from "./components/List"
+import ContractPage from "./components/contracts/ContractPage"
 
 const client = createClient({
   url: process.env.SQUID_ENDPOINT || "http://localhost:4350/graphql"
@@ -42,7 +43,7 @@ function App () {
   return (
     <Provider value={client}>
       <Router>
-        <div className="v-screen h-screen bg-neutral-200">
+        <div className="min-h-screen bg-neutral-200">
           <div className="relative bg-white pt-3 md:pb-3 border-b border-neutral-300">
             <div className="max-w-7xl mx-auto md:px-4">
               <Nav />
@@ -51,7 +52,8 @@ function App () {
           <main className="max-w-7xl mx-auto md:px-4 pt-6">
             <Routes>
               <Route path="/" element={<HomePage/>}/>
-              <Route path="/contracts" element={<ContractsPage/>}/>
+              <Route path="contracts/:id" element={<ContractPage/>} />
+              <Route path="contracts" element={<ContractsPage/>} />
             </Routes>
           </main>
         </div>
