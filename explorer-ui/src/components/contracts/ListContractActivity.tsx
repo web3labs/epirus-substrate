@@ -2,7 +2,7 @@ import React, { useEffect } from "react"
 import { useQuery } from "urql"
 import { Activity } from "../../types/contracts"
 import { Edge, Page, PageQuery } from "../../types/pagination"
-import List, { ListHeader } from "../List"
+import List, { ListFooter, ListHeader } from "../List"
 import Skeleton from "../loading/Skeleton"
 import ActivityRow, { ActivityRowSkeleton } from "./ActivityRow"
 
@@ -35,7 +35,8 @@ query($first: Int!, $after: String = "", $orderBy: [ActivityOrderByInput!]! = [c
 }
 `
 const DefaultPageQuery : PageQuery = {
-  first: 5
+  first: 2,
+  after: "2"
 }
 
 export default function ListContractActivity ({ query = DefaultPageQuery } : {query?: PageQuery}) {
@@ -73,15 +74,12 @@ export default function ListContractActivity ({ query = DefaultPageQuery } : {qu
   const page : Page<Activity> = data?.activitiesConnection
 
   return (
-    <>
-      <List header={latestTransactionsHeader}>
-        {page?.edges.map(({ node } : Edge<Activity>) => (
-          <ActivityRow key={node.id} activity={node} />
-        ))}
-      </List>
-      {/* page?.pageInfo.hasNextPage &&
-      <span>moar {page.pageInfo.endCursor} {page.totalCount}</span>
-        */}
-    </>
+    <List header={latestTransactionsHeader} footer={
+      <ListFooter pageInfo={page.pageInfo} totalCount={page.totalCount} />
+    }>
+      {page?.edges.map(({ node } : Edge<Activity>) => (
+        <ActivityRow key={node.id} activity={node} />
+      ))}
+    </List>
   )
 }

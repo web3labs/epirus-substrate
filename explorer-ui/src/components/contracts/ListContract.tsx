@@ -73,15 +73,10 @@ export default function ListContract ({ query = { first: 5 } } : {query?: PageQu
   const page : Page<Contract> = data?.contractsConnection
 
   return (
-    <>
-      <List header={latestContractsHeader}>
-        {page?.edges.map(({ node } : Edge<Contract>) => (
-          <ContractRow key={node.id} contract={node} />
-        ))}
-      </List>
-      {page?.pageInfo.hasNextPage &&
-      <span>moar {page.pageInfo.endCursor} {page.totalCount}</span>
-      }
-    </>
+    <List header={latestContractsHeader}>
+      {page?.edges.map(({ node } : Edge<Contract>) => (
+        <ContractRow key={node.id} contract={node} />
+      ))}
+    </List>
   )
 }
