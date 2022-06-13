@@ -85,7 +85,7 @@ export default function ContractPage () {
           <h3 className="uppercase tracking-wider text-xs font-medium text-gray-500">Contract</h3>
           <dl className="w-full">
             <Definition label="ID" term={
-              <AccountAddress address={id} short={false}><CodeBadge/></AccountAddress>
+              <AccountAddress address={id}><CodeBadge/></AccountAddress>
             } />
             <Definition label="Code Hash" term={contractCode.id}/>
             <Definition label="Type" term="WASM" />

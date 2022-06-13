@@ -39,7 +39,7 @@ const DefaultPageQuery : PageQuery = {
   after: ""
 }
 
-export default function ListContractActivities ({ query = DefaultPageQuery } : {query?: PageQuery}) {
+export default function ListContractActivities ({ query = DefaultPageQuery, short = false } : {query?: PageQuery, short?: boolean}) {
   const [result] = useSquid({
     query: QUERY,
     variables: { ...query }
@@ -67,7 +67,7 @@ export default function ListContractActivities ({ query = DefaultPageQuery } : {
       <ListFooter pageInfo={page.pageInfo} totalCount={page.totalCount} />
     }>
       {page?.edges.map(({ node } : Edge<Activity>) => (
-        <ActivityRow key={node.id} activity={node} />
+        <ActivityRow key={node.id} activity={node} short={short} />
       ))}
     </List>
   )

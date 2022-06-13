@@ -8,7 +8,7 @@ interface Props {
   children?: JSX.Element | null
 }
 
-export default function AccountAddress ({ address, short = true, children }: Props) {
+export default function AccountAddress ({ address, short = false, children }: Props) {
   if (address) {
     return (
       <div className="flex flex-wrap items-center">

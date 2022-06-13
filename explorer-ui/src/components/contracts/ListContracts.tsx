@@ -42,7 +42,7 @@ query($first: Int!, $after: String = "", $orderBy: [ContractOrderByInput!]! = [d
 }
 `
 
-export default function ListContracts ({ query = { first: 5 }, header } : {query?: PageQuery, header?:JSX.Element}) {
+export default function ListContracts ({ query = { first: 5 }, header, short = false } : {query?: PageQuery, header?:JSX.Element, short?: boolean}) {
   const [result] = useSquid({
     query: QUERY,
     variables: { ...query }
@@ -60,7 +60,7 @@ export default function ListContracts ({ query = { first: 5 }, header } : {query
   return (
     <List header={header}>
       {page?.edges.map(({ node } : Edge<LightContract>) => (
-        <ContractRow key={node.id} contract={node} />
+        <ContractRow key={node.id} contract={node} short={short} />
       ))}
     </List>
   )

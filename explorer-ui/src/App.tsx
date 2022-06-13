@@ -18,12 +18,16 @@ const client = createClient({
 
 function HomePage () {
   return (<div className="flex flex-col space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-2">
-    <ListContractActivities />
-    <ListContracts header={
-      <ListHeader
-        title="Latest Contracts"
-        description="Contracts deployed"/>
-    }/>
+    <ListContractActivities
+      short={true}
+    />
+    <ListContracts
+      short={true}
+      header={
+        <ListHeader
+          title="Latest Contracts"
+          description="Contracts deployed"/>
+      }/>
   </div>)
 }
 

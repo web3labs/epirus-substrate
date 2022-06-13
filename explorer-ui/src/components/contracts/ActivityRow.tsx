@@ -32,7 +32,7 @@ export function ActivityRowSkeleton ({ size = 5 }: {size?: number}) {
   const skeletons : JSX.Element[] = []
   for (let i = 0; i < size; i++) {
     skeletons.push(<li key={`arsk-${i}`} className="pb-2 pt-4 pl-4 pr-4">
-      <div className="grid grid-cols-3 gap-2 items-center">
+      <div className="grid grid-flow-col auto-cols-auto gap-2 items-center">
         <div className="flex items-center space-x-3">
           <div className="h-10 w-10 skeleton rounded-full"></div>
           <div className="h-3 skeleton w-[50%]"></div>
@@ -43,7 +43,7 @@ export function ActivityRowSkeleton ({ size = 5 }: {size?: number}) {
           <div className="h-3 skeleton w-[50%]"></div>
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-2 items-center pt-2">
+      <div className="grid grid-flow-col auto-cols-auto gap-2 items-center pt-2">
         <div className="h-3 skeleton w-[35%]"></div>
         <div className="h-3 skeleton w-0"></div>
         <div className="h-3 skeleton w-[35%] ml-auto"></div>
@@ -55,14 +55,14 @@ export function ActivityRowSkeleton ({ size = 5 }: {size?: number}) {
   </>)
 }
 
-export default function ActivityRow ({ activity }: { activity: Activity }) {
+export default function ActivityRow ({ activity, short }: { activity: Activity, short: boolean }) {
   const { id, from, to, action, createdAt } = activity
 
   return (
     <li key={id} className="font-mono pb-2 pt-4 pl-4 pr-4">
-      <div className="grid grid-cols-3 gap-2 items-center">
+      <div className="grid grid-flow-col auto-cols-auto gap-2 items-center">
         <div>
-          <AccountAddress address={from} />
+          <AccountAddress address={from} short={short} />
         </div>
 
         <div className="text-sm capitalize">
@@ -70,12 +70,12 @@ export default function ActivityRow ({ activity }: { activity: Activity }) {
         </div>
 
         <div>
-          <AccountAddress address={to}>
+          <AccountAddress address={to} short={short}>
             <CodeBadge/>
           </AccountAddress>
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-2 items-center">
+      <div className="grid grid-flow-col auto-cols-auto gap-2 items-center">
         <div className="text-gray-400 text-xs">
           {moment(createdAt).format("DD/MM/YYYY")}
         </div>
