@@ -1,4 +1,5 @@
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, OneToOne as OneToOne_, Index as Index_, JoinColumn as JoinColumn_, ManyToOne as ManyToOne_} from "typeorm"
+import * as marshal from "./marshal"
 import {Account} from "./account.model"
 import {ContractCode} from "./contractCode.model"
 import {Extrinsic} from "./extrinsic.model"
@@ -33,7 +34,7 @@ export class Contract {
 
   @Index_()
   @Column_("timestamp with time zone", {nullable: false})
-  deployedOn!: Date
+  createdAt!: Date
 
   @Column_("text", {nullable: true})
   salt!: string | undefined | null
@@ -41,4 +42,7 @@ export class Contract {
   @Index_()
   @ManyToOne_(() => Extrinsic, {nullable: false})
   createdFrom!: Extrinsic
+
+  @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+  storageDeposit!: bigint
 }

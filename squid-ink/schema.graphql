@@ -22,9 +22,10 @@ type Contract @entity {
   account: Account! @unique
   deployer: Account!
   contractCode: ContractCode!
-  deployedOn: DateTime! @index
+  createdAt: DateTime! @index
   salt: String
   createdFrom: Extrinsic!
+  storageDeposit: BigInt!
 }
 
 type ContractCode @entity {
@@ -32,9 +33,8 @@ type ContractCode @entity {
   id: ID!
   code: Bytes!
   owner: Account!
-  uploadedOn: DateTime 
+  createdAt: DateTime!
   removedOn: DateTime
-  storageDeposit: BigInt
   contractsDeployed: [Contract!] @derivedFrom(field: "contractCode")
   createdFrom: Extrinsic!
 }

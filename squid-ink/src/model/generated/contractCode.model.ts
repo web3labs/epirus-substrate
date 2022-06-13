@@ -1,5 +1,4 @@
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_, OneToMany as OneToMany_} from "typeorm"
-import * as marshal from "./marshal"
 import {Account} from "./account.model"
 import {Contract} from "./contract.model"
 import {Extrinsic} from "./extrinsic.model"
@@ -23,14 +22,11 @@ export class ContractCode {
   @ManyToOne_(() => Account, {nullable: false})
   owner!: Account
 
-  @Column_("timestamp with time zone", {nullable: true})
-  uploadedOn!: Date | undefined | null
+  @Column_("timestamp with time zone", {nullable: false})
+  createdAt!: Date
 
   @Column_("timestamp with time zone", {nullable: true})
   removedOn!: Date | undefined | null
-
-  @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
-  storageDeposit!: bigint | undefined | null
 
   @OneToMany_(() => Contract, e => e.contractCode)
   contractsDeployed!: Contract[]

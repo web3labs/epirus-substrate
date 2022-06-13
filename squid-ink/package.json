@@ -1,11 +1,11 @@
 {
-  "name": "kusama-balances",
+  "name": "squid-ink",
   "private": true,
   "scripts": {
     "build": "rm -rf lib && tsc",
     "init": "node db/init.js",
     "db:migrate": "npx sqd db migrate",
-    "schema:reset": "",
+    "schema:reset": "bash scripts/reset-db.sh",
     "processor:migrate": "echo skip",
     "processor:start": "node -r dotenv/config lib/processor.js",
     "processor:docker-run": "bash scripts/docker-run.sh",
@@ -14,14 +14,13 @@
     "lint:prod": "eslint . --ext .ts --ignore-path .gitignore --max-warnings 0"
   },
   "dependencies": {
-    "@polkadot/keyring": "^9.4.1",
-    "@polkadot/util": "^9.4.1",
     "@subsquid/archive-registry": "^0.0.6",
     "@subsquid/cli": "^0.4.1",
     "@subsquid/graphql-server": "^0.3.0",
     "@subsquid/scale-codec": "^0.4.2",
     "@subsquid/ss58": "^0.1.0",
     "@subsquid/substrate-processor": "^0.8.0",
+    "@subsquid/util-internal-hex": "^0.0.0",
     "dotenv": "^16.0.0",
     "pg": "^8.7.3",
     "typeorm": "^0.2.41"
