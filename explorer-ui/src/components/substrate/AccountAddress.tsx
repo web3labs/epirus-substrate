@@ -4,10 +4,10 @@ import { shorten } from "../../formats/text"
 
 interface Props {
   address: string,
-  badge?: JSX.Element
+  children?: JSX.Element | null
 }
 
-export default function AccountAddress ({ address, badge }: Props) {
+export default function AccountAddress ({ address, children }: Props) {
   if (address) {
     return (
       <div className="flex flex-wrap items-center">
@@ -17,7 +17,7 @@ export default function AccountAddress ({ address, badge }: Props) {
             size={32}
             theme="polkadot"
           />
-          {badge}
+          {children}
         </div>
         <div className="text-sm ml-2">{shorten(address)}</div>
       </div>

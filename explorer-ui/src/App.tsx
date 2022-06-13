@@ -1,9 +1,9 @@
 import Nav from "./components/Nav"
-import List from "./components/List"
 import React from "react"
 
 import { createClient, Provider } from "urql"
-import LatestContractActivity from "./components/LatestContractActivity"
+import ListContractActivity from "./components/contracts/ListContractActivity"
+import ListContract from "./components/contracts/ListContract"
 
 const client = createClient({
   url: process.env.SQUID_ENDPOINT || "http://localhost:4350/graphql"
@@ -20,10 +20,8 @@ function App () {
         </div>
         <main className="max-w-7xl mx-auto md:px-4 pt-6">
           <div className="flex flex-col space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-2">
-            <LatestContractActivity />
-            <List>
-              <div>TBD</div>
-            </List>
+            <ListContractActivity />
+            <ListContract />
           </div>
         </main>
       </div>

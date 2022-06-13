@@ -18,7 +18,7 @@ export function ListHeader ({ title, description }: {title:string, description?:
 
 export default function List ({ header, children }: Props) {
   return (
-    <div className="flex flex-col container w-full items-center justify-center bg-white shadow">
+    <div className="flex flex-col container w-full items-center justify-start bg-white shadow">
       {header}
       <ul className="flex flex-col divide-y w-full">
         {children}

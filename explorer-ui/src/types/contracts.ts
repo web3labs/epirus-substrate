@@ -13,3 +13,24 @@ export interface Activity {
     createdAt: Date,
     args: Arg[]
 }
+
+export interface Contract {
+    id: string,
+    account: {
+        id: string
+    }
+    trieId: string,
+    deployedOn: Date,
+    contractCode: {
+      id: string
+    }
+    createdFrom: {
+        blockNumber: number
+    }
+    deployer: {
+        id: string,
+        account?: {
+          id: string
+        } | null
+    }
+}

@@ -1,7 +1,7 @@
 import moment from "moment"
 import React from "react"
 // import { shortenHexString } from "../../formats/text"
-import AccountAddress from "./AccountAddress"
+import AccountAddress from "../substrate/AccountAddress"
 import CodeBadge from "../badges/CodeBadge"
 import { Activity } from "../../types/contracts"
 
@@ -59,7 +59,9 @@ export default function ActivityRow ({ activity }: { activity: Activity }) {
         </div>
 
         <div>
-          <AccountAddress address={to} badge={CodeBadge()} />
+          <AccountAddress address={to}>
+            <CodeBadge/>
+          </AccountAddress>
         </div>
       </div>
       <div className="grid grid-cols-3 gap-2 items-center">
@@ -70,7 +72,7 @@ export default function ActivityRow ({ activity }: { activity: Activity }) {
         <div className="text-gray-400 text-xs pl-1 font-mono">
           {additionalDetails(activity)}
         </div>
-        <div className="text-sm flex justify-end">
+        <div className="text-xs flex justify-end">
           0 UNIT
         </div>
       </div>
