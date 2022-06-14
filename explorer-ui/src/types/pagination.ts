@@ -1,6 +1,6 @@
 
 export interface PageQuery {
-  first?: number
+  first: number
   after?: string
   orderBy?: string
   where?: object

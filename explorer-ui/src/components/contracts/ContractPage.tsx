@@ -53,7 +53,7 @@ query($id: ID!) {
 
 function Definition ({ label, term }: {label: string, term: JSX.Element | string}) {
   return (
-    <div className="px-2 py-3 grid grid-cols-6 gap-2 items-center">
+    <div className="grid grid-cols-6 items-center">
       <dt className="text-sm text-gray-500">{label}</dt>
       <dd className="text-sm text-gray-900 col-span-5">{term}</dd>
     </div>
@@ -64,6 +64,7 @@ function ActivityTab ({ id }: {id:string}) {
   return (
     <ListContractActivities
       query={{
+        first: 10,
         where: {
           from_eq: id,
           OR: {
@@ -99,12 +100,11 @@ export default function ContractPage () {
     <>
       <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-2">
         <Box className="col-span-2">
-          <div className="flex flex-col w-full border-b px-4 py-5 sm:px-6">
-            <h3 className="uppercase tracking-wider text-xs font-medium text-gray-500">Contract</h3>
-            <dl className="w-full">
-              <Definition label="ID" term={
-                <AccountAddress address={id}><CodeBadge/></AccountAddress>
-              } />
+          <h3 className="px-5 py-4 w-full font-medium border-b">
+            <AccountAddress address={id}><CodeBadge/></AccountAddress>
+          </h3>
+          <div className="flex flex-col w-full px-5 mt-2 sm:px-6">
+            <dl className="flex flex-col w-full gap-y-2">
               <Definition label="Code Hash" term={
                 <span className="font-mono overflow-hidden text-ellipsis">{contractCode.id}</span>
               }/>

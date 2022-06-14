@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import useSquid from "../../hooks/useSquid"
 import { Activity } from "../../types/contracts"
 import { Edge, Page, PageQuery } from "../../types/pagination"
@@ -34,28 +34,25 @@ query($where: ActivityWhereInput = {} ,$first: Int = 5, $after: String = "", $or
   }
 }
 `
-const DefaultPageQuery : PageQuery = {
-  first: 5,
-  after: "",
-  where: {}
-}
 
 export default function ListContractActivities ({
   header,
-  query = DefaultPageQuery,
+  query = { first: 5 },
   short = false
 } : {header?: JSX.Element, query?: PageQuery, short?: boolean}) {
+  const [queryInState, setQueryInState] = useState(query)
+
   const [result] = useSquid({
     query: QUERY,
-    variables: { ...query }
+    variables: { ...queryInState }
   })
 
   const { data, fetching, error } = result
 
-  if (fetching) {
+  if (data === undefined && fetching) {
     return (<Skeleton>
       <List header={header}>
-        <ActivityRowSkeleton size={5}/>
+        <ActivityRowSkeleton size={query.first}/>
       </List>
     </Skeleton>)
   }
@@ -65,7 +62,11 @@ export default function ListContractActivities ({
 
   return (
     <List header={header} footer={
-      <ListFooter pageInfo={page.pageInfo} totalCount={page.totalCount} />
+      <ListFooter
+        page={page}
+        query={queryInState}
+        setQuery={setQueryInState}
+      />
     }>
       {page?.edges.map(({ node } : Edge<Activity>) => (
         <ActivityRow key={node.id} activity={node} short={short} />
