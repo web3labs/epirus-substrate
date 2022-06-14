@@ -7,6 +7,19 @@ interface Props {
     children: JSX.Element | JSX.Element[]
 }
 
+export function Cols ({ children }: {children: JSX.Element | JSX.Element[]}) {
+  return (
+    <div className="grid grid-flow-col md:auto-cols-auto gap-2 items-center">
+      {children}
+    </div>)
+}
+
+export function Row ({ children }: {children: JSX.Element | JSX.Element[]}) {
+  return (<li className="font-mono pb-2 pt-4 pl-4 pr-4">
+    {children}
+  </li>)
+}
+
 export function ListHeader ({ title, description }: {title:string, description?: string}) {
   return (
     <div className="flex flex-col w-full p-4 border-b px-4 py-5 sm:px-6">

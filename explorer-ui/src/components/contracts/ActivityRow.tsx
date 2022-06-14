@@ -5,6 +5,7 @@ import AccountAddress from "../substrate/AccountAddress"
 import CodeBadge from "../badges/CodeBadge"
 import { Activity, Arg } from "../../types/contracts"
 import { shortenHexString } from "../../formats/text"
+import { Cols, Row } from "../List"
 
 function showValue ({ args }: Activity) {
   const va = findArg(args, "value")
@@ -31,24 +32,26 @@ function additionalDetails ({ action, args }: Activity) {
 export function ActivityRowSkeleton ({ size = 5 }: {size?: number}) {
   const skeletons : JSX.Element[] = []
   for (let i = 0; i < size; i++) {
-    skeletons.push(<li key={`arsk-${i}`} className="pb-2 pt-4 pl-4 pr-4">
-      <div className="grid grid-flow-col auto-cols-auto gap-2 items-center">
-        <div className="flex items-center space-x-3">
-          <div className="h-10 w-10 skeleton rounded-full"></div>
-          <div className="h-3 skeleton w-[50%]"></div>
-        </div>
-        <div className="h-3 skeleton w-[50%] "></div>
-        <div className="flex items-center space-x-3">
-          <div className="h-10 w-10 skeleton rounded-full"></div>
-          <div className="h-3 skeleton w-[50%]"></div>
-        </div>
-      </div>
-      <div className="grid grid-flow-col auto-cols-auto gap-2 items-center pt-2">
-        <div className="h-3 skeleton w-[35%]"></div>
-        <div className="h-3 skeleton w-0"></div>
-        <div className="h-3 skeleton w-[35%] ml-auto"></div>
-      </div>
-    </li>)
+    skeletons.push(
+      <Row key={`arsk-${i}`}>
+        <Cols>
+          <div className="flex items-center space-x-3">
+            <div className="h-10 w-10 skeleton rounded-full"></div>
+            <div className="h-3 skeleton w-[50%]"></div>
+          </div>
+          <div className="h-3 skeleton w-[50%] "></div>
+          <div className="flex items-center space-x-3">
+            <div className="h-10 w-10 skeleton rounded-full"></div>
+            <div className="h-3 skeleton w-[50%]"></div>
+          </div>
+        </Cols>
+        <Cols>
+          <div className="h-3 skeleton w-[35%]"></div>
+          <div className="h-3 skeleton w-0"></div>
+          <div className="h-3 skeleton w-[35%] ml-auto"></div>
+        </Cols>
+      </Row>
+    )
   }
   return (<>
     {skeletons}
@@ -59,13 +62,13 @@ export default function ActivityRow ({ activity, short }: { activity: Activity, 
   const { id, from, to, action, createdAt } = activity
 
   return (
-    <li key={id} className="font-mono pb-2 pt-4 pl-4 pr-4">
-      <div className="grid grid-flow-col auto-cols-auto gap-2 items-center">
+    <Row key={id}>
+      <Cols>
         <div>
           <AccountAddress address={from} short={short} />
         </div>
 
-        <div className="text-sm capitalize">
+        <div className="text-sm capitalize text-ellipsis">
           {action}
         </div>
 
@@ -74,8 +77,8 @@ export default function ActivityRow ({ activity, short }: { activity: Activity, 
             <CodeBadge/>
           </AccountAddress>
         </div>
-      </div>
-      <div className="grid grid-flow-col auto-cols-auto gap-2 items-center">
+      </Cols>
+      <Cols>
         <div className="text-gray-400 text-xs">
           {moment(createdAt).format("DD/MM/YYYY")}
         </div>
@@ -86,7 +89,7 @@ export default function ActivityRow ({ activity, short }: { activity: Activity, 
         <div className="text-xs flex justify-end">
           {showValue(activity)} UNIT
         </div>
-      </div>
-    </li>
+      </Cols>
+    </Row>
   )
 }
