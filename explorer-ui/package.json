@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@datepicker-react/styled": "^2.8.4",
     "@headlessui/react": "^1.6.4",
     "@heroicons/react": "^1.0.6",
     "@polkadot/react-identicon": "^2.4.1",

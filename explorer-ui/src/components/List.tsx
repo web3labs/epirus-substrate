@@ -1,4 +1,8 @@
-import React from "react"
+import { Popover } from "@headlessui/react"
+import { XIcon } from "@heroicons/react/outline"
+import { FilterIcon } from "@heroicons/react/solid"
+import { DateRangeInput, FocusedInput, OnDatesChangeProps } from "@datepicker-react/styled"
+import React, { useReducer } from "react"
 import { Page, PageQuery } from "../types/pagination"
 
 interface Props {
@@ -22,10 +26,67 @@ export function Row ({ children }: {children: JSX.Element | JSX.Element[]}) {
   )
 }
 
+const initialState = {
+  startDate: null,
+  endDate: null,
+  focusedInput: null
+}
+
+interface Action { type: string, payload: FocusedInput | OnDatesChangeProps}
+
+function reducer (state : OnDatesChangeProps, action : Action) : OnDatesChangeProps {
+  switch (action.type) {
+  case "focusChange":
+    return { ...state, focusedInput: action.payload as FocusedInput }
+  case "dateChange":
+    return action.payload as OnDatesChangeProps
+  default:
+    throw new Error()
+  }
+}
+
 export function ListHeader ({ title, description }: {title:string, description?: string}) {
+  const [state, dispatch] = useReducer(reducer, initialState)
+
   return (
     <div className="flex flex-col w-full p-4 border-b px-4 py-5 sm:px-6">
-      <h3 className="text-lg leading-6 font-medium text-gray-900">{title}</h3>
+      <div className="flex flex-row">
+        <h3 className="text-lg leading-6 font-medium text-gray-900">{title}</h3>
+        <div className="flex ml-auto">
+          <Popover className="relative z-10">
+            <Popover.Button
+              className="group border py-1 px-2 inline-flex items-center text-sm text-gray-600 hover:text-gray-900 focus:outline-none"
+            >
+              <span>Filter</span>
+              <FilterIcon width={18} height={18}
+                aria-hidden="true"
+              />
+            </Popover.Button>
+            <Popover.Panel className="absolute z-10 top-0 transform right-0">
+              {({ close }) => (
+                <div className="bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+                  <div className="flex flex-row w-full items-start justify-between">
+                    <h3 className="py-2 px-3">Filter</h3>
+                    <Popover.Button className="p-1 text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
+                      <span className="sr-only">Close menu</span>
+                      <XIcon className="h-6 w-6" aria-hidden="true" />
+                    </Popover.Button>
+                  </div>
+                  <div className="relative grid gap-6 px-5 py-6 sm:gap-8 sm:p-8">
+                    <DateRangeInput
+                      onDatesChange={data => dispatch({ type: "dateChange", payload: data })}
+                      onFocusChange={focusedInput => dispatch({ type: "focusChange", payload: focusedInput })}
+                      startDate={state.startDate} // Date or null
+                      endDate={state.endDate} // Date or null
+                      focusedInput={state.focusedInput} // START_DATE, END_DATE or null
+                    />
+                  </div>
+                </div>
+              )}
+            </Popover.Panel>
+          </Popover>
+        </div>
+      </div>
       {description &&
           <p className="mt-1 max-w-2xl text-sm text-gray-500">{description}</p>
       }
