@@ -1,12 +1,12 @@
-import React, { useEffect } from "react"
-import { useQuery } from "urql"
+import React from "react"
+import useSquid from "../../hooks/useSquid"
 import { Activity } from "../../types/contracts"
 import { Edge, Page, PageQuery } from "../../types/pagination"
-import List, { ListHeader } from "../List"
+import List, { ListFooter, ListHeader } from "../List"
 import Skeleton from "../loading/Skeleton"
 import ActivityRow, { ActivityRowSkeleton } from "./ActivityRow"
 
-const LATEST_ACTIVITIES = `
+const QUERY = `
 query($first: Int!, $after: String = "", $orderBy: [ActivityOrderByInput!]! = [createdAt_DESC]) {
   activitiesConnection(orderBy: $orderBy, after: $after, first: $first) {
     totalCount
@@ -35,25 +35,15 @@ query($first: Int!, $after: String = "", $orderBy: [ActivityOrderByInput!]! = [c
 }
 `
 const DefaultPageQuery : PageQuery = {
-  first: 5
+  first: 5,
+  after: ""
 }
 
-export default function ListContractActivity ({ query = DefaultPageQuery } : {query?: PageQuery}) {
-  const [result, reexecuteQuery] = useQuery({
-    query: LATEST_ACTIVITIES,
+export default function ListContractActivities ({ query = DefaultPageQuery, short = false } : {query?: PageQuery, short?: boolean}) {
+  const [result] = useSquid({
+    query: QUERY,
     variables: { ...query }
   })
-
-  useEffect(() => {
-    if (result.fetching) return
-
-    // Refresh every second...
-    const timerId = setInterval(() => {
-      reexecuteQuery({ requestPolicy: "cache-and-network" })
-    }, 1000000)
-
-    return () => clearTimeout(timerId)
-  }, [result.fetching, reexecuteQuery])
 
   const { data, fetching, error } = result
 
@@ -73,15 +63,12 @@ export default function ListContractActivity ({ query = DefaultPageQuery } : {qu
   const page : Page<Activity> = data?.activitiesConnection
 
   return (
-    <>
-      <List header={latestTransactionsHeader}>
-        {page?.edges.map(({ node } : Edge<Activity>) => (
-          <ActivityRow key={node.id} activity={node} />
-        ))}
-      </List>
-      {/* page?.pageInfo.hasNextPage &&
-      <span>moar {page.pageInfo.endCursor} {page.totalCount}</span>
-        */}
-    </>
+    <List header={latestTransactionsHeader} footer={
+      <ListFooter pageInfo={page.pageInfo} totalCount={page.totalCount} />
+    }>
+      {page?.edges.map(({ node } : Edge<Activity>) => (
+        <ActivityRow key={node.id} activity={node} short={short} />
+      ))}
+    </List>
   )
 }
