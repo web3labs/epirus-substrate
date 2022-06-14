@@ -3,8 +3,8 @@ import { useQuery } from "urql"
 import { PageQuery } from "../types/pagination"
 
 interface Props {
-  query: string,
-  variables: PageQuery | object,
+  query: string
+  variables: PageQuery | object
   refresh?: {
     millis: number,
     disabled: boolean

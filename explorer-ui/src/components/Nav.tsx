@@ -11,6 +11,7 @@ import { ChevronDownIcon, CodeIcon } from "@heroicons/react/solid"
 import Logo from "../logo.svg"
 import SearchBox from "./SearchBox"
 import { Link, NavLink } from "react-router-dom"
+import { classNames } from "../utils/strings"
 
 const blockchain = [
   {
@@ -32,10 +33,6 @@ const blockchain = [
     icon: CodeIcon
   }
 ]
-
-function classNames (...classes: String[]) {
-  return classes.filter(Boolean).join(" ")
-}
 
 export default function Nav () {
   return (

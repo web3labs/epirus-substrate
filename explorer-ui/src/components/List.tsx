@@ -1,10 +1,25 @@
 import React from "react"
-import { PageInfo } from "../types/pagination"
+import { Page, PageQuery } from "../types/pagination"
 
 interface Props {
     header?: JSX.Element
     footer?: JSX.Element
     children: JSX.Element | JSX.Element[]
+}
+
+export function Cols ({ children }: {children: JSX.Element | JSX.Element[]}) {
+  return (
+    <div className="flex flex-row gap-2 justify-between items-stretch">
+      {children}
+    </div>)
+}
+
+export function Row ({ children }: {children: JSX.Element | JSX.Element[]}) {
+  return (
+    <li className="text-sm pb-2 pt-4 pl-4 pr-4">
+      {children}
+    </li>
+  )
 }
 
 export function ListHeader ({ title, description }: {title:string, description?: string}) {
@@ -18,7 +33,11 @@ export function ListHeader ({ title, description }: {title:string, description?:
   )
 }
 
-export function ListFooter ({ pageInfo, totalCount }: {pageInfo: PageInfo, totalCount: number}) {
+export function ListFooter ({ page, query, setQuery }: {
+  page: Page<any>, query: PageQuery, setQuery: (query: PageQuery) => void
+}) {
+  const { pageInfo, totalCount } = page
+  const { first } = query
   return (
     <div className="w-full py-3 px-3 flex items-center justify-between border-t border-gray-200">
       <div className="flex-1 flex justify-between items-center">
@@ -27,20 +46,26 @@ export function ListFooter ({ pageInfo, totalCount }: {pageInfo: PageInfo, total
         </div>
         <div className="ml-auto space-x-2">
           {pageInfo.hasPreviousPage &&
-            <a
-              href="#"
-              className="relative inline-flex items-center text-sm text-gray-900"
+            <span
+              onClick={() => setQuery({
+                first,
+                after: (parseInt(pageInfo.startCursor) - (first + 1)).toString()
+              })}
+              className="relative inline-flex items-center text-sm text-gray-900 hover:cursor-pointer"
             >
             Previous
-            </a>
+            </span>
           }
           {pageInfo.hasNextPage &&
-            <a
-              href="#"
-              className="relative inline-flex items-center text-sm text-gray-900"
+            <span
+              onClick={() => setQuery({
+                first,
+                after: pageInfo.endCursor
+              })}
+              className="relative inline-flex items-center text-sm text-gray-900 hover:cursor-pointer"
             >
             Next
-            </a>
+            </span>
           }
         </div>
       </div>
@@ -50,7 +75,7 @@ export function ListFooter ({ pageInfo, totalCount }: {pageInfo: PageInfo, total
 
 export default function List ({ header, footer, children }: Props) {
   return (
-    <div className="flex flex-col container w-full items-center justify-start bg-white shadow">
+    <div className="flex flex-col w-full items-center justify-start">
       {header}
       <ul className="flex flex-col divide-y w-full">
         {children}

@@ -1,8 +1,9 @@
 
 export interface PageQuery {
-  first: number,
-  after?: string,
+  first: number
+  after?: string
   orderBy?: string
+  where?: object
 }
 
 export interface Edge<T> {
