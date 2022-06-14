@@ -1,9 +1,9 @@
 import {
   contractsCodeStoredEventHandler,
   contractsInstantiatedEventHandler,
-} from "./contractsEvents";
-import { balancesTransferEventHandler } from "./balancesEvents";
-import { contractsCallExtrinsicHandler } from "./contractsExtrinsics";
+} from "./contracts-events";
+import { balancesTransferEventHandler } from "./balances-events";
+import { contractsCallExtrinsicHandler } from "./contracts-extrinsics";
 
 const eventHandlers = [
   {
