@@ -66,28 +66,29 @@ export default function ActivityRow ({ activity, short }: { activity: Activity, 
       <Cols>
         <div>
           <AccountAddress address={from} short={short} />
+
+          <div className="text-gray-400 text-xs">
+            {moment(createdAt).format("DD/MM/YYYY")}
+          </div>
         </div>
 
-        <div className="text-sm capitalize overflow-hidden text-ellipsis">
-          {action}
+        <div className="flex flex-wrap basis-1/6 items-stretch content-center">
+          <div className="flex flex-col text-sm capitalize overflow-hidden text-ellipsis gap-y-1">
+            {action}
+            <div className="text-gray-400 text-xs font-mono">
+              {additionalDetails(activity)}
+            </div>
+          </div>
         </div>
 
-        <div>
-          <AccountAddress address={to} short={short}>
+        <div className="flex flex-col">
+          <AccountAddress address={to} short={short} className="justify-end">
             <CodeBadge/>
           </AccountAddress>
-        </div>
-      </Cols>
-      <Cols>
-        <div className="text-gray-400 text-xs">
-          {moment(createdAt).format("DD/MM/YYYY")}
-        </div>
 
-        <div className="text-gray-400 text-xs pl-1 font-mono">
-          {additionalDetails(activity)}
-        </div>
-        <div className="text-xs flex justify-end">
-          {showValue(activity)} UNIT
+          <div className="text-xs flex justify-end">
+            {showValue(activity)} UNIT
+          </div>
         </div>
       </Cols>
     </Row>

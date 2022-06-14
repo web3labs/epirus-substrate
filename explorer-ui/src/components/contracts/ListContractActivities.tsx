@@ -2,13 +2,13 @@ import React from "react"
 import useSquid from "../../hooks/useSquid"
 import { Activity } from "../../types/contracts"
 import { Edge, Page, PageQuery } from "../../types/pagination"
-import List, { ListFooter, ListHeader } from "../List"
+import List, { ListFooter } from "../List"
 import Skeleton from "../loading/Skeleton"
 import ActivityRow, { ActivityRowSkeleton } from "./ActivityRow"
 
 const QUERY = `
-query($first: Int!, $after: String = "", $orderBy: [ActivityOrderByInput!]! = [createdAt_DESC]) {
-  activitiesConnection(orderBy: $orderBy, after: $after, first: $first) {
+query($where: ActivityWhereInput = {} ,$first: Int = 5, $after: String = "", $orderBy: [ActivityOrderByInput!]! = [createdAt_DESC]) {
+  activitiesConnection(where: $where, orderBy: $orderBy, after: $after, first: $first) {
     totalCount
     edges {
       node {
@@ -36,10 +36,15 @@ query($first: Int!, $after: String = "", $orderBy: [ActivityOrderByInput!]! = [c
 `
 const DefaultPageQuery : PageQuery = {
   first: 5,
-  after: ""
+  after: "",
+  where: {}
 }
 
-export default function ListContractActivities ({ query = DefaultPageQuery, short = false } : {query?: PageQuery, short?: boolean}) {
+export default function ListContractActivities ({
+  header,
+  query = DefaultPageQuery,
+  short = false
+} : {header?: JSX.Element, query?: PageQuery, short?: boolean}) {
   const [result] = useSquid({
     query: QUERY,
     variables: { ...query }
@@ -47,13 +52,9 @@ export default function ListContractActivities ({ query = DefaultPageQuery, shor
 
   const { data, fetching, error } = result
 
-  const latestTransactionsHeader = <ListHeader
-    title="Latest Transactions"
-    description="Contract related extrinsics"/>
-
   if (fetching) {
     return (<Skeleton>
-      <List header={latestTransactionsHeader}>
+      <List header={header}>
         <ActivityRowSkeleton size={5}/>
       </List>
     </Skeleton>)
@@ -63,7 +64,7 @@ export default function ListContractActivities ({ query = DefaultPageQuery, shor
   const page : Page<Activity> = data?.activitiesConnection
 
   return (
-    <List header={latestTransactionsHeader} footer={
+    <List header={header} footer={
       <ListFooter pageInfo={page.pageInfo} totalCount={page.totalCount} />
     }>
       {page?.edges.map(({ node } : Edge<Activity>) => (

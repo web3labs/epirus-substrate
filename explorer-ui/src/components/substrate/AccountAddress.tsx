@@ -1,17 +1,23 @@
 import Identicon from "@polkadot/react-identicon"
 import React from "react"
 import { shorten } from "../../formats/text"
+import { con } from "../../utils/strings"
 
 interface Props {
   address: string,
   short?: boolean,
   children?: JSX.Element | null
+  className?: string
 }
 
-export default function AccountAddress ({ address, short = false, children }: Props) {
+export default function AccountAddress ({ address, short = false, children, className }: Props) {
   if (address) {
     return (
-      <div className="flex flex-wrap items-center">
+      <div className={
+        con(
+          "flex flex-wrap items-center gap-x-2",
+          className
+        )}>
         <div className="relative">
           <Identicon
             value={address}
@@ -20,7 +26,7 @@ export default function AccountAddress ({ address, short = false, children }: Pr
           />
           {children}
         </div>
-        <div className="ml-2 overflow-hidden text-ellipsis">{short ? shorten(address) : address}</div>
+        <div className="font-mono overflow-hidden text-ellipsis">{short ? shorten(address) : address}</div>
       </div>
     )
   } else {

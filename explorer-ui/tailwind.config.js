@@ -7,7 +7,7 @@ module.exports = {
   theme: {
     fontFamily: {
       mono: [
-        "B612 Mono",
+        "Fira Mono",
         ...fontFamily.mono
       ]
     }

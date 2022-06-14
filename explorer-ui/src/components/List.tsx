@@ -9,15 +9,17 @@ interface Props {
 
 export function Cols ({ children }: {children: JSX.Element | JSX.Element[]}) {
   return (
-    <div className="grid grid-flow-col md:auto-cols-auto gap-2 items-center">
+    <div className="flex flex-row gap-2 justify-between items-stretch">
       {children}
     </div>)
 }
 
 export function Row ({ children }: {children: JSX.Element | JSX.Element[]}) {
-  return (<li className="text-sm pb-2 pt-4 pl-4 pr-4">
-    {children}
-  </li>)
+  return (
+    <li className="text-sm pb-2 pt-4 pl-4 pr-4">
+      {children}
+    </li>
+  )
 }
 
 export function ListHeader ({ title, description }: {title:string, description?: string}) {
@@ -63,7 +65,7 @@ export function ListFooter ({ pageInfo, totalCount }: {pageInfo: PageInfo, total
 
 export default function List ({ header, footer, children }: Props) {
   return (
-    <div className="flex flex-col container w-full items-center justify-start bg-white shadow">
+    <div className="flex flex-col w-full items-center justify-start">
       {header}
       <ul className="flex flex-col divide-y w-full">
         {children}
