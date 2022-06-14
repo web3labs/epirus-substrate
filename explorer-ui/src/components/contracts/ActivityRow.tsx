@@ -68,7 +68,7 @@ export default function ActivityRow ({ activity, short }: { activity: Activity, 
           <AccountAddress address={from} short={short} />
         </div>
 
-        <div className="text-sm capitalize text-ellipsis">
+        <div className="text-sm capitalize overflow-hidden text-ellipsis">
           {action}
         </div>
 

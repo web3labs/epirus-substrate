@@ -51,7 +51,7 @@ query($id: ID!) {
 
 function Definition ({ label, term }: {label: string, term: JSX.Element | string}) {
   return (
-    <div className="font-mono px-2 py-3 grid grid-cols-6 gap-2 items-center">
+    <div className="px-2 py-3 grid grid-cols-6 gap-2 items-center">
       <dt className="text-sm text-gray-500">{label}</dt>
       <dd className="text-sm text-gray-900 col-span-5">{term}</dd>
     </div>
@@ -87,7 +87,9 @@ export default function ContractPage () {
             <Definition label="ID" term={
               <AccountAddress address={id}><CodeBadge/></AccountAddress>
             } />
-            <Definition label="Code Hash" term={contractCode.id}/>
+            <Definition label="Code Hash" term={
+              <span className="font-mono overflow-hidden text-ellipsis">{contractCode.id}</span>
+            }/>
             <Definition label="Type" term="WASM" />
           </dl>
         </div>
@@ -108,8 +110,8 @@ export default function ContractPage () {
                 {deployer.account && <CodeBadge/>}
               </AccountAddress>
             } />
-            <Definition label="Extrinsic ID" term={
-              <span>{createdFrom.id} · Block #{createdFrom.blockNumber}</span>
+            <Definition label="ID" term={
+              <span className="font-mono">{createdFrom.id}</span>
             }/>
             <Definition label="Timestamp" term={deployedOn.toString()}/>
           </dl>

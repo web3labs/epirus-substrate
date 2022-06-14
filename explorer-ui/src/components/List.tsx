@@ -15,7 +15,7 @@ export function Cols ({ children }: {children: JSX.Element | JSX.Element[]}) {
 }
 
 export function Row ({ children }: {children: JSX.Element | JSX.Element[]}) {
-  return (<li className="font-mono pb-2 pt-4 pl-4 pr-4">
+  return (<li className="text-sm pb-2 pt-4 pl-4 pr-4">
     {children}
   </li>)
 }

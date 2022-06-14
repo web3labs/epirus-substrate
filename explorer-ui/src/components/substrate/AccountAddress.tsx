@@ -20,7 +20,7 @@ export default function AccountAddress ({ address, short = false, children }: Pr
           />
           {children}
         </div>
-        <div className="text-sm ml-2">{short ? shorten(address) : address}</div>
+        <div className="ml-2 overflow-hidden text-ellipsis">{short ? shorten(address) : address}</div>
       </div>
     )
   } else {

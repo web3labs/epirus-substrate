@@ -37,7 +37,7 @@ export default function ContractRow ({ contract, short = false }: { contract: Li
         <div className="text-gray-400 text-xs">
         </div>
 
-        <div className="text-gray-400  text-xs flex justify-end">
+        <div className="font-mono text-gray-400 text-xs flex justify-end">
           {shortenHexString(contract.contractCode.id)}
         </div>
       </Cols>
