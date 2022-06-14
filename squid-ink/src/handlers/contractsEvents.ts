@@ -18,19 +18,18 @@ export async function contractsInstantiatedEventHandler(
   logger: Logger
 ): Promise<void> {
   logger.info("Got contracts instantiated event!");
-  const { deployer, contract } = new NormalisedContractsInstantiatedEvent(
-    ctx
-  ).resolve();
-  const { store, extrinsic, block, event } = ctx;
+  try {
+    const { store, extrinsic, block, event } = ctx;
 
-  if (extrinsic) {
-    const extrinsicEntity = createExtrinsic(extrinsic, block);
-    const eventEntity = createEvent(extrinsicEntity, event);
+    if (extrinsic) {
+      const extrinsicEntity = createExtrinsic(extrinsic, block);
+      const eventEntity = createEvent(extrinsicEntity, event);
+      const { deployer, contract } = new NormalisedContractsInstantiatedEvent(
+        ctx
+      ).resolve();
+      const deployerAccount = await getOrCreateAccount(store, deployer);
+      const contractAccount = await getOrCreateAccount(store, contract);
 
-    const deployerAccount = await getOrCreateAccount(store, deployer);
-    const contractAccount = await getOrCreateAccount(store, contract);
-
-    try {
       const { codeHash, trieId, storageDeposit } =
         await new NormalisedContractInfoOfStorage(ctx).get(contract);
       const contractCodeEntity = await ctx.store.get(ContractCode, {
@@ -68,9 +67,9 @@ export async function contractsInstantiatedEventHandler(
         ),
       ];
       await store.save(entities);
-    } catch (error) {
-      logger.error("Error handling contracts instantiated event.", error);
     }
+  } catch (error) {
+    logger.error("Error handling contracts instantiated event.", error);
   }
 }
 
@@ -79,13 +78,15 @@ export async function contractsCodeStoredEventHandler(
   logger: Logger
 ): Promise<void> {
   logger.info("Got contracts code stored event!");
-  const { extrinsic, store, block, event } = ctx;
-  if (extrinsic) {
-    const { codeHash } = new NormalisedContractsCodeStoredEvent(ctx).resolve();
-    const extrinsicEntity = createExtrinsic(extrinsic, block);
-    const eventEntity = createEvent(extrinsicEntity, event);
 
-    try {
+  try {
+    const { extrinsic, store, block, event } = ctx;
+    if (extrinsic) {
+      const { codeHash } = new NormalisedContractsCodeStoredEvent(
+        ctx
+      ).resolve();
+      const extrinsicEntity = createExtrinsic(extrinsic, block);
+      const eventEntity = createEvent(extrinsicEntity, event);
       const storageInfo = await new NormalisedCodeStorageStorage(ctx).get(
         codeHash
       );
@@ -106,8 +107,8 @@ export async function contractsCodeStoredEventHandler(
       });
 
       await store.save([extrinsicEntity, eventEntity, contractCodeEntity]);
-    } catch (error) {
-      logger.error("Error handling code stored event.", error);
     }
+  } catch (error) {
+    logger.error("Error handling code stored event.", error);
   }
 }
