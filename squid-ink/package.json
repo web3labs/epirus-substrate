@@ -23,7 +23,8 @@
     "@subsquid/util-internal-hex": "^0.0.0",
     "dotenv": "^16.0.0",
     "pg": "^8.7.3",
-    "typeorm": "^0.2.41"
+    "typeorm": "^0.2.41",
+    "winston": "^3.7.2"
   },
   "devDependencies": {
     "@subsquid/substrate-metadata-explorer": "^0.0.8",

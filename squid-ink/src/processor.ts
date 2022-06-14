@@ -1,4 +1,9 @@
-import { SubstrateProcessor } from "@subsquid/substrate-processor";
+import {
+  EventHandlerContext,
+  ExtrinsicHandlerContext,
+  SubstrateProcessor,
+} from "@subsquid/substrate-processor";
+import { createLogger, transports, format, Logger } from "winston";
 import { eventHandlers, extrinsicHandlers } from "./handlers";
 
 // TO DO: Extract to config file
@@ -22,18 +27,56 @@ if (logEvery > 0) {
   console.log({ message: "log every disabled", level: "warn" });
 }
 
+const { combine, splat, colorize, printf, timestamp: ts } = format;
+const winstonLogger = createLogger({
+  transports: [
+    new transports.File({ filename: "error.log", level: "error" }),
+    new transports.File({ filename: "combined.log" }),
+  ],
+  format: combine(
+    colorize(),
+    splat(),
+    ts(),
+    printf(({ level, message, timestamp }) => {
+      return `[${timestamp as string}] ${level}: ${message}`;
+    })
+  ),
+});
+
+if (process.env.NODE_ENV !== "production") {
+  winstonLogger.add(new transports.Console());
+}
+
+interface LoggedHandler<ContextType> {
+  (ctx: ContextType, logger: Logger): Promise<void>;
+}
+function curry<ContextType>(
+  targetFn: LoggedHandler<ContextType>,
+  logger: Logger
+) {
+  return async (ctx: ContextType) => {
+    return targetFn(ctx, logger);
+  };
+}
+
 // Add all event handlers
 for (let i = 0; i < eventHandlers.length; i += 1) {
   const handler = eventHandlers[i];
-  console.log(`Adding event handler [${handler.name}]`);
-  processor.addEventHandler(handler.name, handler.callback);
+
+  winstonLogger.info("Adding event handler [%s]", handler.name);
+  const curried = curry<EventHandlerContext>(handler.callback, winstonLogger);
+  processor.addEventHandler(handler.name, curried);
 }
 
 // Add all extrinsic handlers
 for (let i = 0; i < extrinsicHandlers.length; i += 1) {
   const handler = extrinsicHandlers[i];
-  console.log(`Adding extrinsic handler [${handler.name}]`);
-  processor.addExtrinsicHandler(handler.name, handler.callback);
+  winstonLogger.info("Adding extrinsic handler [%s]", handler.name);
+  const curried = curry<ExtrinsicHandlerContext>(
+    handler.callback,
+    winstonLogger
+  );
+  processor.addExtrinsicHandler(handler.name, curried);
 }
 
 processor.run();

@@ -1,14 +1,16 @@
 import { ExtrinsicHandlerContext } from "@subsquid/substrate-processor";
+import { Logger } from "winston";
 import { ContractCall } from "../model";
 import { createActivity, createExtrinsic } from "../entities";
-import { EnhancedContractsCallCall } from "../enhanced-types";
+import { NormalisedContractsCallCall } from "../normalised-types";
 
 export async function contractsCallExtrinsicHandler(
-  ctx: ExtrinsicHandlerContext
+  ctx: ExtrinsicHandlerContext,
+  logger: Logger
 ): Promise<void> {
-  console.log("Got contracts call extrinsic!");
+  logger.info("Got contracts call extrinsic!");
   const { store, extrinsic, block } = ctx;
-  const { contractAddress } = new EnhancedContractsCallCall(ctx).resolve();
+  const { contractAddress } = new NormalisedContractsCallCall(ctx).resolve();
   const extrinsicEntity = createExtrinsic(extrinsic, block);
   const contractCallEntity = new ContractCall({
     id: extrinsicEntity.id,

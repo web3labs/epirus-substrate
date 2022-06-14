@@ -1,7 +1,7 @@
 import * as ss58 from "@subsquid/ss58";
 import { ContractsCallCall } from "../types/calls";
 
-export class EnhancedContractsCallCall extends ContractsCallCall {
+export class NormalisedContractsCallCall extends ContractsCallCall {
   resolve(): {
     contractAddress: string;
     value?: bigint;

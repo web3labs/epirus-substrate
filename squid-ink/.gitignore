@@ -3,6 +3,7 @@
 /db/migrations
 
 /**Versions.json
+/**.log
 
 # IDE files
 /.idea

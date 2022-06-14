@@ -1,22 +1,24 @@
 import * as ss58 from "@subsquid/ss58";
 import { toHex } from "@subsquid/util-internal-hex";
 import { EventHandlerContext } from "@subsquid/substrate-processor";
+import { Logger } from "winston";
 import { Contract, ContractCode } from "../model";
 import { getOrCreateAccount } from "../entities/retrievers";
 import { createExtrinsic, createEvent, createActivity } from "../entities";
 import {
-  EnhancedCodeStorageStorage,
-  EnhancedContractInfoOfStorage,
-  EnhancedContractsCodeStoredEvent,
-  EnhancedContractsInstantiatedEvent,
-  EnhancedOwnerInfoOfStorage,
-} from "../enhanced-types";
+  NormalisedCodeStorageStorage,
+  NormalisedContractInfoOfStorage,
+  NormalisedContractsCodeStoredEvent,
+  NormalisedContractsInstantiatedEvent,
+  NormalisedOwnerInfoOfStorage,
+} from "../normalised-types";
 
 export async function contractsInstantiatedEventHandler(
-  ctx: EventHandlerContext
+  ctx: EventHandlerContext,
+  logger: Logger
 ): Promise<void> {
-  console.log("Got contracts instantiated event!");
-  const { deployer, contract } = new EnhancedContractsInstantiatedEvent(
+  logger.info("Got contracts instantiated event!");
+  const { deployer, contract } = new NormalisedContractsInstantiatedEvent(
     ctx
   ).resolve();
   const { store, extrinsic, block, event } = ctx;
@@ -30,10 +32,16 @@ export async function contractsInstantiatedEventHandler(
 
     try {
       const { codeHash, trieId, storageDeposit } =
-        await new EnhancedContractInfoOfStorage(ctx).get(contract);
+        await new NormalisedContractInfoOfStorage(ctx).get(contract);
       const contractCodeEntity = await ctx.store.get(ContractCode, {
         where: { id: toHex(codeHash) },
       });
+
+      if (contractCodeEntity == null) {
+        throw new Error(
+          `ContractCode entity is not found in the database for contract address [${contract}], please make sure that it is created and saved first.`
+        );
+      }
 
       const contractEntity = new Contract({
         id: contract,
@@ -61,37 +69,45 @@ export async function contractsInstantiatedEventHandler(
       ];
       await store.save(entities);
     } catch (error) {
-      console.log(error);
+      logger.error("Error handling contracts instantiated event.", error);
     }
   }
 }
 
 export async function contractsCodeStoredEventHandler(
-  ctx: EventHandlerContext
+  ctx: EventHandlerContext,
+  logger: Logger
 ): Promise<void> {
-  const { codeHash } = new EnhancedContractsCodeStoredEvent(ctx).resolve();
+  logger.info("Got contracts code stored event!");
   const { extrinsic, store, block, event } = ctx;
   if (extrinsic) {
+    const { codeHash } = new NormalisedContractsCodeStoredEvent(ctx).resolve();
     const extrinsicEntity = createExtrinsic(extrinsic, block);
     const eventEntity = createEvent(extrinsicEntity, event);
-    // Get code info
-    const storageInfo = await new EnhancedCodeStorageStorage(ctx).get(codeHash);
 
-    // Get owner info
-    const ownerInfo = await new EnhancedOwnerInfoOfStorage(ctx).get(codeHash);
+    try {
+      const storageInfo = await new NormalisedCodeStorageStorage(ctx).get(
+        codeHash
+      );
+      const ownerInfo = await new NormalisedOwnerInfoOfStorage(ctx).get(
+        codeHash
+      );
 
-    const contractCodeEntity = new ContractCode({
-      id: codeHash,
-      code: storageInfo?.code,
-      // TODO here the account won't be created...
-      owner: await getOrCreateAccount(
-        store,
-        ss58.codec("substrate").encode(ownerInfo.owner)
-      ),
-      createdFrom: extrinsicEntity,
-      createdAt: extrinsicEntity.createdAt,
-    });
+      const contractCodeEntity = new ContractCode({
+        id: codeHash,
+        code: storageInfo?.code,
+        // TODO here the account won't be created...
+        owner: await getOrCreateAccount(
+          store,
+          ss58.codec("substrate").encode(ownerInfo.owner)
+        ),
+        createdFrom: extrinsicEntity,
+        createdAt: extrinsicEntity.createdAt,
+      });
 
-    await store.save([extrinsicEntity, eventEntity, contractCodeEntity]);
+      await store.save([extrinsicEntity, eventEntity, contractCodeEntity]);
+    } catch (error) {
+      logger.error("Error handling code stored event.", error);
+    }
   }
 }

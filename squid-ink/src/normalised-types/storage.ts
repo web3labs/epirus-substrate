@@ -1,4 +1,4 @@
-import { assert } from "console";
+import assert from "assert";
 import * as ss58 from "@subsquid/ss58";
 import { decodeHex } from "@subsquid/util-internal-hex";
 import {
@@ -14,7 +14,7 @@ import {
   RawContractInfo,
 } from "../types/v100";
 
-export class EnhancedSystemAccountStorage extends SystemAccountStorage {
+export class NormalisedSystemAccountStorage extends SystemAccountStorage {
   async get(accountId: string): Promise<AccountInfo> {
     assert(this.isExists);
     if (this.isV100) {
@@ -24,7 +24,7 @@ export class EnhancedSystemAccountStorage extends SystemAccountStorage {
   }
 }
 
-export class EnhancedContractInfoOfStorage extends ContractsContractInfoOfStorage {
+export class NormalisedContractInfoOfStorage extends ContractsContractInfoOfStorage {
   async get(accountId: string): Promise<RawContractInfo> {
     assert(this.isExists);
     let info: RawContractInfo | undefined;
@@ -37,12 +37,12 @@ export class EnhancedContractInfoOfStorage extends ContractsContractInfoOfStorag
       return info;
     }
     throw new Error(
-      `ContractInfoOf not found in storage for account [${accountId}]`
+      `ContractInfoOf not found in storage for accountId [${accountId}]`
     );
   }
 }
 
-export class EnhancedCodeStorageStorage extends ContractsCodeStorageStorage {
+export class NormalisedCodeStorageStorage extends ContractsCodeStorageStorage {
   async get(key: string): Promise<PrefabWasmModule> {
     assert(this.isExists);
     let info: PrefabWasmModule | undefined;
@@ -58,7 +58,7 @@ export class EnhancedCodeStorageStorage extends ContractsCodeStorageStorage {
   }
 }
 
-export class EnhancedOwnerInfoOfStorage extends ContractsOwnerInfoOfStorage {
+export class NormalisedOwnerInfoOfStorage extends ContractsOwnerInfoOfStorage {
   async get(key: string): Promise<OwnerInfo> {
     assert(this.isExists);
     let info: OwnerInfo | undefined;

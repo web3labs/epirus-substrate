@@ -6,7 +6,7 @@ import {
   ContractsInstantiatedEvent,
 } from "../types/events";
 
-export class EnhancedBalancesTransferEvent extends BalancesTransferEvent {
+export class NormalisedBalancesTransferEvent extends BalancesTransferEvent {
   resolve(): { from: string; to: string; amount: bigint } {
     if (this.isV100) {
       const { from, to, amount } = this.asV100;
@@ -20,7 +20,7 @@ export class EnhancedBalancesTransferEvent extends BalancesTransferEvent {
   }
 }
 
-export class EnhancedContractsInstantiatedEvent extends ContractsInstantiatedEvent {
+export class NormalisedContractsInstantiatedEvent extends ContractsInstantiatedEvent {
   resolve(): { deployer: string; contract: string } {
     if (this.isV100) {
       const { deployer, contract } = this.asV100;
@@ -33,7 +33,7 @@ export class EnhancedContractsInstantiatedEvent extends ContractsInstantiatedEve
   }
 }
 
-export class EnhancedContractsCodeStoredEvent extends ContractsCodeStoredEvent {
+export class NormalisedContractsCodeStoredEvent extends ContractsCodeStoredEvent {
   resolve(): { codeHash: string } {
     if (this.isV100) {
       const { codeHash } = this.asV100;
