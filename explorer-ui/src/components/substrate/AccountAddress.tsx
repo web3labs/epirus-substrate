@@ -1,7 +1,7 @@
 import Identicon from "@polkadot/react-identicon"
 import React from "react"
 import { shorten } from "../../formats/text"
-import { con } from "../../utils/strings"
+import { classNames } from "../../utils/strings"
 
 interface Props {
   address: string,
@@ -10,11 +10,16 @@ interface Props {
   className?: string
 }
 
-export default function AccountAddress ({ address, short = false, children, className }: Props) {
+export default function AccountAddress ({
+  address,
+  short = false,
+  children,
+  className = ""
+}: Props) {
   if (address) {
     return (
       <div className={
-        con(
+        classNames(
           "flex flex-wrap items-center gap-x-2",
           className
         )}>

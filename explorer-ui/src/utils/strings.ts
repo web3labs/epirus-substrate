@@ -1,3 +1,3 @@
-export function con (t: string, s?: string) {
-  return t + (s ? " " + s : "")
+export function classNames (...classes: String[]) {
+  return classes.filter(Boolean).join(" ")
 }
