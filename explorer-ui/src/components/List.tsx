@@ -1,9 +1,12 @@
 import React from "react"
-import { Page, PageQuery } from "../types/pagination"
+import { PageQuery } from "../types/pagination"
 
 interface Props {
-    header?: JSX.Element
+    title?: JSX.Element | string
+    description?: JSX.Element | string
     footer?: JSX.Element
+    sort?: JSX.Element
+    filter?: JSX.Element
     children: JSX.Element | JSX.Element[]
 }
 
@@ -22,65 +25,48 @@ export function Row ({ children }: {children: JSX.Element | JSX.Element[]}) {
   )
 }
 
-export function ListHeader ({ title, description }: {title:string, description?: string}) {
-  return (
-    <div className="flex flex-col w-full p-4 border-b px-4 py-5 sm:px-6">
-      <h3 className="text-lg leading-6 font-medium text-gray-900">{title}</h3>
-      {description &&
-          <p className="mt-1 max-w-2xl text-sm text-gray-500">{description}</p>
-      }
-    </div>
-  )
+export interface ListProps {
+  query?: PageQuery
+  title?: JSX.Element | string
+  description?: JSX.Element | string
+  short?: boolean
+  sortable?: boolean
+  filterable?: boolean
 }
 
-export function ListFooter ({ page, query, setQuery }: {
-  page: Page<any>, query: PageQuery, setQuery: (query: PageQuery) => void
-}) {
-  const { pageInfo, totalCount } = page
-  const { first } = query
-  return (
-    <div className="w-full py-3 px-3 flex items-center justify-between border-t border-gray-200">
-      <div className="flex-1 flex justify-between items-center">
-        <div className="text-xs">
-        Showing {pageInfo.startCursor} to {pageInfo.endCursor} of {totalCount}
-        </div>
-        <div className="ml-auto space-x-2">
-          {pageInfo.hasPreviousPage &&
-            <span
-              onClick={() => setQuery({
-                first,
-                after: (parseInt(pageInfo.startCursor) - (first + 1)).toString()
-              })}
-              className="relative inline-flex items-center text-sm text-gray-900 hover:cursor-pointer"
-            >
-            Previous
-            </span>
-          }
-          {pageInfo.hasNextPage &&
-            <span
-              onClick={() => setQuery({
-                first,
-                after: pageInfo.endCursor
-              })}
-              className="relative inline-flex items-center text-sm text-gray-900 hover:cursor-pointer"
-            >
-            Next
-            </span>
-          }
-        </div>
-      </div>
-    </div>
-  )
-}
-
-export default function List ({ header, footer, children }: Props) {
+export default function List ({ title, description, footer, filter, sort, children }: Props) {
   return (
     <div className="flex flex-col w-full items-center justify-start">
-      {header}
+      {title &&
+      <div className="flex flex-col w-full p-4 border-b px-4 py-5 sm:px-6">
+        <div className="flex flex-row items-center">
+          <div className="flex flex-col gap-y-1">
+            <h3 className="text-lg leading-6 font-medium text-gray-900">{title}</h3>
+            {description &&
+              <p className="max-w-2xl text-sm text-gray-500">{description}</p>
+            }
+          </div>
+          <div className="flex ml-auto">
+            <div className="flex flex-row gap-x-2 items-center">
+              {sort && <>
+                <span className="text-gray-500">Sort by</span>
+                {sort}
+              </>
+              }
+              {filter}
+            </div>
+          </div>
+        </div>
+      </div>
+      }
       <ul className="flex flex-col divide-y w-full">
         {children}
       </ul>
-      {footer}
+      {footer &&
+        <div className="w-full py-3 px-3 flex items-center justify-between border-t border-gray-200">
+          {footer}
+        </div>
+      }
     </div>
   )
 }

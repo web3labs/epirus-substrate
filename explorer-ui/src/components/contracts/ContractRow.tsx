@@ -8,7 +8,7 @@ import { Cols, Row } from "../List"
 import AccountAddress from "../substrate/AccountAddress"
 
 export default function ContractRow ({ contract, short = false }: { contract: LightContract, short?: boolean }) {
-  const { id, deployedOn, deployer, account } = contract
+  const { id, createdAt, deployer, account } = contract
 
   return (
     <Row key={id}>
@@ -31,7 +31,7 @@ export default function ContractRow ({ contract, short = false }: { contract: Li
       </Cols>
       <Cols>
         <div className="text-gray-400 text-xs">
-          {moment(deployedOn).format("DD/MM/YYYY")}
+          {moment(createdAt).format("DD/MM/YYYY")}
         </div>
 
         <div className="text-gray-400 text-xs">

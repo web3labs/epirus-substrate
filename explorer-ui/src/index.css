@@ -14,3 +14,8 @@
     @apply text-blue-800;
   }
 }
+
+/* Fixes */
+.ui--IdentityIcon {
+  cursor: inherit !important;
+}
