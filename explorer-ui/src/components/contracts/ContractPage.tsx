@@ -9,10 +9,11 @@ import ListContractActivities from "./ListContractActivities"
 const QUERY = `
 query($id: ID!) {
   contracts(where: {id_eq: $id}) {
-    deployedOn
+    createdAt
     id
     salt
     trieId
+    storageDeposit
     deployer {
       id
       contract {
@@ -23,8 +24,7 @@ query($id: ID!) {
       code
       id
       removedOn
-      storageDeposit
-      uploadedOn
+      createdAt
     }
     account {
       balance {
@@ -94,7 +94,7 @@ export default function ContractPage () {
   }
   if (error) return <p>Oh no... {error.message}</p>
 
-  const { id, deployedOn, deployer, createdFrom, contractCode, account } = data?.contracts[0] as Contract
+  const { id, createdAt, deployer, createdFrom, contractCode, account } = data?.contracts[0] as Contract
 
   return (
     <>
@@ -123,7 +123,7 @@ export default function ContractPage () {
               <Definition label="ID" term={
                 <span className="font-mono">{createdFrom.id}</span>
               }/>
-              <Definition label="Timestamp" term={deployedOn.toString()}/>
+              <Definition label="Timestamp" term={createdAt.toString()}/>
             </dl>
           </div>
         </Box>

@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { useQuery } from "urql"
+import { useQuery, UseQueryState } from "urql"
 import { PageQuery } from "../types/pagination"
 
 interface Props {
@@ -16,7 +16,7 @@ export default function useSquid ({
     millis: 1000,
     disabled: false
   }
-}: Props) {
+}: Props) : [UseQueryState, () => void] {
   const [result, reexecuteQuery] = useQuery({
     query,
     variables
@@ -33,5 +33,5 @@ export default function useSquid ({
     return () => clearTimeout(timerId)
   }, [result.fetching, reexecuteQuery])
 
-  return [result]
+  return [result, reexecuteQuery]
 }
