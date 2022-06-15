@@ -22,7 +22,7 @@ export default function Segment (props: Props) {
   return (
     <div className={classNames(className, "flex flex-col w-full px-5 py-3 gap-y-2")}>
       {title &&
-        <h3 className="uppercase tracking-wider text-xs mb-1">
+        <h3 className="small-caps mb-1">
           {title}
         </h3>
       }

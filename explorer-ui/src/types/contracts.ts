@@ -65,5 +65,6 @@ export interface Contract extends LightContract {
     signature:string
     tip:string
     versionInfo:string
+    args: Arg[]
   }
 }

@@ -11,6 +11,7 @@ import AccountAddress from "../substrate/AccountAddress"
 import ListContractActivities from "./ListContractActivities"
 import Segment from "../Segment"
 import { classNames } from "../../utils/strings"
+import { argValue } from "../../utils/types"
 const QUERY = `
 query($id: ID!) {
   contracts(where: {id_eq: $id}) {
@@ -51,6 +52,11 @@ query($id: ID!) {
       signature
       tip
       versionInfo
+      args {
+        type
+        name
+        value
+      }
     }
   }
 }
@@ -63,8 +69,12 @@ function DefinitionList ({ children } :{ children: JSX.Element | JSX.Element[]})
 }
 
 function Definition ({ label, term, className = "" }: {
-  label: string, term: JSX.Element | string, className?: string
+  label: string, term: JSX.Element | string | undefined | null, className?: string
 }) {
+  if (term === undefined || term === null) {
+    return null
+  }
+
   return (
     <div className={classNames(className, "flex flex-row flex-wrap gap-x-2 items-center")}>
       <dt className="flex text-sm text-gray-500 basis-20">{label}</dt>
@@ -108,7 +118,7 @@ export default function ContractPage () {
   }
   if (error) return <p>Oh no... {error.message}</p>
 
-  const { id, createdAt, deployer, createdFrom, contractCode, account } = data?.contracts[0] as Contract
+  const { id, salt, createdAt, deployer, createdFrom, contractCode, account } = data?.contracts[0] as Contract
   const { balance } = account
 
   return (
@@ -127,17 +137,23 @@ export default function ContractPage () {
             </DefinitionList>
           </Segment>
 
-          <Segment title="Creation" collapsable={true} isOpen={false}>
+          <Segment title="Creation details" collapsable={true} isOpen={false}>
             <DefinitionList>
-              <Definition label="Deployer" term={
-                <AccountAddress address={deployer.id} short={false}>
-                  {deployer.account && <CodeBadge/>}
-                </AccountAddress>
-              } />
               <Definition label="ID" term={
                 <span className="font-mono">{createdFrom.id}</span>
               }/>
-              <Definition label="Timestamp" term={createdAt.toString()}/>
+              <Definition label="Time" term={createdAt.toString()}/>
+              <Definition label="Salt" term={salt &&
+                <span className="font-mono">{salt}</span>
+              }/>
+              <Definition label="Data" term={
+                <span className="font-mono">{argValue(createdFrom.args, "data")}</span>
+              } />
+              <Definition label="Deployer" term={
+                <AccountAddress address={deployer.id}>
+                  {deployer.account && <CodeBadge/>}
+                </AccountAddress>
+              } />
             </DefinitionList>
           </Segment>
         </Box>

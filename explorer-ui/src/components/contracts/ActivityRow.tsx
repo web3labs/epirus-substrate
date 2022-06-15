@@ -3,27 +3,24 @@ import { formatBalance } from "@polkadot/util"
 
 import AccountAddress from "../substrate/AccountAddress"
 import CodeBadge from "../badges/CodeBadge"
-import { Activity, Arg } from "../../types/contracts"
+import { Activity } from "../../types/contracts"
 import { shortenHexString } from "../../formats/text"
 import { Cols, Row } from "../List"
 import { formatDate } from "../../formats/time"
 import { NavLink } from "react-router-dom"
 import { useChainProperties } from "../../contexts/ChainContext"
+import { argValue } from "../../utils/types"
 
 function printBalance ({ args }: Activity) {
   const { tokenDecimals, tokenSymbol } = useChainProperties()
-  const va = findArg(args, "value")
+  const va = argValue(args, "value")
   return formatBalance(va, { decimals: tokenDecimals, forceUnit: tokenSymbol })
-}
-
-function findArg (args: Arg[], name: string) {
-  return args.find(a => a.name === name)?.value
 }
 
 function additionalDetails ({ action, args }: Activity) {
   switch (action) {
-  case "contracts.call": return findArg(args, "data")?.slice(0, 10)
-  case "contracts.instantiate": return shortenHexString(findArg(args, "codeHash"))
+  case "contracts.call": return argValue(args, "data")?.slice(0, 10)
+  case "contracts.instantiate": return shortenHexString(argValue(args, "codeHash"))
   default: return null
   }
 }
