@@ -16,7 +16,7 @@ module.exports = {
     "import/prefer-default-export": "off",
     "import/no-default-export": "error",
     // "import/no-cycle": "off",
-    "max-classes-per-file": ["error", 5],
+    "max-classes-per-file": ["error", 8],
     // Don't forget debugs
     "no-console": "off",
     // Not a big fan of constant refactoring that will happen after adding/removing 'this' from some random method

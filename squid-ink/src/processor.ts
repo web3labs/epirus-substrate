@@ -16,17 +16,6 @@ processor.setDataSource({
   chain: "ws://127.0.0.1:9944",
 });
 
-const logEvery = process.env.SECRET_LOG_EVERY
-  ? Number(process.env.SECRET_LOG_EVERY)
-  : 30000;
-if (logEvery > 0) {
-  setInterval(() => {
-    console.log({ message: "test", param1: "test", ts: new Date() });
-  }, logEvery);
-} else {
-  console.log({ message: "log every disabled", level: "warn" });
-}
-
 const { combine, splat, colorize, printf, timestamp: ts } = format;
 const winstonLogger = createLogger({
   transports: [
@@ -45,6 +34,7 @@ const winstonLogger = createLogger({
 
 if (process.env.NODE_ENV !== "production") {
   winstonLogger.add(new transports.Console());
+  winstonLogger.level = "debug";
 }
 
 interface LoggedHandler<ContextType> {

@@ -9,10 +9,10 @@ type Account @entity {
 }
 
 type Balance {
-  free: BigInt!
-  reserved: BigInt!
-  miscFrozen: BigInt!
-  feeFrozen: BigInt!
+  free: BigInt
+  reserved: BigInt
+  miscFrozen: BigInt
+  feeFrozen: BigInt
 }
 
 type Contract @entity {

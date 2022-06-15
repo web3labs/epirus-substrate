@@ -1,35 +1,36 @@
 import { Store } from "@subsquid/substrate-processor";
 import { Account, Balance } from "../model";
 
-export async function getOrCreateAccount(
+export async function updateAccount(
   store: Store,
   id: string,
-  balance?: Balance
+  balance?: Balance,
+  tags?: string[]
 ): Promise<Account> {
-  const account = await getOrCreate(store, Account, id);
+  const account = await getAccount(store, id);
   if (balance) {
-    account.balance = balance;
+    if (account.balance) {
+      account.balance = new Balance({ ...account.balance, ...balance });
+    } else {
+      account.balance = balance;
+    }
+  }
+  if (tags) {
+    if (account.tags) {
+      account.tags = account.tags.concat(tags);
+    } else {
+      account.tags = tags;
+    }
   }
   return account;
 }
 
-export async function getOrCreate<T extends { id: string }>(
-  store: Store,
-  EntityConstructor: EntityConstructor<T>,
-  id: string
-): Promise<T> {
-  let entity = await store.get<T>(EntityConstructor, {
+export async function getAccount(store: Store, id: string): Promise<Account> {
+  let account = await store.get(Account, {
     where: { id },
   });
-
-  if (entity == null) {
-    entity = new EntityConstructor();
-    entity.id = id;
+  if (account == null) {
+    account = new Account({ id });
   }
-
-  return entity;
+  return account;
 }
-
-type EntityConstructor<T> = {
-  new (...args: T[]): T;
-};

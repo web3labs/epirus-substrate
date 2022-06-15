@@ -1,9 +1,16 @@
 import {
   contractsCodeStoredEventHandler,
   contractsInstantiatedEventHandler,
+  contractsContractEmittedEventHandler,
 } from "./contracts-events";
-import { balancesTransferEventHandler } from "./balances-events";
+import {
+  balancesEndowedEventHandler,
+  balancesReservedEventHandler,
+  balancesTransferEventHandler,
+  balancesWithdrawEventHandler,
+} from "./balances-events";
 import { contractsCallExtrinsicHandler } from "./contracts-extrinsics";
+import { systemNewAccountEventHandler } from "./system-events";
 
 const eventHandlers = [
   {
@@ -15,8 +22,28 @@ const eventHandlers = [
     callback: contractsInstantiatedEventHandler,
   },
   {
+    name: "contracts.ContractEmitted",
+    callback: contractsContractEmittedEventHandler,
+  },
+  {
     name: "balances.Transfer",
     callback: balancesTransferEventHandler,
+  },
+  {
+    name: "balances.Endowed",
+    callback: balancesEndowedEventHandler,
+  },
+  {
+    name: "balances.Withdraw",
+    callback: balancesWithdrawEventHandler,
+  },
+  {
+    name: "balances.Reserved",
+    callback: balancesReservedEventHandler,
+  },
+  {
+    name: "system.NewAccount",
+    callback: systemNewAccountEventHandler,
   },
 ];
 

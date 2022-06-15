@@ -2,12 +2,14 @@ import assert from "assert";
 import * as ss58 from "@subsquid/ss58";
 import { decodeHex } from "@subsquid/util-internal-hex";
 import {
+  BalancesAccountStorage,
   ContractsCodeStorageStorage,
   ContractsContractInfoOfStorage,
   ContractsOwnerInfoOfStorage,
   SystemAccountStorage,
 } from "../types/storage";
 import {
+  AccountData,
   AccountInfo,
   OwnerInfo,
   PrefabWasmModule,
@@ -16,6 +18,16 @@ import {
 
 export class NormalisedSystemAccountStorage extends SystemAccountStorage {
   async get(accountId: string): Promise<AccountInfo> {
+    assert(this.isExists);
+    if (this.isV100) {
+      return this.getAsV100(ss58.codec("substrate").decode(accountId));
+    }
+    throw new Error("No Runtime version found");
+  }
+}
+
+export class NormalisedBalancesAccountStorage extends BalancesAccountStorage {
+  async get(accountId: string): Promise<AccountData> {
     assert(this.isExists);
     if (this.isV100) {
       return this.getAsV100(ss58.codec("substrate").decode(accountId));

@@ -64,6 +64,37 @@ export class BalancesEndowedEvent {
   }
 }
 
+export class BalancesReservedEvent {
+  constructor(private ctx: EventContext) {
+    assert(this.ctx.event.name === 'balances.Reserved')
+  }
+
+  /**
+   * Some balance was reserved (moved from free to reserved).
+   */
+  get isV100(): boolean {
+    return this.ctx._chain.getEventHash('balances.Reserved') === 'e84a34a6a3d577b31f16557bd304282f4fe4cbd7115377f4687635dc48e52ba5'
+  }
+
+  /**
+   * Some balance was reserved (moved from free to reserved).
+   */
+  get asV100(): {who: v100.AccountId32, amount: bigint} {
+    assert(this.isV100)
+    return this.ctx._chain.decodeEvent(this.ctx.event)
+  }
+
+  get isLatest(): boolean {
+    deprecateLatest()
+    return this.isV100
+  }
+
+  get asLatest(): {who: v100.AccountId32, amount: bigint} {
+    deprecateLatest()
+    return this.asV100
+  }
+}
+
 export class BalancesTransferEvent {
   constructor(private ctx: EventContext) {
     assert(this.ctx.event.name === 'balances.Transfer')
@@ -214,6 +245,37 @@ export class ContractsInstantiatedEvent {
   }
 
   get asLatest(): {deployer: v100.AccountId32, contract: v100.AccountId32} {
+    deprecateLatest()
+    return this.asV100
+  }
+}
+
+export class SystemNewAccountEvent {
+  constructor(private ctx: EventContext) {
+    assert(this.ctx.event.name === 'system.NewAccount')
+  }
+
+  /**
+   * A new account was created.
+   */
+  get isV100(): boolean {
+    return this.ctx._chain.getEventHash('system.NewAccount') === '7fb7672b764b0a4f0c4910fddefec0709628843df7ad0073a97eede13c53ca92'
+  }
+
+  /**
+   * A new account was created.
+   */
+  get asV100(): {account: v100.AccountId32} {
+    assert(this.isV100)
+    return this.ctx._chain.decodeEvent(this.ctx.event)
+  }
+
+  get isLatest(): boolean {
+    deprecateLatest()
+    return this.isV100
+  }
+
+  get asLatest(): {account: v100.AccountId32} {
     deprecateLatest()
     return this.asV100
   }

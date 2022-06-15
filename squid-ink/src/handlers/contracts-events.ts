@@ -3,7 +3,7 @@ import { toHex } from "@subsquid/util-internal-hex";
 import { EventHandlerContext } from "@subsquid/substrate-processor";
 import { Logger } from "winston";
 import { Contract, ContractCode } from "../model";
-import { getOrCreateAccount } from "../entities/retrievers";
+import { getAccount } from "../entities/retrievers";
 import { createExtrinsic, createEvent, createActivity } from "../entities";
 import {
   NormalisedCodeStorageStorage,
@@ -27,8 +27,8 @@ export async function contractsInstantiatedEventHandler(
       const { deployer, contract } = new NormalisedContractsInstantiatedEvent(
         ctx
       ).resolve();
-      const deployerAccount = await getOrCreateAccount(store, deployer);
-      const contractAccount = await getOrCreateAccount(store, contract);
+      const deployerAccount = await getAccount(store, deployer);
+      const contractAccount = await getAccount(store, contract);
 
       const { codeHash, trieId, storageDeposit } =
         await new NormalisedContractInfoOfStorage(ctx).get(contract);
@@ -69,7 +69,7 @@ export async function contractsInstantiatedEventHandler(
       await store.save(entities);
     }
   } catch (error) {
-    logger.error("Error handling contracts instantiated event.", error);
+    logger.error("Error handling contracts Instantiated event.", error);
   }
 }
 
@@ -82,26 +82,22 @@ export async function contractsCodeStoredEventHandler(
   try {
     const { extrinsic, store, block, event } = ctx;
     if (extrinsic) {
+      const extrinsicEntity = createExtrinsic(extrinsic, block);
+      const eventEntity = createEvent(extrinsicEntity, event);
       const { codeHash } = new NormalisedContractsCodeStoredEvent(
         ctx
       ).resolve();
-      const extrinsicEntity = createExtrinsic(extrinsic, block);
-      const eventEntity = createEvent(extrinsicEntity, event);
-      const storageInfo = await new NormalisedCodeStorageStorage(ctx).get(
+      const { code } = await new NormalisedCodeStorageStorage(ctx).get(
         codeHash
       );
-      const ownerInfo = await new NormalisedOwnerInfoOfStorage(ctx).get(
+      const { owner } = await new NormalisedOwnerInfoOfStorage(ctx).get(
         codeHash
       );
 
       const contractCodeEntity = new ContractCode({
         id: codeHash,
-        code: storageInfo?.code,
-        // TODO here the account won't be created...
-        owner: await getOrCreateAccount(
-          store,
-          ss58.codec("substrate").encode(ownerInfo.owner)
-        ),
+        code,
+        owner: await getAccount(store, ss58.codec("substrate").encode(owner)),
         createdFrom: extrinsicEntity,
         createdAt: extrinsicEntity.createdAt,
       });
@@ -109,6 +105,23 @@ export async function contractsCodeStoredEventHandler(
       await store.save([extrinsicEntity, eventEntity, contractCodeEntity]);
     }
   } catch (error) {
-    logger.error("Error handling code stored event.", error);
+    logger.error("Error handling contract CodeStored event.", error);
+  }
+}
+
+export async function contractsContractEmittedEventHandler(
+  ctx: EventHandlerContext,
+  logger: Logger
+): Promise<void> {
+  logger.info("Got contracts ContractEmitted event!");
+  try {
+    const { extrinsic, store, block, event } = ctx;
+    if (extrinsic) {
+      const extrinsicEntity = createExtrinsic(extrinsic, block);
+      const entities = [extrinsicEntity, createEvent(extrinsicEntity, event)];
+      await store.save(entities);
+    }
+  } catch (error) {
+    logger.error("Error handling contracts ContractEmitted event.", error);
   }
 }

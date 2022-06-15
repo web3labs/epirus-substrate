@@ -7,13 +7,13 @@
     "balances.Endowed",
     "balances.Deposit",
     "balances.Withdraw",
+    "balances.Reserved",
     "contracts.Instantiated",
     "contracts.ContractEmitted",
-    "contracts.CodeStored"
+    "contracts.CodeStored",
+    "system.NewAccount"
   ],
   "calls": [
-    "contracts.instantiate_with_code",
-    "contracts.instantiate",
     "contracts.call",
     "contracts.upload_code",
     "contracts.remove_code"
