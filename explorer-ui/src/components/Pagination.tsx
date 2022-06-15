@@ -18,7 +18,7 @@ export default function Pagination ({ page, query, setQuery }: {
                 first,
                 after: (parseInt(pageInfo.startCursor) - (first + 1)).toString()
               })}
-              className="relative inline-flex items-center text-sm text-gray-900 hover:cursor-pointer"
+              className="link relative inline-flex items-center text-sm cursor-pointer"
             >
             Previous
             </span>
@@ -29,7 +29,7 @@ export default function Pagination ({ page, query, setQuery }: {
                 first,
                 after: pageInfo.endCursor
               })}
-              className="relative inline-flex items-center text-sm text-gray-900 hover:cursor-pointer"
+              className="link relative inline-flex items-center text-sm cursor-pointer"
             >
             Next
             </span>
