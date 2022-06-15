@@ -7,11 +7,13 @@ import { getAccount } from "../entities/retrievers";
 import { createExtrinsic, createEvent, createActivity } from "../entities";
 import {
   NormalisedCodeStorageStorage,
+  NormalisedContractEmittedEvent,
   NormalisedContractInfoOfStorage,
   NormalisedContractsCodeStoredEvent,
   NormalisedContractsInstantiatedEvent,
   NormalisedOwnerInfoOfStorage,
 } from "../normalised-types";
+import { ContractEmittedEvent } from "../model/generated/contractEmittedEvent.model";
 
 export async function contractsInstantiatedEventHandler(
   ctx: EventHandlerContext,
@@ -118,7 +120,19 @@ export async function contractsContractEmittedEventHandler(
     const { extrinsic, store, block, event } = ctx;
     if (extrinsic) {
       const extrinsicEntity = createExtrinsic(extrinsic, block);
-      const entities = [extrinsicEntity, createEvent(extrinsicEntity, event)];
+      const eventEntity = createEvent(extrinsicEntity, event);
+      const { contract, data } = new NormalisedContractEmittedEvent(
+        ctx
+      ).resolve();
+      const contractEventEntity = new ContractEmittedEvent({
+        id: eventEntity.id,
+        contractAddress: contract,
+        data,
+        createdAt: extrinsicEntity.createdAt,
+        extrinsic: extrinsicEntity,
+      });
+
+      const entities = [extrinsicEntity, eventEntity, contractEventEntity];
       await store.save(entities);
     }
   } catch (error) {

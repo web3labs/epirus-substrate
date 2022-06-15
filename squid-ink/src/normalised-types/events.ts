@@ -1,7 +1,6 @@
 import * as ss58 from "@subsquid/ss58";
 import { toHex } from "@subsquid/util-internal-hex";
 import {
-  BalancesDepositEvent,
   BalancesEndowedEvent,
   BalancesReservedEvent,
   BalancesTransferEvent,
@@ -104,7 +103,7 @@ export class NormalisedContractEmittedEvent extends ContractsContractEmittedEven
   resolve(): { contract: string; data: Uint8Array } {
     if (this.isV100) {
       const { contract, data } = this.asV100;
-      return { contract: toHex(contract), data };
+      return { contract: ss58.codec("substrate").encode(contract), data };
     }
     throw new Error(
       "No runtime version found while decoding [ContractsContractEmittedEvent]"

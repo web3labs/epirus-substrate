@@ -47,6 +47,15 @@ type ContractCall @entity {
   extrinsic: Extrinsic!
 }
 
+type ContractEmittedEvent @entity {
+  "Event ID"
+  id: ID!
+  contractAddress: String!
+  data: Bytes!
+  createdAt: DateTime!
+  extrinsic: Extrinsic!
+}
+
 type Extrinsic @entity {
   id: ID!
   name: String!
