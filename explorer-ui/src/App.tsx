@@ -14,6 +14,7 @@ import ListContracts from "./components/contracts/ListContracts"
 import ContractPage from "./components/contracts/ContractPage"
 import Box from "./components/Box"
 import ContractsPage from "./components/contracts/ContractsPage"
+import ChainContextProvider from "./contexts/ChainContext"
 
 const client = createClient({
   url: process.env.SQUID_ENDPOINT || "http://localhost:4350/graphql"
@@ -25,8 +26,8 @@ function HomePage () {
       <Box>
         <ListContractActivities
           short={true}
-          title="Latest Transactions"
-          description="Contract related extrinsics"
+          title="Latest Activity"
+          description="Contract related activities"
         />
       </Box>
       <Box>
@@ -53,20 +54,22 @@ function App () {
     }}>
       <Provider value={client}>
         <Router>
-          <div className="min-h-screen bg-neutral-200">
-            <div className="relative bg-white pt-3 md:pb-3 border-b border-neutral-300">
-              <div className="max-w-7xl mx-auto md:px-4">
-                <Nav />
+          <ChainContextProvider>
+            <div className="min-h-screen bg-neutral-200">
+              <div className="relative bg-white pt-3 md:pb-3 border-b border-neutral-300">
+                <div className="max-w-7xl mx-auto md:px-4">
+                  <Nav />
+                </div>
               </div>
+              <main className="max-w-7xl mx-auto md:px-4 pt-6">
+                <Routes>
+                  <Route path="/" element={<HomePage/>}/>
+                  <Route path="contracts/:id" element={<ContractPage/>} />
+                  <Route path="contracts" element={<ContractsPage/>} />
+                </Routes>
+              </main>
             </div>
-            <main className="max-w-7xl mx-auto md:px-4 pt-6">
-              <Routes>
-                <Route path="/" element={<HomePage/>}/>
-                <Route path="contracts/:id" element={<ContractPage/>} />
-                <Route path="contracts" element={<ContractsPage/>} />
-              </Routes>
-            </main>
-          </div>
+          </ChainContextProvider>
         </Router>
       </Provider>
     </ThemeProvider>

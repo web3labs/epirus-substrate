@@ -1,19 +1,19 @@
 import React from "react"
+import { formatBalance } from "@polkadot/util"
+
 import AccountAddress from "../substrate/AccountAddress"
 import CodeBadge from "../badges/CodeBadge"
 import { Activity, Arg } from "../../types/contracts"
 import { shortenHexString } from "../../formats/text"
 import { Cols, Row } from "../List"
 import { formatDate } from "../../formats/time"
+import { NavLink } from "react-router-dom"
+import { useChainProperties } from "../../contexts/ChainContext"
 
-function showValue ({ args }: Activity) {
+function printBalance ({ args }: Activity) {
+  const { tokenDecimals, tokenSymbol } = useChainProperties()
   const va = findArg(args, "value")
-  if (va) {
-    const bn = BigInt(va) / BigInt(1E10)
-    return bn.toLocaleString()
-  }
-
-  return 0
+  return formatBalance(va, { decimals: tokenDecimals, forceUnit: tokenSymbol })
 }
 
 function findArg (args: Arg[], name: string) {
@@ -25,6 +25,18 @@ function additionalDetails ({ action, args }: Activity) {
   case "contracts.call": return findArg(args, "data")?.slice(0, 10)
   case "contracts.instantiate": return shortenHexString(findArg(args, "codeHash"))
   default: return null
+  }
+}
+
+function actionAlias (action: string) {
+  switch (action) {
+  case "contracts.instantiate":
+  case "contracts.instantiateWithCode":
+    return "creates"
+  case "contracts.call":
+    return "calls"
+  default:
+    return action
   }
 }
 
@@ -72,8 +84,8 @@ export default function ActivityRow ({ activity, short }: { activity: Activity, 
         </div>
 
         <div className="flex flex-wrap basis-1/6 items-stretch content-center">
-          <div className="flex flex-col text-sm capitalize overflow-hidden text-ellipsis gap-y-1">
-            {action}
+          <div className="flex flex-col text-sm overflow-hidden text-ellipsis gap-y-1">
+            {actionAlias(action)}
             <div className="text-gray-400 text-xs font-mono">
               {additionalDetails(activity)}
             </div>
@@ -81,12 +93,14 @@ export default function ActivityRow ({ activity, short }: { activity: Activity, 
         </div>
 
         <div className="flex flex-col">
-          <AccountAddress address={to} short={short} className="justify-end">
-            <CodeBadge/>
-          </AccountAddress>
+          <NavLink to={`/contracts/${to}`} className="link">
+            <AccountAddress address={to} short={short} className="justify-end">
+              <CodeBadge/>
+            </AccountAddress>
+          </NavLink>
 
           <div className="text-xs flex justify-end">
-            {showValue(activity)} UNIT
+            {printBalance(activity)}
           </div>
         </div>
       </Cols>

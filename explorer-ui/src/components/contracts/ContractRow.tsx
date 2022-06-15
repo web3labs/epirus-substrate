@@ -19,8 +19,8 @@ export default function ContractRow ({ contract, short = false }: { contract: Li
           </AccountAddress>
         </NavLink>
 
-        <div className="text-sm capitalize">
-          Deployed By
+        <div className="text-sm">
+          deployed by
         </div>
 
         <div>

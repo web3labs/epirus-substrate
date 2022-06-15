@@ -1,7 +1,8 @@
-import React, { useState } from "react"
+import React, { useMemo, useState } from "react"
 import useSquid from "../../hooks/useSquid"
 import { Activity } from "../../types/contracts"
 import { Edge, Page } from "../../types/pagination"
+import Hashcode from "../../utils/hashcode"
 import List, { ListProps } from "../List"
 import Skeleton from "../loading/Skeleton"
 import Pagination from "../Pagination"
@@ -64,38 +65,44 @@ export default function ListContractActivities ({
 
   const { data, fetching, error } = result
 
-  if (data === undefined && fetching) {
-    return (<Skeleton>
-      <List title={title} description={description}>
-        <ActivityRowSkeleton size={query.first}/>
+  const hash = Hashcode.object(data === undefined ? {} : data.activitiesConnection)
+
+  return useMemo(() => {
+    if (data === undefined && fetching) {
+      return (<Skeleton>
+        <List title={title} description={description}>
+          <ActivityRowSkeleton size={query.first}/>
+        </List>
+      </Skeleton>)
+    }
+    if (error) return <p>Oh no... {error.message}</p>
+
+    console.log("List Activities Data changed", hash)
+
+    const page : Page<Activity> = data.activitiesConnection
+    const sort = sortable
+      ? <SortBy options={SORT_OPTIONS}
+        setQuery={setQueryInState}
+        query={queryInState}
+      />
+      : undefined
+
+    return (
+      <List
+        title={title}
+        description={description}
+        sort={sort}
+        footer={
+          <Pagination
+            page={page}
+            query={queryInState}
+            setQuery={setQueryInState}
+          />
+        }>
+        {page?.edges.map(({ node } : Edge<Activity>) => (
+          <ActivityRow key={node.id} activity={node} short={short} />
+        ))}
       </List>
-    </Skeleton>)
-  }
-  if (error) return <p>Oh no... {error.message}</p>
-
-  const page : Page<Activity> = data?.activitiesConnection
-  const sort = sortable
-    ? <SortBy options={SORT_OPTIONS}
-      setQuery={setQueryInState}
-      query={queryInState}
-    />
-    : undefined
-
-  return (
-    <List
-      title={title}
-      description={description}
-      sort={sort}
-      footer={
-        <Pagination
-          page={page}
-          query={queryInState}
-          setQuery={setQueryInState}
-        />
-      }>
-      {page?.edges.map(({ node } : Edge<Activity>) => (
-        <ActivityRow key={node.id} activity={node} short={short} />
-      ))}
-    </List>
-  )
+    )
+  }, [error, hash])
 }

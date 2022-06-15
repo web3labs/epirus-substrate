@@ -1,11 +1,16 @@
 import React from "react"
+import { formatBalance } from "@polkadot/util"
+
 import { useParams } from "react-router-dom"
+import { useChainProperties } from "../../contexts/ChainContext"
 import useSquid from "../../hooks/useSquid"
 import { Contract } from "../../types/contracts"
 import CodeBadge from "../badges/CodeBadge"
 import Box from "../Box"
 import AccountAddress from "../substrate/AccountAddress"
 import ListContractActivities from "./ListContractActivities"
+import Segment from "../Segment"
+import { classNames } from "../../utils/strings"
 const QUERY = `
 query($id: ID!) {
   contracts(where: {id_eq: $id}) {
@@ -51,11 +56,19 @@ query($id: ID!) {
 }
 `
 
-function Definition ({ label, term }: {label: string, term: JSX.Element | string}) {
+function DefinitionList ({ children } :{ children: JSX.Element | JSX.Element[]}) {
+  return (<dl className="flex flex-col w-full gap-y-2">
+    {children}
+  </dl>)
+}
+
+function Definition ({ label, term, className = "" }: {
+  label: string, term: JSX.Element | string, className?: string
+}) {
   return (
-    <div className="grid grid-cols-6 items-center">
-      <dt className="text-sm text-gray-500">{label}</dt>
-      <dd className="text-sm text-gray-900 col-span-5">{term}</dd>
+    <div className={classNames(className, "flex flex-row flex-wrap gap-x-2 items-center")}>
+      <dt className="flex text-sm text-gray-500 basis-20">{label}</dt>
+      <dd className="text-sm text-gray-900">{term}</dd>
     </div>
   )
 }
@@ -77,6 +90,7 @@ function ActivityTab ({ id }: {id:string}) {
 }
 
 export default function ContractPage () {
+  const { tokenDecimals, tokenSymbol } = useChainProperties()
   const params = useParams()
   const [result] = useSquid({
     query: QUERY,
@@ -95,26 +109,26 @@ export default function ContractPage () {
   if (error) return <p>Oh no... {error.message}</p>
 
   const { id, createdAt, deployer, createdFrom, contractCode, account } = data?.contracts[0] as Contract
+  const { balance } = account
 
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-2">
-        <Box className="col-span-2">
-          <h3 className="px-5 py-4 w-full font-medium border-b">
+        <Box className="col-span-2 divide-y">
+          <h3 className="px-5 py-4 w-full font-medium">
             <AccountAddress address={id}><CodeBadge/></AccountAddress>
           </h3>
-          <div className="flex flex-col w-full px-5 mt-2 sm:px-6">
-            <dl className="flex flex-col w-full gap-y-2">
+          <Segment>
+            <DefinitionList>
               <Definition label="Code Hash" term={
                 <span className="font-mono overflow-hidden text-ellipsis">{contractCode.id}</span>
               }/>
               <Definition label="Type" term="WASM" />
-            </dl>
-          </div>
+            </DefinitionList>
+          </Segment>
 
-          <div className="flex flex-col w-full border-b px-4 py-5 sm:px-6">
-            <h3 className="uppercase tracking-wider text-xs font-medium text-gray-500">Deployment</h3>
-            <dl className="w-full">
+          <Segment title="Creation" collapsable={true} isOpen={false}>
+            <DefinitionList>
               <Definition label="Deployer" term={
                 <AccountAddress address={deployer.id} short={false}>
                   {deployer.account && <CodeBadge/>}
@@ -124,17 +138,24 @@ export default function ContractPage () {
                 <span className="font-mono">{createdFrom.id}</span>
               }/>
               <Definition label="Timestamp" term={createdAt.toString()}/>
-            </dl>
-          </div>
+            </DefinitionList>
+          </Segment>
         </Box>
         <Box>
-          <div className="flex flex-col w-full border-b px-4 py-5 sm:px-6">
-            <h3 className="uppercase tracking-wider text-xs font-medium text-gray-500">Balance</h3>
-            <dl className="w-full">
-              <Definition label="Free" term={account.balance.free}/>
-              <Definition label="Reserved" term={account.balance.reserved} />
-            </dl>
-          </div>
+          <Segment title="Balance">
+            <DefinitionList>
+              <Definition
+                className="justify-between"
+                label="Free"
+                term={formatBalance(balance.free, { decimals: tokenDecimals, forceUnit: tokenSymbol })}
+              />
+              <Definition
+                className="justify-between"
+                label="Reserved"
+                term={formatBalance(balance.reserved, { decimals: tokenDecimals, forceUnit: tokenSymbol })}
+              />
+            </DefinitionList>
+          </Segment>
         </Box>
       </div>
 
