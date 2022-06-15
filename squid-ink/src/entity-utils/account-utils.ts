@@ -1,5 +1,5 @@
 import { EventHandlerContext, Store } from "@subsquid/substrate-processor";
-import { Account, Balance } from "../model";
+import { Account, Balance, ChainProperties } from "../model";
 import {
   NormalisedBalancesAccountStorage,
   NormalisedSystemAccountStorage,
@@ -7,11 +7,10 @@ import {
 
 export async function updateAccountBalance(
   ctx: EventHandlerContext,
-  id: string,
-  balanceStorage: string
+  id: string
 ): Promise<Account> {
   const account = await getOrCreateAccount(ctx.store, id);
-  account.balance = await getBalances(ctx, id, balanceStorage);
+  account.balance = await getBalances(ctx, id);
   return account;
 }
 
@@ -55,20 +54,31 @@ export async function getAccount(store: Store, id: string): Promise<Account> {
 
 async function getBalances(
   ctx: EventHandlerContext,
-  address: string,
-  storageType: string
+  address: string
 ): Promise<Balance> {
-  if (storageType === "system") {
-    const accountStorage = await new NormalisedSystemAccountStorage(ctx).get(
-      address
+  const chainProperties = await ctx.store.get(ChainProperties, {
+    where: { id: "chain_properties" },
+  });
+  if (chainProperties && chainProperties.balancesStorage) {
+    const { balancesStorage } = chainProperties;
+    if (balancesStorage === "system") {
+      const accountStorage = await new NormalisedSystemAccountStorage(ctx).get(
+        address
+      );
+      const { free, reserved, miscFrozen, feeFrozen } = accountStorage.data;
+      return new Balance({ free, reserved, miscFrozen, feeFrozen });
+    }
+    if (balancesStorage === "balances") {
+      const { free, reserved, miscFrozen, feeFrozen } =
+        await new NormalisedBalancesAccountStorage(ctx).get(address);
+      return new Balance({ free, reserved, miscFrozen, feeFrozen });
+    }
+    throw new Error(
+      `Type of balances storage [${balancesStorage}] not supported!`
     );
-    const { free, reserved, miscFrozen, feeFrozen } = accountStorage.data;
-    return new Balance({ free, reserved, miscFrozen, feeFrozen });
+  } else {
+    throw new Error(
+      "Balances storage is not defined in chain properties. Check genesis block definition."
+    );
   }
-  if (storageType === "balances") {
-    const { free, reserved, miscFrozen, feeFrozen } =
-      await new NormalisedBalancesAccountStorage(ctx).get(address);
-    return new Balance({ free, reserved, miscFrozen, feeFrozen });
-  }
-  throw new Error(`Type of balances storage [${storageType}] not supported!`);
 }

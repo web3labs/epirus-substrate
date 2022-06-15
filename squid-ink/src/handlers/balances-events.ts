@@ -21,12 +21,8 @@ export async function balancesTransferEventHandler(
   try {
     const { store, block, event, extrinsic } = ctx;
     const { from, to } = new NormalisedBalancesTransferEvent(ctx).resolve();
-
-    // TODO: this should come from config somehow... :/
-    const balancesStoredIn = "system";
-    const fromAcc = await updateAccountBalance(ctx, from, balancesStoredIn);
-    const toAcc = await updateAccountBalance(ctx, to, balancesStoredIn);
-
+    const fromAcc = await updateAccountBalance(ctx, from);
+    const toAcc = await updateAccountBalance(ctx, to);
     const entities: Array<Account | Extrinsic | Events> = [fromAcc, toAcc];
 
     if (extrinsic) {
@@ -49,15 +45,7 @@ export async function balancesWithdrawEventHandler(
   try {
     const { store, block, event, extrinsic } = ctx;
     const { account } = new NormalisedBalancesWithdrawEvent(ctx).resolve();
-
-    // TODO: this should come from config somehow... :/
-    const balancesStoredIn = "system";
-    const accountEntity = await updateAccountBalance(
-      ctx,
-      account,
-      balancesStoredIn
-    );
-
+    const accountEntity = await updateAccountBalance(ctx, account);
     const entities: Array<Account | Extrinsic | Events> = [accountEntity];
 
     if (extrinsic) {
@@ -80,15 +68,7 @@ export async function balancesReservedEventHandler(
   try {
     const { store, block, event, extrinsic } = ctx;
     const { account } = new NormalisedBalancesReservedEvent(ctx).resolve();
-
-    // TODO: this should come from config somehow... :/
-    const balancesStoredIn = "system";
-    const accountEntity = await updateAccountBalance(
-      ctx,
-      account,
-      balancesStoredIn
-    );
-
+    const accountEntity = await updateAccountBalance(ctx, account);
     const entities: Array<Account | Extrinsic | Events> = [accountEntity];
 
     if (extrinsic) {
@@ -111,14 +91,7 @@ export async function balancesEndowedEventHandler(
   try {
     const { store, block, event, extrinsic } = ctx;
     const { account } = new NormalisedBalancesEndowedEvent(ctx).resolve();
-    // TODO: this should come from config somehow... :/
-    const balancesStoredIn = "system";
-    const accountEntity = await updateAccountBalance(
-      ctx,
-      account,
-      balancesStoredIn
-    );
-
+    const accountEntity = await updateAccountBalance(ctx, account);
     const entities: Array<Account | Extrinsic | Events> = [accountEntity];
 
     if (extrinsic) {

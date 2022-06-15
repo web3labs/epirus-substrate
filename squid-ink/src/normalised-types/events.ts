@@ -1,5 +1,6 @@
 import * as ss58 from "@subsquid/ss58";
 import { toHex } from "@subsquid/util-internal-hex";
+import { CHAIN } from "../chain-properties";
 import {
   BalancesEndowedEvent,
   BalancesReservedEvent,
@@ -16,8 +17,8 @@ export class NormalisedBalancesTransferEvent extends BalancesTransferEvent {
     if (this.isV100) {
       const { from, to, amount } = this.asV100;
       return {
-        from: ss58.codec("substrate").encode(from),
-        to: ss58.codec("substrate").encode(to),
+        from: ss58.codec(CHAIN.ss58Format).encode(from),
+        to: ss58.codec(CHAIN.ss58Format).encode(to),
         amount,
       };
     }
@@ -32,7 +33,7 @@ export class NormalisedBalancesEndowedEvent extends BalancesEndowedEvent {
     if (this.isV100) {
       const { account, freeBalance } = this.asV100;
       return {
-        account: ss58.codec("substrate").encode(account),
+        account: ss58.codec(CHAIN.ss58Format).encode(account),
         freeBalance,
       };
     }
@@ -47,7 +48,7 @@ export class NormalisedBalancesWithdrawEvent extends BalancesWithdrawEvent {
     if (this.isV100) {
       const { who, amount } = this.asV100;
       return {
-        account: ss58.codec("substrate").encode(who),
+        account: ss58.codec(CHAIN.ss58Format).encode(who),
         amount,
       };
     }
@@ -62,7 +63,7 @@ export class NormalisedBalancesReservedEvent extends BalancesReservedEvent {
     if (this.isV100) {
       const { who, amount } = this.asV100;
       return {
-        account: ss58.codec("substrate").encode(who),
+        account: ss58.codec(CHAIN.ss58Format).encode(who),
         amount,
       };
     }
@@ -77,8 +78,8 @@ export class NormalisedContractsInstantiatedEvent extends ContractsInstantiatedE
     if (this.isV100) {
       const { deployer, contract } = this.asV100;
       return {
-        deployer: ss58.codec("substrate").encode(deployer),
-        contract: ss58.codec("substrate").encode(contract),
+        deployer: ss58.codec(CHAIN.ss58Format).encode(deployer),
+        contract: ss58.codec(CHAIN.ss58Format).encode(contract),
       };
     }
     throw new Error(
@@ -103,7 +104,7 @@ export class NormalisedContractEmittedEvent extends ContractsContractEmittedEven
   resolve(): { contract: string; data: Uint8Array } {
     if (this.isV100) {
       const { contract, data } = this.asV100;
-      return { contract: ss58.codec("substrate").encode(contract), data };
+      return { contract: ss58.codec(CHAIN.ss58Format).encode(contract), data };
     }
     throw new Error(
       "No runtime version found while decoding [ContractsContractEmittedEvent]"
@@ -115,7 +116,7 @@ export class NormalisedSystemNewAccountEvent extends SystemNewAccountEvent {
   resolve(): { account: string } {
     if (this.isV100) {
       const { account } = this.asV100;
-      return { account: ss58.codec("substrate").encode(account) };
+      return { account: ss58.codec(CHAIN.ss58Format).encode(account) };
     }
     throw new Error(
       "No runtime version found while decoding [SystemNewAccountEvent]"

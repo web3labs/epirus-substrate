@@ -11,6 +11,7 @@ import {
 } from "./balances-events";
 import { contractsCallExtrinsicHandler } from "./contracts-extrinsics";
 import { systemNewAccountEventHandler } from "./system-events";
+import { genesisBlockHandler } from "./block-prehook";
 
 const eventHandlers = [
   {
@@ -54,4 +55,11 @@ const extrinsicHandlers = [
   },
 ];
 
-export { eventHandlers, extrinsicHandlers };
+const blockPreHookHandlers = [
+  {
+    name: "genesis_block_handler",
+    callback: genesisBlockHandler,
+  },
+];
+
+export { eventHandlers, extrinsicHandlers, blockPreHookHandlers };

@@ -1,4 +1,5 @@
 import * as ss58 from "@subsquid/ss58";
+import { CHAIN } from "../chain-properties";
 import { ContractsCallCall } from "../types/calls";
 
 export class NormalisedContractsCallCall extends ContractsCallCall {
@@ -15,7 +16,9 @@ export class NormalisedContractsCallCall extends ContractsCallCall {
       if (dest.__kind === "Index") {
         throw new Error("Multi-address of type Index is not supported!");
       }
-      return { contractAddress: ss58.codec("substrate").encode(dest.value) };
+      return {
+        contractAddress: ss58.codec(CHAIN.ss58Format).encode(dest.value),
+      };
     }
     throw new Error("No Runtime version found");
   }

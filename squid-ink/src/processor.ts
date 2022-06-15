@@ -1,10 +1,15 @@
 import {
+  BlockHandlerContext,
   EventHandlerContext,
   ExtrinsicHandlerContext,
   SubstrateProcessor,
 } from "@subsquid/substrate-processor";
 import { createLogger, transports, format, Logger } from "winston";
-import { eventHandlers, extrinsicHandlers } from "./handlers";
+import {
+  eventHandlers,
+  extrinsicHandlers,
+  blockPreHookHandlers,
+} from "./handlers";
 
 // TO DO: Extract to config file
 const processor = new SubstrateProcessor("contracts_poc");
@@ -47,6 +52,15 @@ function curry<ContextType>(
   return async (ctx: ContextType) => {
     return targetFn(ctx, logger);
   };
+}
+
+// Add block pre-hooks
+for (let i = 0; i < blockPreHookHandlers.length; i += 1) {
+  const handler = blockPreHookHandlers[i];
+
+  winstonLogger.info("Adding block pre-hook handler [%s]", handler.name);
+  const curried = curry<BlockHandlerContext>(handler.callback, winstonLogger);
+  processor.addPreHook({ range: { from: 0, to: 0 } }, curried);
 }
 
 // Add all event handlers

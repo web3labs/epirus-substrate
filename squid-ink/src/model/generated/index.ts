@@ -1,3 +1,5 @@
+export * from "./chainProperties.model"
+export * from "./token.model"
 export * from "./account.model"
 export * from "./_balance"
 export * from "./contract.model"

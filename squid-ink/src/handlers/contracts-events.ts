@@ -17,6 +17,7 @@ import {
   NormalisedOwnerInfoOfStorage,
 } from "../normalised-types";
 import { ContractEmittedEvent } from "../model/generated/contractEmittedEvent.model";
+import { CHAIN } from "../chain-properties";
 
 export async function contractsInstantiatedEventHandler(
   ctx: EventHandlerContext,
@@ -117,7 +118,7 @@ export async function contractsCodeStoredEventHandler(
         code,
         owner: await getOrCreateAccount(
           store,
-          ss58.codec("substrate").encode(owner)
+          ss58.codec(CHAIN.ss58Format).encode(owner)
         ),
         createdFrom: extrinsicEntity,
         createdAt: extrinsicEntity.createdAt,
