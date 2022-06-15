@@ -1,11 +1,10 @@
-import moment from "moment"
 import React from "react"
-// import { shortenHexString } from "../../formats/text"
 import AccountAddress from "../substrate/AccountAddress"
 import CodeBadge from "../badges/CodeBadge"
 import { Activity, Arg } from "../../types/contracts"
 import { shortenHexString } from "../../formats/text"
 import { Cols, Row } from "../List"
+import { formatDate } from "../../formats/time"
 
 function showValue ({ args }: Activity) {
   const va = findArg(args, "value")
@@ -68,7 +67,7 @@ export default function ActivityRow ({ activity, short }: { activity: Activity, 
           <AccountAddress address={from} short={short} />
 
           <div className="text-gray-400 text-xs">
-            {moment(createdAt).format("DD/MM/YYYY")}
+            {formatDate(createdAt)}
           </div>
         </div>
 

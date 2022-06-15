@@ -1,7 +1,7 @@
-import moment from "moment"
 import React from "react"
 import { NavLink } from "react-router-dom"
 import { shortenHexString } from "../../formats/text"
+import { formatDate } from "../../formats/time"
 import { LightContract } from "../../types/contracts"
 import CodeBadge from "../badges/CodeBadge"
 import { Cols, Row } from "../List"
@@ -31,7 +31,7 @@ export default function ContractRow ({ contract, short = false }: { contract: Li
       </Cols>
       <Cols>
         <div className="text-gray-400 text-xs">
-          {moment(createdAt).format("DD/MM/YYYY")}
+          {formatDate(createdAt)}
         </div>
 
         <div className="text-gray-400 text-xs">
