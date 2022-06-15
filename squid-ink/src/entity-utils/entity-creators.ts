@@ -5,24 +5,7 @@ import {
   SubstrateEvent,
   SubstrateExtrinsic,
 } from "@subsquid/substrate-processor";
-import { Args, Extrinsic, Events, Activity } from "../model";
-
-export function createActivity(
-  id: string,
-  type: string,
-  extrinsic: Extrinsic,
-  to?: string
-): Activity {
-  return new Activity({
-    id,
-    type,
-    to,
-    action: extrinsic.name,
-    createdAt: extrinsic.createdAt,
-    from: extrinsic.signer,
-    args: extrinsic.args,
-  });
-}
+import { Args, Extrinsic, Events } from "../model";
 
 export function createEvent(
   extrinsicEntity: Extrinsic,

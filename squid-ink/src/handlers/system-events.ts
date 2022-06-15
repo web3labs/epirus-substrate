@@ -1,6 +1,6 @@
 import { EventHandlerContext } from "@subsquid/substrate-processor";
 import { Logger } from "winston";
-import { createEvent, createExtrinsic } from "../entities";
+import { createEvent, createExtrinsic } from "../entity-utils";
 import { Account } from "../model";
 import { NormalisedSystemNewAccountEvent } from "../normalised-types";
 

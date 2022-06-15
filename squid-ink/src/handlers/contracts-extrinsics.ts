@@ -1,7 +1,7 @@
 import { ExtrinsicHandlerContext } from "@subsquid/substrate-processor";
 import { Logger } from "winston";
-import { ContractCall } from "../model";
-import { createActivity, createExtrinsic } from "../entities";
+import { Activity, ContractCall } from "../model";
+import { createExtrinsic, getOrCreateAccount } from "../entity-utils";
 import { NormalisedContractsCallCall } from "../normalised-types";
 
 export async function contractsCallExtrinsicHandler(
@@ -20,12 +20,15 @@ export async function contractsCallExtrinsicHandler(
       extrinsic: extrinsicEntity,
     });
 
-    const activityEntity = createActivity(
-      contractCallEntity.id,
-      "ContractCall",
-      extrinsicEntity,
-      contractAddress
-    );
+    const activityEntity = new Activity({
+      id: contractCallEntity.id,
+      type: "ContractCall",
+      to: await getOrCreateAccount(store, contractAddress),
+      action: extrinsicEntity.name,
+      createdAt: extrinsicEntity.createdAt,
+      from: await getOrCreateAccount(store, extrinsicEntity.signer),
+      args: extrinsicEntity.args,
+    });
 
     await store.save([extrinsicEntity, contractCallEntity, activityEntity]);
   } catch (error) {

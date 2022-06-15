@@ -78,8 +78,8 @@ type Activity @entity{
   id: ID!
   type: String! @index
   action: String!
-  to: String @index
-  from: String @index
+  to: Account
+  from: Account
   createdAt: DateTime! @index
   args: [Args!]
 }

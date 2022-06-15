@@ -1,14 +1,16 @@
 import { EventHandlerContext } from "@subsquid/substrate-processor";
 import { Logger } from "winston";
-import { Account, Balance, Events, Extrinsic } from "../model";
-import { updateAccount, createExtrinsic, createEvent } from "../entities";
+import { Account, Events, Extrinsic } from "../model";
 import {
-  NormalisedBalancesAccountStorage,
+  updateAccountBalance,
+  createExtrinsic,
+  createEvent,
+} from "../entity-utils";
+import {
   NormalisedBalancesEndowedEvent,
   NormalisedBalancesReservedEvent,
   NormalisedBalancesTransferEvent,
   NormalisedBalancesWithdrawEvent,
-  NormalisedSystemAccountStorage,
 } from "../normalised-types";
 
 export async function balancesTransferEventHandler(
@@ -22,11 +24,8 @@ export async function balancesTransferEventHandler(
 
     // TODO: this should come from config somehow... :/
     const balancesStoredIn = "system";
-    const fromBalances = await getBalances(ctx, from, balancesStoredIn);
-    const toBalances = await getBalances(ctx, to, balancesStoredIn);
-
-    const fromAcc = await updateAccount(ctx.store, from, fromBalances);
-    const toAcc = await updateAccount(ctx.store, to, toBalances);
+    const fromAcc = await updateAccountBalance(ctx, from, balancesStoredIn);
+    const toAcc = await updateAccountBalance(ctx, to, balancesStoredIn);
 
     const entities: Array<Account | Extrinsic | Events> = [fromAcc, toAcc];
 
@@ -53,8 +52,11 @@ export async function balancesWithdrawEventHandler(
 
     // TODO: this should come from config somehow... :/
     const balancesStoredIn = "system";
-    const balances = await getBalances(ctx, account, balancesStoredIn);
-    const accountEntity = await updateAccount(ctx.store, account, balances);
+    const accountEntity = await updateAccountBalance(
+      ctx,
+      account,
+      balancesStoredIn
+    );
 
     const entities: Array<Account | Extrinsic | Events> = [accountEntity];
 
@@ -81,8 +83,11 @@ export async function balancesReservedEventHandler(
 
     // TODO: this should come from config somehow... :/
     const balancesStoredIn = "system";
-    const balances = await getBalances(ctx, account, balancesStoredIn);
-    const accountEntity = await updateAccount(ctx.store, account, balances);
+    const accountEntity = await updateAccountBalance(
+      ctx,
+      account,
+      balancesStoredIn
+    );
 
     const entities: Array<Account | Extrinsic | Events> = [accountEntity];
 
@@ -105,13 +110,13 @@ export async function balancesEndowedEventHandler(
   logger.info("Got balances Endowed event!");
   try {
     const { store, block, event, extrinsic } = ctx;
-    const { account, freeBalance } = new NormalisedBalancesEndowedEvent(
-      ctx
-    ).resolve();
-    const accountEntity = await updateAccount(
-      ctx.store,
+    const { account } = new NormalisedBalancesEndowedEvent(ctx).resolve();
+    // TODO: this should come from config somehow... :/
+    const balancesStoredIn = "system";
+    const accountEntity = await updateAccountBalance(
+      ctx,
       account,
-      new Balance({ free: freeBalance })
+      balancesStoredIn
     );
 
     const entities: Array<Account | Extrinsic | Events> = [accountEntity];
@@ -126,24 +131,4 @@ export async function balancesEndowedEventHandler(
   } catch (error) {
     logger.error("Error handling balances Endowed event.", error);
   }
-}
-
-async function getBalances(
-  ctx: EventHandlerContext,
-  address: string,
-  storageType: string
-): Promise<Balance> {
-  if (storageType === "system") {
-    const accountStorage = await new NormalisedSystemAccountStorage(ctx).get(
-      address
-    );
-    const { free, reserved, miscFrozen, feeFrozen } = accountStorage.data;
-    return new Balance({ free, reserved, miscFrozen, feeFrozen });
-  }
-  if (storageType === "balances") {
-    const { free, reserved, miscFrozen, feeFrozen } =
-      await new NormalisedBalancesAccountStorage(ctx).get(address);
-    return new Balance({ free, reserved, miscFrozen, feeFrozen });
-  }
-  throw new Error(`Type of balances storage [${storageType}] not supported!`);
 }

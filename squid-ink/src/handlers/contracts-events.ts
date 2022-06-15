@@ -2,9 +2,12 @@ import * as ss58 from "@subsquid/ss58";
 import { toHex } from "@subsquid/util-internal-hex";
 import { EventHandlerContext } from "@subsquid/substrate-processor";
 import { Logger } from "winston";
-import { Contract, ContractCode } from "../model";
-import { getAccount } from "../entities/retrievers";
-import { createExtrinsic, createEvent, createActivity } from "../entities";
+import { Activity, Args, Contract, ContractCode } from "../model";
+import {
+  getOrCreateAccount,
+  createExtrinsic,
+  createEvent,
+} from "../entity-utils";
 import {
   NormalisedCodeStorageStorage,
   NormalisedContractEmittedEvent,
@@ -29,8 +32,8 @@ export async function contractsInstantiatedEventHandler(
       const { deployer, contract } = new NormalisedContractsInstantiatedEvent(
         ctx
       ).resolve();
-      const deployerAccount = await getAccount(store, deployer);
-      const contractAccount = await getAccount(store, contract);
+      const deployerAccount = await getOrCreateAccount(store, deployer);
+      const contractAccount = await getOrCreateAccount(store, contract);
 
       const { codeHash, trieId, storageDeposit } =
         await new NormalisedContractInfoOfStorage(ctx).get(contract);
@@ -55,18 +58,31 @@ export async function contractsInstantiatedEventHandler(
         storageDeposit,
       });
 
+      const allArgs = extrinsicEntity.args || new Array<Args>();
+      allArgs.push(
+        new Args({
+          name: "codeHash",
+          type: "Bytes",
+          value: toHex(codeHash),
+        })
+      );
+      const activityEntity = new Activity({
+        id: contractEntity.id,
+        type: "Contract",
+        to: contractAccount,
+        action: extrinsicEntity.name,
+        createdAt: extrinsicEntity.createdAt,
+        from: deployerAccount,
+        args: allArgs,
+      });
+
       const entities = [
         deployerAccount,
         contractAccount,
         extrinsicEntity,
         eventEntity,
         contractEntity,
-        createActivity(
-          contractEntity.id,
-          "Contract",
-          extrinsicEntity,
-          contract
-        ),
+        activityEntity,
       ];
       await store.save(entities);
     }
@@ -99,7 +115,10 @@ export async function contractsCodeStoredEventHandler(
       const contractCodeEntity = new ContractCode({
         id: codeHash,
         code,
-        owner: await getAccount(store, ss58.codec("substrate").encode(owner)),
+        owner: await getOrCreateAccount(
+          store,
+          ss58.codec("substrate").encode(owner)
+        ),
         createdFrom: extrinsicEntity,
         createdAt: extrinsicEntity.createdAt,
       });
