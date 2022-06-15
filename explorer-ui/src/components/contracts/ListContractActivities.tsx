@@ -71,7 +71,7 @@ export default function ListContractActivities ({
     if (data === undefined && fetching) {
       return (<Skeleton>
         <List title={title} description={description}>
-          <ActivityRowSkeleton size={query.first}/>
+          <ActivityRowSkeleton size={1}/>
         </List>
       </Skeleton>)
     }
