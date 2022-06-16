@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react"
+import React, { useMemo, useRef, useState } from "react"
 import { LightContract } from "../../types/contracts"
 import { Edge, Page } from "../../types/pagination"
 import ContractRow from "./ContractRow"
@@ -7,6 +7,7 @@ import useSquid from "../../hooks/useSquid"
 import Pagination from "../Pagination"
 import SortBy from "../SortBy"
 import Hashcode from "../../utils/hashcode"
+import { ListSkeleton, onFetching } from "../loading/Skeleton"
 
 const QUERY = `
 query($first: Int!, $after: String = "", $orderBy: [ContractOrderByInput!]! = [createdAt_DESC]) {
@@ -67,6 +68,7 @@ export default function ContractList ({
   sortable = false,
   filterable = false
 } : ListProps) {
+  const timeRef = useRef(new Date().getTime())
   const [queryInState, setQueryInState] = useState(query)
 
   const [result] = useSquid({
@@ -80,11 +82,9 @@ export default function ContractList ({
 
   return useMemo(() => {
     if (data === undefined && fetching) {
-      return <p>...</p>
+      return onFetching(timeRef, <ListSkeleton title={title} description={description} />)
     }
     if (error) return <p>Oh no... {error.message}</p>
-
-    console.log("List Contracts Data changed", hash)
 
     const page : Page<LightContract> = data.contractsConnection
     const sort = sortable

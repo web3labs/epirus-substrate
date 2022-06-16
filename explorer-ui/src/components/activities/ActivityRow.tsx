@@ -1,5 +1,4 @@
 import React from "react"
-import { formatBalance } from "@polkadot/util"
 
 import { Activity } from "../../types/contracts"
 import { shortenHexString } from "../../formats/text"
@@ -8,11 +7,12 @@ import { formatDate } from "../../formats/time"
 import { useChainProperties } from "../../contexts/ChainContext"
 import { argValue } from "../../utils/types"
 import AccountLink from "../accounts/AccountRef"
+import { formatUnits } from "../../formats/units"
 
 function printBalance ({ args }: Activity) {
-  const { tokenDecimals, tokenSymbol } = useChainProperties().token
+  const { token } = useChainProperties()
   const va = argValue(args, "value")
-  return formatBalance(va, { decimals: tokenDecimals, forceUnit: tokenSymbol })
+  return formatUnits(va, token)
 }
 
 function additionalDetails ({ action, args }: Activity) {
@@ -33,35 +33,6 @@ function actionAlias (action: string) {
   default:
     return action
   }
-}
-
-export function ActivityRowSkeleton ({ size = 5 }: {size?: number}) {
-  const skeletons : JSX.Element[] = []
-  for (let i = 0; i < size; i++) {
-    skeletons.push(
-      <Row key={`arsk-${i}`}>
-        <Cols>
-          <div className="flex items-center space-x-3">
-            <div className="h-10 w-10 skeleton rounded-full"></div>
-            <div className="h-3 skeleton w-[50%]"></div>
-          </div>
-          <div className="h-3 skeleton w-[50%] "></div>
-          <div className="flex items-center space-x-3">
-            <div className="h-10 w-10 skeleton rounded-full"></div>
-            <div className="h-3 skeleton w-[50%]"></div>
-          </div>
-        </Cols>
-        <Cols>
-          <div className="h-3 skeleton w-[35%]"></div>
-          <div className="h-3 skeleton w-0"></div>
-          <div className="h-3 skeleton w-[35%] ml-auto"></div>
-        </Cols>
-      </Row>
-    )
-  }
-  return (<>
-    {skeletons}
-  </>)
 }
 
 export default function ActivityRow ({ activity, short }: { activity: Activity, short: boolean }) {

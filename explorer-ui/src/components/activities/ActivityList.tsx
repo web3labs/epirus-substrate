@@ -1,13 +1,13 @@
-import React, { useMemo, useState } from "react"
+import React, { useMemo, useRef, useState } from "react"
 import useSquid from "../../hooks/useSquid"
 import { Activity } from "../../types/contracts"
 import { Edge, Page } from "../../types/pagination"
 import Hashcode from "../../utils/hashcode"
 import List, { ListProps } from "../List"
-import Skeleton from "../loading/Skeleton"
+import { ListSkeleton, onFetching } from "../loading/Skeleton"
 import Pagination from "../Pagination"
 import SortBy from "../SortBy"
-import ActivityRow, { ActivityRowSkeleton } from "./ActivityRow"
+import ActivityRow from "./ActivityRow"
 
 const QUERY = `
 query($where: ActivityWhereInput = {} ,$first: Int = 5, $after: String = "", $orderBy: [ActivityOrderByInput!]! = [createdAt_DESC]) {
@@ -66,6 +66,7 @@ export default function ActivityList ({
   sortable = false,
   filterable = false
 } : ListProps) {
+  const timeRef = useRef(new Date().getTime())
   const [queryInState, setQueryInState] = useState(query)
 
   const [result] = useSquid({
@@ -79,11 +80,7 @@ export default function ActivityList ({
 
   return useMemo(() => {
     if (data === undefined && fetching) {
-      return (<Skeleton>
-        <List title={title} description={description}>
-          <ActivityRowSkeleton size={1}/>
-        </List>
-      </Skeleton>)
+      return onFetching(timeRef, <ListSkeleton title={title} description={description} />)
     }
     if (error) return <p>Oh no... {error.message}</p>
 

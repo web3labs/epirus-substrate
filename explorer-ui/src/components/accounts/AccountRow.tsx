@@ -1,13 +1,13 @@
 import React from "react"
-import { formatBalance } from "@polkadot/util"
 
 import { Account } from "../../types/accounts"
 import AccountLink from "./AccountRef"
 import { Cols, Row } from "../List"
 import { useChainProperties } from "../../contexts/ChainContext"
+import { formatUnits } from "../../formats/units"
 
 export default function AccountRow ({ account, short = false }: { account: Account, short?: boolean }) {
-  const { tokenDecimals, tokenSymbol } = useChainProperties().token
+  const { token } = useChainProperties()
   const { id, balance, codesOwned, contractsDeployed } = account
 
   return (
@@ -18,7 +18,7 @@ export default function AccountRow ({ account, short = false }: { account: Accou
         <div></div>
 
         <div>
-          {formatBalance(balance.free, { decimals: tokenDecimals, forceUnit: tokenSymbol })}
+          {formatUnits(balance.free, token)}
         </div>
       </Cols>
       <div className="flex flex-row flex-wrap gap-x-2 justify-end text-xs">

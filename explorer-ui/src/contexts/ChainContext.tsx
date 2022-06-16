@@ -8,7 +8,7 @@ const NULL_CHAIN_PROPERTIES : ChainProperties = {
   ss58Format: null,
   token: {
     tokenDecimals: 12,
-    tokenSymbol: "Unit"
+    tokenSymbol: "UNK"
   }
 }
 

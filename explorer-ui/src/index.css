@@ -7,7 +7,7 @@
 @layer components {
   /* Skeleton loader */
   .skeleton {
-    @apply bg-gray-200;
+    @apply bg-gradient-to-r from-neutral-100 to-white;
   }
 
   .link {

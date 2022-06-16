@@ -1,5 +1,4 @@
 import React from "react"
-import { formatBalance } from "@polkadot/util"
 
 import { useParams } from "react-router-dom"
 import { useChainProperties } from "../../contexts/ChainContext"
@@ -15,6 +14,7 @@ import { argValue } from "../../utils/types"
 import AccountLink from "../accounts/AccountRef"
 import Breadcrumbs from "../Breadcrumbs"
 import Tag from "../Tag"
+import { formatUnits } from "../../formats/units"
 
 const QUERY = `
 query($id: ID!) {
@@ -67,7 +67,7 @@ query($id: ID!) {
 `
 
 function DefinitionList ({ children } :{ children: JSX.Element | JSX.Element[]}) {
-  return (<dl className="flex flex-col w-full gap-y-2">
+  return (<dl className="flex flex-col w-full gap-y-2 overflow-hidden text-ellipsis">
     {children}
   </dl>)
 }
@@ -108,7 +108,7 @@ function ActivityTab ({ id }: {id:string}) {
 }
 
 export default function ContractPage () {
-  const { tokenDecimals, tokenSymbol } = useChainProperties().token
+  const { token } = useChainProperties()
   const params = useParams()
   const [result] = useSquid({
     query: QUERY,
@@ -122,7 +122,7 @@ export default function ContractPage () {
   const { data, fetching, error } = result
 
   if (fetching) {
-    return <p>...</p>
+    return null
   }
   if (error) return <p>Oh no... {error.message}</p>
 
@@ -149,7 +149,7 @@ export default function ContractPage () {
             <Segment>
               <DefinitionList>
                 <Definition label="Code Hash" term={
-                  <span className="font-mono overflow-hidden text-ellipsis">{contractCode.id}</span>
+                  <span className="font-mono">{contractCode.id}</span>
                 }/>
               </DefinitionList>
             </Segment>
@@ -181,12 +181,12 @@ export default function ContractPage () {
                 <Definition
                   className="justify-between"
                   label="Free"
-                  term={formatBalance(balance.free, { decimals: tokenDecimals, forceUnit: tokenSymbol })}
+                  term={formatUnits(balance.free, token)}
                 />
                 <Definition
                   className="justify-between"
                   label="Reserved"
-                  term={formatBalance(balance.reserved, { decimals: tokenDecimals, forceUnit: tokenSymbol })}
+                  term={formatUnits(balance.reserved, token)}
                 />
               </DefinitionList>
             </Segment>
