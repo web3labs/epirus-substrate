@@ -1,14 +1,15 @@
 import React, { useMemo, useState } from "react"
-import { LightAccount } from "../../types/contracts"
+import { Account } from "../../types/accounts"
 import { Edge, Page } from "../../types/pagination"
 import List, { ListProps } from "../List"
 import useSquid from "../../hooks/useSquid"
 import Pagination from "../Pagination"
 import Hashcode from "../../utils/hashcode"
 import AccountRow from "./AccountRow"
+import SortBy from "../SortBy"
 
 const QUERY = `
-query($first: Int!, $after: String = "", $orderBy: [AccountOrderByInput!]! = [id_DESC]) {
+query($first: Int!, $after: String = "", $orderBy: [AccountOrderByInput!]! = [id_ASC]) {
   accountsConnection(orderBy: $orderBy, first: $first, after: $after) {
     totalCount
     pageInfo {
@@ -21,6 +22,12 @@ query($first: Int!, $after: String = "", $orderBy: [AccountOrderByInput!]! = [id
       node {
         id
         tags
+        codesOwned {
+          id
+        }
+        contractsDeployed {
+          id
+        }
         balance {
           free
           reserved
@@ -34,6 +41,20 @@ query($first: Int!, $after: String = "", $orderBy: [AccountOrderByInput!]! = [id
   }
 }
 `
+const SORT_OPTIONS = [
+  {
+    name: "id",
+    value: "id_ASC"
+  },
+  {
+    name: "highest balance",
+    value: "balance_free_DESC"
+  },
+  {
+    name: "lowest balance",
+    value: "balance_free_ASC"
+  }
+]
 
 export default function AccountList ({
   query = { first: 10 },
@@ -60,8 +81,13 @@ export default function AccountList ({
     }
     if (error) return <p>Oh no... {error.message}</p>
 
-    const page : Page<LightAccount> = data.accountsConnection
-    const sort = undefined
+    const page : Page<Account> = data.accountsConnection
+    const sort = sortable
+      ? <SortBy options={SORT_OPTIONS}
+        setQuery={setQueryInState}
+        query={queryInState}
+      />
+      : undefined
 
     return (
       <List
@@ -75,7 +101,7 @@ export default function AccountList ({
             setQuery={setQueryInState}
           />
         }>
-        {page?.edges.map(({ node } : Edge<LightAccount>) => (
+        {page?.edges.map(({ node } : Edge<Account>) => (
           <AccountRow key={node.id} account={node} short={short} />
         ))}
       </List>

@@ -4,63 +4,34 @@ import { formatBalance } from "@polkadot/util"
 import { useParams } from "react-router-dom"
 import { useChainProperties } from "../../contexts/ChainContext"
 import useSquid from "../../hooks/useSquid"
-import { Contract } from "../../types/contracts"
 import CodeBadge from "../badges/CodeBadge"
 import Box from "../Box"
 import AccountAddress from "../accounts/AccountAddress"
 import ActivityList from "../activities/ActivityList"
 import Segment from "../Segment"
 import { classNames } from "../../utils/strings"
-import { argValue } from "../../utils/types"
-import AccountLink from "../accounts/AccountRef"
 import Breadcrumbs from "../Breadcrumbs"
+import { Account } from "../../types/accounts"
 import Tag from "../Tag"
 
 const QUERY = `
 query($id: ID!) {
-  contracts(where: {id_eq: $id}) {
-    createdAt
+  accounts(where: {id_eq: $id}) {
     id
-    salt
-    trieId
-    storageDeposit
-    deployer {
+    tags
+    codesOwned {
       id
-      contract {
-        id
-      }
     }
-    contractCode {
-      code
+    contractsDeployed {
       id
-      removedOn
-      createdAt
     }
-    account {
-      balance {
-        reserved
-        miscFrozen
-        free
-        feeFrozen
-      }
-      id
-      tags
+    balance {
+      free
+      reserved
+      feeFrozen
     }
-    createdFrom {
-      blockHash
-      blockNumber
+    contract {
       id
-      hash
-      name
-      signer
-      signature
-      tip
-      versionInfo
-      args {
-        type
-        name
-        value
-      }
     }
   }
 }
@@ -107,7 +78,7 @@ function ActivityTab ({ id }: {id:string}) {
   )
 }
 
-export default function ContractPage () {
+export default function AccountPage () {
   const { tokenDecimals, tokenSymbol } = useChainProperties()
   const params = useParams()
   const [result] = useSquid({
@@ -126,8 +97,7 @@ export default function ContractPage () {
   }
   if (error) return <p>Oh no... {error.message}</p>
 
-  const { id, salt, createdAt, deployer, createdFrom, contractCode, account } = data?.contracts[0] as Contract
-  const { balance, contract } = account
+  const { id, contract, balance } = data?.accounts[0] as Account
 
   return (
     <>
@@ -135,45 +105,17 @@ export default function ContractPage () {
       <div className="content">
 
         <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-2">
-          <Box className="col-span-2 divide-y gap-y-2">
+          <Box className="col-span-2">
             <div className="flex flex-row flex-wrap items-start justify-between mt-4 gap-x-2">
               <h3 className="mx-5 mb-1 font-medium">
                 <AccountAddress address={id}>
                   {contract && <CodeBadge/>}
                 </AccountAddress>
               </h3>
-              <div className="flex flex-row flex-wrap gap-x-2  ml-5 md:ml-0">
-                <Tag label="wasm" color="lime" />
+              <div className="flex flex-row flex-wrap gap-x-2 ml-5 md:ml-0">
+                <Tag label={contract ? "contract" : "EOA"} color="orange"/>
               </div>
             </div>
-            <Segment>
-              <DefinitionList>
-                <Definition label="Code Hash" term={
-                  <span className="font-mono overflow-hidden text-ellipsis">{contractCode.id}</span>
-                }/>
-              </DefinitionList>
-            </Segment>
-
-            <Segment title="Creation details" collapsable={true} isOpen={false}>
-              <DefinitionList>
-                <Definition label="Block" term={
-                  <span className="font-mono">{createdFrom.blockNumber}</span>
-                }/>
-                <Definition label="Extrinsic" term={
-                  <span className="font-mono">{createdFrom.id}</span>
-                }/>
-                <Definition label="Time" term={createdAt.toString()}/>
-                <Definition label="Salt" term={salt &&
-                <span className="font-mono">{salt}</span>
-                }/>
-                <Definition label="Data" term={
-                  <span className="font-mono">{argValue(createdFrom.args, "data")}</span>
-                } />
-                <Definition label="Deployer" term={
-                  <AccountLink account={deployer} />
-                } />
-              </DefinitionList>
-            </Segment>
           </Box>
           <Box>
             <Segment title="Balance">
@@ -203,12 +145,12 @@ export default function ContractPage () {
               </li>
               <li className="mr-2">
                 <a href="#" className="inline-flex p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 group">
-                Events
+                Contracts
                 </a>
               </li>
               <li className="mr-2">
                 <a href="#" className="inline-flex p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 group">
-                XXX
+                Codes
                 </a>
               </li>
               <li>

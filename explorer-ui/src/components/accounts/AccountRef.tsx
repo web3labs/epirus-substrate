@@ -1,6 +1,6 @@
 import React from "react"
 import { NavLink } from "react-router-dom"
-import { AccountRef } from "../../types/contracts"
+import { AccountRef } from "../../types/accounts"
 import CodeBadge from "../badges/CodeBadge"
 import AccountAddress from "./AccountAddress"
 

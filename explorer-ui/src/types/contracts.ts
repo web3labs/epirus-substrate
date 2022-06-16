@@ -1,28 +1,9 @@
+import { AccountRef, Account } from "./accounts"
+
 export interface Arg {
   type: string,
   name: string,
   value: string
-}
-
-export interface AccountRef {
-  id: string,
-  contract?: {
-    id: string
-  }
-}
-
-export type LightAccount = {
-    balance: {
-      reserved: string
-      miscFrozen:string
-      free:string
-      feeFrozen:string
-    }
-    contract?: {
-      id: string
-    }
-    id:string
-    tags:string[]
 }
 
 export interface Activity {
@@ -64,7 +45,7 @@ export interface Contract extends LightContract {
     removedOn : Date
     createdAt: Date
   }
-  account: LightAccount
+  account: Account
   createdFrom: {
     blockHash: string
     blockNumber: string

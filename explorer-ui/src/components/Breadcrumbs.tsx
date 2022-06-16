@@ -5,7 +5,6 @@ import useBreadcrumbs from "use-react-router-breadcrumbs"
 export default function Breadcrumbs () {
   const breadcrumbs = useBreadcrumbs()
 
-  console.log(breadcrumbs)
   const links = breadcrumbs.slice(0, breadcrumbs.length - 1)
   const current = breadcrumbs[breadcrumbs.length - 1]
 
