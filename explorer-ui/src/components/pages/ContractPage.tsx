@@ -108,7 +108,7 @@ function ActivityTab ({ id }: {id:string}) {
 }
 
 export default function ContractPage () {
-  const { tokenDecimals, tokenSymbol } = useChainProperties()
+  const { tokenDecimals, tokenSymbol } = useChainProperties().token
   const params = useParams()
   const [result] = useSquid({
     query: QUERY,

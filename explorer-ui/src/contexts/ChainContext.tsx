@@ -1,25 +1,67 @@
-import React, { createContext, useContext } from "react"
-
-export interface ChainProperties {
-    systemName: string | null
-    systemVersion: string | null
-    tokenDecimals: number
-    tokenSymbol: string
-}
+import React, { createContext, useContext, useEffect, useRef, useState } from "react"
+import { useClient } from "urql"
+import { ChainProperties } from "../types/chain"
 
 const NULL_CHAIN_PROPERTIES : ChainProperties = {
-  systemName: null,
-  systemVersion: null,
-  tokenDecimals: 12,
-  tokenSymbol: "Unit"
+  name: "unknown",
+  version: null,
+  ss58Format: null,
+  token: {
+    tokenDecimals: 12,
+    tokenSymbol: "Unit"
+  }
 }
+
+const QUERY = `
+query{
+  chainProperties {
+    id
+    name
+    ss58Format
+    token {
+      tokenDecimals
+      tokenSymbol
+    }
+  }
+}
+`
 
 export const ChainContext = createContext(NULL_CHAIN_PROPERTIES)
 
 export default function ChainContextProvider ({ children }: React.PropsWithChildren<Partial<ChainProperties>>) {
-  // TODO resolve chain properties from Squid
+  const init = useRef(true)
+  const [chainProps, setChainProps] = useState(NULL_CHAIN_PROPERTIES)
+  const client = useClient()
+
+  // Execute just once on initialization
+  useEffect(() => {
+    async function loadChainProperties () {
+      try {
+        const { data, error } = await client
+          .query(QUERY, {
+            /* vars */
+          }).toPromise()
+
+        if (error) {
+          console.log(error)
+        }
+
+        if (data) {
+          setChainProps(data.chainProperties[0])
+        }
+      } catch (e) {
+        console.log(e)
+      }
+    }
+
+    if (init.current) {
+      init.current = false
+      loadChainProperties()
+    }
+  }, [])
+
   return (
-    <ChainContext.Provider value={NULL_CHAIN_PROPERTIES}>
+    <ChainContext.Provider value={chainProps}>
       {children}
     </ChainContext.Provider>
   )
