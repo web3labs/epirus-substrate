@@ -22,7 +22,7 @@ const client = createClient({
 
 function HomePage () {
   return (
-    <div className="flex flex-col space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-2">
+    <div className="content flex flex-col space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-2">
       <Box>
         <ListContractActivities
           short={true}
@@ -61,7 +61,7 @@ function App () {
                   <Nav />
                 </div>
               </div>
-              <main className="max-w-7xl mx-auto md:px-4 pt-6">
+              <main className="max-w-7xl mx-auto">
                 <Routes>
                   <Route path="/" element={<HomePage/>}/>
                   <Route path="contracts/:id" element={<ContractPage/>} />

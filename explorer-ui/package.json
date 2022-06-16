@@ -23,6 +23,7 @@
     "twin.macro": "^2.8.2",
     "typescript": "^4.7.3",
     "urql": "^2.2.2",
+    "use-react-router-breadcrumbs": "^3.2.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

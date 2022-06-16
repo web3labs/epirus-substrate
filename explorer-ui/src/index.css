@@ -13,6 +13,10 @@
   .link {
     @apply text-blue-800;
   }
+
+  .content {
+    @apply my-5;
+  }
 }
 
 /* Fixes */

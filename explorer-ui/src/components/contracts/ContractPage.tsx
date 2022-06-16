@@ -13,6 +13,7 @@ import Segment from "../Segment"
 import { classNames } from "../../utils/strings"
 import { argValue } from "../../utils/types"
 import AccountLink from "../AccountRef"
+import Breadcrumbs from "../Breadcrumbs"
 const QUERY = `
 query($id: ID!) {
   contracts(where: {id_eq: $id}) {
@@ -128,83 +129,87 @@ export default function ContractPage () {
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-2">
-        <Box className="col-span-2 divide-y">
-          <h3 className="px-5 py-4 w-full font-medium">
-            <AccountAddress address={id}><CodeBadge/></AccountAddress>
-          </h3>
-          <Segment>
-            <DefinitionList>
-              <Definition label="Code Hash" term={
-                <span className="font-mono overflow-hidden text-ellipsis">{contractCode.id}</span>
-              }/>
-              <Definition label="Type" term="WASM" />
-            </DefinitionList>
-          </Segment>
+      <Breadcrumbs/>
+      <div className="content">
 
-          <Segment title="Creation details" collapsable={true} isOpen={false}>
-            <DefinitionList>
-              <Definition label="ID" term={
-                <span className="font-mono">{createdFrom.id}</span>
-              }/>
-              <Definition label="Time" term={createdAt.toString()}/>
-              <Definition label="Salt" term={salt &&
+        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-2">
+          <Box className="col-span-2 divide-y">
+            <h3 className="px-5 py-4 w-full font-medium">
+              <AccountAddress address={id}><CodeBadge/></AccountAddress>
+            </h3>
+            <Segment>
+              <DefinitionList>
+                <Definition label="Code Hash" term={
+                  <span className="font-mono overflow-hidden text-ellipsis">{contractCode.id}</span>
+                }/>
+                <Definition label="Type" term="WASM" />
+              </DefinitionList>
+            </Segment>
+
+            <Segment title="Creation details" collapsable={true} isOpen={false}>
+              <DefinitionList>
+                <Definition label="ID" term={
+                  <span className="font-mono">{createdFrom.id}</span>
+                }/>
+                <Definition label="Time" term={createdAt.toString()}/>
+                <Definition label="Salt" term={salt &&
                 <span className="font-mono">{salt}</span>
-              }/>
-              <Definition label="Data" term={
-                <span className="font-mono">{argValue(createdFrom.args, "data")}</span>
-              } />
-              <Definition label="Deployer" term={
-                <AccountLink account={deployer} />
-              } />
-            </DefinitionList>
-          </Segment>
-        </Box>
-        <Box>
-          <Segment title="Balance">
-            <DefinitionList>
-              <Definition
-                className="justify-between"
-                label="Free"
-                term={formatBalance(balance.free, { decimals: tokenDecimals, forceUnit: tokenSymbol })}
-              />
-              <Definition
-                className="justify-between"
-                label="Reserved"
-                term={formatBalance(balance.reserved, { decimals: tokenDecimals, forceUnit: tokenSymbol })}
-              />
-            </DefinitionList>
-          </Segment>
+                }/>
+                <Definition label="Data" term={
+                  <span className="font-mono">{argValue(createdFrom.args, "data")}</span>
+                } />
+                <Definition label="Deployer" term={
+                  <AccountLink account={deployer} />
+                } />
+              </DefinitionList>
+            </Segment>
+          </Box>
+          <Box>
+            <Segment title="Balance">
+              <DefinitionList>
+                <Definition
+                  className="justify-between"
+                  label="Free"
+                  term={formatBalance(balance.free, { decimals: tokenDecimals, forceUnit: tokenSymbol })}
+                />
+                <Definition
+                  className="justify-between"
+                  label="Reserved"
+                  term={formatBalance(balance.reserved, { decimals: tokenDecimals, forceUnit: tokenSymbol })}
+                />
+              </DefinitionList>
+            </Segment>
+          </Box>
+        </div>
+
+        <Box className="mt-2">
+          <div className="border-b border-gray-200 w-full">
+            <ul className="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500">
+              <li className="mr-2">
+                <a href="#" className="inline-flex p-4 text-purple-600 rounded-t-lg border-b-2 border-purple-600 active group" aria-current="page">
+                Activity
+                </a>
+              </li>
+              <li className="mr-2">
+                <a href="#" className="inline-flex p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 group">
+                Events
+                </a>
+              </li>
+              <li className="mr-2">
+                <a href="#" className="inline-flex p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 group">
+                XXX
+                </a>
+              </li>
+              <li>
+                <a className="inline-block p-4 text-gray-400 rounded-t-lg cursor-not-allowed">Disabled</a>
+              </li>
+            </ul>
+          </div>
+          <div className="w-full">
+            <ActivityTab id={id} />
+          </div>
         </Box>
       </div>
-
-      <Box className="mt-2">
-        <div className="border-b border-gray-200 w-full">
-          <ul className="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500">
-            <li className="mr-2">
-              <a href="#" className="inline-flex p-4 text-purple-600 rounded-t-lg border-b-2 border-purple-600 active group" aria-current="page">
-                Activity
-              </a>
-            </li>
-            <li className="mr-2">
-              <a href="#" className="inline-flex p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 group">
-                Events
-              </a>
-            </li>
-            <li className="mr-2">
-              <a href="#" className="inline-flex p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 group">
-                XXX
-              </a>
-            </li>
-            <li>
-              <a className="inline-block p-4 text-gray-400 rounded-t-lg cursor-not-allowed">Disabled</a>
-            </li>
-          </ul>
-        </div>
-        <div className="w-full">
-          <ActivityTab id={id} />
-        </div>
-      </Box>
     </>
   )
 }
