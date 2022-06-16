@@ -47,7 +47,7 @@ export default function ChainContextProvider ({ children }: React.PropsWithChild
         }
 
         if (data) {
-          setChainProps(NULL_CHAIN_PROPERTIES)// data.chainProperties[0])
+          setChainProps(data.chainProperties[0])
         }
       } catch (e) {
         console.log(e)

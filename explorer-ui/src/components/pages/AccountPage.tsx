@@ -93,7 +93,7 @@ export default function AccountPage () {
   const { data, fetching, error } = result
 
   if (fetching) {
-    return <p>...</p>
+    return null
   }
   if (error) return <p>Oh no... {error.message}</p>
 
