@@ -45,12 +45,17 @@ export default function Nav () {
           <div className="flex flex-col md:flex-row md:justify-between items-center md:space-x-10 w-full md:mb-2">
             <div className="flex flex-row justify-start w-full px-4 md:px-0">
               <Link to="/">
-                <span className="sr-only">Epirus</span>
-                <img
-                  className="h-8 w-auto sm:h-10"
-                  src={Logo}
-                  alt=""
-                />
+                <div className="flex flow-col flow-wrap justify-start gap-x-1.5">
+                  <img
+                    className="h-8 w-auto sm:h-10"
+                    src={Logo}
+                    alt=""
+                  />
+                  <span className="leading-tight">
+                    <span className="font-medium">Epirus</span><br/>
+                    <span className="text-gray-900">substrate</span>
+                  </span>
+                </div>
               </Link>
               <div className="-mr-2 -my-2 md:hidden ml-auto">
                 <Popover.Button className="bg-white p-2 inline-flex items-center justify-center text-gray-600 focus:outline-none">
@@ -59,7 +64,7 @@ export default function Nav () {
                 </Popover.Button>
               </div>
             </div>
-            <div className="w-full mt-4 md:w-[40em] md:ml-auto">
+            <div className="w-full mt-4 md:w-[40em] md:ml-auto md:mt-0">
               <SearchBox />
             </div>
           </div>
