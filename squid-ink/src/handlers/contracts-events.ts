@@ -48,6 +48,8 @@ export async function contractsInstantiatedEventHandler(
         );
       }
 
+      const saltArg = extrinsicEntity.args?.filter((a) => a.name === "salt");
+
       const contractEntity = new Contract({
         id: contract,
         trieId,
@@ -57,6 +59,7 @@ export async function contractsInstantiatedEventHandler(
         createdFrom: extrinsicEntity,
         contractCode: contractCodeEntity,
         storageDeposit,
+        salt: saltArg && saltArg.length ? saltArg[0].value : undefined,
       });
 
       const allArgs = extrinsicEntity.args || new Array<Args>();
