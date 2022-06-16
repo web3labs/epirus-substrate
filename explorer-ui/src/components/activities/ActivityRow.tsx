@@ -35,14 +35,14 @@ function actionAlias (action: string) {
   }
 }
 
-export default function ActivityRow ({ activity, short }: { activity: Activity, short: boolean }) {
+export default function ActivityRow ({ activity, short = false }: { activity: Activity, short?: boolean }) {
   const { id, from, to, action, createdAt } = activity
 
   return (
     <Row key={id}>
       <Cols>
         <div>
-          <AccountLink account={from} short={true}/>
+          <AccountLink account={from} short={short}/>
 
           <div className="text-gray-400 text-xs">
             {formatDate(createdAt)}
@@ -59,7 +59,7 @@ export default function ActivityRow ({ activity, short }: { activity: Activity, 
         </div>
 
         <div className="flex flex-col">
-          <AccountLink account={to} short={true} className="justify-end"/>
+          <AccountLink account={to} short={short} className="justify-end"/>
 
           <div className="text-xs flex justify-end">
             {printBalance(activity)}
