@@ -82,8 +82,6 @@ export default function ActivityList ({
     }
     if (error) return <p>Oh no... {error.message}</p>
 
-    console.log("List Activities Data changed", hash)
-
     const page : Page<Activity> = data.activitiesConnection
     const sort = sortable
       ? <SortBy options={SORT_OPTIONS}
