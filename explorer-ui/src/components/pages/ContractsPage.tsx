@@ -1,7 +1,7 @@
 import React from "react"
 import Box from "../Box"
 import Breadcrumbs from "../Breadcrumbs"
-import ContractList from "./ContractList"
+import ContractList from "../contracts/ContractList"
 
 export default function ContractsPage () {
   return (

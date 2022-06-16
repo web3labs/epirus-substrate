@@ -1,8 +1,8 @@
 import React from "react"
 import { NavLink } from "react-router-dom"
-import { AccountRef } from "../types/contracts"
-import CodeBadge from "./badges/CodeBadge"
-import AccountAddress from "./substrate/AccountAddress"
+import { AccountRef } from "../../types/contracts"
+import CodeBadge from "../badges/CodeBadge"
+import AccountAddress from "./AccountAddress"
 
 export default function AccountLink (
   { account, className, short = false }

@@ -11,10 +11,11 @@ import { ThemeProvider } from "styled-components"
 import colors from "tailwindcss/colors"
 import ActivityList from "./components/contracts/ActivityList"
 import ContractList from "./components/contracts/ContractList"
-import ContractPage from "./components/contracts/ContractPage"
+import ContractPage from "./components/pages/ContractPage"
 import Box from "./components/Box"
-import ContractsPage from "./components/contracts/ContractsPage"
+import ContractsPage from "./components/pages/ContractsPage"
 import ChainContextProvider from "./contexts/ChainContext"
+import AccountsPage from "./components/pages/AccountsPage"
 
 const client = createClient({
   url: process.env.SQUID_ENDPOINT || "http://localhost:4350/graphql"
@@ -64,6 +65,7 @@ function App () {
               <main className="max-w-7xl mx-auto">
                 <Routes>
                   <Route path="/" element={<HomePage/>}/>
+                  <Route path="accounts" element={<AccountsPage/>} />
                   <Route path="contracts/:id" element={<ContractPage/>} />
                   <Route path="contracts" element={<ContractsPage/>} />
                 </Routes>

@@ -2,7 +2,7 @@ import React from "react"
 import { shortenHexString } from "../../formats/text"
 import { formatDate } from "../../formats/time"
 import { LightContract } from "../../types/contracts"
-import AccountLink from "../AccountRef"
+import AccountLink from "../accounts/AccountRef"
 import { Cols, Row } from "../List"
 
 export default function ContractRow ({ contract, short = false }: { contract: LightContract, short?: boolean }) {

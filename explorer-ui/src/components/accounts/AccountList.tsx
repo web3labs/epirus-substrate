@@ -8,7 +8,7 @@ import Hashcode from "../../utils/hashcode"
 import AccountRow from "./AccountRow"
 
 const QUERY = `
-query($first: Int!, $after: String = "", $orderBy: [ContractOrderByInput!]! = [createdAt_DESC]) {
+query($first: Int!, $after: String = "", $orderBy: [AccountOrderByInput!]! = [id_DESC]) {
   accountsConnection(orderBy: $orderBy, first: $first, after: $after) {
     totalCount
     pageInfo {
@@ -21,11 +21,10 @@ query($first: Int!, $after: String = "", $orderBy: [ContractOrderByInput!]! = [c
       node {
         id
         tags
-        createdAt
         balance {
           free
           reserved
-          frozen
+          feeFrozen
         }
         contract {
           id
@@ -37,7 +36,7 @@ query($first: Int!, $after: String = "", $orderBy: [ContractOrderByInput!]! = [c
 `
 
 export default function AccountList ({
-  query = { first: 5 },
+  query = { first: 10 },
   title,
   description,
   short = false,

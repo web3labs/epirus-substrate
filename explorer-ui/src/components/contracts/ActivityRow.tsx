@@ -7,7 +7,7 @@ import { Cols, Row } from "../List"
 import { formatDate } from "../../formats/time"
 import { useChainProperties } from "../../contexts/ChainContext"
 import { argValue } from "../../utils/types"
-import AccountLink from "../AccountRef"
+import AccountLink from "../accounts/AccountRef"
 
 function printBalance ({ args }: Activity) {
   const { tokenDecimals, tokenSymbol } = useChainProperties()

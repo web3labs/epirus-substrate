@@ -1,6 +1,6 @@
 import React from "react"
 import { LightAccount } from "../../types/contracts"
-import AccountLink from "../AccountRef"
+import AccountLink from "./AccountRef"
 import { Cols, Row } from "../List"
 
 export default function AccountRow ({ account, short = false }: { account: LightAccount, short?: boolean }) {
