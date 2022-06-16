@@ -67,7 +67,7 @@ query($id: ID!) {
 `
 
 function DefinitionList ({ children } :{ children: JSX.Element | JSX.Element[]}) {
-  return (<dl className="flex flex-col w-full gap-y-2">
+  return (<dl className="flex flex-col w-full gap-y-2 overflow-hidden text-ellipsis">
     {children}
   </dl>)
 }
@@ -149,7 +149,7 @@ export default function ContractPage () {
             <Segment>
               <DefinitionList>
                 <Definition label="Code Hash" term={
-                  <span className="font-mono overflow-hidden text-ellipsis">{contractCode.id}</span>
+                  <span className="font-mono">{contractCode.id}</span>
                 }/>
               </DefinitionList>
             </Segment>
