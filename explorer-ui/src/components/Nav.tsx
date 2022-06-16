@@ -70,7 +70,7 @@ export default function Nav () {
           </div>
           <div className="hidden md:flex space-x-10 items-center justify-end w-full">
             <div className="mr-auto">
-              <span className="bg-purple-100 text-purple-800 text-xs mr-2 px-1.5 py-1 rounded dark:bg-purple-200 dark:text-purple-900">
+              <span className="bg-emerald-100 text-emerald-800 text-xs mr-2 px-1.5 py-1 rounded">
                 {name}
               </span>
             </div>
