@@ -7,7 +7,7 @@ import { Cols, Row } from "../List"
 import { useChainProperties } from "../../contexts/ChainContext"
 
 export default function AccountRow ({ account, short = false }: { account: Account, short?: boolean }) {
-  const { tokenDecimals, tokenSymbol } = useChainProperties()
+  const { tokenDecimals, tokenSymbol } = useChainProperties().token
   const { id, balance, codesOwned, contractsDeployed } = account
 
   return (

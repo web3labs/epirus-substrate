@@ -10,7 +10,7 @@ import { argValue } from "../../utils/types"
 import AccountLink from "../accounts/AccountRef"
 
 function printBalance ({ args }: Activity) {
-  const { tokenDecimals, tokenSymbol } = useChainProperties()
+  const { tokenDecimals, tokenSymbol } = useChainProperties().token
   const va = argValue(args, "value")
   return formatBalance(va, { decimals: tokenDecimals, forceUnit: tokenSymbol })
 }

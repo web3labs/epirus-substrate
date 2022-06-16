@@ -12,6 +12,7 @@ import Logo from "../logo.svg"
 import SearchBox from "./SearchBox"
 import { Link, NavLink } from "react-router-dom"
 import { classNames } from "../utils/strings"
+import { useChainProperties } from "../contexts/ChainContext"
 
 const blockchain = [
   {
@@ -35,6 +36,8 @@ const blockchain = [
 ]
 
 export default function Nav () {
+  const { name } = useChainProperties()
+
   return (
     <Popover className="relative z-10">
       <div className="w-full md:flex justify-start items-center md:mb-2">
@@ -63,7 +66,7 @@ export default function Nav () {
           <div className="hidden md:flex space-x-10 items-center justify-end w-full">
             <div className="mr-auto">
               <span className="bg-purple-100 text-purple-800 text-xs mr-2 px-1.5 py-1 rounded dark:bg-purple-200 dark:text-purple-900">
-                Local Development
+                {name}
               </span>
             </div>
 
