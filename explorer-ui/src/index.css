@@ -15,7 +15,7 @@
   }
 
   .content {
-    @apply my-5;
+    @apply my-2 md:my-5;
   }
 }
 

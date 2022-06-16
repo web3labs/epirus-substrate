@@ -11,6 +11,20 @@ export interface AccountRef {
   }
 }
 
+export type LightAccount = {
+    balance: {
+      reserved: string
+      miscFrozen:string
+      free:string
+      feeFrozen:string
+    }
+    contract?: {
+      id: string
+    }
+    id:string
+    tags:string[]
+}
+
 export interface Activity {
   id: string,
   type: string,
@@ -50,16 +64,7 @@ export interface Contract extends LightContract {
     removedOn : Date
     createdAt: Date
   }
-  account: {
-    balance: {
-      reserved: string
-      miscFrozen:string
-      free:string
-      feeFrozen:string
-    }
-    id:string
-    tags:string[]
-  }
+  account: LightAccount
   createdFrom: {
     blockHash: string
     blockNumber: string

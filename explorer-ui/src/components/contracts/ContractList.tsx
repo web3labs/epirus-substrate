@@ -59,7 +59,7 @@ const SORT_OPTIONS = [
   }
 ]
 
-export default function ListContracts ({
+export default function ContractList ({
   query = { first: 5 },
   title,
   description,

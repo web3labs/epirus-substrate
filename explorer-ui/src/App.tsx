@@ -9,8 +9,8 @@ import {
 import { createClient, Provider } from "urql"
 import { ThemeProvider } from "styled-components"
 import colors from "tailwindcss/colors"
-import ListContractActivities from "./components/contracts/ListContractActivities"
-import ListContracts from "./components/contracts/ListContracts"
+import ActivityList from "./components/contracts/ActivityList"
+import ContractList from "./components/contracts/ContractList"
 import ContractPage from "./components/contracts/ContractPage"
 import Box from "./components/Box"
 import ContractsPage from "./components/contracts/ContractsPage"
@@ -24,14 +24,14 @@ function HomePage () {
   return (
     <div className="content flex flex-col space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-2">
       <Box>
-        <ListContractActivities
+        <ActivityList
           short={true}
           title="Latest Activity"
           description="Contract related activities"
         />
       </Box>
       <Box>
-        <ListContracts
+        <ContractList
           short={true}
           title="Latest Contracts"
           description="Contracts deployed"
@@ -57,7 +57,7 @@ function App () {
           <ChainContextProvider>
             <div className="min-h-screen bg-neutral-200">
               <div className="relative bg-white pt-3 md:pb-3 border-b border-neutral-300">
-                <div className="max-w-7xl mx-auto md:px-4">
+                <div className="max-w-7xl mx-auto">
                   <Nav />
                 </div>
               </div>

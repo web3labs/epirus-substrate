@@ -58,7 +58,7 @@ const SORT_OPTIONS = [
   }
 ]
 
-export default function ListContractActivities ({
+export default function ActivityList ({
   title,
   description,
   query = { first: 5 },

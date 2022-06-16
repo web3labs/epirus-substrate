@@ -1,14 +1,14 @@
 import React from "react"
 import Box from "../Box"
 import Breadcrumbs from "../Breadcrumbs"
-import ListContracts from "./ListContracts"
+import ContractList from "./ContractList"
 
 export default function ContractsPage () {
   return (
     <>
       <Breadcrumbs/>
       <Box className="content">
-        <ListContracts
+        <ContractList
           query={{ first: 25 }}
           sortable={true}
           title="Contracts"

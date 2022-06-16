@@ -8,7 +8,7 @@ import { Contract } from "../../types/contracts"
 import CodeBadge from "../badges/CodeBadge"
 import Box from "../Box"
 import AccountAddress from "../substrate/AccountAddress"
-import ListContractActivities from "./ListContractActivities"
+import ActivityList from "./ActivityList"
 import Segment from "../Segment"
 import { classNames } from "../../utils/strings"
 import { argValue } from "../../utils/types"
@@ -87,7 +87,7 @@ function Definition ({ label, term, className = "" }: {
 
 function ActivityTab ({ id }: {id:string}) {
   return (
-    <ListContractActivities
+    <ActivityList
       query={{
         first: 10,
         where: {
