@@ -14,10 +14,11 @@ export default function Pagination ({ page, query, setQuery }: {
       <div className="ml-auto space-x-2">
         {pageInfo.hasPreviousPage &&
             <span
-              onClick={() => setQuery({
-                first,
-                after: (parseInt(pageInfo.startCursor) - (first + 1)).toString()
-              })}
+              onClick={() => setQuery(Object.assign({}, query,
+                {
+                  after: (parseInt(pageInfo.startCursor) - (first + 1)).toString()
+                })
+              )}
               className="link relative inline-flex items-center text-sm cursor-pointer"
             >
             Previous
@@ -25,10 +26,11 @@ export default function Pagination ({ page, query, setQuery }: {
         }
         {pageInfo.hasNextPage &&
             <span
-              onClick={() => setQuery({
-                first,
-                after: pageInfo.endCursor
-              })}
+              onClick={() => setQuery(Object.assign({}, query,
+                {
+                  after: pageInfo.endCursor
+                })
+              )}
               className="link relative inline-flex items-center text-sm cursor-pointer"
             >
             Next

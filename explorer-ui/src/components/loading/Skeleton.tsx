@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react"
+import React from "react"
 import List, { Cols, Row } from "../List"
 
 export function Heading () {
@@ -50,20 +50,4 @@ export default function Skeleton ({ children }: {children: JSX.Element | JSX.Ele
       {children}
     </div>
   )
-}
-
-export function onFetching (
-  ltime: React.MutableRefObject<number>,
-  skeleton: ReactElement,
-  minMillis: number = 700
-) {
-  const now = new Date().getTime()
-  const ellapsed = now - ltime.current
-  ltime.current = now
-
-  if (ellapsed > minMillis) {
-    return skeleton
-  } else {
-    return null
-  }
 }

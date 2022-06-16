@@ -1,10 +1,9 @@
-import React, { useMemo, useRef, useState } from "react"
+import React, { useMemo, useState } from "react"
 import useSquid from "../../hooks/useSquid"
 import { Activity } from "../../types/contracts"
 import { Edge, Page } from "../../types/pagination"
 import Hashcode from "../../utils/hashcode"
 import List, { ListProps } from "../List"
-import { ListSkeleton, onFetching } from "../loading/Skeleton"
 import Pagination from "../Pagination"
 import SortBy from "../SortBy"
 import ActivityRow from "./ActivityRow"
@@ -66,7 +65,6 @@ export default function ActivityList ({
   sortable = false,
   filterable = false
 } : ListProps) {
-  const timeRef = useRef(new Date().getTime())
   const [queryInState, setQueryInState] = useState(query)
 
   const [result] = useSquid({
@@ -80,11 +78,9 @@ export default function ActivityList ({
 
   return useMemo(() => {
     if (data === undefined && fetching) {
-      return onFetching(timeRef, <ListSkeleton title={title} description={description} />)
+      return null
     }
     if (error) return <p>Oh no... {error.message}</p>
-
-    console.log("List Activities Data changed", hash)
 
     const page : Page<Activity> = data.activitiesConnection
     const sort = sortable

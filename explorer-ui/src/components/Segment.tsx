@@ -1,4 +1,3 @@
-import { Transition } from "@headlessui/react"
 import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/solid"
 import React, { useState } from "react"
 import { classNames } from "../utils/strings"
@@ -52,17 +51,7 @@ function CollapsableSegment ({
         </h3>
         }
       </div>
-      <Transition
-        show={open}
-        enter="transition-opacity duration-200"
-        enterFrom="opacity-0"
-        enterTo="opacity-100"
-        leave="transition-opacity duration-200"
-        leaveFrom="opacity-100"
-        leaveTo="opacity-0"
-      >
-        {children}
-      </Transition>
+      {open && children}
     </div>
   )
 }

@@ -58,7 +58,7 @@ function Definition ({ label, term, className = "" }: {
   )
 }
 
-function ActivityTab ({ id }: {id:string}) {
+function ActivityTab ({ id }: {id: string}) {
   return (
     <ActivityList
       query={{
