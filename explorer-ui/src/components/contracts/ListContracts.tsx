@@ -38,6 +38,9 @@ query($first: Int!, $after: String = "", $orderBy: [ContractOrderByInput!]! = [c
         }
         account {
           id
+          contract {
+            id
+          }
         }
       }
     }

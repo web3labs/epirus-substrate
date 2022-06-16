@@ -12,6 +12,7 @@ import ListContractActivities from "./ListContractActivities"
 import Segment from "../Segment"
 import { classNames } from "../../utils/strings"
 import { argValue } from "../../utils/types"
+import AccountLink from "../AccountRef"
 const QUERY = `
 query($id: ID!) {
   contracts(where: {id_eq: $id}) {
@@ -89,9 +90,13 @@ function ActivityTab ({ id }: {id:string}) {
       query={{
         first: 10,
         where: {
-          from_eq: id,
+          from: {
+            id_eq: id
+          },
           OR: {
-            to_eq: id
+            to: {
+              id_eq: id
+            }
           }
         }
       }}
@@ -150,9 +155,7 @@ export default function ContractPage () {
                 <span className="font-mono">{argValue(createdFrom.args, "data")}</span>
               } />
               <Definition label="Deployer" term={
-                <AccountAddress address={deployer.id}>
-                  {deployer.account && <CodeBadge/>}
-                </AccountAddress>
+                <AccountLink account={deployer} />
               } />
             </DefinitionList>
           </Segment>

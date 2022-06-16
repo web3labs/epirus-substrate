@@ -17,9 +17,19 @@ query($where: ActivityWhereInput = {} ,$first: Int = 5, $after: String = "", $or
       node {
         action
         createdAt
-        from
+        from {
+          id
+          contract {
+            id
+          }
+        }
         id
-        to
+        to {
+          id
+          contract {
+            id
+          }
+        }
         type
         args {
           name

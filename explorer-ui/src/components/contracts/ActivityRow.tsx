@@ -1,15 +1,13 @@
 import React from "react"
 import { formatBalance } from "@polkadot/util"
 
-import AccountAddress from "../substrate/AccountAddress"
-import CodeBadge from "../badges/CodeBadge"
 import { Activity } from "../../types/contracts"
 import { shortenHexString } from "../../formats/text"
 import { Cols, Row } from "../List"
 import { formatDate } from "../../formats/time"
-import { NavLink } from "react-router-dom"
 import { useChainProperties } from "../../contexts/ChainContext"
 import { argValue } from "../../utils/types"
+import AccountLink from "../AccountRef"
 
 function printBalance ({ args }: Activity) {
   const { tokenDecimals, tokenSymbol } = useChainProperties()
@@ -73,7 +71,7 @@ export default function ActivityRow ({ activity, short }: { activity: Activity, 
     <Row key={id}>
       <Cols>
         <div>
-          <AccountAddress address={from} short={short} />
+          <AccountLink account={from} short={true}/>
 
           <div className="text-gray-400 text-xs">
             {formatDate(createdAt)}
@@ -90,11 +88,7 @@ export default function ActivityRow ({ activity, short }: { activity: Activity, 
         </div>
 
         <div className="flex flex-col">
-          <NavLink to={`/contracts/${to}`} className="link">
-            <AccountAddress address={to} short={short} className="justify-end">
-              <CodeBadge/>
-            </AccountAddress>
-          </NavLink>
+          <AccountLink account={to} short={true} className="justify-end"/>
 
           <div className="text-xs flex justify-end">
             {printBalance(activity)}

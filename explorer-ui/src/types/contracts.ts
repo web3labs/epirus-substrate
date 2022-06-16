@@ -4,21 +4,26 @@ export interface Arg {
   value: string
 }
 
+export interface AccountRef {
+  id: string,
+  contract?: {
+    id: string
+  }
+}
+
 export interface Activity {
   id: string,
   type: string,
   action: string,
-  to: string,
-  from: string,
+  to: AccountRef,
+  from: AccountRef,
   createdAt: Date,
   args: Arg[]
 }
 
 export type LightContract = {
   id: string,
-  account: {
-    id: string
-  }
+  account: AccountRef
   trieId: string,
   createdAt: Date,
   contractCode: {
