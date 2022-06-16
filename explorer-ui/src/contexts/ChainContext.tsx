@@ -8,7 +8,7 @@ const NULL_CHAIN_PROPERTIES : ChainProperties = {
   ss58Format: null,
   token: {
     tokenDecimals: 12,
-    tokenSymbol: "Unit"
+    tokenSymbol: "UNK"
   }
 }
 
@@ -47,7 +47,7 @@ export default function ChainContextProvider ({ children }: React.PropsWithChild
         }
 
         if (data) {
-          setChainProps(data.chainProperties[0])
+          setChainProps(NULL_CHAIN_PROPERTIES)// data.chainProperties[0])
         }
       } catch (e) {
         console.log(e)

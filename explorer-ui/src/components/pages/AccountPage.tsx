@@ -1,5 +1,4 @@
 import React from "react"
-import { formatBalance } from "@polkadot/util"
 
 import { useParams } from "react-router-dom"
 import { useChainProperties } from "../../contexts/ChainContext"
@@ -13,6 +12,7 @@ import { classNames } from "../../utils/strings"
 import Breadcrumbs from "../Breadcrumbs"
 import { Account } from "../../types/accounts"
 import Tag from "../Tag"
+import { formatUnits } from "../../formats/units"
 
 const QUERY = `
 query($id: ID!) {
@@ -79,7 +79,7 @@ function ActivityTab ({ id }: {id:string}) {
 }
 
 export default function AccountPage () {
-  const { tokenDecimals, tokenSymbol } = useChainProperties().token
+  const { token } = useChainProperties()
   const params = useParams()
   const [result] = useSquid({
     query: QUERY,
@@ -123,12 +123,12 @@ export default function AccountPage () {
                 <Definition
                   className="justify-between"
                   label="Free"
-                  term={formatBalance(balance.free, { decimals: tokenDecimals, forceUnit: tokenSymbol })}
+                  term={formatUnits(balance.free, token)}
                 />
                 <Definition
                   className="justify-between"
                   label="Reserved"
-                  term={formatBalance(balance.reserved, { decimals: tokenDecimals, forceUnit: tokenSymbol })}
+                  term={formatUnits(balance.reserved, token)}
                 />
               </DefinitionList>
             </Segment>

@@ -1,5 +1,4 @@
 import React from "react"
-import { formatBalance } from "@polkadot/util"
 
 import { Activity } from "../../types/contracts"
 import { shortenHexString } from "../../formats/text"
@@ -8,11 +7,12 @@ import { formatDate } from "../../formats/time"
 import { useChainProperties } from "../../contexts/ChainContext"
 import { argValue } from "../../utils/types"
 import AccountLink from "../accounts/AccountRef"
+import { formatUnits } from "../../formats/units"
 
 function printBalance ({ args }: Activity) {
-  const { tokenDecimals, tokenSymbol } = useChainProperties().token
+  const { token } = useChainProperties()
   const va = argValue(args, "value")
-  return formatBalance(va, { decimals: tokenDecimals, forceUnit: tokenSymbol })
+  return formatUnits(va, token)
 }
 
 function additionalDetails ({ action, args }: Activity) {
