@@ -51,7 +51,7 @@ export default function Nav () {
                     src={Logo}
                     alt=""
                   />
-                  <span className="leading-tight">
+                  <span className="hidden leading-tight md:block">
                     <span className="font-medium">Epirus</span><br/>
                     <span className="text-gray-900">substrate</span>
                   </span>
@@ -179,7 +179,7 @@ export default function Nav () {
                         to={item.to}
                         className="-m-3 p-3 flex items-center hover:bg-gray-50"
                       >
-                        <item.icon className="flex-shrink-0 h-6 w-6 text-purple-600" aria-hidden="true" />
+                        <item.icon className="flex-shrink-0 h-6 w-6 text-gray-500" aria-hidden="true" />
                         <span className="ml-3 text-base font-medium text-gray-900">{item.name}</span>
                       </NavLink>
                     ))}
