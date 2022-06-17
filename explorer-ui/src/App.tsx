@@ -17,7 +17,7 @@ import AccountPage from "./components/pages/AccountPage"
 import HomePage from "./components/pages/HomePage"
 
 const client = createClient({
-  url: process.env.SQUID_ENDPOINT || "http://localhost:4350/graphql"
+  url: process.env.SQUID_ENDPOINT || "http://192.168.0.164:4350/graphql"
 })
 
 function App () {
@@ -34,8 +34,8 @@ function App () {
       <Provider value={client}>
         <Router>
           <ChainContextProvider>
-            <div className="min-h-screen bg-neutral-200">
-              <div className="relative bg-white pt-3 border-b border-neutral-300 md:pb-3 md:mt-3">
+            <div className="min-h-screen bg-neutral-200 overflow-hidden">
+              <div className="relative bg-white pt-3 border-b border-neutral-300 md:pb-3 md:pt-6">
                 <div className="max-w-7xl mx-auto md:px-2">
                   <Nav />
                 </div>
