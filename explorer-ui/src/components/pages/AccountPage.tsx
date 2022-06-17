@@ -133,13 +133,13 @@ export default function AccountPage () {
 
         <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-2">
           <Box className="col-span-2">
-            <div className="flex flex-row flex-wrap items-start justify-between mt-4 gap-x-2">
+            <div className="flex flex-row flex-wrap w-full items-start justify-between mt-4 gap-x-2">
               <h3 className="mx-5 mb-1 font-medium">
                 <AccountAddress address={id}>
                   {contract && <CodeBadge/>}
                 </AccountAddress>
               </h3>
-              <div className="flex flex-row flex-wrap gap-x-2 ml-5 md:ml-0">
+              <div className="flex flex-row flex-wrap gap-x-2 px-4">
                 <Tag label={contract ? "contract" : "EOA"} color="orange"/>
               </div>
             </div>

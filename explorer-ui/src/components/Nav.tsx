@@ -17,19 +17,19 @@ import { useChainProperties } from "../contexts/ChainContext"
 const blockchain = [
   {
     name: "Accounts",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    description: "Browse the accounts on this chain",
     to: "/accounts",
     icon: UserIcon
   },
   {
     name: "Contracts",
-    description: "Pellentesque auctor vehicula justo vitae consectetur.",
+    description: "Browse the contract instances",
     to: "/contracts",
     icon: DocumentReportIcon
   },
   {
     name: "Codes",
-    description: "Mauris euismod feugiat eros eget mollis.",
+    description: "Uploaded contract bytecodes",
     to: "/codes",
     icon: CodeIcon
   }
@@ -117,7 +117,7 @@ export default function Nav () {
                                 onClick={() => close()}
                                 className="-m-3 p-3 flex items-start hover:bg-gray-50"
                               >
-                                <item.icon className="flex-shrink-0 h-6 w-6 text-purple-600" aria-hidden="true" />
+                                <item.icon className="flex-shrink-0 h-6 w-6 text-gray-500" aria-hidden="true" />
                                 <div className="ml-4">
                                   <p className="text-base font-medium text-gray-900">{item.name}</p>
                                   <p className="mt-1 text-sm text-gray-500">{item.description}</p>
