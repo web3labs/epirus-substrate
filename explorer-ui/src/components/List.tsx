@@ -69,11 +69,7 @@ export default function List ({ title, description, footer, filter, sort, childr
       <ul className="flex flex-col divide-y w-full">
         {children}
       </ul>
-      {footer &&
-        <div className="w-full py-3 px-3 flex mt-auto items-center justify-between">
-          {footer}
-        </div>
-      }
+      {footer && footer}
     </div>
   )
 }

@@ -10,12 +10,14 @@ export default function Pagination ({ page, query, setQuery }: {
 
   if (hasNextPage || hasPreviousPage) {
     return (
-      <div className="flex-1 flex justify-between items-center border-t border-gray-200">
-        <div className="text-xs">
+      <div className="w-full py-3 px-3 flex mt-auto items-center justify-between border-t border-gray-200">
+
+        <div className="flex-1 flex justify-between items-center">
+          <div className="text-xs">
         Showing {startCursor} to {endCursor} of {totalCount}
-        </div>
-        <div className="ml-auto space-x-2">
-          {hasPreviousPage &&
+          </div>
+          <div className="ml-auto space-x-2">
+            {hasPreviousPage &&
             <span
               onClick={() => setQuery(Object.assign({}, query,
                 {
@@ -26,8 +28,8 @@ export default function Pagination ({ page, query, setQuery }: {
             >
             Previous
             </span>
-          }
-          {hasNextPage &&
+            }
+            {hasNextPage &&
             <span
               onClick={() => setQuery(Object.assign({}, query,
                 {
@@ -38,8 +40,10 @@ export default function Pagination ({ page, query, setQuery }: {
             >
             Next
             </span>
-          }
+            }
+          </div>
         </div>
+
       </div>
     )
   }
