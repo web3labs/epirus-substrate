@@ -6,37 +6,44 @@ export default function Pagination ({ page, query, setQuery }: {
   }) {
   const { pageInfo, totalCount } = page
   const { first } = query
-  return (
-    <div className="flex-1 flex justify-between items-center">
-      <div className="text-xs">
-        Showing {pageInfo.startCursor} to {pageInfo.endCursor} of {totalCount}
-      </div>
-      <div className="ml-auto space-x-2">
-        {pageInfo.hasPreviousPage &&
+  const { hasNextPage, hasPreviousPage, startCursor, endCursor } = pageInfo
+
+  if (hasNextPage || hasPreviousPage) {
+    return (
+      <div className="flex-1 flex justify-between items-center border-t border-gray-200">
+        <div className="text-xs">
+        Showing {startCursor} to {endCursor} of {totalCount}
+        </div>
+        <div className="ml-auto space-x-2">
+          {hasPreviousPage &&
             <span
               onClick={() => setQuery(Object.assign({}, query,
                 {
-                  after: (parseInt(pageInfo.startCursor) - (first + 1)).toString()
+                  after: (parseInt(startCursor) - (first + 1)).toString()
                 })
               )}
               className="link relative inline-flex items-center text-sm cursor-pointer"
             >
             Previous
             </span>
-        }
-        {pageInfo.hasNextPage &&
+          }
+          {hasNextPage &&
             <span
               onClick={() => setQuery(Object.assign({}, query,
                 {
-                  after: pageInfo.endCursor
+                  after: endCursor
                 })
               )}
               className="link relative inline-flex items-center text-sm cursor-pointer"
             >
             Next
             </span>
-        }
+          }
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
+
+  // Don't print anything
+  return null
 }
