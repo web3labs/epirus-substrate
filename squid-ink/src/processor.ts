@@ -11,22 +11,9 @@ import {
   blockPreHookHandlers,
 } from "./handlers";
 
-// TO DO: Extract to config file
-const processor = new SubstrateProcessor("contracts_poc");
-
-processor.setBatchSize(500);
-// processor.setBlockRange({ from: 0 });
-processor.setDataSource({
-  archive: "http://localhost:4010/v1/graphql",
-  chain: "ws://127.0.0.1:9944",
-});
-
 const { combine, splat, colorize, printf, timestamp: ts } = format;
 const winstonLogger = createLogger({
-  transports: [
-    new transports.File({ filename: "error.log", level: "error" }),
-    new transports.File({ filename: "combined.log" }),
-  ],
+  transports: [new transports.Console()],
   format: combine(
     colorize(),
     splat(),
@@ -37,10 +24,20 @@ const winstonLogger = createLogger({
   ),
 });
 
-if (process.env.NODE_ENV !== "production") {
-  winstonLogger.add(new transports.Console());
-  winstonLogger.level = "debug";
-}
+const processor = new SubstrateProcessor(
+  process.env.PROCESSOR_NAME || "contracts_poc"
+);
+
+processor.setBatchSize(500);
+processor.setDataSource({
+  archive: process.env.ARCHIVE_ENDPOINT || "http://localhost:4010/v1/graphql",
+  chain: process.env.WS_ENDPOINT || "ws://127.0.0.1:9944",
+});
+
+winstonLogger.info(
+  "New substrate processor [%s] initialised",
+  process.env.PROCESSOR_NAME
+);
 
 interface LoggedHandler<ContextType> {
   (ctx: ContextType, logger: Logger): Promise<void>;

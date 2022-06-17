@@ -1,17 +1,17 @@
 import { EventHandlerContext } from "@subsquid/substrate-processor";
 import { Logger } from "winston";
+import {
+  NormalisedBalancesEndowedEvent,
+  NormalisedBalancesReservedEvent,
+  NormalisedBalancesTransferEvent,
+  NormalisedBalancesWithdrawEvent,
+} from "@chain/normalised-types";
 import { Account, Events, Extrinsic } from "../model";
 import {
   updateAccountBalance,
   createExtrinsic,
   createEvent,
 } from "../entity-utils";
-import {
-  NormalisedBalancesEndowedEvent,
-  NormalisedBalancesReservedEvent,
-  NormalisedBalancesTransferEvent,
-  NormalisedBalancesWithdrawEvent,
-} from "../normalised-types";
 
 export async function balancesTransferEventHandler(
   ctx: EventHandlerContext,

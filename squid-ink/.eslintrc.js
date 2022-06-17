@@ -37,7 +37,7 @@ module.exports = {
   },
   "ignorePatterns": [
     "src/model/generated",
-    "src/types",
+    "src/chains/**/types",
     "db"
   ]
 }

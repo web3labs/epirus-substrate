@@ -15,13 +15,13 @@ import {
   PrefabWasmModule,
   RawContractInfo,
 } from "../types/v100";
-import { CHAIN } from "../chain-properties";
+import { ss58Format } from "../../../chain-config";
 
 export class NormalisedSystemAccountStorage extends SystemAccountStorage {
   async get(accountId: string): Promise<AccountInfo> {
     assert(this.isExists);
     if (this.isV100) {
-      return this.getAsV100(ss58.codec(CHAIN.ss58Format).decode(accountId));
+      return this.getAsV100(ss58.codec(ss58Format).decode(accountId));
     }
     throw new Error("No Runtime version found");
   }
@@ -31,7 +31,7 @@ export class NormalisedBalancesAccountStorage extends BalancesAccountStorage {
   async get(accountId: string): Promise<AccountData> {
     assert(this.isExists);
     if (this.isV100) {
-      return this.getAsV100(ss58.codec(CHAIN.ss58Format).decode(accountId));
+      return this.getAsV100(ss58.codec(ss58Format).decode(accountId));
     }
     throw new Error("No Runtime version found");
   }
@@ -42,9 +42,7 @@ export class NormalisedContractInfoOfStorage extends ContractsContractInfoOfStor
     assert(this.isExists);
     let info: RawContractInfo | undefined;
     if (this.isV100) {
-      info = await this.getAsV100(
-        ss58.codec(CHAIN.ss58Format).decode(accountId)
-      );
+      info = await this.getAsV100(ss58.codec(ss58Format).decode(accountId));
     } else {
       throw new Error("No Runtime version found");
     }

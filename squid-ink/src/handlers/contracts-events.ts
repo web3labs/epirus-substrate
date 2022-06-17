@@ -2,12 +2,6 @@ import * as ss58 from "@subsquid/ss58";
 import { toHex } from "@subsquid/util-internal-hex";
 import { EventHandlerContext } from "@subsquid/substrate-processor";
 import { Logger } from "winston";
-import { Activity, Args, Contract, ContractCode } from "../model";
-import {
-  getOrCreateAccount,
-  createExtrinsic,
-  createEvent,
-} from "../entity-utils";
 import {
   NormalisedCodeStorageStorage,
   NormalisedContractEmittedEvent,
@@ -15,9 +9,15 @@ import {
   NormalisedContractsCodeStoredEvent,
   NormalisedContractsInstantiatedEvent,
   NormalisedOwnerInfoOfStorage,
-} from "../normalised-types";
+} from "@chain/normalised-types";
+import { Activity, Args, Contract, ContractCode } from "../model";
+import {
+  getOrCreateAccount,
+  createExtrinsic,
+  createEvent,
+} from "../entity-utils";
 import { ContractEmittedEvent } from "../model/generated/contractEmittedEvent.model";
-import { CHAIN } from "../chain-properties";
+import { ss58Format } from "../chain-config";
 
 export async function contractsInstantiatedEventHandler(
   ctx: EventHandlerContext,
@@ -121,7 +121,7 @@ export async function contractsCodeStoredEventHandler(
         code,
         owner: await getOrCreateAccount(
           store,
-          ss58.codec(CHAIN.ss58Format).encode(owner)
+          ss58.codec(ss58Format).encode(owner)
         ),
         createdFrom: extrinsicEntity,
         createdAt: extrinsicEntity.createdAt,

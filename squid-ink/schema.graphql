@@ -3,7 +3,6 @@ type ChainProperties @entity {
   name: String!
   token: Token!
   ss58Format: Int!
-  balancesStorage: String!
 }
 
 type Token @entity {

@@ -19,7 +19,4 @@ export class ChainProperties {
 
   @Column_("int4", {nullable: false})
   ss58Format!: number
-
-  @Column_("text", {nullable: false})
-  balancesStorage!: string
 }

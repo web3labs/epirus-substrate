@@ -1,6 +1,6 @@
 import { BlockHandlerContext } from "@subsquid/substrate-processor";
 import { Logger } from "winston";
-import { CHAIN, TOKEN } from "../chain-properties";
+import { name, ss58Format, token } from "../chain-config";
 import { ChainProperties, Token } from "../model";
 
 export async function genesisBlockHandler(
@@ -11,8 +11,8 @@ export async function genesisBlockHandler(
   const { store } = ctx;
   const tokenEntity = new Token({
     id: "0",
-    tokenDecimals: TOKEN.tokenDecimals,
-    tokenSymbol: TOKEN.tokenSymbol,
+    tokenDecimals: token.tokenDecimals,
+    tokenSymbol: token.tokenSymbol,
   });
 
   try {
@@ -20,10 +20,9 @@ export async function genesisBlockHandler(
       tokenEntity,
       new ChainProperties({
         id: "chain_properties",
-        name: CHAIN.name,
+        name,
         token: tokenEntity,
-        ss58Format: CHAIN.ss58Format,
-        balancesStorage: CHAIN.balancesStorage,
+        ss58Format,
       }),
     ]);
   } catch (error) {

@@ -1,19 +1,9 @@
 {
+  "extends": "./config/base-tsconfig.json",
+  // Override path to point to chain-specific types
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es2020",
-    "outDir": "lib",
-    "rootDir": "src",
-    "strict": true,
-    "declaration": false,
-    "sourceMap": true,
-    "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "skipLibCheck": true
-  },
-  "include": ["src"],
-  "exclude": [
-    "node_modules"
-  ]
+    "paths": {
+      "@chain/*":["chains/local/*"]
+    }
+  }
 }

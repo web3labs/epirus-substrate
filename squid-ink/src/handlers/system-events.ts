@@ -1,8 +1,8 @@
 import { EventHandlerContext } from "@subsquid/substrate-processor";
 import { Logger } from "winston";
+import { NormalisedSystemNewAccountEvent } from "@chain/normalised-types";
 import { createEvent, createExtrinsic } from "../entity-utils";
 import { Account } from "../model";
-import { NormalisedSystemNewAccountEvent } from "../normalised-types";
 
 /**
  * Handler for the systems pallet NewAccount event.

@@ -1,8 +1,8 @@
 import { ExtrinsicHandlerContext } from "@subsquid/substrate-processor";
 import { Logger } from "winston";
+import { NormalisedContractsCallCall } from "@chain/normalised-types";
 import { Activity, ContractCall } from "../model";
 import { createExtrinsic, getOrCreateAccount } from "../entity-utils";
-import { NormalisedContractsCallCall } from "../normalised-types";
 
 export async function contractsCallExtrinsicHandler(
   ctx: ExtrinsicHandlerContext,
