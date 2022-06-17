@@ -7,7 +7,7 @@
     "db:migrate": "npx sqd db migrate",
     "schema:reset": "bash scripts/reset-db.sh",
     "processor:migrate": "echo skip",
-    "processor:start": "node -r dotenv/config lib/processor.js",
+    "processor:start": "node -r dotenv/config lib/processor.js dotenv_config_path=$ENV",
     "processor:docker-run": "bash scripts/docker-run.sh",
     "query-node:start": "squid-graphql-server",
     "lint": "npm run lint:prod -- --fix",
@@ -22,6 +22,7 @@
     "@subsquid/substrate-processor": "^0.8.0",
     "@subsquid/util-internal-hex": "^0.0.0",
     "dotenv": "^16.0.0",
+    "module-alias": "^2.2.2",
     "pg": "^8.7.3",
     "typeorm": "^0.2.41",
     "winston": "^3.7.2"
@@ -39,5 +40,8 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-type-graphql": "^0.3.2",
     "typescript": "~4.6.2"
+  },
+  "_moduleAliases": {
+    "@chain": "lib/chains/local"
   }
 }
