@@ -11,7 +11,11 @@
   }
 
   .link {
-    @apply text-blue-800;
+    color: #009cdf;
+  }
+
+  .link:hover {
+    color: #0069ac;
   }
 
   .content {

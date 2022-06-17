@@ -1,4 +1,6 @@
 import React from "react"
+import { NavLink } from "react-router-dom"
+
 import ActivityList from "../activities/ActivityList"
 import Box from "../Box"
 import ContractList from "../contracts/ContractList"
@@ -9,14 +11,22 @@ export default function HomePage () {
       <Box>
         <ActivityList
           short={true}
-          title="Latest Activity"
+          title={
+            <NavLink to="/activities" className="hover:link">
+            Latest Activities
+            </NavLink>
+          }
           description="Contract related activities"
         />
       </Box>
       <Box>
         <ContractList
           short={true}
-          title="Latest Contracts"
+          title={
+            <NavLink to="/contracts" className="hover:link">
+            Latest Contracts
+            </NavLink>
+          }
           description="Contracts deployed"
         />
       </Box>

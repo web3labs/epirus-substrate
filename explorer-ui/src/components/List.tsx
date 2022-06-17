@@ -19,7 +19,7 @@ export function Cols ({ children }: {children: JSX.Element | JSX.Element[]}) {
 
 export function Row ({ children }: {children: JSX.Element | JSX.Element[]}) {
   return (
-    <li className="text-sm pb-2 pt-4 pl-4 pr-4">
+    <li className="text-sm pb-2 pt-4 pl-4 pr-4 hover:bg-gray-50">
       {children}
     </li>
   )
@@ -43,7 +43,7 @@ export interface ListProps {
 
 export default function List ({ title, description, footer, filter, sort, children }: Props) {
   return (
-    <div className="flex flex-col w-full items-center justify-start">
+    <div className="flex flex-col grow w-full items-center justify-start">
       {title &&
       <div className="flex flex-col w-full p-4 border-b px-4 py-5 sm:px-6">
         <div className="flex flex-row items-center">
@@ -69,11 +69,7 @@ export default function List ({ title, description, footer, filter, sort, childr
       <ul className="flex flex-col divide-y w-full">
         {children}
       </ul>
-      {footer &&
-        <div className="w-full py-3 px-3 flex items-center justify-between border-t border-gray-200">
-          {footer}
-        </div>
-      }
+      {footer && footer}
     </div>
   )
 }
