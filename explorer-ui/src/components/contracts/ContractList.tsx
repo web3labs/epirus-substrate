@@ -63,6 +63,7 @@ export default function ContractList ({
   query = { first: 5 },
   title,
   description,
+  currentId,
   short = false,
   sortable = false,
   filterable = false
@@ -105,7 +106,12 @@ export default function ContractList ({
           />
         }>
         {page?.edges.map(({ node } : Edge<LightContract>) => (
-          <ContractRow key={node.id} contract={node} short={short} />
+          <ContractRow
+            key={node.id}
+            obj={node}
+            currentId={currentId}
+            short={short}
+          />
         ))}
       </List>
     )

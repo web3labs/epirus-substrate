@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 
 import { useParams } from "react-router-dom"
 import { useChainProperties } from "../../contexts/ChainContext"
@@ -7,14 +7,15 @@ import { Contract } from "../../types/contracts"
 import CodeBadge from "../badges/CodeBadge"
 import Box from "../Box"
 import AccountAddress from "../accounts/AccountAddress"
-import ActivityList from "../activities/ActivityList"
 import Segment from "../Segment"
 import { classNames } from "../../utils/strings"
 import { argValue } from "../../utils/types"
-import AccountLink from "../accounts/AccountRef"
+import AccountLink from "../accounts/AccountLink"
 import Breadcrumbs from "../Breadcrumbs"
 import Tag from "../Tag"
 import { formatUnits } from "../../formats/units"
+import Tabs, { TabItem } from "../Tabs"
+import ActivityTab from "../activities/ActivityTab"
 
 const QUERY = `
 query($id: ID!) {
@@ -87,29 +88,29 @@ function Definition ({ label, term, className = "" }: {
   )
 }
 
-function ActivityTab ({ id }: {id:string}) {
-  return (
-    <ActivityList
-      query={{
-        first: 10,
-        where: {
-          from: {
-            id_eq: id
-          },
-          OR: {
-            to: {
-              id_eq: id
-            }
-          }
-        }
-      }}
-    />
-  )
-}
-
 export default function ContractPage () {
   const { token } = useChainProperties()
+
   const params = useParams()
+
+  const tabs : TabItem[] = useMemo(() => {
+    if (params.id) {
+      return [
+        {
+          label: "Activities",
+          to: "",
+          element: <ActivityTab id={params.id} />
+        },
+        {
+          label: "Events",
+          to: "events",
+          element: <div>TBD</div>
+        }
+      ]
+    }
+    return []
+  }, [params.id])
+
   const [result] = useSquid({
     query: QUERY,
     variables: { id: params.id },
@@ -136,13 +137,13 @@ export default function ContractPage () {
 
         <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-2">
           <Box className="col-span-2 divide-y gap-y-2">
-            <div className="flex flex-row flex-wrap items-start justify-between mt-4 gap-x-2">
+            <div className="flex flex-row flex-wrap w-full items-start justify-between mt-4 gap-x-2">
               <h3 className="mx-5 mb-1 font-medium">
                 <AccountAddress address={id}>
                   {contract && <CodeBadge/>}
                 </AccountAddress>
               </h3>
-              <div className="flex flex-row flex-wrap gap-x-2  ml-5 md:ml-0">
+              <div className="flex flex-row flex-wrap gap-x-2 px-4">
                 <Tag label="wasm" color="lime" />
               </div>
             </div>
@@ -194,31 +195,7 @@ export default function ContractPage () {
         </div>
 
         <Box className="mt-2">
-          <div className="border-b border-gray-200 w-full">
-            <ul className="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500">
-              <li className="mr-2">
-                <a href="#" className="inline-flex p-4 text-purple-600 rounded-t-lg border-b-2 border-purple-600 active group" aria-current="page">
-                Activity
-                </a>
-              </li>
-              <li className="mr-2">
-                <a href="#" className="inline-flex p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 group">
-                Events
-                </a>
-              </li>
-              <li className="mr-2">
-                <a href="#" className="inline-flex p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 group">
-                XXX
-                </a>
-              </li>
-              <li>
-                <a className="inline-block p-4 text-gray-400 rounded-t-lg cursor-not-allowed">Disabled</a>
-              </li>
-            </ul>
-          </div>
-          <div className="w-full">
-            <ActivityTab id={id} />
-          </div>
+          <Tabs items={tabs} />
         </Box>
       </div>
     </>

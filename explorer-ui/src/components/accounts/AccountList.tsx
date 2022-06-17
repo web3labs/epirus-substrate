@@ -60,6 +60,7 @@ export default function AccountList ({
   query = { first: 10 },
   title,
   description,
+  currentId,
   short = false,
   sortable = false,
   filterable = false
@@ -102,7 +103,12 @@ export default function AccountList ({
           />
         }>
         {page?.edges.map(({ node } : Edge<Account>) => (
-          <AccountRow key={node.id} account={node} short={short} />
+          <AccountRow
+            key={node.id}
+            obj={node}
+            short={short}
+            currentId={currentId}
+          />
         ))}
       </List>
     )

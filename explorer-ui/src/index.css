@@ -17,6 +17,14 @@
   .content {
     @apply my-2 md:my-5;
   }
+
+  .tab {
+    @apply inline-flex p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300;
+  }
+
+  .tab.active {
+    @apply text-purple-600 border-purple-600 
+  }
 }
 
 /* Fixes */

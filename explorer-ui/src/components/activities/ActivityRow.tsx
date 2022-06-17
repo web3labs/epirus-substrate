@@ -2,11 +2,11 @@ import React from "react"
 
 import { Activity } from "../../types/contracts"
 import { shortenHexString } from "../../formats/text"
-import { Cols, Row } from "../List"
+import { Cols, Row, TypedRow } from "../List"
 import { formatDate } from "../../formats/time"
 import { useChainProperties } from "../../contexts/ChainContext"
 import { argValue } from "../../utils/types"
-import AccountLink from "../accounts/AccountRef"
+import AccountLink from "../accounts/AccountLink"
 import { formatUnits } from "../../formats/units"
 
 function printBalance ({ args }: Activity) {
@@ -35,14 +35,18 @@ function actionAlias (action: string) {
   }
 }
 
-export default function ActivityRow ({ activity, short = false }: { activity: Activity, short?: boolean }) {
-  const { id, from, to, action, createdAt } = activity
+export default function ActivityRow ({
+  obj,
+  currentId,
+  short = false
+}: TypedRow<Activity>) {
+  const { id, from, to, action, createdAt } = obj
 
   return (
     <Row key={id}>
       <Cols>
         <div>
-          <AccountLink account={from} short={short}/>
+          <AccountLink account={from} currentId={currentId} short={short} />
 
           <div className="text-gray-400 text-xs">
             {formatDate(createdAt)}
@@ -53,16 +57,16 @@ export default function ActivityRow ({ activity, short = false }: { activity: Ac
           <div className="flex flex-col text-sm overflow-hidden text-ellipsis gap-y-1">
             {actionAlias(action)}
             <div className="text-gray-400 text-xs font-mono">
-              {additionalDetails(activity)}
+              {additionalDetails(obj)}
             </div>
           </div>
         </div>
 
         <div className="flex flex-col">
-          <AccountLink account={to} short={short} className="justify-end"/>
+          <AccountLink account={to} currentId={currentId} short={short} className="justify-end"/>
 
           <div className="text-xs flex justify-end">
-            {printBalance(activity)}
+            {printBalance(obj)}
           </div>
         </div>
       </Cols>
