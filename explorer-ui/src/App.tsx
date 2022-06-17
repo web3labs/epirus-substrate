@@ -34,8 +34,8 @@ function App () {
       <Provider value={client}>
         <Router>
           <ChainContextProvider>
-            <div className="min-h-screen bg-neutral-200">
-              <div className="relative bg-white pt-3 border-b border-neutral-300 md:pb-3 md:mt-3">
+            <div className="min-h-screen bg-neutral-200 overflow-hidden">
+              <div className="relative bg-white pt-3 border-b border-neutral-300 md:pb-3 md:pt-6">
                 <div className="max-w-7xl mx-auto md:px-2">
                   <Nav />
                 </div>
