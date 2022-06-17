@@ -3,7 +3,7 @@ import { useClient } from "urql"
 import { ChainProperties } from "../types/chain"
 
 const NULL_CHAIN_PROPERTIES : ChainProperties = {
-  name: "unknown",
+  name: null,
   version: null,
   ss58Format: null,
   token: {

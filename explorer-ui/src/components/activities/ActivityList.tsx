@@ -63,7 +63,8 @@ export default function ActivityList ({
   query = { first: 5 },
   short = false,
   sortable = false,
-  filterable = false
+  filterable = false,
+  currentId
 } : ListProps) {
   const [queryInState, setQueryInState] = useState(query)
 
@@ -103,7 +104,12 @@ export default function ActivityList ({
           />
         }>
         {page?.edges.map(({ node } : Edge<Activity>) => (
-          <ActivityRow key={node.id} activity={node} short={short} />
+          <ActivityRow
+            key={node.id}
+            obj={node}
+            short={short}
+            currentId={currentId}
+          />
         ))}
       </List>
     )

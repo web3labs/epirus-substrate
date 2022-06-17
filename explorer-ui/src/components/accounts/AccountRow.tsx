@@ -1,19 +1,23 @@
 import React from "react"
 
 import { Account } from "../../types/accounts"
-import AccountLink from "./AccountRef"
-import { Cols, Row } from "../List"
+import AccountLink from "./AccountLink"
+import { Cols, Row, TypedRow } from "../List"
 import { useChainProperties } from "../../contexts/ChainContext"
 import { formatUnits } from "../../formats/units"
 
-export default function AccountRow ({ account, short = false }: { account: Account, short?: boolean }) {
+export default function AccountRow ({
+  obj,
+  currentId,
+  short = false
+}: TypedRow<Account>) {
   const { token } = useChainProperties()
-  const { id, balance, codesOwned, contractsDeployed } = account
+  const { id, balance, codesOwned, contractsDeployed } = obj
 
   return (
     <Row key={id}>
       <Cols>
-        <AccountLink account={account} short={short}/>
+        <AccountLink account={obj} currentId={currentId} short={short} />
 
         <div></div>
 

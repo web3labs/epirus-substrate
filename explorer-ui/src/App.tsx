@@ -65,11 +65,11 @@ function App () {
               </div>
               <main className="max-w-7xl mx-auto">
                 <Routes>
-                  <Route path="/" element={<HomePage/>}/>
+                  <Route index element={<HomePage/>}/>
                   <Route path="accounts" element={<AccountsPage/>} />
-                  <Route path="accounts/:id" element={<AccountPage/>} />
-                  <Route path="contracts/:id" element={<ContractPage/>} />
+                  <Route path="accounts/:id/*" element={<AccountPage/>} />
                   <Route path="contracts" element={<ContractsPage/>} />
+                  <Route path="contracts/:id/*" element={<ContractPage/>} />
                 </Routes>
               </main>
             </div>

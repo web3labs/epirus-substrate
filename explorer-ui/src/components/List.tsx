@@ -25,6 +25,12 @@ export function Row ({ children }: {children: JSX.Element | JSX.Element[]}) {
   )
 }
 
+export interface TypedRow<T> {
+  obj: T,
+  currentId?: string,
+  short?: boolean
+}
+
 export interface ListProps {
   query?: PageQuery
   title?: JSX.Element | string
@@ -32,6 +38,7 @@ export interface ListProps {
   short?: boolean
   sortable?: boolean
   filterable?: boolean
+  currentId?: string
 }
 
 export default function List ({ title, description, footer, filter, sort, children }: Props) {

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 
 import { useParams } from "react-router-dom"
 import { useChainProperties } from "../../contexts/ChainContext"
@@ -13,6 +13,7 @@ import Breadcrumbs from "../Breadcrumbs"
 import { Account } from "../../types/accounts"
 import Tag from "../Tag"
 import { formatUnits } from "../../formats/units"
+import Tabs, { TabItem } from "../Tabs"
 
 const QUERY = `
 query($id: ID!) {
@@ -61,6 +62,7 @@ function Definition ({ label, term, className = "" }: {
 function ActivityTab ({ id }: {id: string}) {
   return (
     <ActivityList
+      currentId={id}
       query={{
         first: 10,
         where: {
@@ -80,7 +82,32 @@ function ActivityTab ({ id }: {id: string}) {
 
 export default function AccountPage () {
   const { token } = useChainProperties()
+
   const params = useParams()
+
+  const tabs : TabItem[] = useMemo(() => {
+    if (params.id) {
+      return [
+        {
+          label: "Activities",
+          to: "",
+          element: <ActivityTab id={params.id} />
+        },
+        {
+          label: "Contracts",
+          to: "contracts",
+          element: <div>TBD</div>
+        },
+        {
+          label: "Sources",
+          to: "sources",
+          element: <div>TBD</div>
+        }
+      ]
+    }
+    return []
+  }, [params.id])
+
   const [result] = useSquid({
     query: QUERY,
     variables: { id: params.id },
@@ -136,31 +163,7 @@ export default function AccountPage () {
         </div>
 
         <Box className="mt-2">
-          <div className="border-b border-gray-200 w-full">
-            <ul className="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500">
-              <li className="mr-2">
-                <a href="#" className="inline-flex p-4 text-purple-600 rounded-t-lg border-b-2 border-purple-600 active group" aria-current="page">
-                Activity
-                </a>
-              </li>
-              <li className="mr-2">
-                <a href="#" className="inline-flex p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 group">
-                Contracts
-                </a>
-              </li>
-              <li className="mr-2">
-                <a href="#" className="inline-flex p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 group">
-                Codes
-                </a>
-              </li>
-              <li>
-                <a className="inline-block p-4 text-gray-400 rounded-t-lg cursor-not-allowed">Disabled</a>
-              </li>
-            </ul>
-          </div>
-          <div className="w-full">
-            <ActivityTab id={id} />
-          </div>
+          <Tabs items={tabs} />
         </Box>
       </div>
     </>

@@ -2,22 +2,26 @@ import React from "react"
 import { shortenHexString } from "../../formats/text"
 import { formatDate } from "../../formats/time"
 import { LightContract } from "../../types/contracts"
-import AccountLink from "../accounts/AccountRef"
-import { Cols, Row } from "../List"
+import AccountLink from "../accounts/AccountLink"
+import { Cols, Row, TypedRow } from "../List"
 
-export default function ContractRow ({ contract, short = false }: { contract: LightContract, short?: boolean }) {
-  const { id, createdAt, deployer, account } = contract
+export default function ContractRow ({
+  obj,
+  currentId,
+  short = false
+}: TypedRow<LightContract>) {
+  const { id, createdAt, deployer, account, contractCode } = obj
 
   return (
     <Row key={id}>
       <Cols>
-        <AccountLink account={account} short={short}/>
+        <AccountLink account={account} currentId={currentId} short={short} />
 
         <div className="text-sm">
           deployed by
         </div>
 
-        <AccountLink account={deployer} short={short}/>
+        <AccountLink account={deployer} currentId={currentId} short={short} />
       </Cols>
       <Cols>
         <div className="text-gray-400 text-xs">
@@ -28,7 +32,7 @@ export default function ContractRow ({ contract, short = false }: { contract: Li
         </div>
 
         <div className="font-mono text-gray-400 text-xs flex justify-end">
-          {shortenHexString(contract.contractCode.id)}
+          {shortenHexString(contractCode.id)}
         </div>
       </Cols>
     </Row>
