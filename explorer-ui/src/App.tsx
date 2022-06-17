@@ -17,7 +17,7 @@ import AccountPage from "./components/pages/AccountPage"
 import HomePage from "./components/pages/HomePage"
 
 const client = createClient({
-  url: process.env.SQUID_ENDPOINT || "http://192.168.0.164:4350/graphql"
+  url: process.env.SQUID_ENDPOINT || "http://localhost:4350/graphql"
 })
 
 function App () {
