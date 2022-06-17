@@ -1,4 +1,4 @@
-import "module-alias/register";
+import "./initialise";
 import {
   BlockHandlerContext,
   EventHandlerContext,
@@ -36,8 +36,9 @@ processor.setDataSource({
 });
 
 winstonLogger.info(
-  "New substrate processor [%s] initialised",
-  process.env.PROCESSOR_NAME
+  "Substrate processor [%s] for chain [%s] initialised",
+  process.env.PROCESSOR_NAME,
+  process.env.CHAIN
 );
 
 interface LoggedHandler<ContextType> {

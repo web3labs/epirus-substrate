@@ -18,6 +18,14 @@ const chainConfig: Record<string, ChainConfig> = {
       tokenSymbol: "Unit",
     },
   },
+  rococo: {
+    name: "Contracts on Rococo",
+    ss58Format: 42,
+    token: {
+      tokenDecimals: 12,
+      tokenSymbol: "ROC",
+    },
+  },
 };
 
 function getChainConfig(): ChainConfig {
