@@ -2,8 +2,13 @@ import * as ss58 from "@subsquid/ss58";
 import { toHex } from "@subsquid/util-internal-hex";
 import {
   ResolvedBalancesEndowedEvent,
+  ResolvedBalancesReservedEvent,
   ResolvedBalancesTransferEvent,
   ResolvedBalancesWithdrawEvent,
+  ResolvedContractEmittedEvent,
+  ResolvedContractsCodeStoredEvent,
+  ResolvedContractsInstantiatedEvent,
+  ResolvedNewAccountEvent,
 } from "chains/normalised-return-types";
 import { ss58Format } from "../../../chain-config";
 import {
@@ -79,7 +84,7 @@ export class NormalisedBalancesWithdrawEvent extends BalancesWithdrawEvent {
 }
 
 export class NormalisedBalancesReservedEvent extends BalancesReservedEvent {
-  resolve(): { account: string; amount: bigint } {
+  resolve(): ResolvedBalancesReservedEvent {
     if (this.isV1) {
       const values = this.asV1;
       return {
@@ -101,7 +106,7 @@ export class NormalisedBalancesReservedEvent extends BalancesReservedEvent {
 }
 
 export class NormalisedContractsInstantiatedEvent extends ContractsInstantiatedEvent {
-  resolve(): { deployer: string; contract: string } {
+  resolve(): ResolvedContractsInstantiatedEvent {
     if (this.isV31) {
       const { deployer, contract } = this.asV31;
       return {
@@ -116,7 +121,7 @@ export class NormalisedContractsInstantiatedEvent extends ContractsInstantiatedE
 }
 
 export class NormalisedContractsCodeStoredEvent extends ContractsCodeStoredEvent {
-  resolve(): { codeHash: string } {
+  resolve(): ResolvedContractsCodeStoredEvent {
     if (this.isV31) {
       const { codeHash } = this.asV31;
       return { codeHash: toHex(codeHash) };
@@ -128,7 +133,7 @@ export class NormalisedContractsCodeStoredEvent extends ContractsCodeStoredEvent
 }
 
 export class NormalisedContractEmittedEvent extends ContractsContractEmittedEvent {
-  resolve(): { contract: string; data: Uint8Array } {
+  resolve(): ResolvedContractEmittedEvent {
     if (this.isV31) {
       const { contract, data } = this.asV31;
       return { contract: ss58.codec(ss58Format).encode(contract), data };
@@ -140,7 +145,7 @@ export class NormalisedContractEmittedEvent extends ContractsContractEmittedEven
 }
 
 export class NormalisedSystemNewAccountEvent extends SystemNewAccountEvent {
-  resolve(): { account: string } {
+  resolve(): ResolvedNewAccountEvent {
     if (this.isV1) {
       return { account: ss58.codec(ss58Format).encode(this.asV1) };
     }

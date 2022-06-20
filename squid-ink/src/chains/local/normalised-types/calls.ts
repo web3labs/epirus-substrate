@@ -1,15 +1,10 @@
 import * as ss58 from "@subsquid/ss58";
+import { ResolvedContractsCallCall } from "chains/normalised-return-types";
 import { ss58Format } from "../../../chain-config";
 import { ContractsCallCall } from "../types/calls";
 
 export class NormalisedContractsCallCall extends ContractsCallCall {
-  resolve(): {
-    contractAddress: string;
-    value?: bigint;
-    gasLimit?: bigint;
-    storageDepositLimit?: bigint | undefined;
-    data?: Uint8Array;
-  } {
+  resolve(): ResolvedContractsCallCall {
     if (this.isV100) {
       const { dest } = this.asV100;
       // TODO: Ensure proper support of MultiAddress

@@ -1,5 +1,15 @@
 import * as ss58 from "@subsquid/ss58";
 import { toHex } from "@subsquid/util-internal-hex";
+import {
+  ResolvedBalancesEndowedEvent,
+  ResolvedBalancesReservedEvent,
+  ResolvedBalancesTransferEvent,
+  ResolvedBalancesWithdrawEvent,
+  ResolvedContractEmittedEvent,
+  ResolvedContractsCodeStoredEvent,
+  ResolvedContractsInstantiatedEvent,
+  ResolvedNewAccountEvent,
+} from "chains/normalised-return-types";
 import { ss58Format } from "../../../chain-config";
 import {
   BalancesEndowedEvent,
@@ -13,7 +23,7 @@ import {
 } from "../types/events";
 
 export class NormalisedBalancesTransferEvent extends BalancesTransferEvent {
-  resolve(): { from: string; to: string; amount: bigint } {
+  resolve(): ResolvedBalancesTransferEvent {
     if (this.isV100) {
       const { from, to, amount } = this.asV100;
       return {
@@ -29,7 +39,7 @@ export class NormalisedBalancesTransferEvent extends BalancesTransferEvent {
 }
 
 export class NormalisedBalancesEndowedEvent extends BalancesEndowedEvent {
-  resolve(): { account: string; freeBalance: bigint } {
+  resolve(): ResolvedBalancesEndowedEvent {
     if (this.isV100) {
       const { account, freeBalance } = this.asV100;
       return {
@@ -44,7 +54,7 @@ export class NormalisedBalancesEndowedEvent extends BalancesEndowedEvent {
 }
 
 export class NormalisedBalancesWithdrawEvent extends BalancesWithdrawEvent {
-  resolve(): { account: string; amount: bigint } {
+  resolve(): ResolvedBalancesWithdrawEvent {
     if (this.isV100) {
       const { who, amount } = this.asV100;
       return {
@@ -59,7 +69,7 @@ export class NormalisedBalancesWithdrawEvent extends BalancesWithdrawEvent {
 }
 
 export class NormalisedBalancesReservedEvent extends BalancesReservedEvent {
-  resolve(): { account: string; amount: bigint } {
+  resolve(): ResolvedBalancesReservedEvent {
     if (this.isV100) {
       const { who, amount } = this.asV100;
       return {
@@ -74,7 +84,7 @@ export class NormalisedBalancesReservedEvent extends BalancesReservedEvent {
 }
 
 export class NormalisedContractsInstantiatedEvent extends ContractsInstantiatedEvent {
-  resolve(): { deployer: string; contract: string } {
+  resolve(): ResolvedContractsInstantiatedEvent {
     if (this.isV100) {
       const { deployer, contract } = this.asV100;
       return {
@@ -89,7 +99,7 @@ export class NormalisedContractsInstantiatedEvent extends ContractsInstantiatedE
 }
 
 export class NormalisedContractsCodeStoredEvent extends ContractsCodeStoredEvent {
-  resolve(): { codeHash: string } {
+  resolve(): ResolvedContractsCodeStoredEvent {
     if (this.isV100) {
       const { codeHash } = this.asV100;
       return { codeHash: toHex(codeHash) };
@@ -101,7 +111,7 @@ export class NormalisedContractsCodeStoredEvent extends ContractsCodeStoredEvent
 }
 
 export class NormalisedContractEmittedEvent extends ContractsContractEmittedEvent {
-  resolve(): { contract: string; data: Uint8Array } {
+  resolve(): ResolvedContractEmittedEvent {
     if (this.isV100) {
       const { contract, data } = this.asV100;
       return { contract: ss58.codec(ss58Format).encode(contract), data };
@@ -113,7 +123,7 @@ export class NormalisedContractEmittedEvent extends ContractsContractEmittedEven
 }
 
 export class NormalisedSystemNewAccountEvent extends SystemNewAccountEvent {
-  resolve(): { account: string } {
+  resolve(): ResolvedNewAccountEvent {
     if (this.isV100) {
       const { account } = this.asV100;
       return { account: ss58.codec(ss58Format).encode(account) };
