@@ -5,7 +5,7 @@ import {
   ExtrinsicHandlerContext,
   SubstrateProcessor,
 } from "@subsquid/substrate-processor";
-import { createLogger, transports, format, Logger } from "winston";
+import { createLogger, transports, format, Logger, loggers } from "winston";
 import {
   eventHandlers,
   extrinsicHandlers,
@@ -34,6 +34,13 @@ processor.setDataSource({
   archive: process.env.ARCHIVE_ENDPOINT || "http://localhost:4010/v1/graphql",
   chain: process.env.WS_ENDPOINT || "ws://127.0.0.1:9944",
 });
+if (process.env.BUNDLE_TYPES) {
+  winstonLogger.info(
+    "Adding types bundle from file: %s",
+    process.env.BUNDLE_TYPES
+  );
+  processor.setTypesBundle(process.env.BUNDLE_TYPES);
+}
 
 winstonLogger.info(
   "Substrate processor [%s] for chain [%s] initialised",
