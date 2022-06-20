@@ -26,6 +26,14 @@ const chainConfig: Record<string, ChainConfig> = {
       tokenSymbol: "ROC",
     },
   },
+  shibuya: {
+    name: "Shibuya Testnet",
+    ss58Format: 5,
+    token: {
+      tokenDecimals: 18,
+      tokenSymbol: "SBY",
+    },
+  },
 };
 
 function getChainConfig(): ChainConfig {
