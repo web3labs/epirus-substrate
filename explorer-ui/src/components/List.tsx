@@ -73,3 +73,13 @@ export default function List ({ title, description, footer, filter, sort, childr
     </div>
   )
 }
+
+const emptyListText: Record<string, string> = {
+  activity: "No contract related activities yet!",
+  contract: "No WASM contracts deployed yet!",
+  account: "No accounts on chain yet!"
+}
+
+export function EmptyList ({ from }: {from:string}) {
+  return <div className="w-full p-4 border-b px-4 py-5 sm:px-6 text-gray-400">{emptyListText[from]}</div>
+}

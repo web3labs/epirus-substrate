@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react"
 import { LightContract } from "../../types/contracts"
 import { Edge, Page } from "../../types/pagination"
 import ContractRow from "./ContractRow"
-import List, { ListProps } from "../List"
+import List, { EmptyList, ListProps } from "../List"
 import useSquid from "../../hooks/useSquid"
 import Pagination from "../Pagination"
 import SortBy from "../SortBy"
@@ -93,6 +93,20 @@ export default function ContractList ({
       />
       : undefined
 
+    let rows: JSX.Element[]
+    if (page.totalCount === 0) {
+      rows = [EmptyList({ from: "contract" })]
+    } else {
+      rows = page?.edges.map(({ node } : Edge<LightContract>) => (
+        <ContractRow
+          key={node.id}
+          obj={node}
+          currentId={currentId}
+          short={short}
+        />
+      ))
+    }
+
     return (
       <List
         title={title}
@@ -105,14 +119,7 @@ export default function ContractList ({
             setQuery={setQueryInState}
           />
         }>
-        {page?.edges.map(({ node } : Edge<LightContract>) => (
-          <ContractRow
-            key={node.id}
-            obj={node}
-            currentId={currentId}
-            short={short}
-          />
-        ))}
+        {rows}
       </List>
     )
   }, [error, hash])

@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react"
 import { Account } from "../../types/accounts"
 import { Edge, Page } from "../../types/pagination"
-import List, { ListProps } from "../List"
+import List, { EmptyList, ListProps } from "../List"
 import useSquid from "../../hooks/useSquid"
 import Pagination from "../Pagination"
 import Hashcode from "../../utils/hashcode"
@@ -95,6 +95,20 @@ export default function AccountList ({
       />
       : undefined
 
+    let rows: JSX.Element[]
+    if (page.totalCount === 0) {
+      rows = [EmptyList({ from: "account" })]
+    } else {
+      rows = page?.edges.map(({ node } : Edge<Account>) => (
+        <AccountRow
+          key={node.id}
+          obj={node}
+          short={short}
+          currentId={currentId}
+        />
+      ))
+    }
+
     return (
       <List
         title={title}
@@ -107,14 +121,7 @@ export default function AccountList ({
             setQuery={setQueryInState}
           />
         }>
-        {page?.edges.map(({ node } : Edge<Account>) => (
-          <AccountRow
-            key={node.id}
-            obj={node}
-            short={short}
-            currentId={currentId}
-          />
-        ))}
+        {rows}
       </List>
     )
   }, [error, hash])
