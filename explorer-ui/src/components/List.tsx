@@ -1,4 +1,4 @@
-import React from "react"
+import React, { ReactNode } from "react"
 import { PageQuery } from "../types/pagination"
 
 interface Props {
@@ -7,7 +7,8 @@ interface Props {
     footer?: JSX.Element
     sort?: JSX.Element
     filter?: JSX.Element
-    children: JSX.Element | JSX.Element[]
+    children?: ReactNode
+    emptyMessage?: string
 }
 
 export function Cols ({ children }: {children: JSX.Element | JSX.Element[]}) {
@@ -41,7 +42,20 @@ export interface ListProps {
   currentId?: string
 }
 
-export default function List ({ title, description, footer, filter, sort, children }: Props) {
+function isEmpty (element: ReactNode) {
+  return (Array.isArray(element) && element.length === 0) ||
+  element === null
+}
+
+export default function List ({
+  title,
+  description,
+  emptyMessage,
+  footer,
+  filter,
+  sort,
+  children
+}: Props) {
   return (
     <div className="flex flex-col grow w-full items-center justify-start">
       {title &&
@@ -67,19 +81,13 @@ export default function List ({ title, description, footer, filter, sort, childr
       </div>
       }
       <ul className="flex flex-col divide-y w-full">
-        {children}
+        {isEmpty(children)
+          ? <div className="w-full p-4 border-b px-4 py-5 sm:px-6 text-gray-400">
+            {emptyMessage || "No items to show"}
+          </div>
+          : children }
       </ul>
       {footer && footer}
     </div>
   )
-}
-
-const emptyListText: Record<string, string> = {
-  activity: "No contract related activities yet!",
-  contract: "No WASM contracts deployed yet!",
-  account: "No accounts on chain yet!"
-}
-
-export function EmptyList ({ from }: {from:string}) {
-  return <div className="w-full p-4 border-b px-4 py-5 sm:px-6 text-gray-400">{emptyListText[from]}</div>
 }

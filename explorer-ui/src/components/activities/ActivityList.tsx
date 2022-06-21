@@ -3,7 +3,7 @@ import useSquid from "../../hooks/useSquid"
 import { Activity } from "../../types/contracts"
 import { Edge, Page } from "../../types/pagination"
 import Hashcode from "../../utils/hashcode"
-import List, { EmptyList, ListProps } from "../List"
+import List, { ListProps } from "../List"
 import Pagination from "../Pagination"
 import SortBy from "../SortBy"
 import ActivityRow from "./ActivityRow"
@@ -91,20 +91,6 @@ export default function ActivityList ({
       />
       : undefined
 
-    let rows: JSX.Element[]
-    if (page.totalCount === 0) {
-      rows = [EmptyList({ from: "activity" })]
-    } else {
-      rows = page?.edges.map(({ node } : Edge<Activity>) => (
-        <ActivityRow
-          key={node.id}
-          obj={node}
-          short={short}
-          currentId={currentId}
-        />
-      ))
-    }
-
     return (
       <List
         title={title}
@@ -116,8 +102,17 @@ export default function ActivityList ({
             query={queryInState}
             setQuery={setQueryInState}
           />
-        }>
-        {rows}
+        }
+        emptyMessage="No contract related activities yet"
+      >
+        {page?.edges.map(({ node } : Edge<Activity>) => (
+          <ActivityRow
+            key={node.id}
+            obj={node}
+            short={short}
+            currentId={currentId}
+          />
+        ))}
       </List>
     )
   }, [error, hash])
