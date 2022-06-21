@@ -36,6 +36,7 @@ query($first: Int!, $after: String = "", $orderBy: [AccountOrderByInput!]! = [id
         contract {
           id
         }
+        createdAt
       }
     }
   }
@@ -43,8 +44,12 @@ query($first: Int!, $after: String = "", $orderBy: [AccountOrderByInput!]! = [id
 `
 const SORT_OPTIONS = [
   {
-    name: "id",
-    value: "id_ASC"
+    name: "newest",
+    value: "createdAt_DESC"
+  },
+  {
+    name: "oldest",
+    value: "createdAt_ASC"
   },
   {
     name: "highest balance",

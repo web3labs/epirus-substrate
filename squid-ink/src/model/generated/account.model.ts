@@ -19,6 +19,9 @@ export class Account {
   @Column_("jsonb", {transformer: {to: obj => obj == null ? undefined : obj.toJSON(), from: obj => obj == null ? undefined : new Balance(undefined, obj)}, nullable: true})
   balance!: Balance | undefined | null
 
+  @Column_("timestamp with time zone", {nullable: false})
+  createdAt!: Date
+
   @OneToOne_(() => Contract)
   contract!: Contract | undefined | null
 

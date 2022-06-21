@@ -34,6 +34,7 @@ query($id: ID!) {
     contract {
       id
     }
+    createdAt
   }
 }
 `

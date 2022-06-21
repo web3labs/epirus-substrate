@@ -5,6 +5,7 @@ import AccountLink from "./AccountLink"
 import { Cols, Row, TypedRow } from "../List"
 import { useChainProperties } from "../../contexts/ChainContext"
 import { formatUnits } from "../../formats/units"
+import { formatDate } from "../../formats/time"
 
 export default function AccountRow ({
   obj,
@@ -12,14 +13,17 @@ export default function AccountRow ({
   short = false
 }: TypedRow<Account>) {
   const { token } = useChainProperties()
-  const { id, balance, codesOwned, contractsDeployed } = obj
+  const { id, balance, codesOwned, contractsDeployed, createdAt } = obj
 
   return (
     <Row key={id}>
       <Cols>
-        <AccountLink account={obj} currentId={currentId} short={short} />
-
-        <div></div>
+        <div>
+          <AccountLink account={obj} currentId={currentId} short={short} />
+          <div className="text-gray-400 text-xs">
+            {formatDate(createdAt)}
+          </div>
+        </div>
 
         <div>
           {formatUnits(balance.free, token)}

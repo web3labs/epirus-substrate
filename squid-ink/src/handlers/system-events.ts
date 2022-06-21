@@ -1,7 +1,7 @@
 import { EventHandlerContext } from "@subsquid/substrate-processor";
 import { Logger } from "winston";
 import { NormalisedSystemNewAccountEvent } from "@chain/normalised-types";
-import { createEvent, createExtrinsic } from "../entity-utils";
+import { createAccount, createEvent, createExtrinsic } from "../entity-utils";
 import { Account } from "../model";
 
 /**
@@ -20,7 +20,10 @@ export async function systemNewAccountEventHandler(
     if (extrinsic) {
       const extrinsicEntity = createExtrinsic(extrinsic, block);
       const { account } = new NormalisedSystemNewAccountEvent(ctx).resolve();
-      const accountEntity = new Account({ id: account });
+      const accountEntity = createAccount(
+        account,
+        new Date(ctx.block.timestamp)
+      );
       const entities = [
         extrinsicEntity,
         createEvent(extrinsicEntity, event),

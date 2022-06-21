@@ -19,7 +19,7 @@ export async function updateAccountBalance(
  * If account doesn't exist, return a fresh one.
  * @param store
  * @param id
- * @returns
+ * @returns Account promise
  */
 export async function getOrCreateAccount(
   store: Store,
@@ -29,27 +29,22 @@ export async function getOrCreateAccount(
     where: { id },
   });
   if (account == null) {
-    account = new Account({ id });
+    account = createAccount(id, new Date());
   }
   return account;
 }
 
 /**
- * Tries to get an account by id in the database.
- * If account doesn't exist, throw an error.
- * To be used when we don't want a new account created if it cannot be found.
- * @param store
- * @param id
- * @returns
+ * Creates and returns a new Account object.
+ * When called from SystemNewAccountEventHandler, createdAt is the timestamp of the block
+ * When called from getOrCreateAccount(), createdAt is the current timestamp
+ * because we don't have a way to find out real createdAt timestamp on the chain
+ * @param id address of the account
+ * @param createdAt timestamp when account is created
+ * @returns Account
  */
-export async function getAccount(store: Store, id: string): Promise<Account> {
-  const account = await store.get(Account, {
-    where: { id },
-  });
-  if (account == null) {
-    throw new Error(`No account found for ID [${id}]`);
-  }
-  return account;
+export function createAccount(id: string, createdAt: Date): Account {
+  return new Account({ id, createdAt });
 }
 
 async function getBalances(

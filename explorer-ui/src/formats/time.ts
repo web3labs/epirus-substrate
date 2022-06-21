@@ -6,8 +6,8 @@ export function formatDate (date: Date) {
   if (now.isSame(d, "day")) {
     return d.format("h:mm a")
   } else if (now.isSame(d, "year")) {
-    return d.format("MMM DD")
+    return d.format("DD MMM")
   } else {
-    return d.format("MM/DD/YYYY")
+    return d.format("DD MMM YYYY")
   }
 }
