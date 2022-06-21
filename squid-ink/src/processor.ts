@@ -5,7 +5,7 @@ import {
   ExtrinsicHandlerContext,
   SubstrateProcessor,
 } from "@subsquid/substrate-processor";
-import { createLogger, transports, format, Logger, loggers } from "winston";
+import { createLogger, transports, format, Logger } from "winston";
 import {
   eventHandlers,
   extrinsicHandlers,

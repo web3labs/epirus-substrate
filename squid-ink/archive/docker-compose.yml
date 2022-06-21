@@ -11,7 +11,8 @@ services:
       POSTGRES_PASSWORD: postgres
 
   indexer:
-    image: subsquid/hydra-indexer:5
+    image: subsquid/hydra-evm-indexer:5
+    # image: subsquid/hydra-indexer:5
     restart: unless-stopped
     environment:
       - WORKERS_NUMBER=5
@@ -22,7 +23,7 @@ services:
       - DB_PORT=5432
       - REDIS_URI=redis://redis:6379/0
       - FORCE_HEIGHT=true # starting block height
-      - WS_PROVIDER_ENDPOINT_URI=ws://172.17.0.1:9944
+      - WS_PROVIDER_ENDPOINT_URI=${WS_PROVIDER_ENDPOINT_URI}
 
     # # If your chain uses custom types you need to provide those
     # # as detailed here - https://polkadot.js.org/docs/api/start/types.extend
@@ -36,12 +37,12 @@ services:
     #   - CHAIN_TYPES=typesChain.json
     #   - BUNDLE_TYPES=typesBundle.json
     #
-    # volumes:
+    volumes:
     #   - ./types.json:/configs/types.json
     #   - ./typesAlias.json:/configs/typesAlias.json
     #   - ./typesSpec.json:/configs/typesSpec.json
     #   - ./typesChain.json:/configs/typesChain.json
-    #   - ./typesBundle.json:/configs/typesBundle.json
+      - ${BUNDLE_TYPES}:/configs/typesBundle.json
 
     depends_on:
       - db
@@ -49,7 +50,8 @@ services:
     command: >
       sh -c "yarn db:bootstrap && yarn start:prod"
   indexer-gateway:
-    image: subsquid/hydra-indexer-gateway:5
+    image: subsquid/hydra-evm-indexer-gateway:5
+    # image: subsquid/hydra-indexer-gateway:5
     restart: unless-stopped
     depends_on:
       - redis
@@ -68,7 +70,7 @@ services:
       - HYDRA_INDEXER_STATUS_SERVICE=http://indexer-status-service:8081/status
 
   indexer-status-service:
-    image: subsquid/hydra-indexer-status-service:4
+    image: subsquid/hydra-indexer-status-service:5
     restart: unless-stopped
     depends_on:
       - redis

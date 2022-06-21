@@ -32,6 +32,8 @@ The Squid processor extracts block, extrinsic and event data from a Squid Archiv
 ### Run local Squid Archive
 Inspect `archive/.env` and provide the websocket endpoint for your node. If the network requires custom type bundles (for older versions of Substrate), mount them as volumes in `archive/docker-compose.yml` and uncomment the relevant sections in `archive/.env`.
 
+**Note:** When running a chain with EVM pallet, the indexer and indexer-gateway images should be changed to `subsquid/hydra-evm-indexer:5` and `subsquid/hydra-evm-indexer-gateway:5` respectively.
+
 Then run (in a separate terminal window)
 
 ```bash
