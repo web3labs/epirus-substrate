@@ -1,12 +1,11 @@
-import React, { useMemo, useState } from "react"
+import React from "react"
 import { LightContract } from "../../types/contracts"
 import { Edge, Page } from "../../types/pagination"
 import ContractRow from "./ContractRow"
 import List, { ListProps } from "../List"
-import useSquid from "../../hooks/useSquid"
 import Pagination from "../Pagination"
 import SortBy from "../SortBy"
-import Hashcode from "../../utils/hashcode"
+import ListQuery from "../ListQuery"
 
 const QUERY = `
 query($first: Int!, $after: String = "", $orderBy: [ContractOrderByInput!]! = [createdAt_DESC]) {
@@ -60,7 +59,7 @@ const SORT_OPTIONS = [
 ]
 
 export default function ContractList ({
-  query = { first: 5 },
+  pageQuery = { first: 5 },
   title,
   description,
   currentId,
@@ -68,54 +67,44 @@ export default function ContractList ({
   sortable = false,
   filterable = false
 } : ListProps) {
-  const [queryInState, setQueryInState] = useState(query)
-
-  const [result] = useSquid({
-    query: QUERY,
-    variables: { ...queryInState }
-  })
-
-  const { data, fetching, error } = result
-
-  const hash = Hashcode.object(data === undefined ? {} : data.contractsConnection)
-
-  return useMemo(() => {
-    if (data === undefined && fetching) {
-      return null
-    }
-    if (error) return <p>Oh no... {error.message}</p>
-
-    const page : Page<LightContract> = data.contractsConnection
-    const sort = sortable
-      ? <SortBy options={SORT_OPTIONS}
-        setQuery={setQueryInState}
-        query={queryInState}
-      />
-      : undefined
-
-    return (
-      <List
-        title={title}
-        description={description}
-        sort={sort}
-        footer={
-          <Pagination
-            page={page}
-            query={queryInState}
+  return <ListQuery
+    pageQuery={pageQuery}
+    query={QUERY}
+    dataSelector="contractsConnection"
+    render={
+      ({ data, setQueryInState, queryInState }) => {
+        const page : Page<LightContract> = data
+        const sort = sortable
+          ? <SortBy options={SORT_OPTIONS}
             setQuery={setQueryInState}
+            pageQuery={queryInState}
           />
-        }
-        emptyMessage="No WASM contracted deployed yet"
-      >
-        {page?.edges.map(({ node } : Edge<LightContract>) => (
-          <ContractRow
-            key={node.id}
-            obj={node}
-            currentId={currentId}
-            short={short}
-          />
-        ))}
-      </List>
-    )
-  }, [error, hash])
+          : undefined
+
+        return (
+          <List
+            title={title}
+            description={description}
+            sort={sort}
+            footer={
+              <Pagination
+                page={page}
+                pageQuery={queryInState}
+                setQuery={setQueryInState}
+              />
+            }
+            emptyMessage="No WASM contracted deployed yet"
+          >
+            {page?.edges.map(({ node } : Edge<LightContract>) => (
+              <ContractRow
+                key={node.id}
+                obj={node}
+                currentId={currentId}
+                short={short}
+              />
+            ))}
+          </List>
+        )
+      }}
+  />
 }

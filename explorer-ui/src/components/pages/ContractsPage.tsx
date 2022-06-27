@@ -9,7 +9,7 @@ export default function ContractsPage () {
       <Breadcrumbs/>
       <Box className="content">
         <ContractList
-          query={{ first: 15 }}
+          pageQuery={{ first: 15 }}
           sortable={true}
           title="Contracts"
         />

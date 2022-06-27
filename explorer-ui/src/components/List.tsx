@@ -33,7 +33,7 @@ export interface TypedRow<T> {
 }
 
 export interface ListProps {
-  query?: PageQuery
+  pageQuery?: PageQuery
   title?: JSX.Element | string
   description?: JSX.Element | string
   short?: boolean

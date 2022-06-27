@@ -15,6 +15,7 @@ import ChainContextProvider from "./contexts/ChainContext"
 import AccountsPage from "./components/pages/AccountsPage"
 import AccountPage from "./components/pages/AccountPage"
 import HomePage from "./components/pages/HomePage"
+import { Toaster } from "react-hot-toast"
 
 const client = createClient({
   url: process.env.SQUID_ENDPOINT || "http://localhost:4350/graphql"
@@ -34,13 +35,14 @@ function App () {
       <Provider value={client}>
         <Router>
           <ChainContextProvider>
+            <div><Toaster position="bottom-right"/></div>
             <div className="min-h-screen bg-neutral-200 overflow-hidden">
               <div className="relative bg-white pt-3 border-b border-neutral-300 md:pb-3 md:pt-6">
                 <div className="max-w-7xl mx-auto md:px-2">
                   <Nav />
                 </div>
               </div>
-              <main className="max-w-7xl mx-auto">
+              <main className="max-w-7xl mx-auto z-10">
                 <Routes>
                   <Route index element={<HomePage/>}/>
                   <Route path="accounts" element={<AccountsPage/>} />

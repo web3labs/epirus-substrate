@@ -37,12 +37,12 @@ services:
     #   - CHAIN_TYPES=typesChain.json
     #   - BUNDLE_TYPES=typesBundle.json
     #
-    volumes:
+    # volumes:
     #   - ./types.json:/configs/types.json
     #   - ./typesAlias.json:/configs/typesAlias.json
     #   - ./typesSpec.json:/configs/typesSpec.json
     #   - ./typesChain.json:/configs/typesChain.json
-      - ${BUNDLE_TYPES}:/configs/typesBundle.json
+      # - ${BUNDLE_TYPES}:/configs/typesBundle.json
 
     depends_on:
       - db

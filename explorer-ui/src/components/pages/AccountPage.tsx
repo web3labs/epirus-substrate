@@ -64,7 +64,7 @@ function ActivityTab ({ id }: {id: string}) {
   return (
     <ActivityList
       currentId={id}
-      query={{
+      pageQuery={{
         first: 10,
         where: {
           from: {

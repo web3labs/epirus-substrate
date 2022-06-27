@@ -1,7 +1,6 @@
 {
-  "outDir": "src/chains/shibuya/types",
-  "chainVersions": "shibuyaVersions.json",
-  "typesBundle": "shibuyaTypesBundle.json",
+  "outDir": "src/chains/rococo/types",
+  "chainVersions": "rococoVersions.json",
   "events": [
     "balances.Transfer",
     "balances.Endowed",

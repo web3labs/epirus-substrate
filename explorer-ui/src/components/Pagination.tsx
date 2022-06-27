@@ -1,11 +1,11 @@
 import React from "react"
 import { Page, PageQuery } from "../types/pagination"
 
-export default function Pagination ({ page, query, setQuery }: {
-    page: Page<any>, query: PageQuery, setQuery: (query: PageQuery) => void
+export default function Pagination ({ page, pageQuery, setQuery }: {
+    page: Page<any>, pageQuery: PageQuery, setQuery: (pageQuery: PageQuery) => void
   }) {
   const { pageInfo, totalCount } = page
-  const { first } = query
+  const { first } = pageQuery
   const { hasNextPage, hasPreviousPage, startCursor, endCursor } = pageInfo
 
   if (hasNextPage || hasPreviousPage) {
@@ -19,7 +19,7 @@ export default function Pagination ({ page, query, setQuery }: {
           <div className="ml-auto space-x-2">
             {hasPreviousPage &&
             <span
-              onClick={() => setQuery(Object.assign({}, query,
+              onClick={() => setQuery(Object.assign({}, pageQuery,
                 {
                   after: (parseInt(startCursor) - (first + 1)).toString()
                 })
@@ -31,7 +31,7 @@ export default function Pagination ({ page, query, setQuery }: {
             }
             {hasNextPage &&
             <span
-              onClick={() => setQuery(Object.assign({}, query,
+              onClick={() => setQuery(Object.assign({}, pageQuery,
                 {
                   after: endCursor
                 })

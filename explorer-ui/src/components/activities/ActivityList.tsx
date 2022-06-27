@@ -1,9 +1,8 @@
-import React, { useMemo, useState } from "react"
-import useSquid from "../../hooks/useSquid"
+import React from "react"
 import { Activity } from "../../types/contracts"
 import { Edge, Page } from "../../types/pagination"
-import Hashcode from "../../utils/hashcode"
 import List, { ListProps } from "../List"
+import ListQuery from "../ListQuery"
 import Pagination from "../Pagination"
 import SortBy from "../SortBy"
 import ActivityRow from "./ActivityRow"
@@ -60,60 +59,50 @@ const SORT_OPTIONS = [
 export default function ActivityList ({
   title,
   description,
-  query = { first: 5 },
+  pageQuery = { first: 5 },
   short = false,
   sortable = false,
   filterable = false,
   currentId
 } : ListProps) {
-  const [queryInState, setQueryInState] = useState(query)
-
-  const [result] = useSquid({
-    query: QUERY,
-    variables: { ...queryInState }
-  })
-
-  const { data, fetching, error } = result
-
-  const hash = Hashcode.object(data === undefined ? {} : data.activitiesConnection)
-
-  return useMemo(() => {
-    if (data === undefined && fetching) {
-      return null
-    }
-    if (error) return <p>Oh no... {error.message}</p>
-
-    const page : Page<Activity> = data.activitiesConnection
-    const sort = sortable
-      ? <SortBy options={SORT_OPTIONS}
-        setQuery={setQueryInState}
-        query={queryInState}
-      />
-      : undefined
-
-    return (
-      <List
-        title={title}
-        description={description}
-        sort={sort}
-        footer={
-          <Pagination
-            page={page}
-            query={queryInState}
+  return <ListQuery
+    pageQuery={pageQuery}
+    query={QUERY}
+    dataSelector="activitiesConnection"
+    render={
+      ({ data, setQueryInState, queryInState }) => {
+        const page : Page<Activity> = data
+        const sort = sortable
+          ? <SortBy options={SORT_OPTIONS}
             setQuery={setQueryInState}
+            pageQuery={queryInState}
           />
-        }
-        emptyMessage="No contract related activities yet"
-      >
-        {page?.edges.map(({ node } : Edge<Activity>) => (
-          <ActivityRow
-            key={node.id}
-            obj={node}
-            short={short}
-            currentId={currentId}
-          />
-        ))}
-      </List>
-    )
-  }, [error, hash])
+          : undefined
+
+        return (
+          <List
+            title={title}
+            description={description}
+            sort={sort}
+            footer={
+              <Pagination
+                page={page}
+                pageQuery={queryInState}
+                setQuery={setQueryInState}
+              />
+            }
+            emptyMessage="No contract related activities yet"
+          >
+            {page?.edges.map(({ node } : Edge<Activity>) => (
+              <ActivityRow
+                key={node.id}
+                obj={node}
+                short={short}
+                currentId={currentId}
+              />
+            ))}
+          </List>
+        )
+      }
+    }/>
 }

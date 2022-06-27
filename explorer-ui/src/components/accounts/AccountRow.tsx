@@ -15,6 +15,7 @@ export default function AccountRow ({
   const { token } = useChainProperties()
   const { id, balance, codesOwned, contractsDeployed, createdAt } = obj
 
+  // TODO: balance=null fallback
   return (
     <Row key={id}>
       <Cols>
@@ -26,7 +27,7 @@ export default function AccountRow ({
         </div>
 
         <div>
-          {formatUnits(balance.free, token)}
+          {balance && formatUnits(balance.free, token)}
         </div>
       </Cols>
       <div className="flex flex-row flex-wrap gap-x-2 justify-end text-xs">
