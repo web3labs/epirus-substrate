@@ -57,6 +57,10 @@ type ContractCall @entity {
   "Extrinsic ID"
   id: ID!
   contractAddress: String!
+  value: BigInt
+  gasLimit: BigInt
+  storageDepositLimit: BigInt
+  data: Bytes
   createdAt: DateTime! 
   extrinsic: Extrinsic!
 }

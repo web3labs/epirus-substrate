@@ -43,9 +43,11 @@ if (process.env.BUNDLE_TYPES) {
 }
 
 winstonLogger.info(
-  "Substrate processor [%s] for chain [%s] initialised",
+  "Substrate processor [%s] for chain [%s] initialised. Archive endpoint: [%s] WS endpoint: [%s]",
   process.env.PROCESSOR_NAME,
-  process.env.CHAIN
+  process.env.CHAIN,
+  process.env.ARCHIVE_ENDPOINT,
+  process.env.WS_ENDPOINT
 );
 
 interface LoggedHandler<ContextType> {
@@ -89,4 +91,8 @@ for (let i = 0; i < extrinsicHandlers.length; i += 1) {
   processor.addExtrinsicHandler(handler.name, curried);
 }
 
-processor.run();
+try {
+  processor.run();
+} catch (error) {
+  winstonLogger.error("Error while running processor", error);
+}

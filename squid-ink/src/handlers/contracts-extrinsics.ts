@@ -11,11 +11,16 @@ export async function contractsCallExtrinsicHandler(
   logger.info("Got contracts call extrinsic!");
   try {
     const { store, extrinsic, block } = ctx;
-    const { contractAddress } = new NormalisedContractsCallCall(ctx).resolve();
+    const { contractAddress, value, gasLimit, storageDepositLimit, data } =
+      new NormalisedContractsCallCall(ctx).resolve();
     const extrinsicEntity = createExtrinsic(extrinsic, block);
     const contractCallEntity = new ContractCall({
       id: extrinsicEntity.id,
       contractAddress,
+      value,
+      gasLimit,
+      storageDepositLimit,
+      data,
       createdAt: extrinsicEntity.createdAt,
       extrinsic: extrinsicEntity,
     });
