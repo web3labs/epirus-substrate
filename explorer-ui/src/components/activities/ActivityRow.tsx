@@ -77,21 +77,21 @@ export default function ActivityRow ({
       {currentId === undefined &&
         <AccountLink account={to} currentId={currentId} short={short} />
       }
-      <div className="ml-auto justify-end">
-        {printBalance(obj)}
+      <div className="w-full flex flex-row flex-wrap items-center gap-x-2">
+        <div className={classNames(
+          `tag ${alias}`,
+          "w-20 text-xs uppercase py-0.5 px-1 rounded text-center"
+        )}>
+          {alias}
+        </div>
+        <Narrative id={id} full={false} segments={[
+          additionalDetails({ currentId, short, activity: obj }),
+          { on: formatDate(createdAt) }
+        ]} />
+        <div className="ml-auto justify-end">
+          {printBalance(obj)}
+        </div>
       </div>
-      <Narrative id={id} segments={[
-        {
-          _: <div className={classNames(
-            `tag ${alias}`,
-            "w-20 text-xs uppercase py-0.5 px-1 rounded text-center"
-          )}>
-            {alias}
-          </div>
-        },
-        additionalDetails({ currentId, short, activity: obj }),
-        { on: formatDate(createdAt) }
-      ]} />
     </Row>
   )
 }
