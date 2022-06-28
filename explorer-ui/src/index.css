@@ -27,7 +27,29 @@
   }
 
   .tab.active {
-    @apply text-purple-600 border-purple-600 
+    @apply text-purple-600 border-purple-600;
+  }
+
+  .tag.instantiate {
+    @apply border border-amber-300 bg-amber-100 text-amber-600;
+  }
+
+  .tag.message {
+    @apply border border-purple-300 bg-purple-100 text-purple-600;
+  }
+
+  .tag.chain  {
+    @apply bg-emerald-100 text-emerald-800;
+  }
+
+  .tag.contract {
+    @apply text-neutral-600 bg-neutral-200
+  }
+  .tag.eoa {
+    @apply text-orange-600 bg-orange-200
+  }
+  .tag.wasm {
+    @apply text-lime-600 bg-lime-200
   }
 }
 

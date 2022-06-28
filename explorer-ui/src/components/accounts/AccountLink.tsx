@@ -6,12 +6,13 @@ import CodeBadge from "../badges/CodeBadge"
 import AccountAddress from "./AccountAddress"
 
 export default function AccountLink (
-  { account, currentId, className = "", short = false }
+  { account, currentId, className = "", short, size }
   : {
     account: AccountRef
     currentId?: string,
     className?: string
-    short?: boolean
+    short?: boolean,
+    size?: number
   }
 ) {
   const { id, contract } = account
@@ -33,7 +34,12 @@ export default function AccountLink (
 
   return (
     <NavLink to={`/${contract ? "contracts" : "accounts"}/${id}`} className="link">
-      <AccountAddress address={id} short={short} className={className}>
+      <AccountAddress
+        address={id}
+        short={short}
+        className={className}
+        size={size}
+      >
         {contract && <CodeBadge/>}
       </AccountAddress>
     </NavLink>

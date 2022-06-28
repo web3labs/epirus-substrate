@@ -11,16 +11,9 @@ interface Props {
     emptyMessage?: string
 }
 
-export function Cols ({ children }: {children: JSX.Element | JSX.Element[]}) {
+export function Row ({ children }: {children: ReactNode}) {
   return (
-    <div className="flex flex-row gap-2 justify-between items-stretch">
-      {children}
-    </div>)
-}
-
-export function Row ({ children }: {children: JSX.Element | JSX.Element[]}) {
-  return (
-    <li className="text-sm pb-2 pt-4 pl-4 pr-4 hover:bg-gray-50">
+    <li className="flex flex-row flex-wrap gap-2 items-stretch justify-between items-center pb-2 pt-4 pl-4 pr-4 hover:bg-gray-50">
       {children}
     </li>
   )

@@ -141,7 +141,7 @@ export default function AccountPage () {
                 </AccountAddress>
               </h3>
               <div className="flex flex-row flex-wrap gap-x-2 px-4">
-                <Tag label={contract ? "contract" : "EOA"} color="orange"/>
+                <Tag label={contract ? "contract" : "EOA"} />
               </div>
             </div>
           </Box>

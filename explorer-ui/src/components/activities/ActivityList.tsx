@@ -60,7 +60,7 @@ export default function ActivityList ({
   title,
   description,
   pageQuery = { first: 5 },
-  short = false,
+  short,
   sortable = false,
   filterable = false,
   currentId
