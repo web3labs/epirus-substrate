@@ -9,14 +9,16 @@ interface Props {
   address: string,
   short?: boolean,
   children?: JSX.Element | null
-  className?: string
+  className?: string,
+  size?: number
 }
 
 export default function AccountAddress ({
   address,
   short = false,
   children,
-  className = ""
+  className = "",
+  size = 32
 }: Props) {
   if (address) {
     return (
@@ -28,7 +30,7 @@ export default function AccountAddress ({
         <div className="relative">
           <Identicon
             value={address}
-            size={32}
+            size={size}
             theme="polkadot"
           />
           {children}

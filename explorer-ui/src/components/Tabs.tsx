@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react"
-import { NavLink, Route, Routes, useLocation } from "react-router-dom"
+import { NavLink, Route, Routes } from "react-router-dom"
 
 export interface TabItem {
     to: string,
@@ -10,8 +10,6 @@ export interface TabItem {
 export default function Tabs ({
   items
 }: {items: TabItem[]}) {
-  const { pathname } = useLocation()
-  console.log(pathname, "vv")
   return (
     <>
       <div className="border-b border-gray-200 w-full">

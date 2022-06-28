@@ -1,5 +1,5 @@
 import React from "react"
-import List, { Cols, Row } from "../List"
+import List, { Row } from "../List"
 
 export function Heading () {
   return (
@@ -22,9 +22,7 @@ export function RowSkeleton ({ size = 5 }: {size?: number}) {
   for (let i = 0; i < size; i++) {
     skeletons.push(
       <Row key={`arsk-${i}`}>
-        <Cols>
-          <div className="skeleton h-10 w-full"/>
-        </Cols>
+        <div className="skeleton h-10 w-full"/>
       </Row>
     )
   }

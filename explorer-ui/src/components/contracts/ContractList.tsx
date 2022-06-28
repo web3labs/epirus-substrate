@@ -63,7 +63,7 @@ export default function ContractList ({
   title,
   description,
   currentId,
-  short = false,
+  short,
   sortable = false,
   filterable = false
 } : ListProps) {
@@ -93,7 +93,7 @@ export default function ContractList ({
                 setQuery={setQueryInState}
               />
             }
-            emptyMessage="No WASM contracted deployed yet"
+            emptyMessage="No WASM contract deployed yet"
           >
             {page?.edges.map(({ node } : Edge<LightContract>) => (
               <ContractRow

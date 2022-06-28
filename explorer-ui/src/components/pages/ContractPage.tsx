@@ -144,7 +144,7 @@ export default function ContractPage () {
                 </AccountAddress>
               </h3>
               <div className="flex flex-row flex-wrap gap-x-2 px-4">
-                <Tag label="wasm" color="lime" />
+                <Tag label="wasm" />
               </div>
             </div>
             <Segment>
@@ -171,7 +171,7 @@ export default function ContractPage () {
                   <span className="font-mono">{argValue(createdFrom.args, "data")}</span>
                 } />
                 <Definition label="Deployer" term={
-                  <AccountLink account={deployer} />
+                  <AccountLink account={deployer} size={21} />
                 } />
               </DefinitionList>
             </Segment>
