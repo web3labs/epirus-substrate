@@ -11,6 +11,14 @@ export interface Activity {
   args: Arg[]
 }
 
+export interface Event {
+  id: string,
+  contractAddress: string,
+  createdAt: Date,
+  data: string,
+  extrinsic: Extrinsic
+}
+
 export type LightContract = {
   id: string,
   account: AccountRef
