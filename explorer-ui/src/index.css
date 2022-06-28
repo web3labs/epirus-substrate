@@ -34,7 +34,7 @@
     @apply border border-amber-300 bg-amber-100 text-amber-600;
   }
 
-  .tag.message {
+  .tag.call {
     @apply border border-purple-300 bg-purple-100 text-purple-600;
   }
 

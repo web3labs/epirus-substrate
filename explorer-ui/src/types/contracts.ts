@@ -1,10 +1,5 @@
 import { AccountRef, Account } from "./accounts"
-
-export interface Arg {
-  type: string,
-  name: string,
-  value: string
-}
+import { Arg, Extrinsic } from "./extrinsic"
 
 export interface Activity {
   id: string,
@@ -27,12 +22,7 @@ export type LightContract = {
   createdFrom: {
     blockNumber: string
   }
-  deployer: {
-    id: string,
-    account?: {
-      id: string
-    } | null
-  }
+  deployer: AccountRef
 }
 
 export interface Contract extends LightContract {
@@ -46,16 +36,5 @@ export interface Contract extends LightContract {
     createdAt: Date
   }
   account: Account
-  createdFrom: {
-    blockHash: string
-    blockNumber: string
-    id:string
-    hash:string
-    name:string
-    signer:string
-    signature:string
-    tip:string
-    versionInfo:string
-    args: Arg[]
-  }
+  createdFrom: Extrinsic
 }

@@ -12,7 +12,7 @@ interface Props {
 }
 
 // TODO: add prop refresh to control useSquid refresh options
-export default function listQuery (props: Props) {
+export default function ListQuery (props: Props) {
   const {
     query,
     dataSelector,

@@ -5,6 +5,7 @@ import { LightContract } from "../../types/contracts"
 import AccountLink from "../accounts/AccountLink"
 import Narrative from "../Narrative"
 import { Row, TypedRow } from "../List"
+import { NavLink } from "react-router-dom"
 
 export default function ContractRow ({
   obj,
@@ -25,7 +26,9 @@ export default function ContractRow ({
             short={true}
             size={21}
           />,
-          code: shortenHexString(contractCode.id),
+          code: <NavLink to={`/codes/${contractCode.id}`} className="link">
+            {shortenHexString(contractCode.id)}
+          </NavLink>,
           on: formatDate(createdAt)
         }} />
     </Row>

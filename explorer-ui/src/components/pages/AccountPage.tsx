@@ -8,12 +8,12 @@ import Box from "../Box"
 import AccountAddress from "../accounts/AccountAddress"
 import ActivityList from "../activities/ActivityList"
 import Segment from "../Segment"
-import { classNames } from "../../utils/strings"
 import Breadcrumbs from "../Breadcrumbs"
 import { Account } from "../../types/accounts"
 import Tag from "../Tag"
 import { formatUnits } from "../../formats/units"
 import Tabs, { TabItem } from "../Tabs"
+import { Definition, DefinitionList } from "../Definitions"
 
 const QUERY = `
 query($id: ID!) {
@@ -38,27 +38,6 @@ query($id: ID!) {
   }
 }
 `
-
-function DefinitionList ({ children } :{ children: JSX.Element | JSX.Element[]}) {
-  return (<dl className="flex flex-col w-full gap-y-2">
-    {children}
-  </dl>)
-}
-
-function Definition ({ label, term, className = "" }: {
-  label: string, term: JSX.Element | string | undefined | null, className?: string
-}) {
-  if (term === undefined || term === null) {
-    return null
-  }
-
-  return (
-    <div className={classNames(className, "flex flex-row flex-wrap gap-x-2 items-center")}>
-      <dt className="flex text-sm text-gray-500 basis-20">{label}</dt>
-      <dd className="text-sm text-gray-900">{term}</dd>
-    </div>
-  )
-}
 
 function ActivityTab ({ id }: {id: string}) {
   return (
@@ -118,12 +97,11 @@ export default function AccountPage () {
     }
   })
 
-  const { data, fetching, error } = result
+  const { data, fetching } = result
 
   if (fetching) {
     return null
   }
-  if (error) return <p>Oh no... {error.message}</p>
 
   const { id, contract, balance } = data?.accounts[0] as Account
 

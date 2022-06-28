@@ -20,35 +20,15 @@ function printBalance ({ args }: Activity) {
   return formatUnits(va, token)
 }
 
-function additionalDetails ({
-  activity, currentId, short
-} : {
-  currentId?: string,
-  short?: boolean,
-  activity: Activity
-}) {
-  const { from, to } = activity
-
-  return Object.assign(
-    {},
-    currentId && from.id === currentId
-      ? { to: <AccountLink account={to} currentId={currentId} short={short} size={21} /> }
-      : { from: <AccountLink account={from} currentId={currentId} short={short} size={21} /> },
-    argsRecord(activity)
-  )
-}
-
-function argsRecord ({ action, args }: Activity) {
+function additionalDetails ({ action, args }: Activity) {
+  console.log(args)
   switch (action) {
-  case "contracts.call": return {
-    selector:
-      argValue(args, "data")?.slice(0, 10)
-  }
-  case "contracts.instantiate": return {
-    code:
-      shortenHexString(argValue(args, "codeHash"))
-  }
-  default: return undefined
+  case "contracts.call":
+    return { selector: argValue(args, "data")?.slice(0, 10) }
+  case "contracts.instantiate":
+    return { code: shortenHexString(argValue(args, "codeHash")) }
+  default:
+    return null
   }
 }
 
@@ -58,7 +38,7 @@ function actionAlias (action: string) {
   case "contracts.instantiateWithCode":
     return "instantiate"
   case "contracts.call":
-    return "message"
+    return "call"
   default:
     return action
   }
@@ -69,28 +49,34 @@ export default function ActivityRow ({
   currentId,
   short = false
 }: TypedRow<Activity>) {
-  const { id, to, action, createdAt } = obj
+  const { id, from, to, action, createdAt } = obj
   const alias = actionAlias(action)
 
   return (
     <Row key={id}>
-      {currentId === undefined &&
-        <AccountLink account={to} currentId={currentId} short={short} />
-      }
-      <div className="w-full flex flex-row flex-wrap items-center gap-x-2">
+      <div className="w-full flex flex-row flex-wrap items-center gap-2">
         <div className={classNames(
           `tag ${alias}`,
           "w-20 text-xs uppercase py-0.5 px-1 rounded text-center"
         )}>
-          {alias}
+          {`${alias}`}
         </div>
-        <Narrative id={id} full={false} segments={[
-          additionalDetails({ currentId, short, activity: obj }),
-          { on: formatDate(createdAt) }
-        ]} />
         <div className="ml-auto justify-end">
           {printBalance(obj)}
         </div>
+        <Narrative id={id} full={true} segments={
+          {
+            from: <AccountLink account={from} currentId={currentId} short={short} size={21} />,
+            to: <AccountLink account={to} currentId={currentId} short={short} size={21} />
+          }
+        } />
+        <Narrative id={id} full={true} segments={
+          Object.assign({},
+            additionalDetails(obj),
+            {
+              on: formatDate(createdAt)
+            }
+          )}/>
       </div>
     </Row>
   )

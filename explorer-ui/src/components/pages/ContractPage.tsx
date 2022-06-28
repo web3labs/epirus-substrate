@@ -120,15 +120,14 @@ export default function ContractPage () {
     }
   })
 
-  const { data, fetching, error } = result
+  const { data, fetching } = result
 
   if (fetching) {
     return null
   }
-  if (error) return <p>Oh no... {error.message}</p>
 
   const { id, salt, createdAt, deployer, createdFrom, contractCode, account } = data?.contracts[0] as Contract
-  const { balance, contract } = account
+  const { balance } = account
 
   return (
     <>
@@ -140,7 +139,7 @@ export default function ContractPage () {
             <div className="flex flex-row flex-wrap w-full items-start justify-between mt-4 gap-x-2">
               <h3 className="mx-5 mb-1 font-medium">
                 <AccountAddress address={id}>
-                  {contract && <CodeBadge/>}
+                  <CodeBadge/>
                 </AccountAddress>
               </h3>
               <div className="flex flex-row flex-wrap gap-x-2 px-4">

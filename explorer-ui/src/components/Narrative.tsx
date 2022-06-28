@@ -9,14 +9,13 @@ export default function Narrative ({
   segments
 }: {
     id: string,
-    segments: Segment | Segment[],
+    segments: Segment,
     full?: boolean
 }) {
   const rows = []
-  const mergedSegments = Array.isArray(segments) ? Object.assign({}, ...segments) : segments
 
-  for (const key in mergedSegments) {
-    const value = mergedSegments[key]
+  for (const key in segments) {
+    const value = segments[key]
     const k = `${id}-${key}`
     if (value) {
       switch (key) {
