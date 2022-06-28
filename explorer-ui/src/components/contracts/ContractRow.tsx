@@ -19,7 +19,12 @@ export default function ContractRow ({
       <Narrative
         id={id}
         segments={{
-          by: <AccountLink account={deployer} currentId={currentId} short={true} size={21} />,
+          deployer: <AccountLink
+            account={deployer}
+            currentId={currentId}
+            short={true}
+            size={21}
+          />,
           code: shortenHexString(contractCode.id),
           on: formatDate(createdAt)
         }} />
