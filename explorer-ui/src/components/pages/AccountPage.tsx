@@ -6,7 +6,6 @@ import useSquid from "../../hooks/useSquid"
 import CodeBadge from "../badges/CodeBadge"
 import Box from "../commons/Box"
 import AccountAddress from "../accounts/AccountAddress"
-import ActivityList from "../activities/ActivityList"
 import Segment from "../commons/Segment"
 import Breadcrumbs from "../navigation/Breadcrumbs"
 import { Account } from "../../types/accounts"
@@ -14,6 +13,9 @@ import Tag from "../commons/Tag"
 import { formatUnits } from "../../formats/units"
 import Tabs, { TabItem } from "../navigation/Tabs"
 import { Definition, DefinitionList } from "../commons/Definitions"
+import ActivityTab, { activityByAccount } from "../activities/ActivityTab"
+import ContractTab, { contractByDeployer } from "../contracts/ContractTab"
+import CodeTab, { codeByOwner } from "../codes/CodeTab"
 
 const QUERY = `
 query($id: ID!) {
@@ -39,27 +41,6 @@ query($id: ID!) {
 }
 `
 
-function ActivityTab ({ id }: {id: string}) {
-  return (
-    <ActivityList
-      currentId={id}
-      pageQuery={{
-        first: 10,
-        where: {
-          from: {
-            id_eq: id
-          },
-          OR: {
-            to: {
-              id_eq: id
-            }
-          }
-        }
-      }}
-    />
-  )
-}
-
 export default function AccountPage () {
   const { token } = useChainProperties()
 
@@ -71,17 +52,26 @@ export default function AccountPage () {
         {
           label: "Activities",
           to: "",
-          element: <ActivityTab id={params.id} />
+          element: <ActivityTab
+            currentId={params.id}
+            where={activityByAccount(params.id)}
+          />
         },
         {
           label: "Contracts",
           to: "contracts",
-          element: <div>TBD</div>
+          element: <ContractTab
+            currentId={params.id}
+            where={contractByDeployer(params.id)}
+          />
         },
         {
-          label: "Sources",
-          to: "sources",
-          element: <div>TBD</div>
+          label: "Codes",
+          to: "codes",
+          element: <CodeTab
+            currentId={params.id}
+            where={codeByOwner(params.id)}
+          />
         }
       ]
     }

@@ -8,8 +8,8 @@ import SortBy from "../query/SortBy"
 import ListQuery from "../query/ListQuery"
 
 const QUERY = `
-query($first: Int!, $after: String = "", $orderBy: [ContractOrderByInput!]! = [createdAt_DESC]) {
-  contractsConnection(orderBy: $orderBy, first: $first, after: $after) {
+query($where: ContractWhereInput = {}, $first: Int!, $after: String = "", $orderBy: [ContractOrderByInput!]! = [createdAt_DESC]) {
+  contractsConnection(where: $where, orderBy: $orderBy, first: $first, after: $after) {
     totalCount
     pageInfo {
       endCursor

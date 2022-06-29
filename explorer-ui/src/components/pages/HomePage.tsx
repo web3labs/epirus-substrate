@@ -11,7 +11,6 @@ export default function HomePage () {
       <Box>
         <ActivityList
           short={true}
-          pageQuery={{ first: 6 }}
           title={
             <NavLink to="/activities" className="hover:link">
             Latest Activities

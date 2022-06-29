@@ -15,8 +15,9 @@ import Breadcrumbs from "../navigation/Breadcrumbs"
 import Tag from "../commons/Tag"
 import { formatUnits } from "../../formats/units"
 import Tabs, { TabItem } from "../navigation/Tabs"
-import ActivityTab from "../activities/ActivityTab"
+import ActivityTab, { activityByAccount } from "../activities/ActivityTab"
 import EventTab from "../events/EventTab"
+import CodeLink from "../codes/CodeLink"
 
 const QUERY = `
 query($id: ID!) {
@@ -100,7 +101,10 @@ export default function ContractPage () {
         {
           label: "Activities",
           to: "",
-          element: <ActivityTab id={params.id} />
+          element: <ActivityTab
+            currentId={params.id}
+            where={activityByAccount(params.id)}
+          />
         },
         {
           label: "Events",
@@ -150,7 +154,7 @@ export default function ContractPage () {
             <Segment>
               <DefinitionList>
                 <Definition label="Code Hash" term={
-                  <span className="font-mono">{contractCode.id}</span>
+                  <CodeLink id={contractCode.id} />
                 }/>
               </DefinitionList>
             </Segment>
