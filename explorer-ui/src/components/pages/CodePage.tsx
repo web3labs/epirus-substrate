@@ -85,9 +85,7 @@ export default function CodePage () {
     return null
   }
 
-  const { id, createdAt, owner, createdFrom, contractsDeployed } = data?.contractCodes[0] as ContractCode
-
-  console.log(contractsDeployed)
+  const { id, createdAt, owner, createdFrom } = data?.contractCodes[0] as ContractCode
 
   return (
     <>

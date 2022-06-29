@@ -6,6 +6,8 @@ import { Row, TypedRow } from "../List"
 import { useChainProperties } from "../../contexts/ChainContext"
 import { formatUnits } from "../../formats/units"
 import { formatDate } from "../../formats/time"
+import { Label } from "../commons/Label"
+import Lane from "../Lane"
 
 export default function AccountRow ({
   obj,
@@ -17,23 +19,25 @@ export default function AccountRow ({
 
   return (
     <Row key={id}>
-      <div className="w-full flex flex-row flex-wrap justify-between">
-        <AccountLink account={obj} currentId={currentId} short={short} />
-        <div>
-          {balance && formatUnits(balance.free, token)}
-        </div>
-      </div>
-      <div className="flex flex-row flex-wrap gap-x-2 justify-end text-xs">
-        <div className="text-gray-400 text-xs">
-          {formatDate(createdAt)}
-        </div>
-        {contractsDeployed && contractsDeployed.length > 0 &&
-          <div className="flex gap-x-1">{contractsDeployed.length}<span className="text-gray-400">contracts</span></div>
+      <Lane
+        head={
+          <AccountLink account={obj} currentId={currentId} short={short} />
         }
-        {codesOwned && codesOwned.length > 0 &&
-          <div className="flex gap-x-1">{codesOwned.length}<span className="text-gray-400">codes</span></div>
-        }
-      </div>
+        tail={<Label>{formatDate(createdAt)}</Label>}
+      />
+      <Lane
+        tail={<div className="flex gap-2">
+          {codesOwned && codesOwned.length > 0 &&
+          <span>{codesOwned.length} <Label>codes</Label></span>
+          }
+          {contractsDeployed && contractsDeployed.length > 0 &&
+          <span>{contractsDeployed.length} <Label>instances</Label></span>
+          }
+        </div>}
+      >
+        {balance && <div className="flex gap-2"><Label>Balance</Label>
+          {formatUnits(balance.free, token)} </div>}
+      </Lane>
     </Row>
   )
 }

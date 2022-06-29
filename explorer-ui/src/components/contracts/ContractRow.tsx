@@ -1,11 +1,11 @@
 import React from "react"
-import { shortenHexString } from "../../formats/text"
 import { formatDate } from "../../formats/time"
 import { LightContract } from "../../types/contracts"
 import AccountLink from "../accounts/AccountLink"
-import Narrative from "../Narrative"
+import Lane from "../Lane"
 import { Row, TypedRow } from "../List"
-import { NavLink } from "react-router-dom"
+import CodeLink from "../codes/CodeLink"
+import { Label } from "../commons/Label"
 
 export default function ContractRow ({
   obj,
@@ -16,21 +16,26 @@ export default function ContractRow ({
 
   return (
     <Row key={id}>
-      <AccountLink account={account} currentId={currentId} short={short} />
-      <Narrative
-        id={id}
-        segments={{
-          deployer: <AccountLink
+      <Lane
+        head={
+          <div className="flex flex-col gap-1">
+            <AccountLink account={account} currentId={currentId} short={short} />
+            <Label className="text-xs">{formatDate(createdAt)}</Label>
+          </div>
+        }
+      >
+        <div className="flex gap-2">
+          <Label>Deployer</Label> <AccountLink
             account={deployer}
             currentId={currentId}
             short={true}
             size={21}
-          />,
-          code: <NavLink to={`/codes/${contractCode.id}`} className="link">
-            {shortenHexString(contractCode.id)}
-          </NavLink>,
-          on: formatDate(createdAt)
-        }} />
+          />
+        </div>
+        <div className="flex gap-2">
+          <Label>Code</Label> <CodeLink id={contractCode.id} short={true} />
+        </div>
+      </Lane>
     </Row>
   )
 }

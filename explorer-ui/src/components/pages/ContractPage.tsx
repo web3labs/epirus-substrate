@@ -83,7 +83,7 @@ function Definition ({ label, term, className = "" }: {
 
   return (
     <div className={classNames(className, "flex flex-row flex-wrap gap-x-2 items-center")}>
-      <dt className="flex text-sm text-gray-500 basis-20">{label}</dt>
+      <dt className="flex text-sm text-gray-400 basis-20">{label}</dt>
       <dd className="text-sm text-gray-900">{term}</dd>
     </div>
   )

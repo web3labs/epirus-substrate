@@ -1,7 +1,7 @@
 import React from "react"
 
 import { Activity } from "../../types/contracts"
-import { shortenHexString } from "../../formats/text"
+// import { shortenHexString } from "../../formats/text"
 import { Row, TypedRow } from "../List"
 import { formatDate } from "../../formats/time"
 import { useChainProperties } from "../../contexts/ChainContext"
@@ -9,7 +9,8 @@ import { argValue } from "../../utils/types"
 import AccountLink from "../accounts/AccountLink"
 import { formatUnits } from "../../formats/units"
 import { classNames } from "../../utils/strings"
-import Narrative from "../Narrative"
+import Lane from "../Lane"
+import { Label } from "../commons/Label"
 
 function printBalance ({ args }: Activity) {
   const { token } = useChainProperties()
@@ -20,8 +21,8 @@ function printBalance ({ args }: Activity) {
   return formatUnits(va, token)
 }
 
+/*
 function additionalDetails ({ action, args }: Activity) {
-  console.log(args)
   switch (action) {
   case "contracts.call":
     return { selector: argValue(args, "data")?.slice(0, 10) }
@@ -30,7 +31,7 @@ function additionalDetails ({ action, args }: Activity) {
   default:
     return null
   }
-}
+} */
 
 function actionAlias (action: string) {
   switch (action) {
@@ -54,30 +55,29 @@ export default function ActivityRow ({
 
   return (
     <Row key={id}>
-      <div className="w-full flex flex-row flex-wrap items-center gap-2">
-        <div className={classNames(
-          `tag ${alias}`,
-          "w-20 text-xs uppercase py-0.5 px-1 rounded text-center"
-        )}>
-          {`${alias}`}
+      <Lane
+        head={
+          <div className="flex flex-col gap-2">
+            <div className={classNames(
+              `tag ${alias}`,
+              "w-20 text-xs uppercase py-0.5 px-1 rounded text-center"
+            )}>
+              {`${alias}`}
+            </div>
+            <Label className="text-xs">{formatDate(createdAt)}</Label>
+          </div>
+        }
+        tail={
+          printBalance(obj)
+        }
+      >
+        <div className="flex gap-2">
+          <Label>From</Label><AccountLink account={from} currentId={currentId} short={short} size={21} />
         </div>
-        <div className="ml-auto justify-end">
-          {printBalance(obj)}
+        <div className="flex gap-2">
+          <Label>To</Label><AccountLink account={to} currentId={currentId} short={short} size={21} />
         </div>
-        <Narrative id={id} full={true} segments={
-          {
-            from: <AccountLink account={from} currentId={currentId} short={short} size={21} />,
-            to: <AccountLink account={to} currentId={currentId} short={short} size={21} />
-          }
-        } />
-        <Narrative id={id} full={true} segments={
-          Object.assign({},
-            additionalDetails(obj),
-            {
-              on: formatDate(createdAt)
-            }
-          )}/>
-      </div>
+      </Lane>
     </Row>
   )
 }

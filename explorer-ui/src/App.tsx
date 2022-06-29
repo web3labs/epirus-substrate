@@ -17,6 +17,7 @@ import AccountPage from "./components/pages/AccountPage"
 import HomePage from "./components/pages/HomePage"
 import { Toaster } from "react-hot-toast"
 import CodePage from "./components/pages/CodePage"
+import CodesPage from "./components/pages/CodesPage"
 
 const client = createClient({
   url: process.env.SQUID_ENDPOINT || "http://localhost:4350/graphql"
@@ -50,6 +51,7 @@ function App () {
                   <Route path="accounts/:id/*" element={<AccountPage/>} />
                   <Route path="contracts" element={<ContractsPage/>} />
                   <Route path="contracts/:id/*" element={<ContractPage/>} />
+                  <Route path="codes" element={<CodesPage/>} />
                   <Route path="codes/:id/*" element={<CodePage/>} />
                 </Routes>
               </main>
