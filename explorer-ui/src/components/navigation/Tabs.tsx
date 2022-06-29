@@ -1,6 +1,11 @@
 import React, { ReactElement } from "react"
 import { NavLink, Route, Routes } from "react-router-dom"
 
+export interface TabQuery {
+  currentId?:string,
+  where: any
+}
+
 export interface TabItem {
     to: string,
     label: string,
