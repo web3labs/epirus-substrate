@@ -13,16 +13,12 @@ export default function EventRow ({
   return (
     <Row key={id}>
       <div className="flex flex-col gap-2 max-w-[75%] text-sm">
-        <div className="text-gray-400">Contract emitted</div>
-        <div className="font-mono w-full break-words">{data}</div>
-        <div className="flex flex-col gap-2 md:flex-row">
-          <div className="text-gray-400">On extrinsic</div>
-          <div className="font-mono">{extrinsic.id}</div>
-          <div className="text-gray-400">of type</div>
-          <div className="font-mono">{extrinsic.name}</div>
-        </div>
+        <div className="text-gray-400">Extrinsic</div>
+        <div className="font-mono">{extrinsic.id}</div>
+        <div className="text-gray-400">Data</div>
+        <div className="code">{data}</div>
       </div>
-      <div className="flex ml-auto items-end text-sm">{formatDate(createdAt)}</div>
+      <div className="flex ml-auto text-sm">{formatDate(createdAt)}</div>
     </Row>
   )
 }
