@@ -72,17 +72,17 @@ export default function CodePage () {
     if (params.id) {
       return [
         {
-          label: "Bytecode",
-          to: "",
-          element: <BinaryTab id={params.id} />
-        },
-        {
           label: "Instances",
-          to: "contracts",
+          to: "",
           element: <ContractTab
             currentId={params.id}
             where={contractByCodeHash(params.id)}
           />
+        },
+        {
+          label: "Bytecode",
+          to: "bytecode",
+          element: <BinaryTab id={params.id} />
         }
       ]
     }
