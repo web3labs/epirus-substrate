@@ -24,7 +24,7 @@ export default function ContractRow ({
           </div>
         }
       >
-        <div className="flex gap-2">
+        <div className="flex gap-2 text-sm">
           <Label>Deployer</Label> <AccountLink
             account={deployer}
             currentId={currentId}
@@ -32,7 +32,7 @@ export default function ContractRow ({
             size={21}
           />
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 text-sm">
           <Label>Code</Label> <CodeLink id={contractCode.id} short={true} />
         </div>
       </Lane>

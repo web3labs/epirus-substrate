@@ -21,12 +21,12 @@ export default function AccountRow ({
     <Row key={id}>
       <Lane
         head={
-          <AccountLink account={obj} currentId={currentId} short={short} />
+          <div className="flex flex-col gap-2">
+            <AccountLink account={obj} currentId={currentId} short={short} />
+            <Label className="text-xs">{formatDate(createdAt)}</Label>
+          </div>
         }
-        tail={<Label>{formatDate(createdAt)}</Label>}
-      />
-      <Lane
-        tail={<div className="flex gap-2">
+        tail={<div className="flex gap-2 text-sm">
           {codesOwned && codesOwned.length > 0 &&
           <span>{codesOwned.length} <Label>codes</Label></span>
           }
@@ -35,7 +35,7 @@ export default function AccountRow ({
           }
         </div>}
       >
-        {balance && <div className="flex gap-2"><Label>Balance</Label>
+        {balance && <div className="flex gap-2 text-sm"><Label>Balance</Label>
           {formatUnits(balance.free, token)} </div>}
       </Lane>
     </Row>

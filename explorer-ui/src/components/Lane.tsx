@@ -12,12 +12,14 @@ export default function Lane ({
     tail?: NodeType
 }) {
   return (
-    <div className="grid grid-flow-col gap-2 items-start w-full">
-      {head}
-      <div className="flex flex-col flex-wrap gap-2 text-sm">
+    <div className="flex justify-between gap-4 items-start w-full md:gap-10">
+      <div className="flex shrink">
+        {head}
+      </div>
+      <div className="flex grow flex-col flex-wrap gap-2">
         {children}
       </div>
-      <div className="flex text-sm">
+      <div className="flex shrink">
         {tail}
       </div>
     </div>

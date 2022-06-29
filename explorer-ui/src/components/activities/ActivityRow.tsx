@@ -71,10 +71,10 @@ export default function ActivityRow ({
           printBalance(obj)
         }
       >
-        <div className="flex gap-2">
+        <div className="flex gap-2 text-sm">
           <Label>From</Label><AccountLink account={from} currentId={currentId} short={short} size={21} />
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 text-sm">
           <Label>To</Label><AccountLink account={to} currentId={currentId} short={short} size={21} />
         </div>
       </Lane>
