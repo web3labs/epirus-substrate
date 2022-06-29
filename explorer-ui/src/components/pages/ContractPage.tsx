@@ -19,6 +19,7 @@ import ActivityTab, { activityByAccount } from "../activities/ActivityTab"
 import EventTab from "../events/EventTab"
 import CodeLink from "../codes/CodeLink"
 import Copy from "../commons/Copy"
+import { HexCallData, HexText } from "../commons/Hex"
 
 const QUERY = `
 query($id: ID!) {
@@ -164,19 +165,23 @@ export default function ContractPage () {
 
             <Segment title="Creation details" collapsable={true} isOpen={false}>
               <DefinitionList>
+                <Definition label="Time" term={
+                  <span className="font-mono">{createdAt.toString()}</span>
+                }/>
                 <Definition label="Block" term={
                   <span className="font-mono">{createdFrom.blockNumber}</span>
                 }/>
                 <Definition label="Extrinsic" term={
                   <span className="font-mono">{createdFrom.id}</span>
                 }/>
-                <Definition label="Time" term={createdAt.toString()}/>
-                <Definition label="Salt" term={salt &&
-                <span className="font-mono">{salt}</span>
-                }/>
                 <Definition label="Data" term={
-                  <span className="font-mono">{argValue(createdFrom.args, "data")}</span>
-                } />
+                  <HexCallData>
+                    {argValue(createdFrom.args, "data")}
+                  </HexCallData>
+                }/>
+                <Definition label="Salt" term={salt &&
+                  <HexText>{salt}</HexText>
+                }/>
                 <Definition label="Deployer" term={
                   <AccountLink account={deployer} size={21} />
                 } />

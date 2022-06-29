@@ -128,11 +128,11 @@ export default function CodePage () {
 
             <Segment title="Upload details" collapsable={true} isOpen={false}>
               <DefinitionList>
-                <Definition label="Block" term={
-                  <span className="font-mono">{createdFrom.blockNumber}</span>
-                }/>
                 <Definition label="Time" term={
                   <span className="font-mono">{createdAt.toString()}</span>
+                }/>
+                <Definition label="Block" term={
+                  <span className="font-mono">{createdFrom.blockNumber}</span>
                 }/>
                 <Definition label="Extrinsic" term={
                   <span className="font-mono">{createdFrom.id}</span>
