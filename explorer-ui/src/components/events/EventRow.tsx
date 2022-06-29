@@ -12,21 +12,17 @@ export default function EventRow ({
 
   return (
     <Row key={id}>
-      <div className="flex flex-row flex-wrap w-full text-sm overflow-hidden justify-between">
-        <div className="flex flex-col flex-wrap gap-2 overflow-hidden">
-          <div className="flex flex-col flex-wrap gap-2 md:flex-row overflow-hidden w-full">
-            <div className="text-gray-400 text-sm">Contract emitted</div>
-            <div className="font-mono text-ellipsis overflow-hidden w-full">{data}</div>
-          </div>
-          <div className="flex flex-col flex-wrap overflow-hidden gap-2 md:flex-row">
-            <div className="text-gray-400 text-sm">On extrinsic</div>
-            <div className="font-mono">{extrinsic.id}</div>
-            <div className="text-gray-400 text-sm">of type</div>
-            <div className="font-mono">{extrinsic.name}</div>
-          </div>
+      <div className="flex flex-col gap-2 max-w-[75%] text-sm">
+        <div className="text-gray-400">Contract emitted</div>
+        <div className="font-mono w-full break-words">{data}</div>
+        <div className="flex flex-col gap-2 md:flex-row">
+          <div className="text-gray-400">On extrinsic</div>
+          <div className="font-mono">{extrinsic.id}</div>
+          <div className="text-gray-400">of type</div>
+          <div className="font-mono">{extrinsic.name}</div>
         </div>
-        <div className="flex ml-auto justify-end">{formatDate(createdAt)}</div>
       </div>
+      <div className="flex ml-auto items-end text-sm">{formatDate(createdAt)}</div>
     </Row>
   )
 }
