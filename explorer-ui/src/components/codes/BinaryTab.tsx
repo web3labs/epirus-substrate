@@ -30,7 +30,7 @@ export default function BinaryTab ({ id }:{id: string}) {
   const codeHash = data?.contractCodes[0] as ContractCode
 
   return (
-    <div className="mx-4 my-2">
+    <div className="mx-4 my-5">
       <HexView bytes={hexToBytes(codeHash.code.slice(2))}/>
     </div>
   )

@@ -16,7 +16,8 @@ import { useChainProperties } from "../../contexts/ChainContext"
 import ContractTab, { contractByCodeHash } from "../contracts/ContractTab"
 import BinaryTab from "../codes/BinaryTab"
 import Copy from "../commons/Copy"
-import HexText from "../commons/HexText"
+import { HexCallData, HexText } from "../commons/Hex"
+import { CodeIcon } from "@heroicons/react/outline"
 
 const QUERY = `
 query($id: ID!) {
@@ -105,7 +106,12 @@ export default function CodePage () {
             <div className="flex flex-row flex-wrap w-full items-start justify-between mt-4 gap-x-2">
               <h3 className="mx-5 mb-1 font-medium">
                 <Copy text={id}>
-                  <HexText>{id}</HexText>
+                  <div className="flex gap-2 items-center text-sm">
+                    <span className="bg-lime-200 rounded-full p-1.5">
+                      <CodeIcon width={21} height={21} />
+                    </span>
+                    <HexText>{id}</HexText>
+                  </div>
                 </Copy>
               </h3>
               <div className="flex flex-row flex-wrap gap-x-2 px-4">
@@ -144,9 +150,9 @@ export default function CodePage () {
                 }/>
 
                 <Definition label="Data" term={
-                  <span className="font-mono">
+                  <HexCallData>
                     {argValue(createdFrom.args, "data")}
-                  </span>
+                  </HexCallData>
                 }/>
                 <Definition label="Salt" term={
                   <HexText>
