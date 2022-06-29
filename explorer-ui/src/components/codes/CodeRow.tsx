@@ -7,34 +7,48 @@ import { ContractCode } from "../../types/codes"
 import { Label } from "../commons/Label"
 import CodeLink from "./CodeLink"
 import { CodeIcon } from "@heroicons/react/outline"
+import Lane from "../commons/Lane"
+import { printBalance } from "../commons/Args"
+import { useChainProperties } from "../../contexts/ChainContext"
 
 export default function CodeRow ({
   obj,
   currentId,
   short = false
 }: TypedRow<ContractCode>) {
-  const { id, contractsDeployed, createdAt, owner } = obj
+  const { token } = useChainProperties()
+  const { id, contractsDeployed, createdAt, owner, createdFrom } = obj
 
   return (
     <Row key={id}>
-      <div className="flex flex-row gap-x-2 items-center text-sm">
-        <span className="bg-lime-200 rounded-full p-0.5">
-          <CodeIcon width={16} height={16} />
-        </span>
-        <CodeLink id={id}/>
-      </div>
-      <div className="w-full flex flex-row flex-wrap gap-x-2 text-sm">
-        <Label>owned by</Label>
-        <AccountLink account={owner} currentId={currentId} short={true} size={21} />
-      </div>
-      <div className="flex flex-row flex-wrap gap-x-2 justify-end text-xs">
-        <div className="text-gray-400 text-xs">
-          {formatDate(createdAt)}
-        </div>
-        {contractsDeployed && contractsDeployed.length > 0 &&
-          <div className="flex gap-x-1">{contractsDeployed.length}<span className="text-gray-400">instances</span></div>
+      <Lane
+        head={
+          <div className="flex flex-col gap-2">
+            <div className="flex gap-2 items-center text-sm">
+              <span className="bg-lime-200 rounded-full p-0.5">
+                <CodeIcon width={16} height={16} />
+              </span>
+              <CodeLink id={id}/>
+            </div>
+            <Label className="text-xs">
+              {formatDate(createdAt)}
+            </Label>
+          </div>
         }
-      </div>
+        tail={
+          printBalance(createdFrom.args, token)
+        }
+      >
+        <div className="flex flex-wrap gap-2 text-sm">
+          <Label>Owner</Label>
+          <AccountLink account={owner} currentId={currentId} short={true} size={21} />
+        </div>
+        <div className="flex flex-wrap gap-2 text-sm">
+          {contractsDeployed && contractsDeployed.length > 0 &&
+          <div className="flex gap-x-1">{contractsDeployed.length}<Label>instances</Label></div>
+          }
+        </div>
+      </Lane>
     </Row>
   )
 }

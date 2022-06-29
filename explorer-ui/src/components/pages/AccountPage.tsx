@@ -16,6 +16,7 @@ import { Definition, DefinitionList } from "../commons/Definitions"
 import ActivityTab, { activityByAccount } from "../activities/ActivityTab"
 import ContractTab, { contractByDeployer } from "../contracts/ContractTab"
 import CodeTab, { codeByOwner } from "../codes/CodeTab"
+import Copy from "../commons/Copy"
 
 const QUERY = `
 query($id: ID!) {
@@ -104,9 +105,11 @@ export default function AccountPage () {
           <Box className="col-span-2">
             <div className="flex flex-row flex-wrap w-full items-start justify-between mt-4 gap-x-2">
               <h3 className="mx-5 mb-1 font-medium">
-                <AccountAddress address={id}>
-                  {contract && <CodeBadge/>}
-                </AccountAddress>
+                <Copy text={id}>
+                  <AccountAddress address={id}>
+                    {contract && <CodeBadge/>}
+                  </AccountAddress>
+                </Copy>
               </h3>
               <div className="flex flex-row flex-wrap gap-x-2 px-4">
                 <Tag label={contract ? "contract" : "EOA"} />

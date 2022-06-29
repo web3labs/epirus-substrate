@@ -15,6 +15,13 @@ query($where: ContractCodeWhereInput = {} ,$first: Int = 5, $after: String = "",
       node {
         createdAt
         id
+        createdFrom {
+          args {
+            name
+            type
+            value
+          }
+        }
         owner {
           id
           contract {

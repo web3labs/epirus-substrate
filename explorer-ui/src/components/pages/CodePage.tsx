@@ -10,12 +10,18 @@ import Tag from "../commons/Tag"
 import Tabs, { TabItem } from "../navigation/Tabs"
 import { Definition, DefinitionList } from "../commons/Definitions"
 import { ContractCode } from "../../types/codes"
+import { argValue } from "../../utils/types"
+import { printBalance } from "../commons/Args"
+import { useChainProperties } from "../../contexts/ChainContext"
+import ContractTab, { contractByCodeHash } from "../contracts/ContractTab"
+import BinaryTab from "../codes/BinaryTab"
+import Copy from "../commons/Copy"
+import HexText from "../commons/HexText"
 
 const QUERY = `
 query($id: ID!) {
   contractCodes(where: {id_eq: $id}) {
     id
-    code
     createdAt
     createdFrom {
       blockHash
@@ -48,28 +54,8 @@ query($id: ID!) {
 `
 
 export default function CodePage () {
-  // const { token } = useChainProperties()
-
+  const { token } = useChainProperties()
   const params = useParams()
-
-  const tabs : TabItem[] = useMemo(() => {
-    if (params.id) {
-      return [
-        {
-          label: "Instances",
-          to: "",
-          element: <div>TBD</div>
-        },
-        {
-          label: "Sources",
-          to: "sources",
-          element: <div>TBD</div>
-        }
-      ]
-    }
-    return []
-  }, [params.id])
-
   const [result] = useSquid({
     query: QUERY,
     variables: { id: params.id },
@@ -81,11 +67,33 @@ export default function CodePage () {
 
   const { data, fetching } = result
 
+  const tabs : TabItem[] = useMemo(() => {
+    if (params.id) {
+      return [
+        {
+          label: "Bytecode",
+          to: "",
+          element: <BinaryTab id={params.id} />
+        },
+        {
+          label: "Instances",
+          to: "contracts",
+          element: <ContractTab
+            currentId={params.id}
+            where={contractByCodeHash(params.id)}
+          />
+        }
+      ]
+    }
+    return []
+  }, [params.id, fetching])
+
   if (fetching) {
     return null
   }
 
   const { id, createdAt, owner, createdFrom } = data?.contractCodes[0] as ContractCode
+  const depositLimit = argValue(createdFrom.args, "storageDepositLimit")
 
   return (
     <>
@@ -96,7 +104,9 @@ export default function CodePage () {
           <Box className="col-span-2 divide-y gap-y-2">
             <div className="flex flex-row flex-wrap w-full items-start justify-between mt-4 gap-x-2">
               <h3 className="mx-5 mb-1 font-medium">
-                {id}
+                <Copy text={id}>
+                  <HexText>{id}</HexText>
+                </Copy>
               </h3>
               <div className="flex flex-row flex-wrap gap-x-2 px-4">
                 <Tag label="wasm" />
@@ -110,20 +120,44 @@ export default function CodePage () {
               </DefinitionList>
             </Segment>
 
-            <Segment title="Creation details" collapsable={true} isOpen={false}>
+            <Segment title="Upload details" collapsable={true} isOpen={false}>
               <DefinitionList>
                 <Definition label="Block" term={
                   <span className="font-mono">{createdFrom.blockNumber}</span>
                 }/>
+                <Definition label="Time" term={
+                  <span className="font-mono">{createdAt.toString()}</span>
+                }/>
                 <Definition label="Extrinsic" term={
                   <span className="font-mono">{createdFrom.id}</span>
                 }/>
-                <Definition label="Time" term={createdAt.toString()}/>
+
+                <Definition label="Gas Limit" term={
+                  <span className="font-mono">
+                    {argValue(createdFrom.args, "gasLimit")}
+                  </span>
+                }/>
+                <Definition label="Deposit Limit" term={
+                  <span className="font-mono">
+                    {depositLimit === "null" ? "unlimited" : depositLimit}
+                  </span>
+                }/>
+
+                <Definition label="Data" term={
+                  <span className="font-mono">
+                    {argValue(createdFrom.args, "data")}
+                  </span>
+                }/>
+                <Definition label="Salt" term={
+                  <HexText>
+                    {argValue(createdFrom.args, "salt")}
+                  </HexText>
+                }/>
               </DefinitionList>
             </Segment>
           </Box>
           <Box>
-            <span>....</span>
+            <span>{printBalance(createdFrom.args, token)}</span>
           </Box>
         </div>
 
