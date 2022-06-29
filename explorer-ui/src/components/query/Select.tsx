@@ -1,7 +1,7 @@
 import { Listbox, Transition } from "@headlessui/react"
 import { CheckIcon, SelectorIcon } from "@heroicons/react/outline"
 import React, { Fragment, useEffect, useRef, useState } from "react"
-import { classNames } from "../utils/strings"
+import { classNames } from "../../utils/strings"
 
 export interface Option {
   name:string

@@ -1,5 +1,5 @@
 import React from "react"
-import { Page, PageQuery } from "../types/pagination"
+import { Page, PageQuery } from "../../types/pagination"
 
 export default function Pagination ({ page, pageQuery, setQuery }: {
     page: Page<any>, pageQuery: PageQuery, setQuery: (pageQuery: PageQuery) => void

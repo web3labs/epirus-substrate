@@ -1,5 +1,5 @@
 import React from "react"
-import { PageQuery } from "../types/pagination"
+import { PageQuery } from "../../types/pagination"
 import Select, { Option } from "./Select"
 
 interface Props {

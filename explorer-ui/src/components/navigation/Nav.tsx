@@ -8,7 +8,7 @@ import {
 } from "@heroicons/react/outline"
 import { ChevronDownIcon, CodeIcon } from "@heroicons/react/solid"
 
-import Logo from "../logo.svg"
+import Logo from "../../logo.svg"
 import SearchBox from "../query/SearchBox"
 import { Link, NavLink } from "react-router-dom"
 import { classNames } from "../../utils/strings"

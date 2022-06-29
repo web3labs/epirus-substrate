@@ -2,9 +2,9 @@ import React from "react"
 import { Account } from "../../types/accounts"
 import { Edge, Page } from "../../types/pagination"
 import List, { ListProps } from "../commons/List"
-import Pagination from "../Pagination"
+import Pagination from "../query/Pagination"
 import AccountRow from "./AccountRow"
-import SortBy from "../SortBy"
+import SortBy from "../query/SortBy"
 import ListQuery from "../query/ListQuery"
 
 const QUERY = `

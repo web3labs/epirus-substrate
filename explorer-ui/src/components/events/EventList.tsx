@@ -3,8 +3,8 @@ import { Event } from "../../types/contracts"
 import { Edge, Page } from "../../types/pagination"
 import List, { ListProps } from "../commons/List"
 import ListQuery from "../query/ListQuery"
-import Pagination from "../Pagination"
-import SortBy from "../SortBy"
+import Pagination from "../query/Pagination"
+import SortBy from "../query/SortBy"
 import EventRow from "./EventRow"
 
 const QUERY = `
