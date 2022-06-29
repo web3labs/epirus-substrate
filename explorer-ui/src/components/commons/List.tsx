@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react"
-import { PageQuery } from "../types/pagination"
+import { PageQuery } from "../../types/pagination"
 
 interface Props {
     title?: JSX.Element | string

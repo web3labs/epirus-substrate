@@ -1,5 +1,5 @@
 import React from "react"
-import List, { Row } from "../List"
+import List, { Row } from "../commons/List"
 
 export function Heading () {
   return (

@@ -1,5 +1,5 @@
 import React from "react"
-import { classNames } from "../utils/strings"
+import { classNames } from "../../utils/strings"
 
 interface Props {
     children: JSX.Element | JSX.Element[],

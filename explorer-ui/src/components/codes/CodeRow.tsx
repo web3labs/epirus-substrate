@@ -1,6 +1,6 @@
 import React from "react"
 
-import { Row, TypedRow } from "../List"
+import { Row, TypedRow } from "../commons/List"
 import { formatDate } from "../../formats/time"
 import AccountLink from "../accounts/AccountLink"
 import { ContractCode } from "../../types/codes"

@@ -1,6 +1,6 @@
 import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/solid"
 import React, { useState } from "react"
-import { classNames } from "../utils/strings"
+import { classNames } from "../../utils/strings"
 
 interface Props {
   children: JSX.Element[] | JSX.Element, title?: string, className?: string, isOpen?: boolean

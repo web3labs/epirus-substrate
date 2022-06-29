@@ -1,7 +1,7 @@
 import React from "react"
 import { formatDate } from "../../formats/time"
 import { Event } from "../../types/contracts"
-import { Row, TypedRow } from "../List"
+import { Row, TypedRow } from "../commons/List"
 
 export default function EventRow ({
   obj,

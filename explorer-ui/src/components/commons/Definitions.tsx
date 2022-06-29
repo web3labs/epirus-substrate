@@ -1,5 +1,5 @@
 import React from "react"
-import { classNames } from "../utils/strings"
+import { classNames } from "../../utils/strings"
 
 export function DefinitionList ({ children } :{ children: JSX.Element | JSX.Element[]}) {
   return (<dl className="flex flex-col w-full gap-y-2 overflow-hidden text-ellipsis">

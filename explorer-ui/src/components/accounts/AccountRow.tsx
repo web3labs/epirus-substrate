@@ -2,12 +2,12 @@ import React from "react"
 
 import { Account } from "../../types/accounts"
 import AccountLink from "./AccountLink"
-import { Row, TypedRow } from "../List"
+import { Row, TypedRow } from "../commons/List"
 import { useChainProperties } from "../../contexts/ChainContext"
 import { formatUnits } from "../../formats/units"
 import { formatDate } from "../../formats/time"
 import { Label } from "../commons/Label"
-import Lane from "../Lane"
+import Lane from "../commons/Lane"
 
 export default function AccountRow ({
   obj,

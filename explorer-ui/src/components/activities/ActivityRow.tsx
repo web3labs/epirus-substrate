@@ -2,14 +2,14 @@ import React from "react"
 
 import { Activity } from "../../types/contracts"
 // import { shortenHexString } from "../../formats/text"
-import { Row, TypedRow } from "../List"
+import { Row, TypedRow } from "../commons/List"
 import { formatDate } from "../../formats/time"
 import { useChainProperties } from "../../contexts/ChainContext"
 import { argValue } from "../../utils/types"
 import AccountLink from "../accounts/AccountLink"
 import { formatUnits } from "../../formats/units"
 import { classNames } from "../../utils/strings"
-import Lane from "../Lane"
+import Lane from "../commons/Lane"
 import { Label } from "../commons/Label"
 
 function printBalance ({ args }: Activity) {

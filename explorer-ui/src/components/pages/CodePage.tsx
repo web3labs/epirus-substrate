@@ -2,13 +2,13 @@ import React, { useMemo } from "react"
 
 import { useParams } from "react-router-dom"
 import useSquid from "../../hooks/useSquid"
-import Box from "../Box"
-import Segment from "../Segment"
+import Box from "../commons/Box"
+import Segment from "../commons/Segment"
 import AccountLink from "../accounts/AccountLink"
 import Breadcrumbs from "../Breadcrumbs"
 import Tag from "../Tag"
 import Tabs, { TabItem } from "../Tabs"
-import { Definition, DefinitionList } from "../Definitions"
+import { Definition, DefinitionList } from "../commons/Definitions"
 import { ContractCode } from "../../types/codes"
 
 const QUERY = `

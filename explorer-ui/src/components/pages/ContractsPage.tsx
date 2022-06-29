@@ -1,5 +1,5 @@
 import React from "react"
-import Box from "../Box"
+import Box from "../commons/Box"
 import Breadcrumbs from "../Breadcrumbs"
 import ContractList from "../contracts/ContractList"
 

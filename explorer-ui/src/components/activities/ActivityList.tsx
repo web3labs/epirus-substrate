@@ -1,7 +1,7 @@
 import React from "react"
 import { Activity } from "../../types/contracts"
 import { Edge, Page } from "../../types/pagination"
-import List, { ListProps } from "../List"
+import List, { ListProps } from "../commons/List"
 import ListQuery from "../ListQuery"
 import Pagination from "../Pagination"
 import SortBy from "../SortBy"

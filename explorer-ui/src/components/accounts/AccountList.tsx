@@ -1,7 +1,7 @@
 import React from "react"
 import { Account } from "../../types/accounts"
 import { Edge, Page } from "../../types/pagination"
-import List, { ListProps } from "../List"
+import List, { ListProps } from "../commons/List"
 import Pagination from "../Pagination"
 import AccountRow from "./AccountRow"
 import SortBy from "../SortBy"
