@@ -16,6 +16,7 @@ import Tag from "../Tag"
 import { formatUnits } from "../../formats/units"
 import Tabs, { TabItem } from "../Tabs"
 import ActivityTab from "../activities/ActivityTab"
+import EventTab from "../events/EventTab"
 
 const QUERY = `
 query($id: ID!) {
@@ -104,7 +105,7 @@ export default function ContractPage () {
         {
           label: "Events",
           to: "events",
-          element: <div>TBD</div>
+          element: <EventTab id={params.id} />
         }
       ]
     }

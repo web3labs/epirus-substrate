@@ -7,6 +7,7 @@ export interface Arg {
 export interface Extrinsic {
   blockHash: string
   blockNumber: string
+  indexInBlock: string
   id:string
   hash:string
   name:string
