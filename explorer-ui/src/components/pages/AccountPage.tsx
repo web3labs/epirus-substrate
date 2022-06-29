@@ -8,11 +8,11 @@ import Box from "../commons/Box"
 import AccountAddress from "../accounts/AccountAddress"
 import ActivityList from "../activities/ActivityList"
 import Segment from "../commons/Segment"
-import Breadcrumbs from "../Breadcrumbs"
+import Breadcrumbs from "../navigation/Breadcrumbs"
 import { Account } from "../../types/accounts"
 import Tag from "../Tag"
 import { formatUnits } from "../../formats/units"
-import Tabs, { TabItem } from "../Tabs"
+import Tabs, { TabItem } from "../navigation/Tabs"
 import { Definition, DefinitionList } from "../commons/Definitions"
 
 const QUERY = `

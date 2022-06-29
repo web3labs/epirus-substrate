@@ -1,4 +1,4 @@
-import Nav from "./components/Nav"
+import Nav from "./components/navigation/Nav"
 import React from "react"
 import {
   BrowserRouter as Router,

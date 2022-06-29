@@ -1,6 +1,6 @@
 import React from "react"
 import Box from "../commons/Box"
-import Breadcrumbs from "../Breadcrumbs"
+import Breadcrumbs from "../navigation/Breadcrumbs"
 import CodeList from "../codes/CodeList"
 
 export default function CodesPage () {

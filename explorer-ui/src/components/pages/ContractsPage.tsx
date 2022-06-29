@@ -1,6 +1,6 @@
 import React from "react"
 import Box from "../commons/Box"
-import Breadcrumbs from "../Breadcrumbs"
+import Breadcrumbs from "../navigation/Breadcrumbs"
 import ContractList from "../contracts/ContractList"
 
 export default function ContractsPage () {
