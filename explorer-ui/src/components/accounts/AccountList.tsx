@@ -5,7 +5,7 @@ import List, { ListProps } from "../commons/List"
 import Pagination from "../Pagination"
 import AccountRow from "./AccountRow"
 import SortBy from "../SortBy"
-import ListQuery from "../ListQuery"
+import ListQuery from "../query/ListQuery"
 
 const QUERY = `
 query($first: Int!, $after: String = "", $orderBy: [AccountOrderByInput!]! = [id_ASC]) {

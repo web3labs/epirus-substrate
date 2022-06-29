@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState } from "react"
-import useSquid from "../hooks/useSquid"
-import { PageQuery } from "../types/pagination"
-import Hashcode from "../utils/hashcode"
+import useSquid from "../../hooks/useSquid"
+import { PageQuery } from "../../types/pagination"
+import Hashcode from "../../utils/hashcode"
 
 interface Props {
   query: string

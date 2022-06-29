@@ -2,9 +2,9 @@ import React from "react"
 import { ContractCode } from "../../types/codes"
 import { Edge, Page } from "../../types/pagination"
 import List, { ListProps } from "../commons/List"
-import ListQuery from "../ListQuery"
-import Pagination from "../Pagination"
-import SortBy from "../SortBy"
+import ListQuery from "../query/ListQuery"
+import Pagination from "../query/Pagination"
+import SortBy from "../query/SortBy"
 import CodeRow from "./CodeRow"
 
 const QUERY = `

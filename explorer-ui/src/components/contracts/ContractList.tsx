@@ -3,9 +3,9 @@ import { LightContract } from "../../types/contracts"
 import { Edge, Page } from "../../types/pagination"
 import ContractRow from "./ContractRow"
 import List, { ListProps } from "../commons/List"
-import Pagination from "../Pagination"
-import SortBy from "../SortBy"
-import ListQuery from "../ListQuery"
+import Pagination from "../query/Pagination"
+import SortBy from "../query/SortBy"
+import ListQuery from "../query/ListQuery"
 
 const QUERY = `
 query($first: Int!, $after: String = "", $orderBy: [ContractOrderByInput!]! = [createdAt_DESC]) {
