@@ -11,13 +11,13 @@ import Tabs, { TabItem } from "../navigation/Tabs"
 import { Definition, DefinitionList } from "../commons/Definitions"
 import { ContractCode } from "../../types/codes"
 import { argValue } from "../../utils/types"
-import { printBalance } from "../commons/Args"
 import { useChainProperties } from "../../contexts/ChainContext"
 import ContractTab, { contractByCodeHash } from "../contracts/ContractTab"
 import BinaryTab from "../codes/BinaryTab"
 import Copy from "../commons/Copy"
-import { HexCallData, HexText } from "../commons/Hex"
+import { HexText } from "../commons/Hex"
 import { CodeIcon } from "@heroicons/react/outline"
+import ExtrinsicSummary from "../commons/ExtrinsicSummary"
 
 const QUERY = `
 query($id: ID!) {
@@ -100,72 +100,50 @@ export default function CodePage () {
     <>
       <Breadcrumbs/>
       <div className="content">
-
-        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-2">
-          <Box className="col-span-2 divide-y gap-y-2">
-            <div className="flex flex-row flex-wrap w-full items-start justify-between mt-4 gap-x-2">
-              <h3 className="mx-5 mb-1 font-medium">
-                <Copy text={id}>
-                  <div className="flex gap-2 items-center text-sm">
-                    <span className="bg-lime-200 rounded-full p-1.5">
-                      <CodeIcon width={21} height={21} />
-                    </span>
-                    <HexText>{id}</HexText>
-                  </div>
-                </Copy>
-              </h3>
-              <div className="flex flex-row flex-wrap gap-x-2 px-4">
-                <Tag label="wasm" />
-              </div>
+        <Box className="divide-y gap-y-2">
+          <div className="flex flex-row flex-wrap w-full items-start justify-between mt-4 gap-x-2">
+            <h3 className="mx-5 mb-1 font-medium">
+              <Copy text={id}>
+                <div className="flex gap-2 items-center text-sm">
+                  <span className="bg-lime-200 rounded-full p-1.5">
+                    <CodeIcon width={21} height={21} />
+                  </span>
+                  <HexText>{id}</HexText>
+                </div>
+              </Copy>
+            </h3>
+            <div className="flex flex-row flex-wrap gap-x-2 px-4">
+              <Tag label="wasm" />
             </div>
-            <Segment>
-              <DefinitionList>
-                <Definition label="Owner" term={
-                  <AccountLink account={owner} size={21} />
-                }/>
-              </DefinitionList>
-            </Segment>
+          </div>
+          <Segment>
+            <DefinitionList>
+              <Definition label="Time" term={
+                <span className="font-mono">{createdAt.toString()}</span>
+              }/>
+              <Definition label="Owner" term={
+                <AccountLink account={owner} size={21} />
+              }/>
+            </DefinitionList>
+          </Segment>
 
-            <Segment title="Upload details" collapsable={true} isOpen={false}>
-              <DefinitionList>
-                <Definition label="Time" term={
-                  <span className="font-mono">{createdAt.toString()}</span>
-                }/>
-                <Definition label="Block" term={
-                  <span className="font-mono">{createdFrom.blockNumber}</span>
-                }/>
-                <Definition label="Extrinsic" term={
-                  <span className="font-mono">{createdFrom.id}</span>
-                }/>
+          <ExtrinsicSummary extrinsic={createdFrom} token={token} />
 
-                <Definition label="Gas Limit" term={
-                  <span className="font-mono">
-                    {argValue(createdFrom.args, "gasLimit")}
-                  </span>
-                }/>
-                <Definition label="Deposit Limit" term={
-                  <span className="font-mono">
-                    {depositLimit === "null" ? "unlimited" : depositLimit}
-                  </span>
-                }/>
-
-                <Definition label="Data" term={
-                  <HexCallData>
-                    {argValue(createdFrom.args, "data")}
-                  </HexCallData>
-                }/>
-                <Definition label="Salt" term={
-                  <HexText>
-                    {argValue(createdFrom.args, "salt")}
-                  </HexText>
-                }/>
-              </DefinitionList>
-            </Segment>
-          </Box>
-          <Box>
-            <span>{printBalance(createdFrom.args, token)}</span>
-          </Box>
-        </div>
+          <Segment title="Upload details" collapsable={true} isOpen={false}>
+            <DefinitionList>
+              <Definition label="Deposit Limit" term={
+                <span className="font-mono">
+                  {depositLimit === "null" ? "unlimited" : depositLimit}
+                </span>
+              }/>
+              <Definition label="Salt" term={
+                <HexText>
+                  {argValue(createdFrom.args, "salt")}
+                </HexText>
+              }/>
+            </DefinitionList>
+          </Segment>
+        </Box>
 
         <Box className="mt-2">
           <Tabs items={tabs} />

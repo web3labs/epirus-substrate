@@ -9,7 +9,6 @@ import Box from "../commons/Box"
 import AccountAddress from "../accounts/AccountAddress"
 import Segment from "../commons/Segment"
 import { classNames } from "../../utils/strings"
-import { argValue } from "../../utils/types"
 import AccountLink from "../accounts/AccountLink"
 import Breadcrumbs from "../navigation/Breadcrumbs"
 import Tag from "../commons/Tag"
@@ -19,7 +18,8 @@ import ActivityTab, { activityByAccount } from "../activities/ActivityTab"
 import EventTab from "../events/EventTab"
 import CodeLink from "../codes/CodeLink"
 import Copy from "../commons/Copy"
-import { HexCallData, HexText } from "../commons/Hex"
+import { HexText } from "../commons/Hex"
+import ExtrinsicSummary from "../commons/ExtrinsicSummary"
 
 const QUERY = `
 query($id: ID!) {
@@ -86,7 +86,7 @@ function Definition ({ label, term, className = "" }: {
 
   return (
     <div className={classNames(className, "flex flex-row flex-wrap gap-x-2 items-center")}>
-      <dt className="flex text-sm text-gray-400 basis-20">{label}</dt>
+      <dt className="flex text-sm text-gray-400 basis-28">{label}</dt>
       <dd className="text-sm text-gray-900">{term}</dd>
     </div>
   )
@@ -133,7 +133,16 @@ export default function ContractPage () {
     return null
   }
 
-  const { id, salt, createdAt, deployer, createdFrom, contractCode, account } = data?.contracts[0] as Contract
+  const {
+    id,
+    salt,
+    createdAt,
+    deployer,
+    createdFrom,
+    contractCode,
+    account,
+    storageDeposit
+  } = data?.contracts[0] as Contract
   const { balance } = account
 
   return (
@@ -157,34 +166,25 @@ export default function ContractPage () {
             </div>
             <Segment>
               <DefinitionList>
+                <Definition label="Time" term={
+                  <span className="font-mono">{createdAt.toString()}</span>
+                }/>
                 <Definition label="Code Hash" term={
                   <CodeLink id={contractCode.id} />
                 }/>
               </DefinitionList>
             </Segment>
 
+            <ExtrinsicSummary extrinsic={createdFrom} token={token} />
+
             <Segment title="Creation details" collapsable={true} isOpen={false}>
               <DefinitionList>
-                <Definition label="Time" term={
-                  <span className="font-mono">{createdAt.toString()}</span>
-                }/>
-                <Definition label="Block" term={
-                  <span className="font-mono">{createdFrom.blockNumber}</span>
-                }/>
-                <Definition label="Extrinsic" term={
-                  <span className="font-mono">{createdFrom.id}</span>
-                }/>
-                <Definition label="Data" term={
-                  <HexCallData>
-                    {argValue(createdFrom.args, "data")}
-                  </HexCallData>
-                }/>
-                <Definition label="Salt" term={salt &&
-                  <HexText>{salt}</HexText>
-                }/>
                 <Definition label="Deployer" term={
                   <AccountLink account={deployer} size={21} />
                 } />
+                <Definition label="Salt" term={salt &&
+                  <HexText>{salt}</HexText>
+                }/>
               </DefinitionList>
             </Segment>
           </Box>
@@ -200,6 +200,11 @@ export default function ContractPage () {
                   className="justify-between"
                   label="Reserved"
                   term={formatUnits(balance.reserved, token)}
+                />
+                <Definition
+                  className="justify-between"
+                  label="Storage Deposit"
+                  term={formatUnits(storageDeposit, token)}
                 />
               </DefinitionList>
             </Segment>

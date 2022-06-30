@@ -7,7 +7,7 @@ import AccountLink from "../accounts/AccountLink"
 import { classNames } from "../../utils/strings"
 import Lane from "../commons/Lane"
 import { Label } from "../commons/Label"
-import { printBalance } from "../commons/Args"
+import { formatValue } from "../commons/Args"
 import { useChainProperties } from "../../contexts/ChainContext"
 
 function actionAlias (action: string) {
@@ -46,7 +46,7 @@ export default function ActivityRow ({
           </div>
         }
         tail={
-          printBalance(obj.args, token)
+          formatValue(obj.args, token)
         }
       >
         <div className="flex gap-2 text-sm">

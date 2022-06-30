@@ -1,7 +1,7 @@
-import React from "react"
+import React, { ReactNode } from "react"
 import { classNames } from "../../utils/strings"
 
-export function DefinitionList ({ children } :{ children: JSX.Element | JSX.Element[]}) {
+export function DefinitionList ({ children } :{ children: ReactNode}) {
   return (<dl className="flex flex-col w-full gap-y-2 overflow-hidden text-ellipsis">
     {children}
   </dl>)
@@ -15,7 +15,7 @@ export function Definition ({ label, term, className = "" }: {
   }
 
   return (
-    <div className={classNames(className, "flex flex-row flex-wrap gap-x-2 items-center")}>
+    <div className={classNames(className, "flex flex-row flex-wrap gap-x-2 items-start")}>
       <dt className="flex text-sm text-gray-500 basis-20">{label}</dt>
       <dd className="text-sm text-gray-900">{term}</dd>
     </div>

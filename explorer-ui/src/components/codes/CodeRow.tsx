@@ -8,7 +8,7 @@ import { Label } from "../commons/Label"
 import CodeLink from "./CodeLink"
 import { CodeIcon } from "@heroicons/react/outline"
 import Lane from "../commons/Lane"
-import { printBalance } from "../commons/Args"
+import { formatValue } from "../commons/Args"
 import { useChainProperties } from "../../contexts/ChainContext"
 
 export default function CodeRow ({
@@ -36,7 +36,7 @@ export default function CodeRow ({
           </div>
         }
         tail={
-          printBalance(createdFrom.args, token)
+          formatValue(createdFrom.args, token)
         }
       >
         <div className="flex flex-wrap gap-2 text-sm">
