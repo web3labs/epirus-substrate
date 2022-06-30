@@ -38,6 +38,11 @@ export default function ExtrinsicSummary (
             {argValue(args, "gasLimit")}
           </span>
         }/>
+        <Definition label="Tip" term={
+          <span className="font-mono">
+            {formatValue(args, token, "tip") || 0}
+          </span>
+        }/>
         <Definition label="Value" term={
           <span className="font-mono">
             {formatValue(args, token) || 0}

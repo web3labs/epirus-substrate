@@ -127,9 +127,9 @@ export default function CodePage () {
             </DefinitionList>
           </Segment>
 
-          <ExtrinsicSummary extrinsic={createdFrom} token={token} />
+          <ExtrinsicSummary extrinsic={createdFrom} token={token} isOpen={false} />
 
-          <Segment title="Upload details" collapsable={true} isOpen={false}>
+          <Segment title="Additional details" collapsable={true} isOpen={false}>
             <DefinitionList>
               <Definition label="Deposit Limit" term={
                 <span className="font-mono">

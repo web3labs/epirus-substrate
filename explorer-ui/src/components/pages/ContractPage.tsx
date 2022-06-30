@@ -72,7 +72,7 @@ query($id: ID!) {
 `
 
 function DefinitionList ({ children } :{ children: JSX.Element | JSX.Element[]}) {
-  return (<dl className="flex flex-col w-full gap-y-2 overflow-hidden text-ellipsis">
+  return (<dl className="flex flex-col w-full gap-y-3 overflow-hidden text-ellipsis">
     {children}
   </dl>)
 }
@@ -86,7 +86,7 @@ function Definition ({ label, term, className = "" }: {
 
   return (
     <div className={classNames(className, "flex flex-row flex-wrap gap-x-2 items-center")}>
-      <dt className="flex text-sm text-gray-400 basis-28">{label}</dt>
+      <dt className="flex text-sm text-gray-400 basis-32">{label}</dt>
       <dd className="text-sm text-gray-900">{term}</dd>
     </div>
   )
@@ -175,9 +175,9 @@ export default function ContractPage () {
               </DefinitionList>
             </Segment>
 
-            <ExtrinsicSummary extrinsic={createdFrom} token={token} />
+            <ExtrinsicSummary extrinsic={createdFrom} token={token} isOpen={false} />
 
-            <Segment title="Creation details" collapsable={true} isOpen={false}>
+            <Segment title="Additional details" collapsable={true} isOpen={false}>
               <DefinitionList>
                 <Definition label="Deployer" term={
                   <AccountLink account={deployer} size={21} />

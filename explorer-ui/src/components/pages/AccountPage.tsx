@@ -94,7 +94,7 @@ export default function AccountPage () {
     return null
   }
 
-  const { id, contract, balance } = data?.accounts[0] as Account
+  const { id, contract, createdAt, balance } = data?.accounts[0] as Account
 
   return (
     <>
@@ -115,6 +115,14 @@ export default function AccountPage () {
                 <Tag label={contract ? "contract" : "EOA"} />
               </div>
             </div>
+
+            <Segment>
+              <DefinitionList>
+                <Definition label="Time" term={
+                  <span className="font-mono">{createdAt.toString()}</span>
+                }/>
+              </DefinitionList>
+            </Segment>
           </Box>
           <Box>
             <Segment title="Balance">
@@ -128,6 +136,20 @@ export default function AccountPage () {
                   className="justify-between"
                   label="Reserved"
                   term={formatUnits(balance.reserved, token)}
+                />
+              </DefinitionList>
+            </Segment>
+            <Segment>
+              <DefinitionList>
+                <Definition
+                  className="justify-between"
+                  label="Fee Frozen"
+                  term={formatUnits(balance.feeFrozen, token)}
+                />
+                <Definition
+                  className="justify-between"
+                  label="Misc Frozen"
+                  term={formatUnits(balance.miscFrozen, token)}
                 />
               </DefinitionList>
             </Segment>
