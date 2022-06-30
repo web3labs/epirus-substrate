@@ -1,7 +1,7 @@
 import React from "react"
 import Box from "../commons/Box"
 import Breadcrumbs from "../navigation/Breadcrumbs"
-import ActivityList from "../activities/ActivityList"
+import ActivityList from "./ActivityList"
 
 export default function ActivitiesPage () {
   return (

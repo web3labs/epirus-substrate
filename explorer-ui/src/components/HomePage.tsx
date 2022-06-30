@@ -1,9 +1,9 @@
 import React from "react"
 import { NavLink } from "react-router-dom"
 
-import ActivityList from "../activities/ActivityList"
-import Box from "../commons/Box"
-import ContractList from "../contracts/ContractList"
+import ActivityList from "./activities/ActivityList"
+import Box from "./commons/Box"
+import ContractList from "./contracts/ContractList"
 
 export default function HomePage () {
   return (
