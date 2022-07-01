@@ -10,6 +10,14 @@ export function contractByDeployer (id: string) {
   }
 }
 
+export function contractByCodeHash (id: string) {
+  return {
+    contractCode: {
+      id_eq: id
+    }
+  }
+}
+
 export default function ContractTab ({ currentId, where }: TabQuery) {
   return (
     <ContractList

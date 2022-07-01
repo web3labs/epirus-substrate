@@ -1,13 +1,13 @@
 import React from "react"
 import { NavLink } from "react-router-dom"
-import { shortenHexString } from "../../formats/text"
+import { HexText } from "../commons/Hex"
 
 export default function CodeLink (
   { id, short = false }:{id:string, short?:boolean}
 ) {
   return (
-    <NavLink to={`/codes/${id}`} className="link font-mono">
-      {short ? shortenHexString(id) : id}
+    <NavLink to={`/codes/${id}`} className="link">
+      <HexText short={short}>{id}</HexText>
     </NavLink>
   )
 }

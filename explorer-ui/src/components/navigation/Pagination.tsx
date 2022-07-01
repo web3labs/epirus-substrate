@@ -1,3 +1,4 @@
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/outline"
 import React from "react"
 import { Page, PageQuery } from "../../types/pagination"
 
@@ -10,40 +11,42 @@ export default function Pagination ({ page, pageQuery, setQuery }: {
 
   if (hasNextPage || hasPreviousPage) {
     return (
-      <div className="w-full py-3 px-3 flex mt-auto items-center justify-between border-t border-gray-200">
-
-        <div className="flex-1 flex justify-between items-center">
-          <div className="text-xs">
-        Showing {startCursor} to {endCursor} of {totalCount}
-          </div>
-          <div className="ml-auto space-x-2">
-            {hasPreviousPage &&
+      <div className="w-full flex justify-between items-center border-t border-gray-200 mt-auto">
+        <div className="text-xs px-3 py-2">
+            Showing {startCursor} to {endCursor} of {totalCount}
+        </div>
+        {(hasNextPage || hasPreviousPage) &&
+        <nav role="navigation" className="ml-auto flex divide-x">
+          {hasPreviousPage &&
             <span
               onClick={() => setQuery(Object.assign({}, pageQuery,
                 {
                   after: (parseInt(startCursor) - (first + 1)).toString()
                 })
               )}
-              className="link relative inline-flex items-center text-sm cursor-pointer"
+              aria-label="previous page"
+              className="flex link cursor-pointer p-2 text-xs items-center"
             >
-            Previous
+              <ChevronLeftIcon height={18} width={18} aria-hidden="true" />
+              <span>Prev</span>
             </span>
-            }
-            {hasNextPage &&
+          }
+          {hasNextPage &&
             <span
               onClick={() => setQuery(Object.assign({}, pageQuery,
                 {
                   after: endCursor
                 })
               )}
-              className="link relative inline-flex items-center text-sm cursor-pointer"
+              aria-label="next page"
+              className="flex link cursor-pointer p-2 text-xs items-center"
             >
-            Next
+              <span>Next</span>
+              <ChevronRightIcon height={18} width={18} aria-hidden="true" />
             </span>
-            }
-          </div>
-        </div>
-
+          }
+        </nav>
+        }
       </div>
     )
   }

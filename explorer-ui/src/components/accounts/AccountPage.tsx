@@ -5,7 +5,7 @@ import { useChainProperties } from "../../contexts/ChainContext"
 import useSquid from "../../hooks/useSquid"
 import CodeBadge from "../badges/CodeBadge"
 import Box from "../commons/Box"
-import AccountAddress from "../accounts/AccountAddress"
+import AccountAddress from "./AccountAddress"
 import Segment from "../commons/Segment"
 import Breadcrumbs from "../navigation/Breadcrumbs"
 import { Account } from "../../types/accounts"
@@ -16,6 +16,7 @@ import { Definition, DefinitionList } from "../commons/Definitions"
 import ActivityTab, { activityByAccount } from "../activities/ActivityTab"
 import ContractTab, { contractByDeployer } from "../contracts/ContractTab"
 import CodeTab, { codeByOwner } from "../codes/CodeTab"
+import Copy from "../commons/Copy"
 
 const QUERY = `
 query($id: ID!) {
@@ -93,7 +94,7 @@ export default function AccountPage () {
     return null
   }
 
-  const { id, contract, balance } = data?.accounts[0] as Account
+  const { id, contract, createdAt, balance } = data?.accounts[0] as Account
 
   return (
     <>
@@ -104,14 +105,24 @@ export default function AccountPage () {
           <Box className="col-span-2">
             <div className="flex flex-row flex-wrap w-full items-start justify-between mt-4 gap-x-2">
               <h3 className="mx-5 mb-1 font-medium">
-                <AccountAddress address={id}>
-                  {contract && <CodeBadge/>}
-                </AccountAddress>
+                <Copy text={id}>
+                  <AccountAddress address={id}>
+                    {contract && <CodeBadge/>}
+                  </AccountAddress>
+                </Copy>
               </h3>
               <div className="flex flex-row flex-wrap gap-x-2 px-4">
                 <Tag label={contract ? "contract" : "EOA"} />
               </div>
             </div>
+
+            <Segment>
+              <DefinitionList>
+                <Definition label="Time" term={
+                  <span className="font-mono">{createdAt.toString()}</span>
+                }/>
+              </DefinitionList>
+            </Segment>
           </Box>
           <Box>
             <Segment title="Balance">
@@ -125,6 +136,20 @@ export default function AccountPage () {
                   className="justify-between"
                   label="Reserved"
                   term={formatUnits(balance.reserved, token)}
+                />
+              </DefinitionList>
+            </Segment>
+            <Segment>
+              <DefinitionList>
+                <Definition
+                  className="justify-between"
+                  label="Fee Frozen"
+                  term={formatUnits(balance.feeFrozen, token)}
+                />
+                <Definition
+                  className="justify-between"
+                  label="Misc Frozen"
+                  term={formatUnits(balance.miscFrozen, token)}
                 />
               </DefinitionList>
             </Segment>

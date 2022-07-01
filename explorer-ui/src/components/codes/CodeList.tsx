@@ -3,7 +3,7 @@ import { ContractCode } from "../../types/codes"
 import { Edge, Page } from "../../types/pagination"
 import List, { ListProps } from "../commons/List"
 import ListQuery from "../query/ListQuery"
-import Pagination from "../query/Pagination"
+import Pagination from "../navigation/Pagination"
 import SortBy from "../query/SortBy"
 import CodeRow from "./CodeRow"
 
@@ -15,6 +15,13 @@ query($where: ContractCodeWhereInput = {} ,$first: Int = 5, $after: String = "",
       node {
         createdAt
         id
+        createdFrom {
+          args {
+            name
+            type
+            value
+          }
+        }
         owner {
           id
           contract {

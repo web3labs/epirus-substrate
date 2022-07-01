@@ -1,37 +1,14 @@
 import React from "react"
 
 import { Activity } from "../../types/contracts"
-// import { shortenHexString } from "../../formats/text"
 import { Row, TypedRow } from "../commons/List"
 import { formatDate } from "../../formats/time"
-import { useChainProperties } from "../../contexts/ChainContext"
-import { argValue } from "../../utils/types"
 import AccountLink from "../accounts/AccountLink"
-import { formatUnits } from "../../formats/units"
 import { classNames } from "../../utils/strings"
 import Lane from "../commons/Lane"
 import { Label } from "../commons/Label"
-
-function printBalance ({ args }: Activity) {
-  const { token } = useChainProperties()
-  const va = argValue(args, "value")
-  if (va === "0") {
-    return null
-  }
-  return formatUnits(va, token)
-}
-
-/*
-function additionalDetails ({ action, args }: Activity) {
-  switch (action) {
-  case "contracts.call":
-    return { selector: argValue(args, "data")?.slice(0, 10) }
-  case "contracts.instantiate":
-    return { code: shortenHexString(argValue(args, "codeHash")) }
-  default:
-    return null
-  }
-} */
+import { formatValue } from "../commons/Args"
+import { useChainProperties } from "../../contexts/ChainContext"
 
 function actionAlias (action: string) {
   switch (action) {
@@ -50,6 +27,7 @@ export default function ActivityRow ({
   currentId,
   short = false
 }: TypedRow<Activity>) {
+  const { token } = useChainProperties()
   const { id, from, to, action, createdAt } = obj
   const alias = actionAlias(action)
 
@@ -68,7 +46,7 @@ export default function ActivityRow ({
           </div>
         }
         tail={
-          printBalance(obj)
+          formatValue(obj.args, token)
         }
       >
         <div className="flex gap-2 text-sm">

@@ -9,7 +9,6 @@ import Box from "../commons/Box"
 import AccountAddress from "../accounts/AccountAddress"
 import Segment from "../commons/Segment"
 import { classNames } from "../../utils/strings"
-import { argValue } from "../../utils/types"
 import AccountLink from "../accounts/AccountLink"
 import Breadcrumbs from "../navigation/Breadcrumbs"
 import Tag from "../commons/Tag"
@@ -18,6 +17,9 @@ import Tabs, { TabItem } from "../navigation/Tabs"
 import ActivityTab, { activityByAccount } from "../activities/ActivityTab"
 import EventTab from "../events/EventTab"
 import CodeLink from "../codes/CodeLink"
+import Copy from "../commons/Copy"
+import { HexText } from "../commons/Hex"
+import ExtrinsicSummary from "../commons/ExtrinsicSummary"
 
 const QUERY = `
 query($id: ID!) {
@@ -70,7 +72,7 @@ query($id: ID!) {
 `
 
 function DefinitionList ({ children } :{ children: JSX.Element | JSX.Element[]}) {
-  return (<dl className="flex flex-col w-full gap-y-2 overflow-hidden text-ellipsis">
+  return (<dl className="flex flex-col w-full gap-y-3 overflow-hidden text-ellipsis">
     {children}
   </dl>)
 }
@@ -84,7 +86,7 @@ function Definition ({ label, term, className = "" }: {
 
   return (
     <div className={classNames(className, "flex flex-row flex-wrap gap-x-2 items-center")}>
-      <dt className="flex text-sm text-gray-400 basis-20">{label}</dt>
+      <dt className="flex text-sm text-gray-400 basis-32">{label}</dt>
       <dd className="text-sm text-gray-900">{term}</dd>
     </div>
   )
@@ -131,7 +133,16 @@ export default function ContractPage () {
     return null
   }
 
-  const { id, salt, createdAt, deployer, createdFrom, contractCode, account } = data?.contracts[0] as Contract
+  const {
+    id,
+    salt,
+    createdAt,
+    deployer,
+    createdFrom,
+    contractCode,
+    account,
+    storageDeposit
+  } = data?.contracts[0] as Contract
   const { balance } = account
 
   return (
@@ -143,9 +154,11 @@ export default function ContractPage () {
           <Box className="col-span-2 divide-y gap-y-2">
             <div className="flex flex-row flex-wrap w-full items-start justify-between mt-4 gap-x-2">
               <h3 className="mx-5 mb-1 font-medium">
-                <AccountAddress address={id}>
-                  <CodeBadge/>
-                </AccountAddress>
+                <Copy text={id}>
+                  <AccountAddress address={id}>
+                    <CodeBadge/>
+                  </AccountAddress>
+                </Copy>
               </h3>
               <div className="flex flex-row flex-wrap gap-x-2 px-4">
                 <Tag label="wasm" />
@@ -153,30 +166,25 @@ export default function ContractPage () {
             </div>
             <Segment>
               <DefinitionList>
+                <Definition label="Time" term={
+                  <span className="font-mono">{createdAt.toString()}</span>
+                }/>
                 <Definition label="Code Hash" term={
                   <CodeLink id={contractCode.id} />
                 }/>
               </DefinitionList>
             </Segment>
 
-            <Segment title="Creation details" collapsable={true} isOpen={false}>
+            <ExtrinsicSummary extrinsic={createdFrom} token={token} isOpen={false} />
+
+            <Segment title="Additional details" collapsable={true} isOpen={false}>
               <DefinitionList>
-                <Definition label="Block" term={
-                  <span className="font-mono">{createdFrom.blockNumber}</span>
-                }/>
-                <Definition label="Extrinsic" term={
-                  <span className="font-mono">{createdFrom.id}</span>
-                }/>
-                <Definition label="Time" term={createdAt.toString()}/>
-                <Definition label="Salt" term={salt &&
-                <span className="font-mono">{salt}</span>
-                }/>
-                <Definition label="Data" term={
-                  <span className="font-mono">{argValue(createdFrom.args, "data")}</span>
-                } />
                 <Definition label="Deployer" term={
                   <AccountLink account={deployer} size={21} />
                 } />
+                <Definition label="Salt" term={salt &&
+                  <HexText>{salt}</HexText>
+                }/>
               </DefinitionList>
             </Segment>
           </Box>
@@ -192,6 +200,11 @@ export default function ContractPage () {
                   className="justify-between"
                   label="Reserved"
                   term={formatUnits(balance.reserved, token)}
+                />
+                <Definition
+                  className="justify-between"
+                  label="Storage Deposit"
+                  term={formatUnits(storageDeposit, token)}
                 />
               </DefinitionList>
             </Segment>
