@@ -21,7 +21,7 @@ export default function Segment (props: Props) {
   return (
     <div className={classNames(className, "flex flex-col w-full px-5 py-3 gap-y-2")}>
       {title &&
-        <h3 className="small-caps mb-1">
+        <h3 className="font-medium mb-1">
           {title}
         </h3>
       }
@@ -42,11 +42,11 @@ function CollapsableSegment ({
     <div className={classNames(className, "flex flex-col w-full px-5 py-3 gap-y-2")}>
       <div className="flex flex-row cursor-pointer -ml-1" onClick={() => setOpen(!open)}>
         {open
-          ? <ChevronDownIcon className="text-gray-400 w-4 h-4" />
-          : <ChevronRightIcon className="text-gray-400 w-4 h-4"/>
+          ? <ChevronDownIcon className="text-gray-300 w-5 h-5" />
+          : <ChevronRightIcon className="text-gray-300 w-5 h-5"/>
         }
         {title &&
-        <h3 className="uppercase tracking-wider text-xs mb-1">
+        <h3 className="tracking-wider text-sm">
           {title}
         </h3>
         }
