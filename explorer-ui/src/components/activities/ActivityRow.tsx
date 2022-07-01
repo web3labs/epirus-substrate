@@ -49,12 +49,16 @@ export default function ActivityRow ({
           formatValue(obj.args, token)
         }
       >
-        <div className="flex gap-2 text-sm">
-          <Label>From</Label><AccountLink account={from} currentId={currentId} short={short} size={21} />
-        </div>
-        <div className="flex gap-2 text-sm">
-          <Label>To</Label><AccountLink account={to} currentId={currentId} short={short} size={21} />
-        </div>
+        {from &&
+          (<div className="flex gap-2 text-sm">
+            <Label>From</Label><AccountLink account={from} currentId={currentId} short={short} size={21} />
+          </div>)
+        }
+        {to &&
+          (<div className="flex gap-2 text-sm">
+            <Label>To</Label><AccountLink account={to} currentId={currentId} short={short} size={21} />
+          </div>)
+        }
       </Lane>
     </Row>
   )

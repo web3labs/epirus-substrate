@@ -35,7 +35,7 @@ export default function useSquid ({
   const { error, stale } = result
   useEffect(() => {
     if (!stale && error) {
-      toast(WarningToast({ title: "Network Error", message: "There is some trouble fetching the data. Retrying..." }), { id: "squid-network-error" })
+      toast(WarningToast({ title: "Network Error", message: "There is some trouble fetching new data. Retrying..." }), { id: "squid-network-error" })
     }
   }, [error, stale])
 
