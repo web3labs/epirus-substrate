@@ -235,6 +235,7 @@ export async function contractsContractCodeUpdatedEventHandler(
       const activityEntity = new Activity({
         id: codeHashChangeEntity.id,
         type: ActivityType.CODEUPDATED,
+        from: await getOrCreateAccount(store, extrinsicEntity.signer),
         to: await getOrCreateAccount(store, contract),
         action: extrinsicEntity.name,
         createdAt: extrinsicEntity.createdAt,
