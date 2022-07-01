@@ -38,7 +38,7 @@ export default function ActivityRow ({
           <div className="flex flex-col gap-2">
             <div className={classNames(
               `tag ${alias}`,
-              "w-20 text-xs uppercase py-0.5 px-1 rounded text-center"
+              "w-24 text-[0.68rem] font-semibold uppercase py-0.5 px-1 rounded text-center"
             )}>
               {`${alias}`}
             </div>

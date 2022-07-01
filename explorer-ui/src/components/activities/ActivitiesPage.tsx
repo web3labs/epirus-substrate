@@ -11,6 +11,7 @@ export default function ActivitiesPage () {
         <ActivityList
           pageQuery={{ first: 15 }}
           sortable={true}
+          filterable={true}
           title="Activities"
         />
       </Box>

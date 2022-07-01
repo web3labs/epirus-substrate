@@ -11,7 +11,7 @@ export default function SearchBox () {
           </svg>
         </div>
         <input type="search" id="default-search"
-          className="block p-2 pl-10 w-full text-sm text-gray-900 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-400"
+          className="input w-full pl-10 text-sm"
           placeholder="Search Accounts, Contracts, ..."
           required />
       </div>

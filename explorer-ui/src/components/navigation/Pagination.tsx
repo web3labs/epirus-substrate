@@ -16,7 +16,7 @@ export default function Pagination ({ page, pageQuery, setQuery }: {
             Showing {startCursor} to {endCursor} of {totalCount}
         </div>
         {(hasNextPage || hasPreviousPage) &&
-        <nav role="navigation" className="ml-auto flex divide-x">
+        <nav role="navigation" className="ml-auto flex">
           {hasPreviousPage &&
             <span
               onClick={() => setQuery(Object.assign({}, pageQuery,

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Mono:wght@100;200;300;400;500;600;700&family=Inter:wght@100;200;300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -27,7 +27,7 @@
   }
 
   .tab.active {
-    @apply text-purple-600 border-purple-600;
+    @apply text-blue-600 border-blue-600;
   }
 
   .tag.instantiate {
@@ -55,9 +55,40 @@
   .code {
     @apply bg-gray-100 text-gray-800 border border-gray-200 rounded-md px-3 py-2 shadow-inner font-mono break-words overflow-y-auto max-h-20
   }
+
+  .input {
+    @apply appearance-none block py-2 px-3 text-sm text-gray-900 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400
+  }
+
+  .select {
+    @apply appearance-none block py-2 px-3 text-sm text-gray-900 border border-gray-200 focus:outline-none
+  }
+
+  .select-option.active {
+    @apply bg-blue-100 text-blue-900
+  }
+
+  .select-option .selected {
+    @apply text-blue-600
+  }
+
+  .btn {
+    @apply py-2 px-4
+  }
+  .btn-primary {
+    @apply bg-blue-500 text-white
+  }
+  .btn-primary:hover {
+    @apply bg-blue-700
+  }
+
 }
 
 /* Fixes */
+* {
+  text-rendering: geometricPrecision;
+}
+
 .ui--IdentityIcon {
   cursor: inherit !important;
 }

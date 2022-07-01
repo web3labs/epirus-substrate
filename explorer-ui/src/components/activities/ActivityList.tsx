@@ -6,6 +6,9 @@ import ListQuery from "../query/ListQuery"
 import Pagination from "../navigation/Pagination"
 import SortBy from "../query/SortBy"
 import ActivityRow from "./ActivityRow"
+import Filters from "../query/Filters"
+import DateRangeFilter from "../query/filters/DateRangeFilter"
+import { filterOf as textFilterOf } from "../query/filters/TextFilter"
 
 const QUERY = `
 query($where: ActivityWhereInput = {} ,$first: Int = 5, $after: String = "", $orderBy: [ActivityOrderByInput!]! = [createdAt_DESC]) {
@@ -78,12 +81,25 @@ export default function ActivityList ({
             pageQuery={queryInState}
           />
           : undefined
+        const filter = filterable
+          ? <Filters
+            filterTypes={[
+              DateRangeFilter,
+              textFilterOf("from", value => (
+                { from: { id_eq: value } }
+              ))
+            ]}
+            setQuery={setQueryInState}
+            pageQuery={queryInState}
+          />
+          : undefined
 
         return (
           <List
             title={title}
             description={description}
             sort={sort}
+            filter={filter}
             footer={
               <Pagination
                 page={page}

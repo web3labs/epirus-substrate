@@ -29,10 +29,13 @@ function App () {
     <ThemeProvider theme={{
       reactDatepicker: {
         colors: {
-          selectedDay: colors.purple[300],
-          selectedDayHover: colors.purple[400],
-          primaryColor: colors.purple[500]
-        }
+          selectedDay: colors.blue[300],
+          selectedDayHover: colors.blue[400],
+          primaryColor: colors.blue[500]
+        },
+        inputLabelMargin: "0px",
+        inputLabelBorderRadius: "0px",
+        inputLabelBorder: `1px solid ${colors.gray[200]}`
       }
     }}>
       <Provider value={client}>
