@@ -19,8 +19,8 @@ export default function TextFilter ({
   template
 } : Props) {
   const { applieds } = filterQuery.current
-  const initialState = applieds.address?.data || ""
-  const [address, setAddress] = useState<string>(initialState)
+  const initialState = applieds[label]?.data || ""
+  const [value, setValue] = useState<string>(initialState)
 
   return (
     <div className="flex flex-col gap-y-2">
@@ -29,7 +29,7 @@ export default function TextFilter ({
         className="input w-full"
         type="text"
         placeholder="Address..."
-        value={address}
+        value={value}
         onChange={event => {
           const data = event.target.value
 
@@ -54,7 +54,7 @@ export default function TextFilter ({
             }
           )
 
-          setAddress(data)
+          setValue(data)
         }
         } />
     </div>
