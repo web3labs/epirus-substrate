@@ -40,6 +40,16 @@ type Contract @entity {
   salt: String
   createdFrom: Extrinsic!
   storageDeposit: BigInt!
+  codeHashChanges: [CodeHashChange!] @derivedFrom(field: "contract")
+}
+
+type CodeHashChange @entity {
+  id: ID!
+  contract: Contract!
+  newCodeHash: String!
+  oldCodeHash: String!
+  changedAt: DateTime!
+  extrinsic: Extrinsic!
 }
 
 type ContractCode @entity {
@@ -59,6 +69,7 @@ type ContractCall @entity {
   contractAddress: String!
   value: BigInt
   gasLimit: BigInt
+  gasUsed: BigInt
   storageDepositLimit: BigInt
   data: Bytes
   createdAt: DateTime! 
@@ -94,12 +105,19 @@ type Extrinsic @entity {
 
 type Activity @entity{
   id: ID!
-  type: String! @index
+  type: ActivityType! @index
   action: String!
   to: Account
   from: Account
   createdAt: DateTime! @index
   args: [Args!]
+  extrinsic: Extrinsic!
+}
+
+enum ActivityType {
+  CONTRACT
+  CONTRACTCALL
+  CODEUPDATED
 }
 
 type Events @entity {

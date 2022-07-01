@@ -1,3 +1,5 @@
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable max-classes-per-file */
 import * as ss58 from "@subsquid/ss58";
 import { toHex } from "@subsquid/util-internal-hex";
 import {
@@ -7,6 +9,7 @@ import {
   ResolvedBalancesWithdrawEvent,
   ResolvedContractEmittedEvent,
   ResolvedContractsCodeStoredEvent,
+  ResolvedContractsCodeUpdatedEvent,
   ResolvedContractsInstantiatedEvent,
   ResolvedNewAccountEvent,
 } from "chains/normalised-return-types";
@@ -17,6 +20,7 @@ import {
   BalancesTransferEvent,
   BalancesWithdrawEvent,
   ContractsCodeStoredEvent,
+  ContractsContractCodeUpdatedEvent,
   ContractsContractEmittedEvent,
   ContractsInstantiatedEvent,
   SystemNewAccountEvent,
@@ -106,6 +110,22 @@ export class NormalisedContractsCodeStoredEvent extends ContractsCodeStoredEvent
     }
     throw new Error(
       "No runtime version found while decoding [ContractsCodeStoredEvent]"
+    );
+  }
+}
+
+export class NormalisedContractsCodeUpdatedEvent extends ContractsContractCodeUpdatedEvent {
+  resolve(): ResolvedContractsCodeUpdatedEvent {
+    if (this.isV100) {
+      const { contract, newCodeHash, oldCodeHash } = this.asV100;
+      return {
+        contract: ss58.codec(ss58Format).encode(contract),
+        newCodeHash: toHex(newCodeHash),
+        oldCodeHash: toHex(oldCodeHash),
+      };
+    }
+    throw new Error(
+      "No runtime version found while decoding [ContractsContractCodeUpdatedEvent]"
     );
   }
 }

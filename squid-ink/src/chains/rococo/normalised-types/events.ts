@@ -1,3 +1,5 @@
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable max-classes-per-file */
 import * as ss58 from "@subsquid/ss58";
 import { toHex } from "@subsquid/util-internal-hex";
 import {
@@ -5,8 +7,10 @@ import {
   ResolvedBalancesReservedEvent,
   ResolvedBalancesTransferEvent,
   ResolvedBalancesWithdrawEvent,
+  ResolvedContractCodeRemovedEvent,
   ResolvedContractEmittedEvent,
   ResolvedContractsCodeStoredEvent,
+  ResolvedContractsCodeUpdatedEvent,
   ResolvedContractsInstantiatedEvent,
   ResolvedNewAccountEvent,
 } from "chains/normalised-return-types";
@@ -16,7 +20,9 @@ import {
   BalancesReservedEvent,
   BalancesTransferEvent,
   BalancesWithdrawEvent,
+  ContractsCodeRemovedEvent,
   ContractsCodeStoredEvent,
+  ContractsContractCodeUpdatedEvent,
   ContractsContractEmittedEvent,
   ContractsInstantiatedEvent,
   SystemNewAccountEvent,
@@ -98,6 +104,18 @@ export class NormalisedContractsInstantiatedEvent extends ContractsInstantiatedE
   }
 }
 
+export class NormalisedCodeRemovedEvent extends ContractsCodeRemovedEvent {
+  resolve(): ResolvedContractCodeRemovedEvent {
+    if (this.isV16) {
+      const { codeHash } = this.asV16;
+      return { codeHash: toHex(codeHash) };
+    }
+    throw new Error(
+      "No runtime version found while decoding [ContractsCodeRemovedEvent]"
+    );
+  }
+}
+
 export class NormalisedContractsCodeStoredEvent extends ContractsCodeStoredEvent {
   resolve(): ResolvedContractsCodeStoredEvent {
     if (this.isV16) {
@@ -106,6 +124,22 @@ export class NormalisedContractsCodeStoredEvent extends ContractsCodeStoredEvent
     }
     throw new Error(
       "No runtime version found while decoding [ContractsCodeStoredEvent]"
+    );
+  }
+}
+
+export class NormalisedContractsCodeUpdatedEvent extends ContractsContractCodeUpdatedEvent {
+  resolve(): ResolvedContractsCodeUpdatedEvent {
+    if (this.isV16) {
+      const { contract, newCodeHash, oldCodeHash } = this.asV16;
+      return {
+        contract: ss58.codec(ss58Format).encode(contract),
+        newCodeHash: toHex(newCodeHash),
+        oldCodeHash: toHex(oldCodeHash),
+      };
+    }
+    throw new Error(
+      "No runtime version found while decoding [ContractsContractCodeUpdatedEvent]"
     );
   }
 }

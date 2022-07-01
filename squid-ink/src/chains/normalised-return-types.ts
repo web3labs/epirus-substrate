@@ -6,6 +6,11 @@ export interface ResolvedContractsCallCall {
   data?: Uint8Array;
 }
 
+export interface ResolvedContractsSetCodeCall {
+  contractAddress: string;
+  codeHash: string;
+}
+
 export interface ResolvedBalancesTransferEvent {
   from: string;
   to: string;
@@ -32,8 +37,18 @@ export interface ResolvedContractsInstantiatedEvent {
   contract: string;
 }
 
+export interface ResolvedContractCodeRemovedEvent {
+  codeHash: string;
+}
+
 export interface ResolvedContractsCodeStoredEvent {
   codeHash: string;
+}
+
+export interface ResolvedContractsCodeUpdatedEvent {
+  contract: string;
+  newCodeHash: string;
+  oldCodeHash: string;
 }
 
 export interface ResolvedContractEmittedEvent {

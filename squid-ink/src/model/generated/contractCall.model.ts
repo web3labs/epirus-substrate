@@ -24,6 +24,9 @@ export class ContractCall {
   gasLimit!: bigint | undefined | null
 
   @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
+  gasUsed!: bigint | undefined | null
+
+  @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
   storageDepositLimit!: bigint | undefined | null
 
   @Column_("bytea", {nullable: true})

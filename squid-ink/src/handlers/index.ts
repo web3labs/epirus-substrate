@@ -2,6 +2,7 @@ import {
   contractsCodeStoredEventHandler,
   contractsInstantiatedEventHandler,
   contractsContractEmittedEventHandler,
+  contractsContractCodeUpdatedEventHandler,
 } from "./contracts-events";
 import {
   balancesEndowedEventHandler,
@@ -25,6 +26,10 @@ const eventHandlers = [
   {
     name: "contracts.ContractEmitted",
     callback: contractsContractEmittedEventHandler,
+  },
+  {
+    name: "contracts.ContractCodeUpdated",
+    callback: contractsContractCodeUpdatedEventHandler,
   },
   {
     name: "balances.Transfer",

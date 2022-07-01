@@ -1,7 +1,9 @@
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, Index as Index_, ManyToOne as ManyToOne_} from "typeorm"
 import * as marshal from "./marshal"
+import {ActivityType} from "./_activityType"
 import {Account} from "./account.model"
 import {Args} from "./_args"
+import {Extrinsic} from "./extrinsic.model"
 
 @Entity_()
 export class Activity {
@@ -13,8 +15,8 @@ export class Activity {
   id!: string
 
   @Index_()
-  @Column_("text", {nullable: false})
-  type!: string
+  @Column_("varchar", {length: 12, nullable: false})
+  type!: ActivityType
 
   @Column_("text", {nullable: false})
   action!: string
@@ -33,4 +35,8 @@ export class Activity {
 
   @Column_("jsonb", {transformer: {to: obj => obj == null ? undefined : obj.map((val: any) => val.toJSON()), from: obj => obj == null ? undefined : marshal.fromList(obj, val => new Args(undefined, marshal.nonNull(val)))}, nullable: true})
   args!: (Args)[] | undefined | null
+
+  @Index_()
+  @ManyToOne_(() => Extrinsic, {nullable: false})
+  extrinsic!: Extrinsic
 }

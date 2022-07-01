@@ -1,71 +1,66 @@
-import type { Result } from "./support";
+import type {Result} from './support'
 
-export type AccountId32 = Uint8Array;
+export type AccountId32 = Uint8Array
 
-export type H256 = Uint8Array;
+export type H256 = Uint8Array
 
-export type MultiAddress =
-  | MultiAddress_Id
-  | MultiAddress_Index
-  | MultiAddress_Raw
-  | MultiAddress_Address32
-  | MultiAddress_Address20;
+export type MultiAddress = MultiAddress_Id | MultiAddress_Index | MultiAddress_Raw | MultiAddress_Address32 | MultiAddress_Address20
 
 export interface MultiAddress_Id {
-  __kind: "Id";
-  value: AccountId32;
+  __kind: 'Id'
+  value: AccountId32
 }
 
 export interface MultiAddress_Index {
-  __kind: "Index";
-  value: null;
+  __kind: 'Index'
+  value: null
 }
 
 export interface MultiAddress_Raw {
-  __kind: "Raw";
-  value: Uint8Array;
+  __kind: 'Raw'
+  value: Uint8Array
 }
 
 export interface MultiAddress_Address32 {
-  __kind: "Address32";
-  value: Uint8Array;
+  __kind: 'Address32'
+  value: Uint8Array
 }
 
 export interface MultiAddress_Address20 {
-  __kind: "Address20";
-  value: Uint8Array;
+  __kind: 'Address20'
+  value: Uint8Array
 }
 
 export interface AccountData {
-  free: bigint;
-  reserved: bigint;
-  miscFrozen: bigint;
-  feeFrozen: bigint;
+  free: bigint
+  reserved: bigint
+  miscFrozen: bigint
+  feeFrozen: bigint
 }
 
 export interface PrefabWasmModule {
-  instructionWeightsVersion: number;
-  initial: number;
-  maximum: number;
-  code: Uint8Array;
+  instructionWeightsVersion: number
+  initial: number
+  maximum: number
+  code: Uint8Array
 }
 
 export interface RawContractInfo {
-  trieId: Uint8Array;
-  codeHash: H256;
-  storageDeposit: bigint;
+  trieId: Uint8Array
+  codeHash: H256
+  storageDeposit: bigint
 }
 
 export interface OwnerInfo {
-  owner: AccountId32;
-  deposit: bigint;
-  refcount: bigint;
+  owner: AccountId32
+  deposit: bigint
+  refcount: bigint
 }
 
 export interface AccountInfo {
-  nonce: number;
-  consumers: number;
-  providers: number;
-  sufficients: number;
-  data: AccountData;
+  nonce: number
+  consumers: number
+  providers: number
+  sufficients: number
+  data: AccountData
 }

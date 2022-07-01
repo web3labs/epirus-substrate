@@ -1,0 +1,5 @@
+export enum ActivityType {
+  CONTRACT = "CONTRACT",
+  CONTRACTCALL = "CONTRACTCALL",
+  CODEUPDATED = "CODEUPDATED",
+}

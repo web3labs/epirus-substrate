@@ -1,6 +1,6 @@
 {
-  "outDir": "src/chains/rococo/types",
-  "chainVersions": "rococoVersions.json",
+  "outDir": "src/chains/local/types",
+  "chainVersions": "devChainVersions.json",
   "events": [
     "balances.Transfer",
     "balances.Endowed",
@@ -10,12 +10,13 @@
     "contracts.Instantiated",
     "contracts.ContractEmitted",
     "contracts.CodeStored",
+    "contracts.ContractCodeUpdated",
+    "contracts.CodeRemoved",
     "system.NewAccount"
   ],
   "calls": [
     "contracts.call",
-    "contracts.upload_code",
-    "contracts.remove_code"
+    "contracts.set_code"
   ],
   "storage": [
     "Contracts.CodeStorage",

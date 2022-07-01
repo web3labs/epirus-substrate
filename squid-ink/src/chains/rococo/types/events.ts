@@ -157,6 +157,37 @@ export class BalancesWithdrawEvent {
   }
 }
 
+export class ContractsCodeRemovedEvent {
+  constructor(private ctx: EventContext) {
+    assert(this.ctx.event.name === 'contracts.CodeRemoved')
+  }
+
+  /**
+   * A code with the specified hash was removed.
+   */
+  get isV16(): boolean {
+    return this.ctx._chain.getEventHash('contracts.CodeRemoved') === '9e5c86c297bd88fae31bc40119e44695818ddc3ab8842b90daeb12771005c70d'
+  }
+
+  /**
+   * A code with the specified hash was removed.
+   */
+  get asV16(): {codeHash: v16.H256} {
+    assert(this.isV16)
+    return this.ctx._chain.decodeEvent(this.ctx.event)
+  }
+
+  get isLatest(): boolean {
+    deprecateLatest()
+    return this.isV16
+  }
+
+  get asLatest(): {codeHash: v16.H256} {
+    deprecateLatest()
+    return this.asV16
+  }
+}
+
 export class ContractsCodeStoredEvent {
   constructor(private ctx: EventContext) {
     assert(this.ctx.event.name === 'contracts.CodeStored')
@@ -183,6 +214,37 @@ export class ContractsCodeStoredEvent {
   }
 
   get asLatest(): {codeHash: v16.H256} {
+    deprecateLatest()
+    return this.asV16
+  }
+}
+
+export class ContractsContractCodeUpdatedEvent {
+  constructor(private ctx: EventContext) {
+    assert(this.ctx.event.name === 'contracts.ContractCodeUpdated')
+  }
+
+  /**
+   * A contract's code was updated.
+   */
+  get isV16(): boolean {
+    return this.ctx._chain.getEventHash('contracts.ContractCodeUpdated') === 'f9de6decda4961d31d7cf59e3f8acd4849a220323ebabbb036464d999de54c18'
+  }
+
+  /**
+   * A contract's code was updated.
+   */
+  get asV16(): {contract: v16.AccountId32, newCodeHash: v16.H256, oldCodeHash: v16.H256} {
+    assert(this.isV16)
+    return this.ctx._chain.decodeEvent(this.ctx.event)
+  }
+
+  get isLatest(): boolean {
+    deprecateLatest()
+    return this.isV16
+  }
+
+  get asLatest(): {contract: v16.AccountId32, newCodeHash: v16.H256, oldCodeHash: v16.H256} {
     deprecateLatest()
     return this.asV16
   }
