@@ -46,27 +46,29 @@ export default function DateRangeFilter ({
           const { startDate, endDate } = data
           const clauses : Record<string, string> = {}
 
-          if (startDate) {
+          if (startDate && endDate) {
             clauses.createdAt_gt = startDate.toISOString()
-          }
-          if (endDate) {
             clauses.createdAt_lt = endDate.toISOString()
-          }
 
-          setFilterQuery(mergeFilterQuery(
-            {
-              current: cleanFilterQuery,
-              clauses,
-              applied: {
-                dateRange: {
-                  chip: <Chip key="chip-date_range"
-                    label="Date Range"
-                  />,
-                  data
+            setFilterQuery(mergeFilterQuery(
+              {
+                current: cleanFilterQuery,
+                clauses,
+                applied: {
+                  dateRange: {
+                    chip: <Chip key="chip-date_range"
+                      label="Date Range"
+                    />,
+                    data
+                  }
                 }
               }
-            }
-          ))
+            ))
+          } else {
+            // Remove our filter if the value is empty
+            delete cleanFilterQuery.applieds.dateRange
+            setFilterQuery(cleanFilterQuery)
+          }
 
           return dispatch({ type: "dateChange", payload: data })
         }}

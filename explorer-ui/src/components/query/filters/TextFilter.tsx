@@ -55,19 +55,24 @@ export default function TextFilter ({
 
           // Update filter
           const data = event.target.value
-
-          setFilterQuery(mergeFilterQuery(
-            {
-              current: cleanFilterQuery,
-              clauses: template(data),
-              applied: {
-                [selector]: {
-                  chip: <Chip key={`chip-${selector}`} label={label}/>,
-                  data
+          if (data === "") {
+            // Remove our filter if the value is empty
+            delete cleanFilterQuery.applieds[selector]
+            setFilterQuery(cleanFilterQuery)
+          } else {
+            setFilterQuery(mergeFilterQuery(
+              {
+                current: cleanFilterQuery,
+                clauses: template(data),
+                applied: {
+                  [selector]: {
+                    chip: <Chip key={`chip-${selector}`} label={label}/>,
+                    data
+                  }
                 }
               }
-            }
-          ))
+            ))
+          }
 
           setValue(data)
         }
