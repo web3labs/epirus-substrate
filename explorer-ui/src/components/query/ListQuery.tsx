@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from "react"
-import useSquid from "../../hooks/useSquid"
+import useSquid, { SquidRefreshProps } from "../../hooks/useSquid"
 import { PageQuery } from "../../types/pagination"
 import Hashcode from "../../utils/hashcode"
 
@@ -9,22 +9,24 @@ interface Props {
   pageQuery: PageQuery
   render: ({ data, queryInState, setQueryInState }:
     {data: any, queryInState: PageQuery, setQueryInState: (pageQuery: PageQuery) => void}) => JSX.Element | null
+  refresh?: SquidRefreshProps
 }
 
-// TODO: add prop refresh to control useSquid refresh options
 export default function ListQuery (props: Props) {
   const {
     query,
     dataSelector,
     render,
-    pageQuery
+    pageQuery,
+    refresh
   } = props
   const hash = useRef(Hashcode.object({}))
   const [queryInState, setQueryInState] = useState(pageQuery)
 
   const [result] = useSquid({
     query,
-    variables: { ...queryInState }
+    variables: { ...queryInState },
+    refresh
   })
 
   const { data, fetching } = result
@@ -38,6 +40,10 @@ export default function ListQuery (props: Props) {
       return null
     }
 
-    return render({ data: data[dataSelector], queryInState: queryInState as PageQuery, setQueryInState })
+    return render({
+      data: data[dataSelector],
+      queryInState: queryInState as PageQuery,
+      setQueryInState
+    })
   }, [hash.current])
 }

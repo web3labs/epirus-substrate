@@ -16,7 +16,7 @@ export default function SortBy (
   return (<Select
     className={className}
     options={options}
-    selected={options[0]}
+    selected={options.find(opt => opt.value === pageQuery.orderBy)}
     onChange={option => {
       setQuery(Object.assign(
         {},

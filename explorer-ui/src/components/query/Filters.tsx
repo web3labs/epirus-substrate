@@ -2,7 +2,7 @@ import { Popover } from "@headlessui/react"
 import { FilterIcon } from "@heroicons/react/solid"
 import { XIcon } from "@heroicons/react/outline"
 
-import React, { useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { PageQuery } from "../../types/pagination"
 
 export interface FilterApplied {
@@ -92,6 +92,20 @@ export default function Filters ({
   const [filterQuery, setFilterQuery] = useState({ pageQuery, applieds: {} })
   const initialQuery = useRef({ pageQuery, applieds: {} })
   const popButtonRef = useRef<HTMLButtonElement>(null)
+
+  // Updates from other places, e.g. sorting
+  useEffect(() => {
+    const currentPageQuery = initialQuery.current.pageQuery
+    initialQuery.current = {
+      pageQuery: { ...currentPageQuery, orderBy: pageQuery.orderBy },
+      applieds: {}
+    }
+
+    setFilterQuery({
+      pageQuery: JSON.parse(JSON.stringify(pageQuery)),
+      applieds: filterQuery.applieds
+    })
+  }, [pageQuery])
 
   const props = filterProps
     ? { ...filterProps, filterQuery, setFilterQuery }

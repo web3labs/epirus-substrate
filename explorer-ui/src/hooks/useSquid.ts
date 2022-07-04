@@ -4,13 +4,15 @@ import { useQuery, UseQueryState } from "urql"
 import { WarningToast } from "../components/Toast"
 import { PageQuery } from "../types/pagination"
 
+export interface SquidRefreshProps {
+  millis: number,
+  disabled: boolean
+}
+
 interface Props {
   query: string
   variables: PageQuery | object
-  refresh?: {
-    millis: number,
-    disabled: boolean
-  }
+  refresh?: SquidRefreshProps
 }
 
 export default function useSquid ({
