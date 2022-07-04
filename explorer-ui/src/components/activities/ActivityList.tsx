@@ -85,9 +85,16 @@ export default function ActivityList ({
           ? <Filters
             filterTypes={[
               DateRangeFilter,
-              textFilterOf("from", value => (
-                { from: { id_eq: value } }
-              ))
+              textFilterOf(
+                {
+                  selector: "from",
+                  label: "From Address",
+                  template: value => (
+                    { from: { id_eq: value } }
+                  ),
+                  placeholder: "Address..."
+                }
+              )
             ]}
             setQuery={setQueryInState}
             pageQuery={queryInState}

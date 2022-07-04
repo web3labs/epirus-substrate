@@ -6,6 +6,9 @@ import List, { ListProps } from "../commons/List"
 import Pagination from "../navigation/Pagination"
 import SortBy from "../query/SortBy"
 import ListQuery from "../query/ListQuery"
+import Filters from "../query/Filters"
+import DateRangeFilter from "../query/filters/DateRangeFilter"
+import { filterOf as textFilterOf } from "../query/filters/TextFilter"
 
 const QUERY = `
 query($where: ContractWhereInput = {}, $first: Int!, $after: String = "", $orderBy: [ContractOrderByInput!]! = [createdAt_DESC]) {
@@ -80,12 +83,38 @@ export default function ContractList ({
             pageQuery={queryInState}
           />
           : undefined
+        const filter = filterable
+          ? <Filters
+            filterTypes={[
+              DateRangeFilter,
+              textFilterOf({
+                selector: "id_eq",
+                label: "Contract",
+                template: value => (
+                  { id_eq: value }
+                ),
+                placeholder: "Address..."
+              }),
+              textFilterOf({
+                selector: "deployer",
+                label: "Deployer",
+                template: value => (
+                  { deployer: { id_eq: value } }
+                ),
+                placeholder: "Address..."
+              })
+            ]}
+            setQuery={setQueryInState}
+            pageQuery={queryInState}
+          />
+          : undefined
 
         return (
           <List
             title={title}
             description={description}
             sort={sort}
+            filter={filter}
             footer={
               <Pagination
                 page={page}

@@ -1,6 +1,6 @@
 import React, { useReducer } from "react"
 import { DateRangeInput, FocusedInput, OnDatesChangeProps } from "@datepicker-react/styled"
-import { FilterProps, mergeFilterQuery } from "../Filters"
+import { FilterProps, mergeFilterQuery, resetFilterQuery } from "../Filters"
 import Chip from "./Chip"
 
 interface Action { type: string, payload: FocusedInput | OnDatesChangeProps}
@@ -18,9 +18,9 @@ function reducer (state : OnDatesChangeProps, action : Action) : OnDatesChangePr
 
 export default function DateRangeFilter ({
   filterQuery,
-  refresh
+  setFilterQuery
 } : FilterProps) {
-  const { applieds } = filterQuery.current
+  const { applieds } = filterQuery
   const initialState = applieds.dateRange?.data || {
     startDate: null,
     endDate: null,
@@ -33,35 +33,41 @@ export default function DateRangeFilter ({
       <h3 className="text-sm">Date Range</h3>
       <DateRangeInput
         onDatesChange={data => {
+          // Reset filter
+          const cleanFilterQuery = resetFilterQuery({
+            current: filterQuery,
+            condition: entry => (
+              entry.createdAt_gt !== undefined ||
+              entry.createdAt_lt !== undefined
+            )
+          })
+
+          // Update filter changes
           const { startDate, endDate } = data
           const clauses : Record<string, string> = {}
+
           if (startDate) {
             clauses.createdAt_gt = startDate.toISOString()
           }
           if (endDate) {
             clauses.createdAt_lt = endDate.toISOString()
           }
-          filterQuery.current = mergeFilterQuery(
+
+          setFilterQuery(mergeFilterQuery(
             {
-              current: filterQuery.current,
+              current: cleanFilterQuery,
               clauses,
               applied: {
                 dateRange: {
                   chip: <Chip key="chip-date_range"
                     label="Date Range"
-                    onRemove={() => {
-                      const filter = filterQuery.current
-                      delete filter.applieds.dateRange
-                      delete (filter.pageQuery?.where as any).createdAt_lt
-                      delete (filter.pageQuery?.where as any).createdAt_gt
-                      refresh(filter)
-                    }}
                   />,
                   data
                 }
               }
             }
-          )
+          ))
+
           return dispatch({ type: "dateChange", payload: data })
         }}
         onFocusChange={focusedInput => dispatch({ type: "focusChange", payload: focusedInput })}

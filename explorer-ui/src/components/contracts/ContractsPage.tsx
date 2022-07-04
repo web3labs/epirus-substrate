@@ -9,8 +9,12 @@ export default function ContractsPage () {
       <Breadcrumbs/>
       <Box className="content">
         <ContractList
-          pageQuery={{ first: 15 }}
+          pageQuery={{
+            first: 15,
+            orderBy: "createdAt_DESC"
+          }}
           sortable={true}
+          filterable={true}
           title="Contracts"
         />
       </Box>

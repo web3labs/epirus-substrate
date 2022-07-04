@@ -2,7 +2,7 @@ import { Popover } from "@headlessui/react"
 import { FilterIcon } from "@heroicons/react/solid"
 import { XIcon } from "@heroicons/react/outline"
 
-import React, { MutableRefObject, useMemo, useRef, useState } from "react"
+import React, { useRef, useState } from "react"
 import { PageQuery } from "../../types/pagination"
 
 export interface FilterApplied {
@@ -16,25 +16,50 @@ export interface FilterQuery {
 }
 
 export interface FilterProps {
-  filterQuery: MutableRefObject<FilterQuery>,
-  refresh: (updated: FilterQuery) => void,
+  filterQuery: FilterQuery,
+  setFilterQuery: (query: FilterQuery) => void,
   className?: string
+}
+
+export function resetFilterQuery ({ current, condition }: {
+  current: FilterQuery, condition: (clause: any) => boolean
+}) {
+  const copy = Object.assign({}, current)
+  const filterChain = copy.pageQuery.where?.AND
+  if (filterChain) {
+    copy.pageQuery.where.AND = filterChain.filter(condition)
+  }
+  return copy
 }
 
 export function mergeFilterQuery ({ current, clauses, applied }: {
   current: FilterQuery, clauses: Record<string, string>, applied: Record<string, any>
 }) {
   const { pageQuery } = current
+
+  const where = (pageQuery.where || {}) as unknown as any
+  let andClauses = [] as any[]
+  if (where.AND) {
+    andClauses = where.AND
+  } else {
+    const entries = Object.entries(where).map(([k, v]) => ({ k: v }))
+    if (entries.length > 0) {
+      andClauses = andClauses.concat(entries)
+    }
+  }
+  andClauses.push(clauses)
+
   return {
     applieds: {
       ...current.applieds,
       ...applied
     },
-    pageQuery: Object.assign(
-      {},
+    pageQuery: Object.assign({},
       pageQuery,
       {
-        where: Object.assign({}, pageQuery.where || {}, clauses)
+        where: {
+          AND: andClauses
+        }
       }
     )
   }
@@ -42,8 +67,7 @@ export function mergeFilterQuery ({ current, clauses, applied }: {
 
 function withFilters <P extends object> (
   WrappedComponent : React.ComponentType<P>,
-  key: string,
-  props : FilterProps
+  key: string
 ) {
   return function WithFilters (props : any) {
     return <WrappedComponent
@@ -65,61 +89,59 @@ export default function Filters ({
   pageQuery: PageQuery,
   filterProps?: FilterProps
 }) {
-  const [forceUpdate, setForceUpdate] = useState(0)
-  const filterQuery = useRef({ pageQuery, applieds: {} })
+  const [filterQuery, setFilterQuery] = useState({ pageQuery, applieds: {} })
+  const initialQuery = useRef({ pageQuery, applieds: {} })
   const popButtonRef = useRef<HTMLButtonElement>(null)
 
-  // XXX hack
-  const refresh = (updated: FilterQuery) => {
-    filterQuery.current = updated
-    setForceUpdate(new Date().getTime())
-    setQuery(filterQuery.current.pageQuery)
+  const props = filterProps
+    ? { ...filterProps, filterQuery, setFilterQuery }
+    : { filterQuery, setFilterQuery }
+  const components = (Array.isArray(filterTypes)
+    ? filterTypes.map((c, i) => withFilters(c, "f-" + i))
+    : [withFilters(filterTypes, "f-0")])
+    .map(c => c(props))
+
+  function handleApply () {
+    // We want a deep clone, beaware of the refs.
+    setQuery(JSON.parse(JSON.stringify(filterQuery.pageQuery)))
+    popButtonRef?.current?.click()
   }
 
-  const filters = useMemo(() => {
-    const props = filterProps
-      ? { ...filterProps, filterQuery, refresh }
-      : { filterQuery, refresh }
-    const components = (Array.isArray(filterTypes)
-      ? filterTypes.map((c, i) => withFilters(c, "f-" + i, props))
-      : [withFilters(filterTypes, "f-0", props)])
-      .map(c => c(props))
+  function handleReset () {
+    setQuery(initialQuery.current.pageQuery)
 
-    function handleClick () {
-      setQuery(filterQuery.current.pageQuery)
-      popButtonRef?.current?.click()
-    }
-    return (
-      <>
-        <div className="flex w-full justify-end">
-          <Popover.Button className="p-1 text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
-            <span className="sr-only">Close menu</span>
-            <XIcon className="h-6 w-6" aria-hidden="true" />
-          </Popover.Button>
-        </div>
-        <div className="flex flex-col gap-y-4 mx-5">
-          {components}
-        </div>
-        <div className="flex gap-x-4 mx-5 mt-4 py-4">
-          <button className="btn btn-primary" onClick={handleClick}>
+    setFilterQuery(initialQuery.current)
+    popButtonRef?.current?.click()
+  }
+
+  const filters = (
+    <>
+      <div className="flex w-full justify-end">
+        <Popover.Button className="p-1 text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
+          <span className="sr-only">Close menu</span>
+          <XIcon className="h-6 w-6" aria-hidden="true" />
+        </Popover.Button>
+      </div>
+      <div className="flex flex-col gap-y-4 mx-5">
+        {components}
+      </div>
+      <div className="flex gap-x-4 mx-5 mt-4 py-4">
+        <button className="btn btn-primary" onClick={handleApply}>
             Apply Filters
-          </button>
-          <button className="btn btn-secondary">
+        </button>
+        <button className="btn btn-secondary" onClick={handleReset}>
             Reset All
-          </button>
-        </div>
-      </>
-    )
-  }, [filterQuery.current])
+        </button>
+      </div>
+    </>
+  )
 
-  const chips = useMemo(() => {
-    const { applieds } = filterQuery.current
-    return Object.keys(applieds).length === 0
-      ? "Filters"
-      : (Object.values(applieds) as unknown as FilterApplied[]).map(
-        a => a.chip
-      )
-  }, [filterQuery.current, forceUpdate])
+  const { applieds } = filterQuery
+  const chips = Object.keys(applieds).length === 0
+    ? "Filters"
+    : (Object.values(applieds) as unknown as FilterApplied[]).map(
+      a => a.chip
+    )
 
   return (
     <Popover className="relative">
