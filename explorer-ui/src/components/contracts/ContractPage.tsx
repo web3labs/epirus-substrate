@@ -5,7 +5,7 @@ import { useChainProperties } from "../../contexts/ChainContext"
 import useSquid from "../../hooks/useSquid"
 import { Contract } from "../../types/contracts"
 import CodeBadge from "../badges/CodeBadge"
-import Box from "../commons/Box"
+import Box, { BoxHead } from "../commons/Box"
 import AccountAddress from "../accounts/AccountAddress"
 import Segment from "../commons/Segment"
 import { classNames } from "../../utils/strings"
@@ -151,19 +151,17 @@ export default function ContractPage () {
       <div className="content">
 
         <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-2">
-          <Box className="col-span-2 divide-y gap-y-2">
-            <div className="flex flex-row flex-wrap w-full items-start justify-between mt-4 gap-x-2">
-              <h3 className="mx-5 mb-1 font-medium">
+          <Box className="col-span-2 divide-y">
+            <BoxHead
+              title={
                 <Copy text={id}>
                   <AccountAddress address={id}>
                     <CodeBadge/>
                   </AccountAddress>
                 </Copy>
-              </h3>
-              <div className="flex flex-row flex-wrap gap-x-2 px-4">
-                <Tag label="wasm" />
-              </div>
-            </div>
+              }
+              tag={ <Tag label="wasm" />}
+            />
             <Segment>
               <DefinitionList>
                 <Definition label="Time" term={

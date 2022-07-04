@@ -2,7 +2,7 @@ import React, { useMemo } from "react"
 
 import { useParams } from "react-router-dom"
 import useSquid from "../../hooks/useSquid"
-import Box from "../commons/Box"
+import Box, { BoxHead } from "../commons/Box"
 import Segment from "../commons/Segment"
 import AccountLink from "../accounts/AccountLink"
 import Breadcrumbs from "../navigation/Breadcrumbs"
@@ -100,9 +100,9 @@ export default function CodePage () {
     <>
       <Breadcrumbs/>
       <div className="content">
-        <Box className="divide-y gap-y-2">
-          <div className="flex flex-row flex-wrap w-full items-start justify-between mt-4 gap-x-2">
-            <h3 className="mx-5 mb-1 font-medium">
+        <Box className="divide-y">
+          <BoxHead
+            title={
               <Copy text={id}>
                 <div className="flex gap-2 items-center text-sm">
                   <span className="bg-lime-200 rounded-full p-1.5">
@@ -111,11 +111,9 @@ export default function CodePage () {
                   <HexText>{id}</HexText>
                 </div>
               </Copy>
-            </h3>
-            <div className="flex flex-row flex-wrap gap-x-2 px-4">
-              <Tag label="wasm" />
-            </div>
-          </div>
+            }
+            tag={<Tag label="wasm" />}
+          />
           <Segment>
             <DefinitionList>
               <Definition label="Time" term={

@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom"
 import { useChainProperties } from "../../contexts/ChainContext"
 import useSquid from "../../hooks/useSquid"
 import CodeBadge from "../badges/CodeBadge"
-import Box from "../commons/Box"
+import Box, { BoxHead } from "../commons/Box"
 import AccountAddress from "./AccountAddress"
 import Segment from "../commons/Segment"
 import Breadcrumbs from "../navigation/Breadcrumbs"
@@ -102,19 +102,19 @@ export default function AccountPage () {
       <div className="content">
 
         <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-2">
-          <Box className="col-span-2">
-            <div className="flex flex-row flex-wrap w-full items-start justify-between mt-4 gap-x-2">
-              <h3 className="mx-5 mb-1 font-medium">
+          <Box className="col-span-2 divide-y">
+            <BoxHead
+              title={
                 <Copy text={id}>
                   <AccountAddress address={id}>
                     {contract && <CodeBadge/>}
                   </AccountAddress>
                 </Copy>
-              </h3>
-              <div className="flex flex-row flex-wrap gap-x-2 px-4">
+              }
+              tag={
                 <Tag label={contract ? "contract" : "EOA"} />
-              </div>
-            </div>
+              }
+            />
 
             <Segment>
               <DefinitionList>
