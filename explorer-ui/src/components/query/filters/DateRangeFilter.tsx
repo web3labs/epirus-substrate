@@ -1,6 +1,6 @@
 import React, { useReducer } from "react"
 import { DateRangeInput, FocusedInput, OnDatesChangeProps } from "@datepicker-react/styled"
-import { FilterProps, mergeFilterQuery, resetFilterQuery } from "../Filters"
+import { FilterProps } from "../Filters"
 import Chip from "./Chip"
 
 interface Action { type: string, payload: FocusedInput | OnDatesChangeProps}
@@ -20,8 +20,7 @@ export default function DateRangeFilter ({
   filterQuery,
   setFilterQuery
 } : FilterProps) {
-  const { applieds } = filterQuery
-  const initialState = applieds.dateRange?.data || {
+  const initialState = filterQuery.dateRange?.data || {
     startDate: null,
     endDate: null,
     focusedInput: null
@@ -33,41 +32,26 @@ export default function DateRangeFilter ({
       <h3 className="text-sm">Date Range</h3>
       <DateRangeInput
         onDatesChange={data => {
-          // Reset filter
-          const cleanFilterQuery = resetFilterQuery({
-            current: filterQuery,
-            condition: entry => (
-              entry.createdAt_gt !== undefined ||
-              entry.createdAt_lt !== undefined
-            )
-          })
-
-          // Update filter changes
           const { startDate, endDate } = data
           const clauses : Record<string, string> = {}
 
-          if (startDate && endDate) {
+          if (startDate === null || endDate === null) {
+            delete filterQuery.dateRange
+            setFilterQuery({ ...filterQuery })
+          } else {
             clauses.createdAt_gt = startDate.toISOString()
             clauses.createdAt_lt = endDate.toISOString()
 
-            setFilterQuery(mergeFilterQuery(
-              {
-                current: cleanFilterQuery,
-                clauses,
-                applied: {
-                  dateRange: {
-                    chip: <Chip key="chip-date_range"
-                      label="Date Range"
-                    />,
-                    data
-                  }
-                }
+            setFilterQuery({
+              ...filterQuery,
+              dateRange: {
+                chip: <Chip key="chip-date_range"
+                  label="Date Range"
+                />,
+                data,
+                clauses
               }
-            ))
-          } else {
-            // Remove our filter if the value is empty
-            delete cleanFilterQuery.applieds.dateRange
-            setFilterQuery(cleanFilterQuery)
+            })
           }
 
           return dispatch({ type: "dateChange", payload: data })

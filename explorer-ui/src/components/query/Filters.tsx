@@ -5,15 +5,13 @@ import { XIcon } from "@heroicons/react/outline"
 import React, { useEffect, useRef, useState } from "react"
 import { PageQuery } from "../../types/pagination"
 
-export interface FilterApplied {
-  data: any,
+interface FilterApplied {
+  data: any
   chip: JSX.Element
+  clauses: any
 }
 
-export interface FilterQuery {
-  pageQuery: PageQuery,
-  applieds: Record<string, FilterApplied>
-}
+export type FilterQuery = Record<string, FilterApplied>
 
 export interface FilterProps {
   filterQuery: FilterQuery,
@@ -21,48 +19,38 @@ export interface FilterProps {
   className?: string
 }
 
-export function resetFilterQuery ({ current, condition }: {
-  current: FilterQuery, condition: (clause: any) => boolean
+function buildPageQuery ({ filterQuery, pageQuery }: {
+  filterQuery: FilterQuery,
+  pageQuery: PageQuery
 }) {
-  const copy = Object.assign({}, current)
-  const filterChain = copy.pageQuery.where?.AND
-  if (filterChain) {
-    copy.pageQuery.where.AND = filterChain.filter(condition)
-  }
-  return copy
-}
-
-export function mergeFilterQuery ({ current, clauses, applied }: {
-  current: FilterQuery, clauses: Record<string, string>, applied: Record<string, any>
-}) {
-  const { pageQuery } = current
-
+  // Transform to AND query if needed
   const where = (pageQuery.where || {}) as unknown as any
   let andClauses = [] as any[]
   if (where.AND) {
     andClauses = where.AND
   } else {
-    const entries = Object.entries(where).map(([k, v]) => ({ k: v }))
+    const entries = Object.entries(where).map(([k, v]) => ({ [k]: v }))
     if (entries.length > 0) {
       andClauses = andClauses.concat(entries)
     }
   }
-  andClauses.push(clauses)
 
-  return {
-    applieds: {
-      ...current.applieds,
-      ...applied
-    },
-    pageQuery: Object.assign({},
-      pageQuery,
-      {
-        where: {
-          AND: andClauses
-        }
-      }
+  // Add filter clauses
+  const filterClauses = Object.values(filterQuery)
+    .flatMap(f => Object.entries(f.clauses)
+      .map(([k, v] : any) => ({ [k]: v }))
     )
-  }
+  andClauses = andClauses.concat(filterClauses)
+
+  // Shallow copied page query
+  return Object.assign({},
+    pageQuery,
+    {
+      where: {
+        AND: andClauses
+      }
+    }
+  )
 }
 
 function withFilters <P extends object> (
@@ -89,23 +77,9 @@ export default function Filters ({
   pageQuery: PageQuery,
   filterProps?: FilterProps
 }) {
-  const [filterQuery, setFilterQuery] = useState({ pageQuery, applieds: {} })
-  const initialQuery = useRef({ pageQuery, applieds: {} })
+  const [filterQuery, setFilterQuery] = useState<FilterQuery>({})
+  const pageQueryRef = useRef<PageQuery>(pageQuery)
   const popButtonRef = useRef<HTMLButtonElement>(null)
-
-  // Updates from other places, e.g. sorting
-  useEffect(() => {
-    const currentPageQuery = initialQuery.current.pageQuery
-    initialQuery.current = {
-      pageQuery: { ...currentPageQuery, orderBy: pageQuery.orderBy },
-      applieds: {}
-    }
-
-    setFilterQuery({
-      pageQuery: JSON.parse(JSON.stringify(pageQuery)),
-      applieds: filterQuery.applieds
-    })
-  }, [pageQuery])
 
   const props = filterProps
     ? { ...filterProps, filterQuery, setFilterQuery }
@@ -115,16 +89,30 @@ export default function Filters ({
     : [withFilters(filterTypes, "f-0")])
     .map(c => c(props))
 
+  // Handles updates from other places
+  useEffect(() => {
+    const currentPageQuery = pageQueryRef.current
+    pageQueryRef.current = {
+      ...currentPageQuery,
+      orderBy: pageQuery.orderBy,
+      first: pageQuery.first,
+      after: pageQuery.after
+    }
+  }, [pageQuery])
+
   function handleApply () {
-    // We want a deep clone, beaware of the refs.
-    setQuery(JSON.parse(JSON.stringify(filterQuery.pageQuery)))
+    setQuery(buildPageQuery({
+      filterQuery,
+      pageQuery: pageQueryRef.current
+    }))
+
     popButtonRef?.current?.click()
   }
 
   function handleReset () {
-    setQuery(initialQuery.current.pageQuery)
+    setQuery(pageQueryRef.current)
+    setFilterQuery({})
 
-    setFilterQuery(initialQuery.current)
     popButtonRef?.current?.click()
   }
 
@@ -150,10 +138,9 @@ export default function Filters ({
     </>
   )
 
-  const { applieds } = filterQuery
-  const chips = Object.keys(applieds).length === 0
+  const chips = Object.keys(filterQuery).length === 0
     ? "Filters"
-    : (Object.values(applieds) as unknown as FilterApplied[]).map(
+    : (Object.values(filterQuery) as unknown as FilterApplied[]).map(
       a => a.chip
     )
 

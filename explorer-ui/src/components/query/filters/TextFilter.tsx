@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { FilterProps, mergeFilterQuery, resetFilterQuery } from "../Filters"
+import { FilterProps } from "../Filters"
 import Chip from "./Chip"
 
 export function filterOf (
@@ -34,8 +34,7 @@ export default function TextFilter ({
   placeholder,
   template
 } : Props) {
-  const { applieds } = filterQuery
-  const initialState = applieds[selector]?.data || ""
+  const initialState = filterQuery[selector]?.data || ""
   const [value, setValue] = useState<string>(initialState)
 
   return (
@@ -47,31 +46,19 @@ export default function TextFilter ({
         placeholder={placeholder}
         value={value}
         onChange={event => {
-          // Reset filter
-          const cleanFilterQuery = resetFilterQuery({
-            current: filterQuery,
-            condition: entry => entry[selector] === undefined
-          })
-
-          // Update filter
           const data = event.target.value
           if (data === "") {
-            // Remove our filter if the value is empty
-            delete cleanFilterQuery.applieds[selector]
-            setFilterQuery(cleanFilterQuery)
+            delete filterQuery[selector]
+            setFilterQuery({ ...filterQuery })
           } else {
-            setFilterQuery(mergeFilterQuery(
-              {
-                current: cleanFilterQuery,
+            setFilterQuery({
+              ...filterQuery,
+              [selector]: {
+                chip: <Chip key={`chip-${selector}`} label={label}/>,
                 clauses: template(data),
-                applied: {
-                  [selector]: {
-                    chip: <Chip key={`chip-${selector}`} label={label}/>,
-                    data
-                  }
-                }
+                data
               }
-            ))
+            })
           }
 
           setValue(data)
