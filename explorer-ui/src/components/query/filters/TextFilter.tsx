@@ -9,14 +9,15 @@ export function filterOf (
   template: (value : string) => any,
   placeholder?: string
 }) {
-  // eslint-disable-next-line react/display-name
-  return (props: any) => <TextFilter
-    label={label}
-    selector={selector}
-    template={template}
-    placeholder={placeholder}
-    {...props}
-  />
+  return function TextFilterOf (props: any) {
+    return (<TextFilter
+      label={label}
+      selector={selector}
+      template={template}
+      placeholder={placeholder}
+      {...props}
+    />)
+  }
 }
 
 interface Props extends FilterProps {
