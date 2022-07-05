@@ -11,7 +11,7 @@
   }
 
   .link {
-    @apply text-link hover:text-link-dark;
+    @apply text-sky-600 hover:text-sky-700;
   }
 
   .content {
@@ -75,7 +75,7 @@
     @apply bg-blue-500 text-white hover:bg-blue-700 focus:outline-none
   }
   .btn-secondary {
-    @apply text-link hover:text-link-dark focus:outline-none
+    @apply text-sky-600 hover:text-sky-700 focus:outline-none
   }
 
 }
