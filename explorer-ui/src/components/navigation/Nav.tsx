@@ -52,8 +52,8 @@ export default function Nav () {
                     alt=""
                   />
                   <span className="hidden leading-tight md:block">
-                    <span className="font-medium">Epirus</span><br/>
-                    <span className="text-gray-900">substrate</span>
+                    <span className="font-semibold">Epirus</span><br/>
+                    <span className="font-normal">substrate</span>
                   </span>
                 </div>
               </Link>
@@ -76,7 +76,7 @@ export default function Nav () {
             </div>
 
             <NavLink to="/" className={({ isActive }) =>
-              isActive ? "text-sm text-gray-900 underline" : "text-sm text-gray-600 hover:text-gray-900"
+              isActive ? "nav-link active" : "nav-link"
             }>
               Home
             </NavLink>
@@ -85,13 +85,13 @@ export default function Nav () {
               {({ open }) => (
                 <>
                   <Popover.Button
-                    className="group inline-flex items-center text-sm text-gray-600 hover:text-gray-900 focus:outline-none"
+                    className="nav-link group inline-flex items-center focus:outline-none"
                   >
                     <span>Blockchain</span>
                     <ChevronDownIcon
                       className={classNames(
-                        open ? "text-gray-600" : "text-gray-400",
-                        "ml-2 h-5 w-5 group-hover:text-gray-500"
+                        open ? "open" : "close",
+                        "chevron ml-2 h-5 w-5"
                       )}
                       aria-hidden="true"
                     />
@@ -133,7 +133,7 @@ export default function Nav () {
               )}
             </Popover>
 
-            <a href="#" className="text-sm text-gray-600 hover:text-gray-900">
+            <a href="#" className="nav-link">
               Tokens
             </a>
           </div>

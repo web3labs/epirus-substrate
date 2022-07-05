@@ -1,0 +1,24 @@
+@tailwind components;
+
+@layer components {
+
+  /*===============
+   * 
+   * Candy theme
+   *
+   =================*/
+
+  .theme.candy {
+    .bg-page {
+      @apply bg-gradient-to-br from-blue-300 via-green-200 to-yellow-300;
+    }
+
+    .search .input {
+      @apply bg-white bg-opacity-70 backdrop-blur;
+    }
+
+    .header {
+      @apply border-b border-white border-opacity-30;
+    }
+  }
+}

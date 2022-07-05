@@ -69,7 +69,7 @@ export default function List ({
         </div>
       </div>
       }
-      <ul className="flex flex-col divide-y w-full">
+      <ul className="flex flex-col divide-y divide-opacity-70 w-full">
         {isEmpty(children)
           ? <div className="w-full p-4 border-b px-4 py-5 sm:px-6 text-gray-400">
             {emptyMessage || "No items to show"}

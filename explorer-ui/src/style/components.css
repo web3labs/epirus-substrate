@@ -1,8 +1,12 @@
-@tailwind base;
 @tailwind components;
-@tailwind utilities;
 
 @layer components {
+
+  /*===============
+   * 
+   * Default theme
+   *
+   =================*/
 
   /* Skeleton loader */
   .skeleton {
@@ -13,15 +17,8 @@
     @apply bg-zinc-100;
   }
 
-  .theme.glass {
-    .bg-page {
-      @apply bg-gradient-to-br from-blue-300 via-green-200 to-yellow-300;
-      /*@apply bg-center bg-cover bg-dunes;*/
-    }
-  }
-
   .bg-over {
-    @apply bg-white bg-opacity-80 backdrop-blur;
+    @apply bg-white;
   }
 
   .bg-over-hover {
@@ -30,6 +27,18 @@
 
   .link {
     @apply text-sky-600 hover:text-sky-700;
+  }
+
+  .nav-link {
+    @apply text-sm text-gray-600 hover:text-gray-900;
+  }
+
+  .nav-link.active {
+    @apply text-gray-700 font-semibold;
+  }
+
+  .nav-link .chevron {
+    @apply text-gray-400 group-hover:text-gray-500;
   }
 
   .content {
@@ -92,11 +101,19 @@
     @apply py-2 px-4
   }
 
-  .btn-primary {
+  .btn.btn-primary {
     @apply bg-blue-500 text-white hover:bg-blue-700 focus:outline-none
   }
 
-  .btn-secondary {
+  .btn.btn-secondary {
     @apply text-sky-600 hover:text-sky-700 focus:outline-none
+  }
+
+  .text-light {
+    @apply text-gray-400;
+  }
+
+  .search {
+    @apply text-gray-500;
   }
 }

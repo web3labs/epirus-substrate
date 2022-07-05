@@ -42,8 +42,8 @@ function App () {
         <Router>
           <ChainContextProvider>
             <Toaster position="bottom-right"/>
-            <section className="min-h-screen bg-page overflow-hidden">
-              <div className="relative pt-3 md:pb-3 md:pt-6">
+            <div className="min-h-screen bg-page overflow-hidden">
+              <div className="relative header pt-3 md:pb-3 md:pt-6">
                 <div className="max-w-7xl mx-auto md:px-2">
                   <Nav />
                 </div>
@@ -60,7 +60,7 @@ function App () {
                   <Route path="activities" element={<ActivitiesPage/>} />
                 </Routes>
               </main>
-            </section>
+            </div>
           </ChainContextProvider>
         </Router>
       </Provider>

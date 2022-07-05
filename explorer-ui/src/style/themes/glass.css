@@ -1,0 +1,60 @@
+@tailwind components;
+
+@layer components {
+
+  /*===============
+   * 
+   * Glass theme
+   *
+   =================*/
+
+  .theme.glass {
+    .bg-page {
+      /*@apply bg-gradient-to-br from-blue-300 via-green-200 to-yellow-300;*/
+      @apply bg-cover bg-fixed bg-dunes;
+    }
+
+    .bg-over {
+      @apply bg-gray-100 bg-opacity-85 backdrop-blur;
+    }
+  
+    .bg-over-hover {
+      @apply bg-gray-50 bg-opacity-50;
+    }
+
+    .nav-link {
+      @apply text-sm font-semibold text-gray-100 hover:text-white;
+    }
+  
+    .nav-link.active {
+      @apply border-b-2 border-gray-100 no-underline;
+    }
+  
+    .nav-link .chevron {
+      @apply text-gray-300 group-hover:text-gray-200;
+    }
+
+    .search .input {
+      @apply 
+      bg-white bg-opacity-20 backdrop-blur
+      placeholder:text-gray-300 text-gray-100 font-semibold border-none rounded
+      focus:bg-white focus:text-gray-900;
+    }
+
+    .search {
+      @apply text-white
+    }
+
+    .search {
+      @apply focus-within:text-gray-500;
+    }
+
+    .text-light {
+      @apply text-gray-500;
+    }
+
+    .header {
+      @apply border-b border-white border-opacity-30;
+    }
+  }
+}
