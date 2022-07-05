@@ -50,7 +50,7 @@ export default function List ({
   children
 }: Props) {
   return (
-    <div className="flex flex-col grow w-full items-center justify-start">
+    <div className="relative flex flex-col grow w-full items-center justify-start">
       {title &&
       <div className="flex flex-col w-full p-4 border-b px-4 py-5 sm:px-6">
         <div className="flex flex-row items-center">
@@ -61,13 +61,9 @@ export default function List ({
             }
           </div>
           <div className="flex ml-auto">
-            <div className="flex flex-row gap-x-2 items-center">
-              {sort && <>
-                <span className="text-gray-500">Sort by</span>
-                {sort}
-              </>
-              }
+            <div className="flex flex-row flex-wrap gap-x-1 items-center">
               {filter}
+              {sort}
             </div>
           </div>
         </div>

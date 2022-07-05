@@ -1,9 +1,10 @@
-import { Popover } from "@headlessui/react"
-import { FilterIcon } from "@heroicons/react/solid"
+import { Popover, Transition } from "@headlessui/react"
 import { XIcon } from "@heroicons/react/outline"
+import { SelectorIcon } from "@heroicons/react/solid"
 
-import React, { useEffect, useRef, useState } from "react"
+import React, { Fragment, useEffect, useRef, useState } from "react"
 import { PageQuery } from "../../types/pagination"
+import { Default, Mobile } from "../responsive/Media"
 
 interface FilterApplied {
   data: any
@@ -66,6 +67,15 @@ function withFilters <P extends object> (
   }
 }
 
+function toChips (filterQuery: FilterQuery) {
+  return (Object.keys(filterQuery).length === 0
+    ? <span className="text-sm font-medium text-gray-400">Filter</span>
+    : (Object.values(filterQuery) as unknown as FilterApplied[]).map(
+      a => a.chip
+    )
+  )
+}
+
 export default function Filters ({
   filterTypes,
   pageQuery,
@@ -78,6 +88,7 @@ export default function Filters ({
   filterProps?: FilterProps
 }) {
   const [filterQuery, setFilterQuery] = useState<FilterQuery>({})
+  const [chips, setChips] = useState(toChips(filterQuery))
   const pageQueryRef = useRef<PageQuery>(pageQuery)
   const popButtonRef = useRef<HTMLButtonElement>(null)
 
@@ -100,11 +111,14 @@ export default function Filters ({
     }
   }, [pageQuery])
 
-  function handleApply () {
+  function handleApply (event: { preventDefault: () => void }) {
+    event.preventDefault()
+
     setQuery(buildPageQuery({
       filterQuery,
       pageQuery: pageQueryRef.current
     }))
+    setChips(toChips(filterQuery))
 
     popButtonRef?.current?.click()
   }
@@ -112,14 +126,15 @@ export default function Filters ({
   function handleReset () {
     setQuery(pageQueryRef.current)
     setFilterQuery({})
+    setChips(toChips({}))
 
     popButtonRef?.current?.click()
   }
 
   const filters = (
-    <>
+    <form onSubmit={handleApply}>
       <div className="flex w-full justify-end">
-        <Popover.Button className="p-1 text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
+        <Popover.Button className="p-1 text-gray-400 hover:text-gray-500 focus:outline-none">
           <span className="sr-only">Close menu</span>
           <XIcon className="h-6 w-6" aria-hidden="true" />
         </Popover.Button>
@@ -128,38 +143,54 @@ export default function Filters ({
         {components}
       </div>
       <div className="flex gap-x-4 mx-5 mt-4 py-4">
-        <button className="btn btn-primary" onClick={handleApply}>
+        <button type="submit" className="btn btn-primary">
             Apply Filters
         </button>
         <button className="btn btn-secondary" onClick={handleReset}>
             Reset All
         </button>
       </div>
-    </>
+    </form>
   )
 
-  const chips = Object.keys(filterQuery).length === 0
-    ? "Filters"
-    : (Object.values(filterQuery) as unknown as FilterApplied[]).map(
-      a => a.chip
-    )
-
   return (
-    <Popover className="relative">
+    <Popover className="md:relative">
       <Popover.Button
         ref={popButtonRef}
-        className="py-2 px-3 gap-x-1 inline-flex flex-wrap items-center text-gray-600 hover:text-blue-500 focus:outline-none"
+        className="group hover:bg-gray-100 hover:rounded
+          px-2 py-1 gap-x-1 inline-flex flex-wrap items-center focus:outline-none"
       >
-        <FilterIcon className="h-5 w-5 text-gray-400 hover:text-blue-600"
+        {chips}
+        <SelectorIcon className="text-gray-400 group-hover:text-gray-500"
+          width={16}
+          height={16}
           aria-hidden="true"
         />
-        {chips}
       </Popover.Button>
-      <Popover.Panel className="absolute z-10 top-0 transform right-0">
-        <div className="bg-white shadow-lg ring-1 ring-black ring-opacity-5">
-          {filters}
-        </div>
-      </Popover.Panel>
+      <Default>
+        <Popover.Panel className="absolute z-10 top-0 transform right-0">
+          <div className="bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+            {filters}
+          </div>
+        </Popover.Panel>
+      </Default>
+      <Mobile>
+        <Transition
+          as={Fragment}
+          enter="duration-200 ease-out"
+          enterFrom="opacity-0 scale-95"
+          enterTo="opacity-100 scale-100"
+          leave="duration-100 ease-in"
+          leaveFrom="opacity-100 scale-100"
+          leaveTo="opacity-0 scale-95"
+        >
+          <Popover.Panel className="absolute z-10 top-0 left-0 inset-x-0 transition transform origin-top-right max-w-screen max-h-screen">
+            <div className="bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+              {filters}
+            </div>
+          </Popover.Panel>
+        </Transition>
+      </Mobile>
     </Popover>
   )
 }

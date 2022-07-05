@@ -12,13 +12,13 @@ export default function Pagination ({ page, pageQuery, setQuery }: {
   if (hasNextPage || hasPreviousPage) {
     return (
       <div className="w-full flex justify-between items-center border-t border-gray-200 mt-auto">
-        <div className="text-xs px-3 py-2">
+        <div className="text-xs px-3 py-2 text-gray-500">
             Showing {startCursor} to {endCursor} of {totalCount}
         </div>
         {(hasNextPage || hasPreviousPage) &&
         <nav role="navigation" className="ml-auto flex">
-          {hasPreviousPage &&
-            <span
+          {hasPreviousPage
+            ? <span
               onClick={() => setQuery(Object.assign({}, pageQuery,
                 {
                   after: (parseInt(startCursor) - (first + 1)).toString()
@@ -28,11 +28,13 @@ export default function Pagination ({ page, pageQuery, setQuery }: {
               className="flex link cursor-pointer p-2 text-xs items-center"
             >
               <ChevronLeftIcon height={18} width={18} aria-hidden="true" />
-              <span>Prev</span>
+            </span>
+            : <span className="flex items-center p-2 text-xs text-gray-300">
+              <ChevronLeftIcon height={18} width={18} aria-hidden="true" />
             </span>
           }
-          {hasNextPage &&
-            <span
+          {hasNextPage
+            ? <span
               onClick={() => setQuery(Object.assign({}, pageQuery,
                 {
                   after: endCursor
@@ -41,7 +43,9 @@ export default function Pagination ({ page, pageQuery, setQuery }: {
               aria-label="next page"
               className="flex link cursor-pointer p-2 text-xs items-center"
             >
-              <span>Next</span>
+              <ChevronRightIcon height={18} width={18} aria-hidden="true" />
+            </span>
+            : <span className="flex items-center p-2 text-xs text-gray-300">
               <ChevronRightIcon height={18} width={18} aria-hidden="true" />
             </span>
           }
