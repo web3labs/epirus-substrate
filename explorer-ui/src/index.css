@@ -11,11 +11,7 @@
   }
 
   .link {
-    color: #009cdf;
-  }
-
-  .link:hover {
-    color: #0069ac;
+    @apply text-link hover:text-link-dark;
   }
 
   .content {
@@ -57,7 +53,7 @@
   }
 
   .input {
-    @apply appearance-none block py-2 px-3 text-sm text-gray-900 border border-gray-200 focus:outline-none focus:border-blue-400
+    @apply appearance-none block py-3 px-4 text-sm text-gray-900 border border-gray-200 focus:outline-none focus:border-blue-400
   }
 
   .select.inline {
@@ -76,10 +72,10 @@
     @apply py-2 px-4
   }
   .btn-primary {
-    @apply bg-blue-500 text-white
+    @apply bg-blue-500 text-white hover:bg-blue-700 focus:outline-none
   }
-  .btn-primary:hover {
-    @apply bg-blue-700
+  .btn-secondary {
+    @apply text-link hover:text-link-dark focus:outline-none
   }
 
 }

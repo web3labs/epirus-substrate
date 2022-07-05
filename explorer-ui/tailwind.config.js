@@ -14,6 +14,14 @@ module.exports = {
         "Fira Mono",
         ...fontFamily.mono
       ]
+    },
+    extend: {
+      colors: {
+        link: {
+          DEFAULT: "#009cdf",
+          dark: "#0069ac"
+        }
+      }
     }
   },
   variants: {
