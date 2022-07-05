@@ -1,90 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Mono:wght@100;200;300;400;500;600;700&family=Inter:wght@100;200;300;400;500;600;700;800&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
 
-@layer components {
-  /* Skeleton loader */
-  .skeleton {
-    @apply bg-gradient-to-r from-neutral-100 to-white;
-  }
+@import "tailwindcss/components";
+@import "./style/components.css";
 
-  .link {
-    @apply text-sky-600 hover:text-sky-700;
-  }
+@import "tailwindcss/utilities";
 
-  .content {
-    @apply my-2 md:my-5;
-  }
-
-  .tab {
-    @apply inline-flex p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300;
-  }
-
-  .tab.active {
-    @apply text-blue-600 border-blue-600;
-  }
-
-  .tag.instantiate {
-    @apply border border-amber-300 bg-amber-100 text-amber-600;
-  }
-
-  .tag.call {
-    @apply border border-purple-300 bg-purple-100 text-purple-600;
-  }
-
-  .tag.chain  {
-    @apply bg-emerald-100 text-emerald-800;
-  }
-
-  .tag.contract {
-    @apply text-neutral-600 bg-neutral-200
-  }
-  .tag.eoa {
-    @apply text-orange-600 bg-orange-200
-  }
-  .tag.wasm {
-    @apply text-lime-600 bg-lime-200
-  }
-
-  .code {
-    @apply bg-gray-100 text-gray-800 border border-gray-200 rounded-md px-3 py-2 shadow-inner font-mono break-words overflow-y-auto max-h-20
-  }
-
-  .input {
-    @apply appearance-none block py-3 px-4 text-sm text-gray-900 border border-gray-200 focus:outline-none focus:border-blue-400
-  }
-
-  .select.inline {
-    @apply appearance-none block text-sm text-gray-900 focus:outline-none
-  }
-
-  .select-option.active {
-    @apply bg-gray-100 text-gray-900
-  }
-
-  .select-option .selected {
-    @apply text-gray-500
-  }
-
-  .btn {
-    @apply py-2 px-4
-  }
-  .btn-primary {
-    @apply bg-blue-500 text-white hover:bg-blue-700 focus:outline-none
-  }
-  .btn-secondary {
-    @apply text-sky-600 hover:text-sky-700 focus:outline-none
-  }
-
-}
-
-/* Fixes */
-* {
-  text-rendering: geometricPrecision;
-}
-
-.ui--IdentityIcon {
-  cursor: inherit !important;
-}
+@import "./style/fixes.css"

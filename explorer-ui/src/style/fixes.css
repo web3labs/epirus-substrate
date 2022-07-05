@@ -1,0 +1,8 @@
+/* Fixes */
+* {
+  text-rendering: geometricPrecision;
+}
+
+.ui--IdentityIcon {
+  cursor: inherit !important;
+}

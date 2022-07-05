@@ -13,7 +13,7 @@ interface Props {
 
 export function Row ({ children }: {children: ReactNode}) {
   return (
-    <li className="flex flex-row flex-wrap gap-2 items-stretch justify-between items-center pb-2 pt-4 pl-4 pr-4 hover:bg-gray-50">
+    <li className="flex flex-row flex-wrap gap-2 items-stretch justify-between items-center pb-2 pt-4 pl-4 pr-4 hover:bg-over-hover">
       {children}
     </li>
   )

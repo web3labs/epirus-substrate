@@ -41,9 +41,9 @@ function App () {
       <Provider value={client}>
         <Router>
           <ChainContextProvider>
-            <div><Toaster position="bottom-right"/></div>
-            <div className="min-h-screen bg-zinc-100 overflow-hidden">
-              <div className="relative bg-white pt-3 border-b border-zinc-200 md:pb-3 md:pt-6">
+            <Toaster position="bottom-right"/>
+            <section className="min-h-screen bg-page overflow-hidden">
+              <div className="relative pt-3 md:pb-3 md:pt-6">
                 <div className="max-w-7xl mx-auto md:px-2">
                   <Nav />
                 </div>
@@ -60,7 +60,7 @@ function App () {
                   <Route path="activities" element={<ActivitiesPage/>} />
                 </Routes>
               </main>
-            </div>
+            </section>
           </ChainContextProvider>
         </Router>
       </Provider>
