@@ -91,7 +91,7 @@ export default function Nav () {
                     <ChevronDownIcon
                       className={classNames(
                         open ? "open" : "close",
-                        "chevron ml-2 h-5 w-5"
+                        "chevron ml-2 h-5 w-5 group-hover:text-opacity-100"
                       )}
                       aria-hidden="true"
                     />

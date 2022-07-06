@@ -38,7 +38,7 @@
   }
 
   .nav-link .chevron {
-    @apply text-gray-400;
+    @apply text-gray-400 text-opacity-70;
   }
 
   .content {
