@@ -8,12 +8,12 @@ import {
   ContractsOwnerInfoOfStorage,
   SystemAccountStorage,
 } from "../types/storage";
-import { AccountData, AccountInfoWithTripleRefCount } from "../types/v1";
+import { AccountData, AccountInfo } from "../types/v1";
 import { ss58Format } from "../../../chain-config";
 import { OwnerInfo, PrefabWasmModule, RawContractInfo } from "../types/v31";
 
 export class NormalisedSystemAccountStorage extends SystemAccountStorage {
-  async get(accountId: string): Promise<AccountInfoWithTripleRefCount> {
+  async get(accountId: string): Promise<AccountInfo> {
     assert(this.isExists);
     if (this.isV1) {
       return this.getAsV1(ss58.codec(ss58Format).decode(accountId));

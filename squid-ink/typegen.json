@@ -1,22 +1,24 @@
 {
-  "outDir": "src/chains/local/types",
-  "chainVersions": "devChainVersions.json",
+  "outDir": "src/chains/shibuya/types",
+  "specVersions": "https://shibuya.archive.subsquid.io/graphql",
+  "typesBundle": "shibuya",
   "events": [
-    "balances.Transfer",
-    "balances.Endowed",
-    "balances.Deposit",
-    "balances.Withdraw",
-    "balances.Reserved",
-    "contracts.Instantiated",
-    "contracts.ContractEmitted",
-    "contracts.CodeStored",
-    "contracts.ContractCodeUpdated",
-    "contracts.CodeRemoved",
-    "system.NewAccount"
+    "Balances.Transfer",
+    "Balances.Endowed",
+    "Balances.Deposit",
+    "Balances.Withdraw",
+    "Balances.Reserved",
+    "Contracts.Instantiated",
+    "Contracts.ContractEmitted",
+    "Contracts.CodeStored",
+    "Contracts.ContractCodeUpdated",
+    "Contracts.CodeRemoved",
+    "System.NewAccount"
   ],
   "calls": [
-    "contracts.call",
-    "contracts.set_code"
+    "Contracts.call",
+    "Contracts.set_code",
+    "Contracts.upload_code"
   ],
   "storage": [
     "Contracts.CodeStorage",

@@ -87,19 +87,18 @@ type ContractEmittedEvent @entity {
 
 type Extrinsic @entity {
   id: ID!
+  block: Int!
+  indexInBlock: Int!
+  version: Int!
   name: String!
-  method: String!
-  section: String!
-  blockHash: String!
-  blockNumber: String!
-  versionInfo: String!
-  indexInBlock: String
-  hash: String
-  createdAt: DateTime!
+  signer: String
   signature: String
-  signer: String!
+  success: Boolean!
+  fee: BigInt
   tip: BigInt
-  args: [Args!]
+  hash: String!
+  createdAt: DateTime!
+  args: JSON
   events: [Events!] @derivedFrom(field: "extrinsic")
 }
 
@@ -110,7 +109,7 @@ type Activity @entity{
   to: Account
   from: Account
   createdAt: DateTime! @index
-  args: [Args!]
+  args: JSON
   extrinsic: Extrinsic!
 }
 
@@ -128,11 +127,6 @@ type Events @entity {
   blockNumber: String!
   indexInBlock: String!
   createdAt: DateTime!
-  params: [Args!]
+  params: JSON
 }
 
-type Args {
-  type: String!
-  name: String!
-  value: String
-}

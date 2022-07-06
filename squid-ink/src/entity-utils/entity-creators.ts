@@ -1,93 +1,81 @@
+import { Logger } from "@subsquid/logger";
 import {
-  EventParam,
-  ExtrinsicArg,
   SubstrateBlock,
-  SubstrateEvent,
+  SubstrateCall,
   SubstrateExtrinsic,
+  SubstrateExtrinsicSignature,
 } from "@subsquid/substrate-processor";
-import { Args, Extrinsic, Events } from "../model";
+import { Event } from "../handlers/types";
+import { Extrinsic, Events } from "../model";
 
-export function createEvent(
-  extrinsicEntity: Extrinsic,
-  event: SubstrateEvent
-): Events {
-  const { id, name, method, blockNumber, indexInBlock, params } = event;
+type Args = Record<string, string> | Record<string, Record<string, string>>;
+
+export function createEvent(extrinsicEntity: Extrinsic, event: Event): Events {
+  const { id, name, call, indexInBlock } = event;
   return new Events({
     id,
     extrinsic: extrinsicEntity,
     name,
-    method,
-    blockNumber: blockNumber.toString(),
+    method: call?.name,
+    blockNumber: id.split("-")[0],
     indexInBlock: indexInBlock.toString(),
     createdAt: extrinsicEntity.createdAt,
-    params: castArgsToArgsType(params),
+    params: <Args>extrinsicEntity.args,
   });
 }
 
 export function createExtrinsic(
-  ext: SubstrateExtrinsic,
-  block: SubstrateBlock
+  extrinsic: SubstrateExtrinsic,
+  call: SubstrateCall,
+  block: SubstrateBlock,
+  log: Logger
 ): Extrinsic {
-  const {
-    id,
-    indexInBlock,
-    hash,
-    name,
-    method,
-    signer,
-    signature,
-    args,
-    tip,
-    section,
-    versionInfo,
-  } = ext;
+  const childLog = log.child("entity-creator");
   return new Extrinsic({
-    id,
-    hash,
-    name,
-    method,
-    section,
-    signer,
-    signature,
-    versionInfo,
-    tip,
-    blockNumber: block.height.toString(),
-    blockHash: block.hash.toString(),
+    id: extrinsic.id,
+    block: block.height,
+    indexInBlock: extrinsic.indexInBlock,
+    version: extrinsic.version,
+    name: call.name,
+    signer: getSignerAddress(childLog, extrinsic.signature),
+    signature: getSignature(childLog, extrinsic.signature),
+    success: extrinsic.success,
+    fee: extrinsic.fee,
+    tip: extrinsic.tip,
+    hash: extrinsic.hash,
     createdAt: new Date(block.timestamp),
-    indexInBlock: indexInBlock.toString(),
-    args: castArgsToArgsType(args),
+    args: <Args>call.args,
   });
 }
 
-function castArgsToArgsType(args: ExtrinsicArg[] | EventParam[]): Args[] {
-  const converted: Args[] = [];
+interface Signature {
+  __kind: string;
+  value: string;
+}
 
-  for (let i = 0; i < args.length; i += 1) {
-    const { type, name, value } = args[i];
-    let valueAsString: string;
-    switch (typeof value) {
-      case "string":
-        valueAsString = value;
-        break;
-      case "number":
-        valueAsString = value.toString();
-        break;
-      case "object":
-        valueAsString = JSON.stringify(value);
-        break;
-      case "boolean":
-        valueAsString = String(value);
-        break;
-      default:
-        valueAsString = "unknown";
-    }
-    converted.push(
-      new Args({
-        type,
-        name,
-        value: valueAsString,
-      })
-    );
+function getSignerAddress(
+  log: Logger,
+  signature?: SubstrateExtrinsicSignature
+): string | null {
+  if (!signature) {
+    return null;
   }
-  return converted;
+  const address = <Signature>signature.address;
+  // TODO: support other address types
+  if (address.__kind !== "Id") {
+    log.warn({ address }, "Signer address is not of type [Id], returning null");
+    return null;
+  }
+  return address.value;
+}
+
+function getSignature(
+  log: Logger,
+  signature?: SubstrateExtrinsicSignature
+): string | null {
+  if (!signature) {
+    return null;
+  }
+  const sig = <Signature>signature.signature;
+  return sig.value;
 }

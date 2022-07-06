@@ -1,8 +1,6 @@
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, Index as Index_, ManyToOne as ManyToOne_} from "typeorm"
-import * as marshal from "./marshal"
 import {ActivityType} from "./_activityType"
 import {Account} from "./account.model"
-import {Args} from "./_args"
 import {Extrinsic} from "./extrinsic.model"
 
 @Entity_()
@@ -33,8 +31,8 @@ export class Activity {
   @Column_("timestamp with time zone", {nullable: false})
   createdAt!: Date
 
-  @Column_("jsonb", {transformer: {to: obj => obj == null ? undefined : obj.map((val: any) => val.toJSON()), from: obj => obj == null ? undefined : marshal.fromList(obj, val => new Args(undefined, marshal.nonNull(val)))}, nullable: true})
-  args!: (Args)[] | undefined | null
+  @Column_("jsonb", {nullable: true})
+  args!: unknown | undefined | null
 
   @Index_()
   @ManyToOne_(() => Extrinsic, {nullable: false})

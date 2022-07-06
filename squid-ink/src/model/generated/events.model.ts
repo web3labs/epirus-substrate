@@ -1,7 +1,5 @@
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_} from "typeorm"
-import * as marshal from "./marshal"
 import {Extrinsic} from "./extrinsic.model"
-import {Args} from "./_args"
 
 @Entity_()
 export class Events {
@@ -31,6 +29,6 @@ export class Events {
   @Column_("timestamp with time zone", {nullable: false})
   createdAt!: Date
 
-  @Column_("jsonb", {transformer: {to: obj => obj == null ? undefined : obj.map((val: any) => val.toJSON()), from: obj => obj == null ? undefined : marshal.fromList(obj, val => new Args(undefined, marshal.nonNull(val)))}, nullable: true})
-  params!: (Args)[] | undefined | null
+  @Column_("jsonb", {nullable: true})
+  params!: unknown | undefined | null
 }

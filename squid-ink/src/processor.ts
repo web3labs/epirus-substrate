@@ -1,98 +1,123 @@
 import "./initialise";
+import { lookupArchive } from "@subsquid/archive-registry";
+import { SubstrateBatchProcessor } from "@subsquid/substrate-processor";
+import { TypeormDatabase } from "@subsquid/typeorm-store";
 import {
-  BlockHandlerContext,
-  EventHandlerContext,
-  ExtrinsicHandlerContext,
-  SubstrateProcessor,
-} from "@subsquid/substrate-processor";
-import { createLogger, transports, format, Logger } from "winston";
-import {
-  eventHandlers,
-  extrinsicHandlers,
-  blockPreHookHandlers,
+  handleBalancesEndowed,
+  handleBalancesReserved,
+  handleBalancesTransfer,
+  handleBalancesWithdraw,
+  handleContractCall,
+  handleContractCodeStored,
+  handleContractCodeUpdated,
+  handleContractEmitted,
+  handleContractInstantiated,
+  handleSystemNewAccount,
 } from "./handlers";
 
-const { combine, splat, colorize, printf, timestamp: ts } = format;
-const winstonLogger = createLogger({
-  transports: [new transports.Console()],
-  format: combine(
-    colorize(),
-    splat(),
-    ts(),
-    printf(({ level, message, timestamp }) => {
-      return `[${timestamp as string}] ${level}: ${message}`;
-    })
-  ),
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const processor = new SubstrateBatchProcessor()
+  .setBlockRange({ from: 0 })
+  .setBatchSize(500)
+  .setDataSource({
+    chain: process.env.WS_ENDPOINT,
+    // Lookup archive by the network name in the Subsquid registry
+    archive: lookupArchive("shibuya", { release: "FireSquid" }),
+
+    // Use archive created by archive/docker-compose.yml
+    // archive: 'http://localhost:8888/graphql'
+  })
+  .addEvent("System.NewAccount")
+  .addEvent("Balances.Transfer")
+  .addEvent("Balances.Withdraw")
+  .addEvent("Balances.Reserved")
+  .addEvent("Balances.Endowed")
+  .addEvent("Contracts.Instantiated")
+  .addEvent("Contracts.CodeStored")
+  .addEvent("Contracts.ContractCodeUpdated")
+  .addEvent("Contracts.ContractEmitted")
+  .addCall("Contracts.call");
+
+type ProcessorType = typeof processor;
+
+processor.run(new TypeormDatabase(), async (ctx) => {
+  for (const block of ctx.blocks) {
+    for (const item of block.items) {
+      switch (item.name) {
+        case "System.NewAccount":
+          await handleSystemNewAccount<ProcessorType>({
+            ctx,
+            event: item.event,
+            block: block.header,
+          });
+          break;
+        case "Balances.Transfer":
+          await handleBalancesTransfer<ProcessorType>({
+            ctx,
+            event: item.event,
+            block: block.header,
+          });
+          break;
+        case "Balances.Withdraw":
+          await handleBalancesWithdraw<ProcessorType>({
+            ctx,
+            event: item.event,
+            block: block.header,
+          });
+          break;
+        case "Balances.Reserved":
+          await handleBalancesReserved<ProcessorType>({
+            ctx,
+            event: item.event,
+            block: block.header,
+          });
+          break;
+        case "Balances.Endowed":
+          await handleBalancesEndowed<ProcessorType>({
+            ctx,
+            event: item.event,
+            block: block.header,
+          });
+          break;
+        case "Contracts.Instantiated":
+          await handleContractInstantiated<ProcessorType>({
+            ctx,
+            event: item.event,
+            block: block.header,
+          });
+          break;
+        case "Contracts.CodeStored":
+          await handleContractCodeStored<ProcessorType>({
+            ctx,
+            event: item.event,
+            block: block.header,
+          });
+          break;
+        case "Contracts.ContractCodeUpdated":
+          await handleContractCodeUpdated<ProcessorType>({
+            ctx,
+            event: item.event,
+            block: block.header,
+          });
+          break;
+        case "Contracts.ContractEmitted":
+          await handleContractEmitted<ProcessorType>({
+            ctx,
+            event: item.event,
+            block: block.header,
+          });
+          break;
+        case "Contracts.call":
+          await handleContractCall<ProcessorType>({
+            ctx,
+            call: item.call,
+            extrinsic: item.extrinsic,
+            block: block.header,
+          });
+          break;
+        default:
+          break;
+      }
+    }
+  }
 });
-
-const processor = new SubstrateProcessor(
-  process.env.PROCESSOR_NAME || "contracts_poc"
-);
-
-processor.setBatchSize(500);
-processor.setDataSource({
-  archive: process.env.ARCHIVE_ENDPOINT || "http://localhost:4010/v1/graphql",
-  chain: process.env.WS_ENDPOINT || "ws://127.0.0.1:9944",
-});
-if (process.env.BUNDLE_TYPES) {
-  winstonLogger.info(
-    "Adding types bundle from file: %s",
-    process.env.BUNDLE_TYPES
-  );
-  processor.setTypesBundle(process.env.BUNDLE_TYPES);
-}
-
-winstonLogger.info(
-  "Substrate processor [%s] for chain [%s] initialised. Archive endpoint: [%s] WS endpoint: [%s]",
-  process.env.PROCESSOR_NAME,
-  process.env.CHAIN,
-  process.env.ARCHIVE_ENDPOINT,
-  process.env.WS_ENDPOINT
-);
-
-interface LoggedHandler<ContextType> {
-  (ctx: ContextType, logger: Logger): Promise<void>;
-}
-function curry<ContextType>(
-  targetFn: LoggedHandler<ContextType>,
-  logger: Logger
-) {
-  return async (ctx: ContextType) => {
-    return targetFn(ctx, logger);
-  };
-}
-
-// Add block pre-hooks
-for (let i = 0; i < blockPreHookHandlers.length; i += 1) {
-  const handler = blockPreHookHandlers[i];
-
-  winstonLogger.info("Adding block pre-hook handler [%s]", handler.name);
-  const curried = curry<BlockHandlerContext>(handler.callback, winstonLogger);
-  processor.addPreHook({ range: { from: 0, to: 0 } }, curried);
-}
-
-// Add all event handlers
-for (let i = 0; i < eventHandlers.length; i += 1) {
-  const handler = eventHandlers[i];
-
-  winstonLogger.info("Adding event handler [%s]", handler.name);
-  const curried = curry<EventHandlerContext>(handler.callback, winstonLogger);
-  processor.addEventHandler(handler.name, curried);
-}
-
-// Add all extrinsic handlers
-for (let i = 0; i < extrinsicHandlers.length; i += 1) {
-  const handler = extrinsicHandlers[i];
-  winstonLogger.info("Adding extrinsic handler [%s]", handler.name);
-  const curried = curry<ExtrinsicHandlerContext>(
-    handler.callback,
-    winstonLogger
-  );
-  processor.addExtrinsicHandler(handler.name, curried);
-}
-
-try {
-  processor.run();
-} catch (error) {
-  winstonLogger.error("Error while running processor", error);
-}

@@ -1,10 +1,19 @@
 import assert from 'assert'
-import {CallContext, Result, deprecateLatest} from './support'
+import {Chain, ChainContext, CallContext, Call, Result} from './support'
 import * as v31 from './v31'
+import * as v53 from './v53'
 
 export class ContractsCallCall {
-  constructor(private ctx: CallContext) {
-    assert(this.ctx.extrinsic.name === 'contracts.call')
+  private readonly _chain: Chain
+  private readonly call: Call
+
+  constructor(ctx: CallContext)
+  constructor(ctx: ChainContext, call: Call)
+  constructor(ctx: CallContext, call?: Call) {
+    call = call || ctx.call
+    assert(call.name === 'Contracts.call')
+    this._chain = ctx._chain
+    this.call = call
   }
 
   /**
@@ -26,7 +35,7 @@ export class ContractsCallCall {
    * a regular account will be created and any value will be transferred.
    */
   get isV31(): boolean {
-    return this.ctx._chain.getCallHash('contracts.call') === 'd96c8a6656d7a4d6af6d5d0d51dd36e041c9ea8a92a7ead343d711addd74780f'
+    return this._chain.getCallHash('Contracts.call') === 'd96c8a6656d7a4d6af6d5d0d51dd36e041c9ea8a92a7ead343d711addd74780f'
   }
 
   /**
@@ -49,60 +58,68 @@ export class ContractsCallCall {
    */
   get asV31(): {dest: v31.MultiAddress, value: bigint, gasLimit: bigint, storageDepositLimit: (bigint | undefined), data: Uint8Array} {
     assert(this.isV31)
-    return this.ctx._chain.decodeCall(this.ctx.extrinsic)
-  }
-
-  get isLatest(): boolean {
-    deprecateLatest()
-    return this.isV31
-  }
-
-  get asLatest(): {dest: v31.MultiAddress, value: bigint, gasLimit: bigint, storageDepositLimit: (bigint | undefined), data: Uint8Array} {
-    deprecateLatest()
-    return this.asV31
+    return this._chain.decodeCall(this.call)
   }
 }
 
-export class ContractsRemoveCodeCall {
-  constructor(private ctx: CallContext) {
-    assert(this.ctx.extrinsic.name === 'contracts.removeCode' || this.ctx.extrinsic.name === 'contracts.remove_code')
+export class ContractsSetCodeCall {
+  private readonly _chain: Chain
+  private readonly call: Call
+
+  constructor(ctx: CallContext)
+  constructor(ctx: ChainContext, call: Call)
+  constructor(ctx: CallContext, call?: Call) {
+    call = call || ctx.call
+    assert(call.name === 'Contracts.set_code')
+    this._chain = ctx._chain
+    this.call = call
   }
 
   /**
-   * Remove the code stored under `code_hash` and refund the deposit to its owner.
+   * Privileged function that changes the code of an existing contract.
    * 
-   * A code can only be removed by its original uploader (its owner) and only if it is
-   * not used by any contract.
+   * This takes care of updating refcounts and all other necessary operations. Returns
+   * an error if either the `code_hash` or `dest` do not exist.
+   * 
+   * # Note
+   * 
+   * This does **not** change the address of the contract in question. This means
+   * that the contract address is no longer derived from its code hash after calling
+   * this dispatchable.
    */
-  get isV31(): boolean {
-    return this.ctx._chain.getCallHash('contracts.remove_code') === '9e5c86c297bd88fae31bc40119e44695818ddc3ab8842b90daeb12771005c70d'
+  get isV53(): boolean {
+    return this._chain.getCallHash('Contracts.set_code') === '70cd8e4f03fe2c8334a13735563897eedfa16eb9b8e0c97b3aacce6c108aacc0'
   }
 
   /**
-   * Remove the code stored under `code_hash` and refund the deposit to its owner.
+   * Privileged function that changes the code of an existing contract.
    * 
-   * A code can only be removed by its original uploader (its owner) and only if it is
-   * not used by any contract.
+   * This takes care of updating refcounts and all other necessary operations. Returns
+   * an error if either the `code_hash` or `dest` do not exist.
+   * 
+   * # Note
+   * 
+   * This does **not** change the address of the contract in question. This means
+   * that the contract address is no longer derived from its code hash after calling
+   * this dispatchable.
    */
-  get asV31(): {codeHash: v31.H256} {
-    assert(this.isV31)
-    return this.ctx._chain.decodeCall(this.ctx.extrinsic)
-  }
-
-  get isLatest(): boolean {
-    deprecateLatest()
-    return this.isV31
-  }
-
-  get asLatest(): {codeHash: v31.H256} {
-    deprecateLatest()
-    return this.asV31
+  get asV53(): {dest: v53.MultiAddress, codeHash: v53.H256} {
+    assert(this.isV53)
+    return this._chain.decodeCall(this.call)
   }
 }
 
 export class ContractsUploadCodeCall {
-  constructor(private ctx: CallContext) {
-    assert(this.ctx.extrinsic.name === 'contracts.uploadCode' || this.ctx.extrinsic.name === 'contracts.upload_code')
+  private readonly _chain: Chain
+  private readonly call: Call
+
+  constructor(ctx: CallContext)
+  constructor(ctx: ChainContext, call: Call)
+  constructor(ctx: CallContext, call?: Call) {
+    call = call || ctx.call
+    assert(call.name === 'Contracts.upload_code')
+    this._chain = ctx._chain
+    this.call = call
   }
 
   /**
@@ -124,7 +141,7 @@ export class ContractsUploadCodeCall {
    * through [`Self::instantiate_with_code`].
    */
   get isV31(): boolean {
-    return this.ctx._chain.getCallHash('contracts.upload_code') === 'e5d80c6158333f4c26b9bf07184fcf08a6cc009b6fca8d942ba16f848c6a6417'
+    return this._chain.getCallHash('Contracts.upload_code') === 'e5d80c6158333f4c26b9bf07184fcf08a6cc009b6fca8d942ba16f848c6a6417'
   }
 
   /**
@@ -147,16 +164,6 @@ export class ContractsUploadCodeCall {
    */
   get asV31(): {code: Uint8Array, storageDepositLimit: (bigint | undefined)} {
     assert(this.isV31)
-    return this.ctx._chain.decodeCall(this.ctx.extrinsic)
-  }
-
-  get isLatest(): boolean {
-    deprecateLatest()
-    return this.isV31
-  }
-
-  get asLatest(): {code: Uint8Array, storageDepositLimit: (bigint | undefined)} {
-    deprecateLatest()
-    return this.asV31
+    return this._chain.decodeCall(this.call)
   }
 }

@@ -1,6 +1,5 @@
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, OneToMany as OneToMany_} from "typeorm"
 import * as marshal from "./marshal"
-import {Args} from "./_args"
 import {Events} from "./events.model"
 
 @Entity_()
@@ -12,44 +11,41 @@ export class Extrinsic {
   @PrimaryColumn_()
   id!: string
 
+  @Column_("int4", {nullable: false})
+  block!: number
+
+  @Column_("int4", {nullable: false})
+  indexInBlock!: number
+
+  @Column_("int4", {nullable: false})
+  version!: number
+
   @Column_("text", {nullable: false})
   name!: string
 
-  @Column_("text", {nullable: false})
-  method!: string
-
-  @Column_("text", {nullable: false})
-  section!: string
-
-  @Column_("text", {nullable: false})
-  blockHash!: string
-
-  @Column_("text", {nullable: false})
-  blockNumber!: string
-
-  @Column_("text", {nullable: false})
-  versionInfo!: string
-
   @Column_("text", {nullable: true})
-  indexInBlock!: string | undefined | null
-
-  @Column_("text", {nullable: true})
-  hash!: string | undefined | null
-
-  @Column_("timestamp with time zone", {nullable: false})
-  createdAt!: Date
+  signer!: string | undefined | null
 
   @Column_("text", {nullable: true})
   signature!: string | undefined | null
 
-  @Column_("text", {nullable: false})
-  signer!: string
+  @Column_("bool", {nullable: false})
+  success!: boolean
+
+  @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
+  fee!: bigint | undefined | null
 
   @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
   tip!: bigint | undefined | null
 
-  @Column_("jsonb", {transformer: {to: obj => obj == null ? undefined : obj.map((val: any) => val.toJSON()), from: obj => obj == null ? undefined : marshal.fromList(obj, val => new Args(undefined, marshal.nonNull(val)))}, nullable: true})
-  args!: (Args)[] | undefined | null
+  @Column_("text", {nullable: false})
+  hash!: string
+
+  @Column_("timestamp with time zone", {nullable: false})
+  createdAt!: Date
+
+  @Column_("jsonb", {nullable: true})
+  args!: unknown | undefined | null
 
   @OneToMany_(() => Events, e => e.extrinsic)
   events!: Events[]
