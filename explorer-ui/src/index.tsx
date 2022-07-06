@@ -5,7 +5,7 @@ import reportWebVitals from "./reportWebVitals"
 
 import { createRoot } from "react-dom/client"
 const container = document.getElementById("app")
-container!.className += "theme glass"
+container!.className += "theme default"
 const root = createRoot(container!)
 
 root.render(

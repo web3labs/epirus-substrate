@@ -18,7 +18,7 @@
     }
 
     .header {
-      @apply border-b border-white border-opacity-30;
+      @apply border-b border-gray-300 bg-white;
     }
   }
 }

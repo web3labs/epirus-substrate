@@ -85,7 +85,7 @@ export default function Nav () {
               {({ open }) => (
                 <>
                   <Popover.Button
-                    className="nav-link group inline-flex items-center focus:outline-none"
+                    className="group nav-link inline-flex items-center focus:outline-none"
                   >
                     <span>Blockchain</span>
                     <ChevronDownIcon
@@ -133,9 +133,11 @@ export default function Nav () {
               )}
             </Popover>
 
+            {/*
             <a href="#" className="nav-link">
               Tokens
             </a>
+             */}
           </div>
         </Popover.Group>
       </div>

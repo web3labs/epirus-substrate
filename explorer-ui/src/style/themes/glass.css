@@ -31,18 +31,18 @@
     }
   
     .nav-link .chevron {
-      @apply text-gray-300 group-hover:text-gray-200;
+      @apply text-gray-200 text-opacity-70;
     }
 
     .search .input {
-      @apply 
+      @apply
       bg-white bg-opacity-20 backdrop-blur
       placeholder:text-gray-300 text-gray-100 font-semibold border-none rounded
       focus:bg-white focus:text-gray-900;
     }
 
     .search {
-      @apply text-white
+      @apply text-white;
     }
 
     .search {

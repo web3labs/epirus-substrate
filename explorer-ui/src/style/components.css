@@ -38,7 +38,7 @@
   }
 
   .nav-link .chevron {
-    @apply text-gray-400 group-hover:text-gray-500;
+    @apply text-gray-400;
   }
 
   .content {
@@ -114,6 +114,6 @@
   }
 
   .search {
-    @apply text-gray-500;
+    @apply text-gray-400;
   }
 }
