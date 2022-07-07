@@ -1,7 +1,6 @@
 import { useEffect } from "react"
-import toast from "react-hot-toast"
 import { useQuery, UseQueryState } from "urql"
-import { WarningToast } from "../components/Toast"
+import { warn } from "../components/commons/Toast"
 import { PageQuery } from "../types/pagination"
 
 export interface SquidRefreshProps {
@@ -37,7 +36,14 @@ export default function useSquid ({
   const { error, stale } = result
   useEffect(() => {
     if (!stale && error) {
-      toast(WarningToast({ title: "Network Error", message: "There is some trouble fetching new data. Retrying..." }), { id: "squid-network-error" })
+      const message = error.networkError
+        ? `${error.message} Retrying...`
+        : error.message
+      warn({
+        id: "squid-error",
+        title: "Squid Error",
+        message
+      })
     }
   }, [error, stale])
 
