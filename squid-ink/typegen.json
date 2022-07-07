@@ -1,7 +1,7 @@
 {
-  "outDir": "src/chains/shibuya/types",
-  "specVersions": "https://shibuya.archive.subsquid.io/graphql",
-  "typesBundle": "shibuya",
+  "outDir": "src/chains/rococo/types",
+  "specVersions": "http://127.0.0.1:8888/graphql",
+  "typesBundle": "kusama",
   "events": [
     "Balances.Transfer",
     "Balances.Endowed",
@@ -17,7 +17,6 @@
   ],
   "calls": [
     "Contracts.call",
-    "Contracts.set_code",
     "Contracts.upload_code"
   ],
   "storage": [

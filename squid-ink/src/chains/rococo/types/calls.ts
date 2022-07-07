@@ -1,11 +1,18 @@
 import assert from 'assert'
-import {CallContext, Result, deprecateLatest} from './support'
+import {Chain, ChainContext, CallContext, Call, Result} from './support'
 import * as v16 from './v16'
-import * as v9220 from './v9220'
 
 export class ContractsCallCall {
-  constructor(private ctx: CallContext) {
-    assert(this.ctx.extrinsic.name === 'contracts.call')
+  private readonly _chain: Chain
+  private readonly call: Call
+
+  constructor(ctx: CallContext)
+  constructor(ctx: ChainContext, call: Call)
+  constructor(ctx: CallContext, call?: Call) {
+    call = call || ctx.call
+    assert(call.name === 'Contracts.call')
+    this._chain = ctx._chain
+    this.call = call
   }
 
   /**
@@ -27,7 +34,7 @@ export class ContractsCallCall {
    * a regular account will be created and any value will be transferred.
    */
   get isV16(): boolean {
-    return this.ctx._chain.getCallHash('contracts.call') === 'd96c8a6656d7a4d6af6d5d0d51dd36e041c9ea8a92a7ead343d711addd74780f'
+    return this._chain.getCallHash('Contracts.call') === 'd96c8a6656d7a4d6af6d5d0d51dd36e041c9ea8a92a7ead343d711addd74780f'
   }
 
   /**
@@ -50,65 +57,65 @@ export class ContractsCallCall {
    */
   get asV16(): {dest: v16.MultiAddress, value: bigint, gasLimit: bigint, storageDepositLimit: (bigint | undefined), data: Uint8Array} {
     assert(this.isV16)
-    return this.ctx._chain.decodeCall(this.ctx.extrinsic)
-  }
-
-  get isLatest(): boolean {
-    deprecateLatest()
-    return this.isV16
-  }
-
-  get asLatest(): {dest: v16.MultiAddress, value: bigint, gasLimit: bigint, storageDepositLimit: (bigint | undefined), data: Uint8Array} {
-    deprecateLatest()
-    return this.asV16
+    return this._chain.decodeCall(this.call)
   }
 }
 
-export class ContractsSetCodeCall {
-  constructor(private ctx: CallContext) {
-    assert(this.ctx.extrinsic.name === 'contracts.setCode' || this.ctx.extrinsic.name === 'contracts.set_code')
+export class ContractsUploadCodeCall {
+  private readonly _chain: Chain
+  private readonly call: Call
+
+  constructor(ctx: CallContext)
+  constructor(ctx: ChainContext, call: Call)
+  constructor(ctx: CallContext, call?: Call) {
+    call = call || ctx.call
+    assert(call.name === 'Contracts.upload_code')
+    this._chain = ctx._chain
+    this.call = call
   }
 
   /**
-   * Privileged function that changes the code of an existing contract.
+   * Upload new `code` without instantiating a contract from it.
    * 
-   * This takes care of updating refcounts and all other necessary operations. Returns
-   * an error if either the `code_hash` or `dest` do not exist.
+   * If the code does not already exist a deposit is reserved from the caller
+   * and unreserved only when [`Self::remove_code`] is called. The size of the reserve
+   * depends on the instrumented size of the the supplied `code`.
+   * 
+   * If the code already exists in storage it will still return `Ok` and upgrades
+   * the in storage version to the current
+   * [`InstructionWeights::version`](InstructionWeights).
    * 
    * # Note
    * 
-   * This does **not** change the address of the contract in question. This means
-   * that the contract address is no longer derived from its code hash after calling
-   * this dispatchable.
+   * Anyone can instantiate a contract from any uploaded code and thus prevent its removal.
+   * To avoid this situation a constructor could employ access control so that it can
+   * only be instantiated by permissioned entities. The same is true when uploading
+   * through [`Self::instantiate_with_code`].
    */
-  get isV9220(): boolean {
-    return this.ctx._chain.getCallHash('contracts.set_code') === '70cd8e4f03fe2c8334a13735563897eedfa16eb9b8e0c97b3aacce6c108aacc0'
+  get isV16(): boolean {
+    return this._chain.getCallHash('Contracts.upload_code') === 'e5d80c6158333f4c26b9bf07184fcf08a6cc009b6fca8d942ba16f848c6a6417'
   }
 
   /**
-   * Privileged function that changes the code of an existing contract.
+   * Upload new `code` without instantiating a contract from it.
    * 
-   * This takes care of updating refcounts and all other necessary operations. Returns
-   * an error if either the `code_hash` or `dest` do not exist.
+   * If the code does not already exist a deposit is reserved from the caller
+   * and unreserved only when [`Self::remove_code`] is called. The size of the reserve
+   * depends on the instrumented size of the the supplied `code`.
+   * 
+   * If the code already exists in storage it will still return `Ok` and upgrades
+   * the in storage version to the current
+   * [`InstructionWeights::version`](InstructionWeights).
    * 
    * # Note
    * 
-   * This does **not** change the address of the contract in question. This means
-   * that the contract address is no longer derived from its code hash after calling
-   * this dispatchable.
+   * Anyone can instantiate a contract from any uploaded code and thus prevent its removal.
+   * To avoid this situation a constructor could employ access control so that it can
+   * only be instantiated by permissioned entities. The same is true when uploading
+   * through [`Self::instantiate_with_code`].
    */
-  get asV9220(): {dest: v9220.MultiAddress, codeHash: v9220.H256} {
-    assert(this.isV9220)
-    return this.ctx._chain.decodeCall(this.ctx.extrinsic)
-  }
-
-  get isLatest(): boolean {
-    deprecateLatest()
-    return this.isV9220
-  }
-
-  get asLatest(): {dest: v9220.MultiAddress, codeHash: v9220.H256} {
-    deprecateLatest()
-    return this.asV9220
+  get asV16(): {code: Uint8Array, storageDepositLimit: (bigint | undefined)} {
+    assert(this.isV16)
+    return this._chain.decodeCall(this.call)
   }
 }
