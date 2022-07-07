@@ -12,13 +12,13 @@ export class Extrinsic {
   id!: string
 
   @Column_("int4", {nullable: false})
-  block!: number
+  blockNumber!: number
 
   @Column_("int4", {nullable: false})
   indexInBlock!: number
 
   @Column_("int4", {nullable: false})
-  version!: number
+  versionInfo!: number
 
   @Column_("text", {nullable: false})
   name!: string

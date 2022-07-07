@@ -33,9 +33,9 @@ export function createExtrinsic(
   const childLog = log.child("entity-creator");
   return new Extrinsic({
     id: extrinsic.id,
-    block: block.height,
+    blockNumber: block.height,
     indexInBlock: extrinsic.indexInBlock,
-    version: extrinsic.version,
+    versionInfo: extrinsic.version,
     name: call.name,
     signer: getSignerAddress(childLog, extrinsic.signature),
     signature: getSignature(childLog, extrinsic.signature),

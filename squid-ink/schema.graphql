@@ -87,9 +87,9 @@ type ContractEmittedEvent @entity {
 
 type Extrinsic @entity {
   id: ID!
-  block: Int!
+  blockNumber: Int!
   indexInBlock: Int!
-  version: Int!
+  versionInfo: Int!
   name: String!
   signer: String
   signature: String

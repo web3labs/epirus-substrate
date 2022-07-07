@@ -1,5 +1,4 @@
 import "./initialise";
-import { lookupArchive } from "@subsquid/archive-registry";
 import { SubstrateBatchProcessor } from "@subsquid/substrate-processor";
 import { TypeormDatabase } from "@subsquid/typeorm-store";
 import {
@@ -7,6 +6,7 @@ import {
   handleBalancesReserved,
   handleBalancesTransfer,
   handleBalancesWithdraw,
+  handleChainPropertiesUpload,
   handleContractCall,
   handleContractCodeStored,
   handleContractCodeUpdated,
@@ -15,14 +15,14 @@ import {
   handleSystemNewAccount,
 } from "./handlers";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const processor = new SubstrateBatchProcessor()
   .setBlockRange({ from: 0 })
   .setBatchSize(500)
   .setDataSource({
-    chain: process.env.WS_ENDPOINT,
+    chain: process.env.WS_ENDPOINT || "http://127.0.0.1:9944",
     // Lookup archive by the network name in the Subsquid registry
-    archive: lookupArchive("shibuya", { release: "FireSquid" }),
+    // archive: lookupArchive("shibuya", { release: "FireSquid" }),
+    archive: process.env.ARCHIVE_ENDPOINT || "http://127.0.0.1:8888/graphql",
 
     // Use archive created by archive/docker-compose.yml
     // archive: 'http://localhost:8888/graphql'
@@ -41,6 +41,7 @@ const processor = new SubstrateBatchProcessor()
 type ProcessorType = typeof processor;
 
 processor.run(new TypeormDatabase(), async (ctx) => {
+  await handleChainPropertiesUpload<ProcessorType>(ctx);
   for (const block of ctx.blocks) {
     for (const item of block.items) {
       switch (item.name) {
