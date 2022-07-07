@@ -1,5 +1,5 @@
-import { Arg } from "../types/extrinsic"
+import { Args } from "../types/extrinsic"
 
-export function argValue (args: Arg[], name: string) {
-  return args.find(a => a.name === name)?.value
+export function argValue (args: Args, name: string) {
+  return args[name]
 }

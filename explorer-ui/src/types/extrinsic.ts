@@ -1,8 +1,4 @@
-export interface Arg {
-  type: string,
-  name: string,
-  value: string
-}
+export type Args = Record<string, string> | Record<string, number> | Record<string, undefined>;
 
 export interface Extrinsic {
   blockHash: string
@@ -15,5 +11,5 @@ export interface Extrinsic {
   signature:string
   tip:string
   versionInfo:string
-  args: Arg[]
+  args: Args
 }

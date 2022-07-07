@@ -1,5 +1,5 @@
 import { AccountRef, Account } from "./accounts"
-import { Arg, Extrinsic } from "./extrinsic"
+import { Args, Extrinsic } from "./extrinsic"
 
 export interface Activity {
   id: string,
@@ -8,7 +8,7 @@ export interface Activity {
   to: AccountRef,
   from: AccountRef,
   createdAt: Date,
-  args: Arg[]
+  args: Args
 }
 
 export interface Event {

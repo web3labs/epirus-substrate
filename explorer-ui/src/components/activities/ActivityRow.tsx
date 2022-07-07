@@ -11,9 +11,10 @@ import { formatValue } from "../commons/Args"
 import { useChainProperties } from "../../contexts/ChainContext"
 
 function actionAlias (action: string) {
-  switch (action) {
+  switch (action.toLocaleLowerCase()) {
   case "contracts.instantiate":
-  case "contracts.instantiateWithCode":
+  case "contracts.instantiatewithcode":
+  case "contracts.instantiate_with_code":
     return "instantiate"
   case "contracts.call":
     return "call"

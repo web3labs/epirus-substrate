@@ -1,10 +1,10 @@
-import { argValue } from "../../utils/types"
 import { formatUnits } from "../../formats/units"
-import { Arg } from "../../types/extrinsic"
 import { TokenProps } from "../../types/chain"
+import { Args } from "../../types/extrinsic"
+import { argValue } from "../../utils/types"
 
-export function formatValue (args: Arg[] | undefined, token: TokenProps, name: string = "value") {
-  if (args === undefined || args.length === 0) {
+export function formatValue (args: Args | undefined | null, token: TokenProps, name: string = "value") {
+  if (args === undefined || args === null) {
     return null
   }
 

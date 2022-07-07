@@ -12,6 +12,7 @@ export default function ExtrinsicSummary (
   { extrinsic: Extrinsic, token: TokenProps, isOpen?: boolean}
 ) {
   const { blockNumber, blockHash, id, name, args } = extrinsic
+  const data = argValue(args, "data")
 
   return (
     <Segment title="Extrinsic" collapsable={true} isOpen={isOpen}>
@@ -30,7 +31,7 @@ export default function ExtrinsicSummary (
         }/>
         <Definition label="Data" term={
           <HexCallData>
-            {argValue(args, "data")}
+            {typeof data === "string" ? data : undefined}
           </HexCallData>
         }/>
         <Definition label="Gas Limit" term={

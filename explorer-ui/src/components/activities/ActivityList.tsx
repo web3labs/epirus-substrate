@@ -32,11 +32,7 @@ query($where: ActivityWhereInput = {} ,$first: Int = 5, $after: String = "", $or
           }
         }
         type
-        args {
-          name
-          type
-          value
-        }
+        args
       }
     }
     pageInfo {

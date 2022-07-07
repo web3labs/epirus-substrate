@@ -25,7 +25,6 @@ query($id: ID!) {
     id
     createdAt
     createdFrom {
-      blockHash
       blockNumber
       id
       hash
@@ -34,11 +33,7 @@ query($id: ID!) {
       signature
       tip
       versionInfo
-      args {
-        type
-        name
-        value
-      }
+      args
     }
     owner {
       id,
@@ -95,6 +90,7 @@ export default function CodePage () {
 
   const { id, createdAt, owner, createdFrom } = data?.contractCodes[0] as ContractCode
   const depositLimit = argValue(createdFrom.args, "storageDepositLimit")
+  const salt = argValue(createdFrom.args, "salt")
 
   return (
     <>
@@ -136,7 +132,7 @@ export default function CodePage () {
               }/>
               <Definition label="Salt" term={
                 <HexText>
-                  {argValue(createdFrom.args, "salt")}
+                  {typeof salt === "string" ? salt : undefined}
                 </HexText>
               }/>
             </DefinitionList>
