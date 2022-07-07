@@ -16,7 +16,7 @@ interface Props {
 
 export default function useSquid ({
   query, variables, refresh = {
-    millis: 1000,
+    millis: 10000,
     disabled: false
   }
 }: Props) : [UseQueryState, () => void] {
