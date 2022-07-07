@@ -11,6 +11,7 @@ export default function CodesPage () {
         <CodeList
           pageQuery={{ first: 15 }}
           sortable={true}
+          filterable={true}
           title="Codes"
         />
       </Box>

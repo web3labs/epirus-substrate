@@ -6,10 +6,13 @@ import Pagination from "../navigation/Pagination"
 import AccountRow from "./AccountRow"
 import SortBy from "../query/SortBy"
 import ListQuery from "../query/ListQuery"
+import Filters from "../query/Filters"
+import DateRangeFilter from "../query/filters/DateRangeFilter"
+import { textFilterOf } from "../query/filters/TextFilter"
 
 const QUERY = `
-query($first: Int!, $after: String = "", $orderBy: [AccountOrderByInput!]! = [id_ASC]) {
-  accountsConnection(orderBy: $orderBy, first: $first, after: $after) {
+query($where: AccountWhereInput = {}, $first: Int!, $after: String = "", $orderBy: [AccountOrderByInput!]! = [id_ASC]) {
+  accountsConnection(where: $where, orderBy: $orderBy, first: $first, after: $after) {
     totalCount
     pageInfo {
       endCursor
@@ -82,12 +85,30 @@ export default function AccountList ({
             pageQuery={queryInState}
           />
           : undefined
+        const filter = filterable
+          ? <Filters
+            filterTypes={[
+              DateRangeFilter,
+              textFilterOf({
+                selector: "id_eq",
+                label: "Account",
+                template: value => (
+                  { id_eq: value }
+                ),
+                placeholder: "Address..."
+              })
+            ]}
+            setQuery={setQueryInState}
+            pageQuery={queryInState}
+          />
+          : undefined
 
         return (
           <List
             title={title}
             description={description}
             sort={sort}
+            filter={filter}
             footer={
               <Pagination
                 page={page}

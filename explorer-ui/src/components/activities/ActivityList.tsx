@@ -8,7 +8,7 @@ import SortBy from "../query/SortBy"
 import ActivityRow from "./ActivityRow"
 import Filters from "../query/Filters"
 import DateRangeFilter from "../query/filters/DateRangeFilter"
-import { filterOf as textFilterOf } from "../query/filters/TextFilter"
+import { textFilterOf } from "../query/filters/TextFilter"
 
 const QUERY = `
 query($where: ActivityWhereInput = {} ,$first: Int = 5, $after: String = "", $orderBy: [ActivityOrderByInput!]! = [createdAt_DESC]) {
@@ -88,7 +88,7 @@ export default function ActivityList ({
               textFilterOf(
                 {
                   selector: "from",
-                  label: "From Address",
+                  label: "From",
                   template: value => (
                     { from: { id_eq: value } }
                   ),

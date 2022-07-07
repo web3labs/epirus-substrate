@@ -11,6 +11,7 @@ export default function AccountsPage () {
         <AccountList
           pageQuery={{ first: 15 }}
           sortable={true}
+          filterable={true}
           title="Accounts"
         />
       </Box>

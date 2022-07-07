@@ -8,7 +8,7 @@ import SortBy from "../query/SortBy"
 import ListQuery from "../query/ListQuery"
 import Filters from "../query/Filters"
 import DateRangeFilter from "../query/filters/DateRangeFilter"
-import { filterOf as textFilterOf } from "../query/filters/TextFilter"
+import { textFilterOf } from "../query/filters/TextFilter"
 
 const QUERY = `
 query($where: ContractWhereInput = {}, $first: Int!, $after: String = "", $orderBy: [ContractOrderByInput!]! = [createdAt_DESC]) {
@@ -122,7 +122,7 @@ export default function ContractList ({
                 setQuery={setQueryInState}
               />
             }
-            emptyMessage="No WASM contract deployed yet"
+            emptyMessage="No contracts found"
           >
             {page?.edges.map(({ node } : Edge<LightContract>) => (
               <ContractRow
