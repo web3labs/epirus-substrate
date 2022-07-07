@@ -24,11 +24,6 @@ jobs:
         [ "$VERSION" == "main" ] && VERSION=latest
         # Append var to GITHUB_ENV
         echo "VERSION=${VERSION}" >> $GITHUB_ENV
-        
-    - name: Generate Migrations
-      run: |
-        cd squid-ink
-        npx sqd db create-migration Init
 
     - name: Build the Docker image
       run: | 
