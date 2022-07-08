@@ -1,4 +1,6 @@
 import { assertNotNull } from "@subsquid/substrate-processor";
+import { Ctx } from "handlers/types";
+import { ChainProperties, Token } from "./model";
 
 export interface ChainConfig {
   name: string;
@@ -46,3 +48,41 @@ function getChainConfig(): ChainConfig {
 
 const config = getChainConfig();
 export const { name, ss58Format, token } = config;
+
+export class ChainPropertiesManager {
+  private stored = false;
+
+  async storeChainProperties(ctx: Ctx): Promise<void> {
+    if (this.stored) {
+      return;
+    }
+    await this.store(ctx);
+    this.stored = true;
+  }
+
+  private async store(ctx: Ctx): Promise<void> {
+    const { log, store } = ctx;
+    log.info({ name, ss58Format, token }, "Storing chain properties...");
+
+    try {
+      const tokenEntity = new Token({
+        id: "0",
+        tokenDecimals: token.tokenDecimals,
+        tokenSymbol: token.tokenSymbol,
+      });
+      const chainPropertiesEntity = new ChainProperties({
+        id: "chain_properties",
+        name,
+        token: tokenEntity,
+        ss58Format,
+      });
+      await store.save(tokenEntity);
+      await store.save(chainPropertiesEntity);
+    } catch (error) {
+      log.error(
+        <Error>error,
+        "Error saving chain properties and token config!"
+      );
+    }
+  }
+}

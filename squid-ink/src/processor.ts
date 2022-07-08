@@ -1,19 +1,8 @@
 import "./initialise";
 import { SubstrateBatchProcessor } from "@subsquid/substrate-processor";
 import { TypeormDatabase } from "@subsquid/typeorm-store";
-import {
-  handleBalancesEndowed,
-  handleBalancesReserved,
-  handleBalancesTransfer,
-  handleBalancesWithdraw,
-  handleChainPropertiesUpload,
-  handleContractCall,
-  handleContractCodeStored,
-  handleContractCodeUpdated,
-  handleContractEmitted,
-  handleContractInstantiated,
-  handleSystemNewAccount,
-} from "./handlers";
+import { ChainPropertiesManager } from "./chain-config";
+import { HandlerDirectory } from "./handlerDirectory";
 
 const processor = new SubstrateBatchProcessor()
   .setBlockRange({ from: 0 })
@@ -23,12 +12,9 @@ const processor = new SubstrateBatchProcessor()
     // Lookup archive by the network name in the Subsquid registry
     // archive: lookupArchive("shibuya", { release: "FireSquid" }),
     archive: process.env.ARCHIVE_ENDPOINT || "http://127.0.0.1:8888/graphql",
-
-    // Use archive created by archive/docker-compose.yml
-    // archive: 'http://localhost:8888/graphql'
   })
-  .addEvent("System.NewAccount")
   .addEvent("Balances.Transfer")
+  .addEvent("System.NewAccount")
   .addEvent("Balances.Withdraw")
   .addEvent("Balances.Reserved")
   .addEvent("Balances.Endowed")
@@ -38,86 +24,20 @@ const processor = new SubstrateBatchProcessor()
   .addEvent("Contracts.ContractEmitted")
   .addCall("Contracts.call");
 
-type ProcessorType = typeof processor;
+const handlerDirectory = new HandlerDirectory().registerHandlers();
+const chainPropertiesManager = new ChainPropertiesManager();
 
 processor.run(new TypeormDatabase(), async (ctx) => {
-  await handleChainPropertiesUpload<ProcessorType>(ctx);
+  await chainPropertiesManager.storeChainProperties(ctx);
   for (const block of ctx.blocks) {
     for (const item of block.items) {
-      switch (item.name) {
-        case "System.NewAccount":
-          await handleSystemNewAccount<ProcessorType>({
-            ctx,
-            event: item.event,
-            block: block.header,
-          });
-          break;
-        case "Balances.Transfer":
-          await handleBalancesTransfer<ProcessorType>({
-            ctx,
-            event: item.event,
-            block: block.header,
-          });
-          break;
-        case "Balances.Withdraw":
-          await handleBalancesWithdraw<ProcessorType>({
-            ctx,
-            event: item.event,
-            block: block.header,
-          });
-          break;
-        case "Balances.Reserved":
-          await handleBalancesReserved<ProcessorType>({
-            ctx,
-            event: item.event,
-            block: block.header,
-          });
-          break;
-        case "Balances.Endowed":
-          await handleBalancesEndowed<ProcessorType>({
-            ctx,
-            event: item.event,
-            block: block.header,
-          });
-          break;
-        case "Contracts.Instantiated":
-          await handleContractInstantiated<ProcessorType>({
-            ctx,
-            event: item.event,
-            block: block.header,
-          });
-          break;
-        case "Contracts.CodeStored":
-          await handleContractCodeStored<ProcessorType>({
-            ctx,
-            event: item.event,
-            block: block.header,
-          });
-          break;
-        case "Contracts.ContractCodeUpdated":
-          await handleContractCodeUpdated<ProcessorType>({
-            ctx,
-            event: item.event,
-            block: block.header,
-          });
-          break;
-        case "Contracts.ContractEmitted":
-          await handleContractEmitted<ProcessorType>({
-            ctx,
-            event: item.event,
-            block: block.header,
-          });
-          break;
-        case "Contracts.call":
-          await handleContractCall<ProcessorType>({
-            ctx,
-            call: item.call,
-            extrinsic: item.extrinsic,
-            block: block.header,
-          });
-          break;
-        default:
-          break;
+      try {
+        const handler = handlerDirectory.getHandlerForItem(item, ctx.log);
+        if (handler) {
+          await handler(ctx, block.header);
+        }
+      } catch (error) {
+        ctx.log.error(<Error>error, "Error while handling block items");
       }
     }
   }

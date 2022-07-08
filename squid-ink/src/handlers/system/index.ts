@@ -1,2 +1,3 @@
-export * from "./events";
-export * from "./chain";
+import * as systemEventHandlers from "./events";
+
+export { systemEventHandlers };

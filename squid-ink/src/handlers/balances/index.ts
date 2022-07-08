@@ -1,1 +1,3 @@
-export * from "./events";
+import * as balancesEventHandlers from "./events";
+
+export { balancesEventHandlers };

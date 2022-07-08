@@ -7,13 +7,13 @@ import { Store } from "@subsquid/typeorm-store";
 import { Ctx } from "../handlers/types";
 import { Account, Balance } from "../model";
 
-export async function updateAccountBalance<P>(
-  ctx: Ctx<P>,
+export async function updateAccountBalance(
+  ctx: Ctx,
   id: string,
   block: SubstrateBlock
 ): Promise<Account> {
   const account = await getOrCreateAccount(ctx.store, id);
-  account.balance = await getBalances<P>(ctx, id, block);
+  account.balance = await getBalances(ctx, id, block);
   return account;
 }
 
@@ -52,8 +52,8 @@ export function createAccount(id: string, createdAt: Date): Account {
   return new Account({ id, createdAt });
 }
 
-async function getBalances<P>(
-  ctx: Ctx<P>,
+async function getBalances(
+  ctx: Ctx,
   address: string,
   block: SubstrateBlock
 ): Promise<Balance> {
