@@ -21,7 +21,7 @@ import CodesPage from "./components/codes/CodesPage"
 import ActivitiesPage from "./components/activities/ActivitiesPage"
 
 const client = createClient({
-  url: process.env.SQUID_ENDPOINT || "http://localhost:4350/graphql"
+  url: process.env.REACT_APP_SQUID_ENDPOINT || "http://localhost:4350/graphql"
 })
 
 function App () {
