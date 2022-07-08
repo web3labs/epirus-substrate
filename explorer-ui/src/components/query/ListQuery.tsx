@@ -18,7 +18,9 @@ export default function ListQuery (props: Props) {
     dataSelector,
     render,
     pageQuery,
-    refresh
+    refresh = {
+      millis: 10000
+    }
   } = props
   const hash = useRef(Hashcode.object({}))
   const [queryInState, setQueryInState] = useState(pageQuery)

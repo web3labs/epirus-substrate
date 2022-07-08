@@ -16,11 +16,7 @@ query($id: ID!) {
 export default function BinaryTab ({ id }:{id: string}) {
   const [result] = useSquid({
     query: QUERY,
-    variables: { id },
-    refresh: {
-      disabled: true,
-      millis: 0
-    }
+    variables: { id }
   })
 
   const { data, fetching } = result
