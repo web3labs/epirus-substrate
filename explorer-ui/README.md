@@ -1,10 +1,27 @@
 # Epirus Substrate UI
 
-Epirus Substrate UI is the user interface for the Epirus Substrate explorer.
+Epirus Substrate UI is the user interface for [Epirus squids](../squid-ink/).
 
 ## Configuration
 
-TBD
+To configure the UI just create a `.env` file with the configuration variables.
+
+Example
+```bash
+# =================================
+# Substrate UI config.
+# =================================
+
+# Port of the development server
+PORT=3300
+
+# Epirus Squid Ink query service endpoint
+REACT_APP_SQUID_ENDPOINT=http://localhost:4350/graphql
+
+# EOF
+```
+
+Head to [Adding custom environment variables](https://create-react-app.dev/docs/adding-custom-environment-variables/) for further details.
 
 ## Features
 
