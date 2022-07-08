@@ -11,7 +11,10 @@ export default function AccountsPage () {
       <Breadcrumbs/>
       <Box className="content">
         <AccountList
-          pageQuery={{ first: 15 }}
+          pageQuery={{
+            first: 15,
+            orderBy: "createdAt_DESC"
+          }}
           sortOptions={ACCOUNT_SORT_OPTIONS}
           filterTypes={
             [

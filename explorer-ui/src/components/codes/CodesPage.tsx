@@ -11,7 +11,10 @@ export default function CodesPage () {
       <Breadcrumbs/>
       <Box className="content">
         <CodeList
-          pageQuery={{ first: 15 }}
+          pageQuery={{
+            first: 15,
+            orderBy: "createdAt_DESC"
+          }}
           sortOptions={CODE_SORT_OPTIONS}
           filterTypes={
             [

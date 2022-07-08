@@ -11,7 +11,10 @@ export default function ActivitiesPage () {
       <Breadcrumbs/>
       <Box className="content">
         <ActivityList
-          pageQuery={{ first: 15 }}
+          pageQuery={{
+            first: 15,
+            orderBy: "createdAt_DESC"
+          }}
           sortOptions={ACTIVITY_SORT_OPTIONS}
           filterTypes={[
             DateRangeFilter,
