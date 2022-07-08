@@ -4,27 +4,25 @@ import { warn } from "../components/commons/Toast"
 import { PageQuery } from "../types/pagination"
 
 export interface SquidRefreshProps {
-  millis: number,
-  disabled: boolean
+  millis: number
 }
 
 interface Props {
   query: string
   variables: PageQuery | object
   refresh?: SquidRefreshProps
+  pause?: boolean
 }
 
 export default function useSquid ({
-  query, variables, refresh = {
-    millis: 10000,
-    disabled: false
-  }
+  query, variables, refresh, pause = false
 }: Props) : [UseQueryState, () => void] {
   // Default request policy is "Cache-first"
   // Doesn't seem to be problematic but maybe it's better to always use "cache-and-network"?
   const [result, reexecuteQuery] = useQuery({
     query,
-    variables
+    variables,
+    pause
   })
 
   // With cache-and-network policy, urql will fetch the cached result first
@@ -48,7 +46,7 @@ export default function useSquid ({
   }, [error, stale])
 
   useEffect(() => {
-    if (refresh.disabled || result.fetching) return
+    if (refresh === undefined || result.fetching) return
 
     // Refresh every refresh.millis...
     const timerId = setInterval(() => {

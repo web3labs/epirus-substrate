@@ -120,11 +120,7 @@ export default function ContractPage () {
 
   const [result] = useSquid({
     query: QUERY,
-    variables: { id: params.id },
-    refresh: {
-      disabled: true,
-      millis: 0
-    }
+    variables: { id: params.id }
   })
 
   const { data, fetching } = result
