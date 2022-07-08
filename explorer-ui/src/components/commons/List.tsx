@@ -1,5 +1,7 @@
 import React, { ReactNode } from "react"
 import { PageQuery } from "../../types/pagination"
+import { FilterProps } from "../query/Filters"
+import { Option } from "../commons/Select"
 
 interface Props {
     title?: JSX.Element | string
@@ -30,8 +32,8 @@ export interface ListProps {
   title?: JSX.Element | string
   description?: JSX.Element | string
   short?: boolean
-  sortable?: boolean
-  filterable?: boolean
+  sortOptions?: Option[] | undefined
+  filterTypes?: React.ComponentType<FilterProps> | React.ComponentType<FilterProps>[] | undefined
   currentId?: string
 }
 
@@ -51,23 +53,27 @@ export default function List ({
 }: Props) {
   return (
     <div className="relative flex flex-col grow w-full items-center justify-start">
-      {title &&
-      <div className="flex flex-col w-full p-4 border-b px-4 py-5 sm:px-6">
-        <div className="flex flex-row items-center">
-          <div className="flex flex-col gap-y-1">
-            <h3 className="text-lg leading-6 font-medium text-gray-900">{title}</h3>
-            {description &&
+      {title
+        ? <div className="flex flex-col w-full p-4 border-b px-4 py-5 sm:px-6">
+          <div className="flex flex-row items-center">
+            <div className="flex flex-col gap-y-1">
+              <h3 className="text-lg leading-6 font-medium text-gray-900">{title}</h3>
+              {description &&
               <p className="max-w-2xl text-sm text-gray-500">{description}</p>
-            }
-          </div>
-          <div className="flex ml-auto">
-            <div className="flex flex-row flex-wrap gap-x-1 items-center">
-              {filter}
-              {sort}
+              }
+            </div>
+            <div className="flex ml-auto">
+              <div className="flex flex-row flex-wrap gap-x-1 items-center">
+                {filter}
+                {sort}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+        : <div className="w-full px-2 py-2 flex flex-row flex-wrap gap-x-1 justify-end">
+          {filter}
+          {sort}
+        </div>
       }
       <ul className="flex flex-col divide-y divide-opacity-70 w-full">
         {isEmpty(children)

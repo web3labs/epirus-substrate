@@ -7,8 +7,6 @@ import AccountRow from "./AccountRow"
 import SortBy from "../query/SortBy"
 import ListQuery from "../query/ListQuery"
 import Filters from "../query/Filters"
-import DateRangeFilter from "../query/filters/DateRangeFilter"
-import { textFilterOf } from "../query/filters/TextFilter"
 
 const QUERY = `
 query($where: AccountWhereInput = {}, $first: Int!, $after: String = "", $orderBy: [AccountOrderByInput!]! = [id_ASC]) {
@@ -44,7 +42,7 @@ query($where: AccountWhereInput = {}, $first: Int!, $after: String = "", $orderB
   }
 }
 `
-const SORT_OPTIONS = [
+export const ACCOUNT_SORT_OPTIONS = [
   {
     name: "newest",
     value: "createdAt_DESC"
@@ -69,8 +67,8 @@ export default function AccountList ({
   description,
   currentId,
   short = false,
-  sortable = false,
-  filterable = false
+  sortOptions,
+  filterTypes
 } : ListProps) {
   return <ListQuery
     pageQuery={pageQuery}
@@ -79,25 +77,15 @@ export default function AccountList ({
     render={
       ({ data, setQueryInState, queryInState }) => {
         const page : Page<Account> = data
-        const sort = sortable
-          ? <SortBy options={SORT_OPTIONS}
+        const sort = sortOptions
+          ? <SortBy options={sortOptions}
             setQuery={setQueryInState}
             pageQuery={queryInState}
           />
           : undefined
-        const filter = filterable
+        const filter = filterTypes
           ? <Filters
-            filterTypes={[
-              DateRangeFilter,
-              textFilterOf({
-                selector: "id_eq",
-                label: "Account",
-                template: value => (
-                  { id_eq: value }
-                ),
-                placeholder: "Address..."
-              })
-            ]}
+            filterTypes={filterTypes}
             setQuery={setQueryInState}
             pageQuery={queryInState}
           />
@@ -116,7 +104,7 @@ export default function AccountList ({
                 setQuery={setQueryInState}
               />
             }
-            emptyMessage="No accounts on chain yet"
+            emptyMessage="No accounts to show"
           >
             {page?.edges.map(({ node } : Edge<Account>) => (
               <AccountRow
