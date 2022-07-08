@@ -6,6 +6,7 @@ import ListQuery from "../query/ListQuery"
 import Pagination from "../navigation/Pagination"
 import SortBy from "../query/SortBy"
 import CodeRow from "./CodeRow"
+import Filters from "../query/Filters"
 
 const QUERY = `
 query($where: ContractCodeWhereInput = {} ,$first: Int = 5, $after: String = "", $orderBy: [ContractCodeOrderByInput!]! = [createdAt_DESC]) {
@@ -39,7 +40,7 @@ query($where: ContractCodeWhereInput = {} ,$first: Int = 5, $after: String = "",
   }
 }
 `
-const SORT_OPTIONS = [
+export const CODE_SORT_OPTIONS = [
   {
     name: "newest",
     value: "createdAt_DESC"
@@ -50,13 +51,13 @@ const SORT_OPTIONS = [
   }
 ]
 
-export default function ActivityList ({
+export default function CodeList ({
   title,
   description,
   pageQuery = { first: 5 },
   short,
-  sortable = false,
-  filterable = false,
+  sortOptions,
+  filterTypes,
   currentId
 } : ListProps) {
   return <ListQuery
@@ -66,8 +67,15 @@ export default function ActivityList ({
     render={
       ({ data, setQueryInState, queryInState }) => {
         const page : Page<ContractCode> = data
-        const sort = sortable
-          ? <SortBy options={SORT_OPTIONS}
+        const sort = sortOptions
+          ? <SortBy options={sortOptions}
+            setQuery={setQueryInState}
+            pageQuery={queryInState}
+          />
+          : undefined
+        const filter = filterTypes
+          ? <Filters
+            filterTypes={filterTypes}
             setQuery={setQueryInState}
             pageQuery={queryInState}
           />
@@ -78,6 +86,7 @@ export default function ActivityList ({
             title={title}
             description={description}
             sort={sort}
+            filter={filter}
             footer={
               <Pagination
                 page={page}
@@ -85,7 +94,7 @@ export default function ActivityList ({
                 setQuery={setQueryInState}
               />
             }
-            emptyMessage="No contract related activities yet"
+            emptyMessage="No codes to show"
           >
             {page?.edges.map(({ node } : Edge<ContractCode>) => (
               <CodeRow

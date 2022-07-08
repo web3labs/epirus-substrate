@@ -6,17 +6,85 @@ It has been extended with capabilities to configure and spin up a new processor 
 
 ## Summary
 
-- [Project setup](#project-setup)
-- [Squid Archive](#squid-archive)
-- [Configuring the processor for a new chain](#configuring-the-processor-for-a-new-chain)
-- [Type Bundles](#types-bundle)
+- [Deployment](#deployment)
+- [Development](#development)
+  - [Squid Archive](#squid-archive)
+  - [Adding New Chains](#adding-new-chains)
+  - [Type Bundles](#types-bundle)
 
 ## Prerequisites
 
 * node 16.x
 * docker
 
-## Project setup
+## Deployment
+
+### Docker Images
+
+You can find out published the published Docker images at [Epirus Substrate registry](https://github.com/orgs/web3labs/packages?repo_name=epirus-substrate).
+
+### Running a Server
+
+Example `docker-compose.yml` for Rococo Canvas
+
+```yaml
+version: "3.4"
+
+x-environment: &envs
+  CHAIN: rococo
+  PROCESSOR_NAME: squid-rococo
+  DB_NAME: squid
+  DB_HOST: db
+  DB_PASS: squid
+  DB_PORT: 5432
+  PROCESSOR_PROMETHEUS_PORT: 3000
+  GQL_PORT: 4000
+  ARCHIVE_ENDPOINT: https://SQUID_ARCHIVE/graphql
+  WS_ENDPOINT: wss://NODE_WSS_ENDPOINT
+  BALANCES_STORE: system
+
+services:
+  db:
+    container_name: subsquid-db
+    image: postgres:12
+    environment:
+      POSTGRES_DB: squid
+      POSTGRES_PASSWORD: squid
+
+  processor:
+    container_name: subsquid-processor
+    image: ghcr.io/web3labs/squid-ink-epirus:latest
+    environment: *envs
+    command: npm run processor:start
+    depends_on:
+      - "db"
+
+  query:
+    container_name: query-node
+    image: ghcr.io/web3labs/squid-ink-epirus:latest
+    environment: *envs
+    ports:
+      - "4000:4000"
+      - "3000:3000"
+    depends_on:
+      - "db"
+      - "processor"
+```
+
+#### Bootstrapping the Database
+
+Before you running the service you need to create the initial database model.
+At this moment the migrations are not pushed neither in the git repository nor the image.
+
+```sh
+docker-compose run processor /bin/sh
+npx sqd db create-migration Init
+npx sqd db migrate
+```
+
+## Development
+
+### Project Setup
 
 ```bash
 # Install dependencies
@@ -26,10 +94,11 @@ npm ci
 npx sqd codegen
 ```
 
-## Squid Archive
+### Squid Archive
+
 The Squid processor extracts block, extrinsic and event data from a Squid Archive to perform transformation and storage. As such, a Squid Archive endpoint is always required when running the processor. Subsquid provides Archive endpoints for a myriad of Substrate chains and parachains which can be found in the [archive-registry](https://github.com/subsquid/archive-registry). If the archive registry does not contain endpoints for the chain to index, the Squid Archive can be run locally.
 
-### Run local Squid Archive
+#### Run local Squid Archive
 Inspect `archive/.env` and provide the websocket endpoint for your node. If the network requires custom type bundles (for older versions of Substrate), mount them as volumes in `archive/docker-compose.yml` and uncomment the relevant sections in `archive/.env`.
 
 **Note:** When running a chain with EVM pallet, the indexer and indexer-gateway images should be changed to `subsquid/hydra-evm-indexer:5` and `subsquid/hydra-evm-indexer-gateway:5` respectively.
@@ -54,10 +123,10 @@ To drop the archive, run
 docker compose -f archive/docker-compose.yml down -v
 ```
 
-## Configuring the processor for a new chain
+### Configuring the processor for a new chain
 The following steps are required when adding a new chain to the project:
 
-### 1. Generate TypeScript definitions for substrate events and calls
+#### 1. Generate TypeScript definitions for substrate events and calls
 Generation of type-safe wrappers for events, calls and storage items is currently a two-step process.
 
 First, you need to explore the chain to find blocks which introduce new spec version and
@@ -102,16 +171,16 @@ Run the `squid-substrate-typegen` command
 npx squid-substrate-typegen typegen.json
 ```
 
-### 2. Create normalised types for your chain
+#### 2. Create normalised types for your chain
 Since each chain has different versions, and possibly, types, the wrappers generated in the above step is specific to the chain. We need to normalise the calls, events and storage types in order for the handlers in the processor to be able to run agnostically. An example of how type normalisation should be done can be found in the `src/chains/local` folder.
 
-### 3. Add chain configuration
+#### 3. Add chain configuration
 Add the properties of your chain to the `chainConfig` object in `chain-config.ts`.
 
-### 4. Add .env file
+#### 4. Add .env file
 A `.env` file is required per chain. It is recommended to name it as `.env.<chain-name>`. The `.env` file serves as an example.
 
-### 5. Run the processor
+#### 5. Run the processor
 
 ```bash
 # 1. Compile typescript files
@@ -139,7 +208,7 @@ ENV=/path/to/.env npm run processor:start
 npx squid-graphql-server
 ```
 
-## Types bundle
+### Types bundle
 
 Substrate chains which have blocks with metadata versions below 14 don't provide enough 
 information to decode their data. For those chains external 

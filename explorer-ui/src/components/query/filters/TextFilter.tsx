@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { FilterProps } from "../Filters"
 import Chip from "./Chip"
 
-export function filterOf (
+export function textFilterOf (
   { label, selector, template, placeholder = "" } :{
   label: string,
   selector: string,

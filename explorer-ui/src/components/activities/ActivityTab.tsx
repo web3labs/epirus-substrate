@@ -1,17 +1,22 @@
 import React from "react"
 import { TabQuery } from "../navigation/Tabs"
-import ActivityList from "./ActivityList"
+import DateRangeFilter from "../query/filters/DateRangeFilter"
+import ActivityList, { ACTIVITY_SORT_OPTIONS } from "./ActivityList"
 
 export function activityByAccount (id: string) {
   return {
-    from: {
-      id_eq: id
-    },
-    OR: {
-      to: {
-        id_eq: id
+    OR: [
+      {
+        from: {
+          id_eq: id
+        }
+      },
+      {
+        to: {
+          id_eq: id
+        }
       }
-    }
+    ]
   }
 }
 
@@ -23,6 +28,10 @@ export default function ActivityTab ({ currentId, where }: TabQuery) {
         first: 10,
         where
       }}
+      sortOptions={ACTIVITY_SORT_OPTIONS}
+      filterTypes={[
+        DateRangeFilter
+      ]}
     />
   )
 }

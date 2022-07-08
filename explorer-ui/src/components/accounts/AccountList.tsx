@@ -6,10 +6,11 @@ import Pagination from "../navigation/Pagination"
 import AccountRow from "./AccountRow"
 import SortBy from "../query/SortBy"
 import ListQuery from "../query/ListQuery"
+import Filters from "../query/Filters"
 
 const QUERY = `
-query($first: Int!, $after: String = "", $orderBy: [AccountOrderByInput!]! = [id_ASC]) {
-  accountsConnection(orderBy: $orderBy, first: $first, after: $after) {
+query($where: AccountWhereInput = {}, $first: Int!, $after: String = "", $orderBy: [AccountOrderByInput!]! = [id_ASC]) {
+  accountsConnection(where: $where, orderBy: $orderBy, first: $first, after: $after) {
     totalCount
     pageInfo {
       endCursor
@@ -41,7 +42,7 @@ query($first: Int!, $after: String = "", $orderBy: [AccountOrderByInput!]! = [id
   }
 }
 `
-const SORT_OPTIONS = [
+export const ACCOUNT_SORT_OPTIONS = [
   {
     name: "newest",
     value: "createdAt_DESC"
@@ -66,8 +67,8 @@ export default function AccountList ({
   description,
   currentId,
   short = false,
-  sortable = false,
-  filterable = false
+  sortOptions,
+  filterTypes
 } : ListProps) {
   return <ListQuery
     pageQuery={pageQuery}
@@ -76,8 +77,15 @@ export default function AccountList ({
     render={
       ({ data, setQueryInState, queryInState }) => {
         const page : Page<Account> = data
-        const sort = sortable
-          ? <SortBy options={SORT_OPTIONS}
+        const sort = sortOptions
+          ? <SortBy options={sortOptions}
+            setQuery={setQueryInState}
+            pageQuery={queryInState}
+          />
+          : undefined
+        const filter = filterTypes
+          ? <Filters
+            filterTypes={filterTypes}
             setQuery={setQueryInState}
             pageQuery={queryInState}
           />
@@ -88,6 +96,7 @@ export default function AccountList ({
             title={title}
             description={description}
             sort={sort}
+            filter={filter}
             footer={
               <Pagination
                 page={page}
@@ -95,7 +104,7 @@ export default function AccountList ({
                 setQuery={setQueryInState}
               />
             }
-            emptyMessage="No accounts on chain yet"
+            emptyMessage="No accounts to show"
           >
             {page?.edges.map(({ node } : Edge<Account>) => (
               <AccountRow

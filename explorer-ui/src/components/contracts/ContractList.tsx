@@ -7,8 +7,6 @@ import Pagination from "../navigation/Pagination"
 import SortBy from "../query/SortBy"
 import ListQuery from "../query/ListQuery"
 import Filters from "../query/Filters"
-import DateRangeFilter from "../query/filters/DateRangeFilter"
-import { filterOf as textFilterOf } from "../query/filters/TextFilter"
 
 const QUERY = `
 query($where: ContractWhereInput = {}, $first: Int!, $after: String = "", $orderBy: [ContractOrderByInput!]! = [createdAt_DESC]) {
@@ -50,7 +48,7 @@ query($where: ContractWhereInput = {}, $first: Int!, $after: String = "", $order
 }
 `
 
-const SORT_OPTIONS = [
+export const CONTRACT_SORT_OPTIONS = [
   {
     name: "newest",
     value: "createdAt_DESC"
@@ -67,8 +65,8 @@ export default function ContractList ({
   description,
   currentId,
   short,
-  sortable = false,
-  filterable = false
+  sortOptions,
+  filterTypes
 } : ListProps) {
   return <ListQuery
     pageQuery={pageQuery}
@@ -77,33 +75,15 @@ export default function ContractList ({
     render={
       ({ data, setQueryInState, queryInState }) => {
         const page : Page<LightContract> = data
-        const sort = sortable
-          ? <SortBy options={SORT_OPTIONS}
+        const sort = sortOptions
+          ? <SortBy options={sortOptions}
             setQuery={setQueryInState}
             pageQuery={queryInState}
           />
           : undefined
-        const filter = filterable
+        const filter = filterTypes
           ? <Filters
-            filterTypes={[
-              DateRangeFilter,
-              textFilterOf({
-                selector: "id_eq",
-                label: "Contract",
-                template: value => (
-                  { id_eq: value }
-                ),
-                placeholder: "Address..."
-              }),
-              textFilterOf({
-                selector: "deployer",
-                label: "Deployer",
-                template: value => (
-                  { deployer: { id_eq: value } }
-                ),
-                placeholder: "Address..."
-              })
-            ]}
+            filterTypes={filterTypes}
             setQuery={setQueryInState}
             pageQuery={queryInState}
           />
@@ -122,7 +102,7 @@ export default function ContractList ({
                 setQuery={setQueryInState}
               />
             }
-            emptyMessage="No WASM contract deployed yet"
+            emptyMessage="No contracts to show"
           >
             {page?.edges.map(({ node } : Edge<LightContract>) => (
               <ContractRow

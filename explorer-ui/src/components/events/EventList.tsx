@@ -32,7 +32,7 @@ query($where: ContractEmittedEventWhereInput = {} ,$first: Int = 5, $after: Stri
   }
 }
 `
-const SORT_OPTIONS = [
+export const EVENT_SORT_OPTIONS = [
   {
     name: "newest",
     value: "createdAt_DESC"
@@ -48,8 +48,8 @@ export default function EventList ({
   description,
   pageQuery = { first: 5 },
   short = false,
-  sortable = false,
-  filterable = false,
+  sortOptions,
+  filterTypes,
   currentId
 } : ListProps) {
   return <ListQuery
@@ -59,8 +59,8 @@ export default function EventList ({
     render={
       ({ data, setQueryInState, queryInState }) => {
         const page : Page<Event> = data
-        const sort = sortable
-          ? <SortBy options={SORT_OPTIONS}
+        const sort = sortOptions
+          ? <SortBy options={sortOptions}
             setQuery={setQueryInState}
             pageQuery={queryInState}
           />
@@ -78,7 +78,7 @@ export default function EventList ({
                 setQuery={setQueryInState}
               />
             }
-            emptyMessage="No contract related events yet"
+            emptyMessage="No events to show"
           >
             {page?.edges.map(({ node } : Edge<Event>) => (
               <EventRow

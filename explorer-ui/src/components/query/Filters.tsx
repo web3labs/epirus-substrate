@@ -114,6 +114,10 @@ export default function Filters ({
   function handleApply (event: { preventDefault: () => void }) {
     event.preventDefault()
 
+    console.log(buildPageQuery({
+      filterQuery,
+      pageQuery: pageQueryRef.current
+    }))
     setQuery(buildPageQuery({
       filterQuery,
       pageQuery: pageQueryRef.current

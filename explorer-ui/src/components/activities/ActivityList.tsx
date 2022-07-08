@@ -7,8 +7,6 @@ import Pagination from "../navigation/Pagination"
 import SortBy from "../query/SortBy"
 import ActivityRow from "./ActivityRow"
 import Filters from "../query/Filters"
-import DateRangeFilter from "../query/filters/DateRangeFilter"
-import { filterOf as textFilterOf } from "../query/filters/TextFilter"
 
 const QUERY = `
 query($where: ActivityWhereInput = {} ,$first: Int = 5, $after: String = "", $orderBy: [ActivityOrderByInput!]! = [createdAt_DESC]) {
@@ -44,7 +42,7 @@ query($where: ActivityWhereInput = {} ,$first: Int = 5, $after: String = "", $or
   }
 }
 `
-const SORT_OPTIONS = [
+export const ACTIVITY_SORT_OPTIONS = [
   {
     name: "newest",
     value: "createdAt_DESC"
@@ -60,8 +58,8 @@ export default function ActivityList ({
   description,
   pageQuery = { first: 5 },
   short,
-  sortable = false,
-  filterable = false,
+  sortOptions,
+  filterTypes,
   currentId
 } : ListProps) {
   return <ListQuery
@@ -71,27 +69,15 @@ export default function ActivityList ({
     render={
       ({ data, setQueryInState, queryInState }) => {
         const page : Page<Activity> = data
-        const sort = sortable
-          ? <SortBy options={SORT_OPTIONS}
+        const sort = sortOptions
+          ? <SortBy options={sortOptions}
             setQuery={setQueryInState}
             pageQuery={queryInState}
           />
           : undefined
-        const filter = filterable
+        const filter = filterTypes
           ? <Filters
-            filterTypes={[
-              DateRangeFilter,
-              textFilterOf(
-                {
-                  selector: "from",
-                  label: "From Address",
-                  template: value => (
-                    { from: { id_eq: value } }
-                  ),
-                  placeholder: "Address..."
-                }
-              )
-            ]}
+            filterTypes={filterTypes}
             setQuery={setQueryInState}
             pageQuery={queryInState}
           />
@@ -110,7 +96,7 @@ export default function ActivityList ({
                 setQuery={setQueryInState}
               />
             }
-            emptyMessage="No contract related activities yet"
+            emptyMessage="No activities to show"
           >
             {page?.edges.map(({ node } : Edge<Activity>) => (
               <ActivityRow

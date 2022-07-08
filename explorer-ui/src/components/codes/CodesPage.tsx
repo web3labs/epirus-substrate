@@ -1,7 +1,9 @@
 import React from "react"
 import Box from "../commons/Box"
 import Breadcrumbs from "../navigation/Breadcrumbs"
-import CodeList from "../codes/CodeList"
+import CodeList, { CODE_SORT_OPTIONS } from "../codes/CodeList"
+import DateRangeFilter from "../query/filters/DateRangeFilter"
+import { textFilterOf } from "../query/filters/TextFilter"
 
 export default function CodesPage () {
   return (
@@ -9,8 +11,32 @@ export default function CodesPage () {
       <Breadcrumbs/>
       <Box className="content">
         <CodeList
-          pageQuery={{ first: 15 }}
-          sortable={true}
+          pageQuery={{
+            first: 15,
+            orderBy: "createdAt_DESC"
+          }}
+          sortOptions={CODE_SORT_OPTIONS}
+          filterTypes={
+            [
+              DateRangeFilter,
+              textFilterOf({
+                selector: "id_eq",
+                label: "Code Hash",
+                template: value => (
+                  { id_eq: value }
+                ),
+                placeholder: "Hash..."
+              }),
+              textFilterOf({
+                selector: "owner",
+                label: "Owner",
+                template: value => (
+                  { owner: { id_eq: value } }
+                ),
+                placeholder: "Address..."
+              })
+            ]
+          }
           title="Codes"
         />
       </Box>
