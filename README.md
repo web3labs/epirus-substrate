@@ -1,21 +1,27 @@
 # Epirus Substrate Explorer
 
-Epirus explorer for Substrate chains that supports ink! smart contracts.
+Blockchain explorer for Substrate chains with a focus on the [contracts pallet](https://github.com/paritytech/substrate/tree/master/frame/contracts) and [ink!](https://ink.substrate.io/)
 
-## Project Set Up
+## Overview
 
-### Substrate
-#### Contracts Node Network
-See [dev-contracts-substrate](https://github.com/web3labs/dev-contracts-substrate).
+The system presents two main subsystems:
 
-### Squid Ink
-The squid-ink project contains 2 components: the Archive and the Squid. 
+**1. [Explorer UI](explorer-ui/)**
 
-#### Archive
-A Squid Archive indexes the chain and provides information about blocks, extrinsics and events through a GraphQL API.
+The explorer UI provides a user-friendly application to interact with the Squid Ink GraphQL API.
 
-#### Squid
-A Squid is a processor that transforms the data from the archive to a GraphQL schema that can be used easiily by the front.
+**2. [Squid Ink](squid-ink/)**
 
-### Explorer UI
-The front-end for the explorer.
+The Squid transforms data from a [Squid Archive](https://docs.subsquid.io/docs/archives/how-to-launch-a-squid-archive), stores it and exposes a GraphQL API for the UI.
+
+## Others
+
+### Local Development Network
+
+You can find a repository with a Substrate network configuration and archive node for development at [dev-contracts-substrate](https://github.com/web3labs/dev-contracts-substrate).
+
+---
+
+💫🪐✨💿
+
+Have fun!
