@@ -56,33 +56,33 @@ export class ChainPropertiesManager {
     if (this.stored) {
       return;
     }
-    await this.store(ctx);
-    this.stored = true;
+    try {
+      await this.store(ctx);
+      this.stored = true;
+    } catch (error) {
+      ctx.log.error(
+        <Error>error,
+        "Error saving chain properties and token config!"
+      );
+    }
   }
 
   private async store(ctx: Ctx): Promise<void> {
     const { log, store } = ctx;
     log.info({ name, ss58Format, token }, "Storing chain properties...");
 
-    try {
-      const tokenEntity = new Token({
-        id: "0",
-        tokenDecimals: token.tokenDecimals,
-        tokenSymbol: token.tokenSymbol,
-      });
-      const chainPropertiesEntity = new ChainProperties({
-        id: "chain_properties",
-        name,
-        token: tokenEntity,
-        ss58Format,
-      });
-      await store.save(tokenEntity);
-      await store.save(chainPropertiesEntity);
-    } catch (error) {
-      log.error(
-        <Error>error,
-        "Error saving chain properties and token config!"
-      );
-    }
+    const tokenEntity = new Token({
+      id: "0",
+      tokenDecimals: token.tokenDecimals,
+      tokenSymbol: token.tokenSymbol,
+    });
+    const chainPropertiesEntity = new ChainProperties({
+      id: "chain_properties",
+      name,
+      token: tokenEntity,
+      ss58Format,
+    });
+    await store.save(tokenEntity);
+    await store.save(chainPropertiesEntity);
   }
 }
