@@ -126,12 +126,12 @@ export default function AccountPage () {
                 <Definition
                   className="justify-between"
                   label="Free"
-                  term={formatUnits(balance.free, token)}
+                  term={formatUnits(balance?.free, token)}
                 />
                 <Definition
                   className="justify-between"
                   label="Reserved"
-                  term={formatUnits(balance.reserved, token)}
+                  term={formatUnits(balance?.reserved, token)}
                 />
               </DefinitionList>
             </Segment>
@@ -140,12 +140,12 @@ export default function AccountPage () {
                 <Definition
                   className="justify-between"
                   label="Fee Frozen"
-                  term={formatUnits(balance.feeFrozen, token)}
+                  term={formatUnits(balance?.feeFrozen, token)}
                 />
                 <Definition
                   className="justify-between"
                   label="Misc Frozen"
-                  term={formatUnits(balance.miscFrozen, token)}
+                  term={formatUnits(balance?.miscFrozen, token)}
                 />
               </DefinitionList>
             </Segment>

@@ -32,6 +32,7 @@ export default function useSquid ({
   // If network is down, it then returns the error [fetching=false, stale=false, error=Error, data=undefined]
   // We should check both error and stale to make sure we are not adding or removing "cached" errors
   const { error, stale } = result
+
   useEffect(() => {
     if (!stale && error) {
       const message = error.networkError

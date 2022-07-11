@@ -112,7 +112,6 @@ export default function ContractPage () {
     }
     return []
   }, [params.id])
-  console.log("id ----------------------- ", params.id)
 
   const [result] = useSquid({
     query: QUERY,
@@ -120,7 +119,6 @@ export default function ContractPage () {
   })
 
   const { data, fetching } = result
-  console.log("data ", result)
 
   if (fetching) {
     return null
