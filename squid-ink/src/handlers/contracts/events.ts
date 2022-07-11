@@ -26,11 +26,7 @@ import {
   ContractEmittedEvent,
   Extrinsic,
 } from "../../model";
-import {
-  createEvent,
-  createExtrinsic,
-  getOrCreateAccount,
-} from "../../entity-utils";
+import { createEvent, createExtrinsic, getOrCreateAccount } from "../utils";
 import { ss58Format } from "../../chain-config";
 
 const contractsInstantiatedHandler: EventHandler = {

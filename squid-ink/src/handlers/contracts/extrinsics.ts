@@ -5,7 +5,7 @@ import {
   SubstrateExtrinsic,
 } from "@subsquid/substrate-processor";
 import { Ctx, ExtrinsicHandler } from "../types";
-import { createExtrinsic, getOrCreateAccount } from "../../entity-utils";
+import { createExtrinsic, getOrCreateAccount } from "../utils";
 import { Activity, ActivityType, ContractCall } from "../../model";
 
 const contractsCallHandler: ExtrinsicHandler = {

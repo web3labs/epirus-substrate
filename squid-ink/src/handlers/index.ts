@@ -3,14 +3,20 @@ import {
   contractsEventHandlers,
   contractsExtrinsicHandlers,
 } from "./contracts";
+import { HandlerRegistry } from "./registry";
 import { systemEventHandlers } from "./system";
+import { EventHandler, ExtrinsicHandler } from "./types";
 
-const eventHandlers = Object.assign(
-  balancesEventHandlers,
-  contractsEventHandlers,
-  systemEventHandlers
-);
+const eventHandlers: Record<string, EventHandler> = {
+  ...balancesEventHandlers,
+  ...contractsEventHandlers,
+  ...systemEventHandlers,
+};
 
-const extrinsicHandlers = contractsExtrinsicHandlers;
+const extrinsicHandlers: Record<string, ExtrinsicHandler> =
+  contractsExtrinsicHandlers;
 
-export { eventHandlers, extrinsicHandlers };
+export const registry = new HandlerRegistry({
+  extrinsicHandlers,
+  eventHandlers,
+});

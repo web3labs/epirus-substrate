@@ -4,8 +4,8 @@ import {
   NormalisedSystemAccountStorage,
 } from "@chain/normalised-types";
 import { Store } from "@subsquid/typeorm-store";
-import { Ctx } from "../handlers/types";
-import { Account, Balance } from "../model";
+import { Ctx } from "../types";
+import { Account, Balance } from "../../model";
 
 export async function updateAccountBalance(
   ctx: Ctx,

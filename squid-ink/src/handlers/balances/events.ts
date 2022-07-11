@@ -6,11 +6,7 @@ import {
 } from "@chain/normalised-types";
 import { SubstrateBlock } from "@subsquid/substrate-processor";
 import { Ctx, Event, EventHandler, EventHandlerParams } from "../types";
-import {
-  createEvent,
-  createExtrinsic,
-  updateAccountBalance,
-} from "../../entity-utils";
+import { createEvent, createExtrinsic, updateAccountBalance } from "../utils";
 
 const balancesTransferHandler: EventHandler = {
   name: "Balances.Transfer",

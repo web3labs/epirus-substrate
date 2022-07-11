@@ -5,8 +5,8 @@ import {
   SubstrateExtrinsic,
   SubstrateExtrinsicSignature,
 } from "@subsquid/substrate-processor";
-import { Event } from "../handlers/types";
-import { Extrinsic, Events } from "../model";
+import { Event } from "../types";
+import { Extrinsic, Events } from "../../model";
 
 type Args = Record<string, string> | Record<string, Record<string, string>>;
 

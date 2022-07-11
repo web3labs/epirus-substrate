@@ -3,7 +3,6 @@ import {
   SubstrateCall,
   SubstrateExtrinsic,
 } from "@subsquid/substrate-processor";
-import { Logger } from "@subsquid/logger";
 import {
   Ctx,
   EventHandlerCallback,
@@ -13,50 +12,51 @@ import {
   ItemHandler,
   Event,
   CallItem,
-} from "./handlers/types";
-import { eventHandlers, extrinsicHandlers } from "./handlers";
+  EventHandler,
+  ExtrinsicHandler,
+} from "./types";
 
-export class HandlerDirectory {
-  eventHandlers: Map<string, EventHandlerCallback>;
+export class HandlerRegistry {
+  private eventHandlers: Map<string, EventHandlerCallback>;
 
-  extrinsicHandlers: Map<string, ExtrinsicHandlerCallback>;
+  private extrinsicHandlers: Map<string, ExtrinsicHandlerCallback>;
 
-  constructor() {
+  constructor({
+    eventHandlers,
+    extrinsicHandlers,
+  }: {
+    eventHandlers: Record<string, EventHandler>;
+    extrinsicHandlers: Record<string, ExtrinsicHandler>;
+  }) {
     this.eventHandlers = new Map();
     this.extrinsicHandlers = new Map();
-  }
 
-  registerHandlers(): HandlerDirectory {
-    this.registerEventHandlers();
-    this.registerExtrinsicHandlers();
-    return this;
-  }
-
-  registerEventHandlers(): void {
     for (const handler of Object.values(eventHandlers)) {
       this.eventHandlers.set(handler.name, handler.handle);
     }
-  }
-
-  registerExtrinsicHandlers(): void {
     for (const handler of Object.values(extrinsicHandlers)) {
       this.extrinsicHandlers.set(handler.name, handler.handle);
     }
   }
 
-  getHandlerForItem(item: Item, log: Logger): ItemHandler | undefined {
-    const handlerLog = log.child("handler-directory");
+  get eventNames(): string[] {
+    return [...this.eventHandlers.keys()];
+  }
+
+  get callNames(): string[] {
+    return [...this.extrinsicHandlers.keys()];
+  }
+
+  resolve(item: Item): ItemHandler | undefined {
     switch (item.kind) {
       case "event": {
         const eventItem = <EventItem>item;
         const handler = this.eventHandlers.get(eventItem.name);
-        if (!handler) {
-          handlerLog.warn(
-            { name: eventItem.name },
-            "No event handler found for item"
-          );
+
+        if (handler === undefined) {
           return undefined;
         }
+
         const curried = (event: Event) => {
           return async (ctx: Ctx, block: SubstrateBlock) =>
             handler(ctx, event, block);
@@ -66,13 +66,11 @@ export class HandlerDirectory {
       case "call": {
         const callItem = <CallItem>item;
         const handler = this.extrinsicHandlers.get(callItem.name);
-        if (!handler) {
-          handlerLog.warn(
-            { name: callItem.name },
-            "No call handler found for item"
-          );
+
+        if (handler === undefined) {
           return undefined;
         }
+
         const curried = (
           call: SubstrateCall,
           extrinsic: SubstrateExtrinsic

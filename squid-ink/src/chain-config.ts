@@ -49,10 +49,10 @@ function getChainConfig(): ChainConfig {
 const config = getChainConfig();
 export const { name, ss58Format, token } = config;
 
-export class ChainPropertiesManager {
+export class ChainPropertiesStore {
   private stored = false;
 
-  async storeChainProperties(ctx: Ctx): Promise<void> {
+  async save(ctx: Ctx): Promise<void> {
     if (this.stored) {
       return;
     }

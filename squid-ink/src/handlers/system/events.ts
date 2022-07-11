@@ -1,11 +1,7 @@
 import { NormalisedSystemNewAccountEvent } from "@chain/normalised-types";
 import { SubstrateBlock } from "@subsquid/substrate-processor";
 import { Ctx, EventHandler, Event } from "../types";
-import {
-  createAccount,
-  createEvent,
-  createExtrinsic,
-} from "../../entity-utils";
+import { createAccount, createEvent, createExtrinsic } from "../utils";
 
 /**
  * Handler for the systems pallet NewAccount event.
