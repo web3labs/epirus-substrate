@@ -18,6 +18,7 @@ import {
   EventHandler,
 } from "../types";
 import {
+  Account,
   Activity,
   ActivityType,
   CodeHashChange,
@@ -26,7 +27,12 @@ import {
   ContractEmittedEvent,
   Extrinsic,
 } from "../../model";
-import { createEvent, createExtrinsic, getOrCreateAccount } from "../utils";
+import {
+  createActivity,
+  createEvent,
+  createExtrinsic,
+  getOrCreateAccount,
+} from "../utils";
 import { ss58Format } from "../../chain-config";
 
 const contractsInstantiatedHandler: EventHandler = {
@@ -44,11 +50,11 @@ const contractsInstantiatedHandler: EventHandler = {
         ctx,
         event
       ).resolve();
-      const deployerAccount = await getOrCreateAccount(store, deployer);
-      const contractAccount = await getOrCreateAccount(store, contract);
+      const deployerAccount = await getOrCreateAccount(store, deployer, block);
+      const contractAccount = await getOrCreateAccount(store, contract, block);
 
       if (extrinsic && call) {
-        const extrinsicEntity = createExtrinsic(extrinsic, call, block, log);
+        const extrinsicEntity = createExtrinsic(extrinsic, call, block);
         const eventEntity = createEvent(extrinsicEntity, event);
 
         const { codeHash, trieId, storageDeposit } =
@@ -95,10 +101,17 @@ const contractsInstantiatedHandler: EventHandler = {
           extrinsic: extrinsicEntity,
         });
 
+        await store.save([deployerAccount, contractAccount]);
         await store.save(extrinsicEntity);
         await store.save(eventEntity);
         await store.save(contractEntity);
         await store.save(activityEntity);
+      } else {
+        log.warn(
+          { block: block.height, name: event.name, id: event.id },
+          "No extrinsic or call field in event"
+        );
+        log.debug({ block, event });
       }
     } catch (error) {
       console.log(error);
@@ -122,7 +135,7 @@ const contractsEmittedHandler: EventHandler = {
     log.debug({ block: block.height }, "Got contracts emitted event!");
     try {
       if (extrinsic && call) {
-        const extrinsicEntity = createExtrinsic(extrinsic, call, block, log);
+        const extrinsicEntity = createExtrinsic(extrinsic, call, block);
         const eventEntity = createEvent(extrinsicEntity, event);
         const { contract, data } = new NormalisedContractEmittedEvent(
           ctx,
@@ -139,6 +152,12 @@ const contractsEmittedHandler: EventHandler = {
         await store.save(extrinsicEntity);
         await store.save(eventEntity);
         await store.save(contractEventEntity);
+      } else {
+        log.warn(
+          { block: block.height, name: event.name, id: event.id },
+          "No extrinsic or call field in event"
+        );
+        log.debug({ block, event });
       }
     } catch (error) {
       log.error(
@@ -161,22 +180,30 @@ const contractsCodeStoredHandler: EventHandler = {
     log.debug({ block: block.height }, "Got contracts code stored event!");
     try {
       if (extrinsic && call) {
-        const extrinsicEntity = createExtrinsic(extrinsic, call, block, log);
+        const extrinsicEntity = createExtrinsic(extrinsic, call, block);
         const eventEntity = createEvent(extrinsicEntity, event);
         const { codeHash } = new NormalisedContractsCodeStoredEvent(
           ctx,
           event
         ).resolve();
-        const contractCodeEntity = await buildContractCodeEntity({
-          ctx,
-          block,
-          codeHash,
-          extrinsicEntity,
-        });
+        const { codeOwnerEntity, contractCodeEntity } =
+          await buildContractCodeEntity({
+            ctx,
+            block,
+            codeHash,
+            extrinsicEntity,
+          });
 
         await store.save(extrinsicEntity);
         await store.save(eventEntity);
+        await store.save(codeOwnerEntity);
         await store.save(contractCodeEntity);
+      } else {
+        log.warn(
+          { block: block.height, name: event.name, id: event.id },
+          "No extrinsic or call field in event"
+        );
+        log.debug({ block, event });
       }
     } catch (error) {
       log.error(
@@ -202,8 +229,6 @@ const contractsCodeUpdatedHandler: EventHandler = {
     );
     try {
       if (extrinsic && call) {
-        const extrinsicEntity = createExtrinsic(extrinsic, call, block, log);
-        const eventEntity = createEvent(extrinsicEntity, event);
         const { contract, newCodeHash, oldCodeHash } =
           new NormalisedContractsCodeUpdatedEvent(ctx, event).resolve();
 
@@ -217,17 +242,28 @@ const contractsCodeUpdatedHandler: EventHandler = {
         );
 
         const contractEntity = await store.get(Contract, contract);
-        if (contractEntity == null) {
+        if (contractEntity === undefined) {
           throw new Error(
             `Contract entity is not found in the database for contract address [${contract}], please make sure that it is created and saved first.`
           );
         }
-        const contractCodeEntity = await buildContractCodeEntity({
-          ctx,
-          block,
-          codeHash: newCodeHash,
-          extrinsicEntity,
-        });
+        const accountEntities: Account[] = [];
+        const contractAccount = await getOrCreateAccount(
+          store,
+          contract,
+          block
+        );
+        accountEntities.push(contractAccount);
+        const extrinsicEntity = createExtrinsic(extrinsic, call, block);
+        const eventEntity = createEvent(extrinsicEntity, event);
+        const { codeOwnerEntity, contractCodeEntity } =
+          await buildContractCodeEntity({
+            ctx,
+            block,
+            codeHash: newCodeHash,
+            extrinsicEntity,
+          });
+        accountEntities.push(codeOwnerEntity);
         contractEntity.contractCode = contractCodeEntity;
 
         const codeHashChangeEntity = new CodeHashChange({
@@ -239,34 +275,44 @@ const contractsCodeUpdatedHandler: EventHandler = {
           extrinsic: extrinsicEntity,
         });
 
-        const args = extrinsicEntity.args
+        const signerAccount = extrinsicEntity.signer
+          ? await getOrCreateAccount(store, extrinsicEntity.signer, block)
+          : undefined;
+        if (signerAccount !== undefined) {
+          accountEntities.push(signerAccount);
+        }
+
+        const args: ContractCodeUpdatedArgs = extrinsicEntity.args
           ? <ContractCodeUpdatedArgs>extrinsicEntity.args
-          : null;
-        const allArgs: ContractCodeUpdatedArgs = args || {};
-        allArgs.newCodeHash = newCodeHash;
-        allArgs.oldCodeHash = oldCodeHash;
+          : {};
+        args.newCodeHash = newCodeHash;
+        args.oldCodeHash = oldCodeHash;
 
-        const activityEntity = new Activity({
-          id: codeHashChangeEntity.id,
-          type: ActivityType.CODEUPDATED,
-          from: extrinsicEntity.signer
-            ? await getOrCreateAccount(store, extrinsicEntity.signer)
-            : null,
-          to: await getOrCreateAccount(store, contract),
-          action: extrinsicEntity.name,
-          createdAt: extrinsicEntity.createdAt,
-          args: allArgs,
-          extrinsic: extrinsicEntity,
-        });
-
-        await store.save([
+        const activityEntity = createActivity(
+          extrinsicEntity,
+          ActivityType.CODEUPDATED,
+          contractAccount,
+          signerAccount,
+          args
+        );
+        await store.save(accountEntities);
+        const entities = [
           extrinsicEntity,
           eventEntity,
           contractCodeEntity,
           contractEntity,
           codeHashChangeEntity,
           activityEntity,
-        ]);
+        ];
+        for (const entity of entities) {
+          await store.save(entity);
+        }
+      } else {
+        log.warn(
+          { block: block.height, name: event.name, id: event.id },
+          "No extrinsic or call field in event"
+        );
+        log.debug({ block, event });
       }
     } catch (error) {
       log.error(
@@ -277,7 +323,7 @@ const contractsCodeUpdatedHandler: EventHandler = {
   },
 };
 
-async function buildContractCodeEntity<P>({
+async function buildContractCodeEntity({
   ctx,
   block,
   codeHash,
@@ -287,7 +333,7 @@ async function buildContractCodeEntity<P>({
   block: SubstrateBlock;
   codeHash: string;
   extrinsicEntity: Extrinsic;
-}): Promise<ContractCode> {
+}): Promise<{ codeOwnerEntity: Account; contractCodeEntity: ContractCode }> {
   const { code } = await new NormalisedCodeStorageStorage(ctx, block).get(
     codeHash
   );
@@ -295,19 +341,21 @@ async function buildContractCodeEntity<P>({
     codeHash
   );
 
-  const ownerEntity = await getOrCreateAccount(
+  const codeOwnerEntity = await getOrCreateAccount(
     ctx.store,
-    ss58.codec(ss58Format).encode(owner)
+    ss58.codec(ss58Format).encode(owner),
+    block
   );
 
   const contractCodeEntity = new ContractCode({
     id: codeHash,
     code,
-    owner: ownerEntity,
+    owner: codeOwnerEntity,
     createdFrom: extrinsicEntity,
     createdAt: extrinsicEntity.createdAt,
   });
-  return contractCodeEntity;
+
+  return { codeOwnerEntity, contractCodeEntity };
 }
 
 export {

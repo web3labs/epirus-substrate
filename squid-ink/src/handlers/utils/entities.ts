@@ -1,12 +1,21 @@
-import { Logger } from "@subsquid/logger";
 import {
   SubstrateBlock,
   SubstrateCall,
   SubstrateExtrinsic,
   SubstrateExtrinsicSignature,
 } from "@subsquid/substrate-processor";
-import { Event } from "../types";
-import { Extrinsic, Events } from "../../model";
+import {
+  ContractCodeUpdatedArgs,
+  ContractInstantiatedArgs,
+  Event,
+} from "../types";
+import {
+  Extrinsic,
+  Events,
+  Activity,
+  Account,
+  ActivityType,
+} from "../../model";
 
 type Args = Record<string, string> | Record<string, Record<string, string>>;
 
@@ -27,18 +36,17 @@ export function createEvent(extrinsicEntity: Extrinsic, event: Event): Events {
 export function createExtrinsic(
   extrinsic: SubstrateExtrinsic,
   call: SubstrateCall,
-  block: SubstrateBlock,
-  log: Logger
+  block: SubstrateBlock
 ): Extrinsic {
-  const childLog = log.child("entity-creator");
+  const { signature } = extrinsic;
   return new Extrinsic({
     id: extrinsic.id,
     blockNumber: block.height,
     indexInBlock: extrinsic.indexInBlock,
     versionInfo: extrinsic.version,
     name: call.name,
-    signer: getSignerAddress(childLog, extrinsic.signature),
-    signature: getSignature(childLog, extrinsic.signature),
+    signer: signature ? getSignerAddress(signature) : null,
+    signature: signature ? getSignature(signature) : null,
     success: extrinsic.success,
     fee: extrinsic.fee,
     tip: extrinsic.tip,
@@ -48,34 +56,36 @@ export function createExtrinsic(
   });
 }
 
+export function createActivity(
+  extrinsicEntity: Extrinsic,
+  type: ActivityType,
+  to: Account,
+  from?: Account,
+  args?: ContractCodeUpdatedArgs | ContractInstantiatedArgs
+): Activity {
+  return new Activity({
+    id: `${extrinsicEntity.id}-${type}`,
+    type,
+    to,
+    action: extrinsicEntity.name,
+    createdAt: extrinsicEntity.createdAt,
+    from,
+    extrinsic: extrinsicEntity,
+    args: args || extrinsicEntity.args,
+  });
+}
+
 interface Signature {
   __kind: string;
   value: string;
 }
 
-function getSignerAddress(
-  log: Logger,
-  signature?: SubstrateExtrinsicSignature
-): string | null {
-  if (!signature) {
-    return null;
-  }
-  const address = <Signature>signature.address;
-  // TODO: support other address types
-  if (address.__kind !== "Id") {
-    log.warn({ address }, "Signer address is not of type [Id], returning null");
-    return null;
-  }
-  return address.value;
+function getSignerAddress(signature: SubstrateExtrinsicSignature): string {
+  const { value } = <Signature>signature.address;
+  return value;
 }
 
-function getSignature(
-  log: Logger,
-  signature?: SubstrateExtrinsicSignature
-): string | null {
-  if (!signature) {
-    return null;
-  }
-  const sig = <Signature>signature.signature;
-  return sig.value;
+function getSignature(signature: SubstrateExtrinsicSignature): string {
+  const { value } = <Signature>signature.signature;
+  return value;
 }

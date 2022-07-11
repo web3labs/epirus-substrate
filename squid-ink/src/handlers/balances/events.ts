@@ -105,10 +105,16 @@ async function updateEntities({
     await store.save(accountEntity);
   }
   if (extrinsic && call) {
-    const extrinsicEntity = createExtrinsic(extrinsic, call, block, log);
+    const extrinsicEntity = createExtrinsic(extrinsic, call, block);
     const eventEntity = createEvent(extrinsicEntity, event);
     await store.save(extrinsicEntity);
     await store.save(eventEntity);
+  } else {
+    log.debug(
+      { block: block.height, name: event.name, id: event.id },
+      "No extrinsic or call field in event"
+    );
+    log.trace({ block, event });
   }
 }
 

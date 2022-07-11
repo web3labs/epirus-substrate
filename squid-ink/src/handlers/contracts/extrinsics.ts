@@ -21,7 +21,7 @@ const contractsCallHandler: ExtrinsicHandler = {
     try {
       const { contractAddress, value, gasLimit, storageDepositLimit, data } =
         new NormalisedContractsCallCall(ctx, call).resolve();
-      const extrinsicEntity = createExtrinsic(extrinsic, call, block, log);
+      const extrinsicEntity = createExtrinsic(extrinsic, call, block);
       const contractCallEntity = new ContractCall({
         id: extrinsicEntity.id,
         contractAddress,
@@ -33,10 +33,14 @@ const contractsCallHandler: ExtrinsicHandler = {
         extrinsic: extrinsicEntity,
       });
 
-      const to = await getOrCreateAccount(store, contractAddress);
+      const to = await getOrCreateAccount(store, contractAddress, block);
+      const accountEntities = [to];
       const from = extrinsicEntity.signer
-        ? await getOrCreateAccount(store, extrinsicEntity.signer)
+        ? await getOrCreateAccount(store, extrinsicEntity.signer, block)
         : null;
+      if (from !== null) {
+        accountEntities.push(from);
+      }
 
       const activityEntity = new Activity({
         id: contractCallEntity.id,
@@ -48,6 +52,7 @@ const contractsCallHandler: ExtrinsicHandler = {
         extrinsic: extrinsicEntity,
       });
 
+      await store.save(accountEntities);
       await store.save(extrinsicEntity);
       await store.save(contractCallEntity);
       await store.save(activityEntity);

@@ -12,43 +12,38 @@ export async function updateAccountBalance(
   id: string,
   block: SubstrateBlock
 ): Promise<Account> {
-  const account = await getOrCreateAccount(ctx.store, id);
+  const account = await getOrCreateAccount(ctx.store, id, block);
   account.balance = await getBalances(ctx, id, block);
   return account;
 }
 
 /**
  * Tries to get an account by id in the database.
- * If account doesn't exist, create a fresh one and save in store.
- * @param store
- * @param id
+ * If account doesn't exist, return a fresh one.
+ * @param store - Store
+ * @param id - ID of account
+ * @param block - New account will have createdAt field = block timestamp
  * @returns Account promise
  */
 export async function getOrCreateAccount(
   store: Store,
-  id: string
+  id: string,
+  block: SubstrateBlock
 ): Promise<Account> {
-  let account = await store.get(Account, {
-    where: { id },
-  });
+  let account = await store.get(Account, id);
   if (account == null) {
-    account = createAccount(id, new Date());
-    await store.save(account);
+    account = createAccount(id, new Date(block.timestamp));
   }
   return account;
 }
 
 /**
  * Creates and returns a new Account object.
- * New account is not saved in store.
- * When called from SystemNewAccountEventHandler, createdAt is the timestamp of the block
- * When called from getOrCreateAccount(), createdAt is the current timestamp
- * because we don't have a way to find out real createdAt timestamp on the chain
  * @param id address of the account
  * @param createdAt timestamp when account is created
  * @returns Account
  */
-export function createAccount(id: string, createdAt: Date): Account {
+function createAccount(id: string, createdAt: Date): Account {
   return new Account({ id, createdAt });
 }
 

@@ -1,7 +1,7 @@
 import { NormalisedSystemNewAccountEvent } from "@chain/normalised-types";
 import { SubstrateBlock } from "@subsquid/substrate-processor";
 import { Ctx, EventHandler, Event } from "../types";
-import { createAccount, createEvent, createExtrinsic } from "../utils";
+import { createEvent, createExtrinsic, updateAccountBalance } from "../utils";
 
 /**
  * Handler for the systems pallet NewAccount event.
@@ -20,18 +20,23 @@ const systemNewAccountHandler: EventHandler = {
     const { extrinsic, call } = event;
     log.debug({ block: block.height }, "Got system NewAccount event!");
     try {
+      const { account } = new NormalisedSystemNewAccountEvent(
+        ctx,
+        event
+      ).resolve();
+      const accountEntity = await updateAccountBalance(ctx, account, block);
+      await store.save(accountEntity);
       if (extrinsic && call) {
-        const extrinsicEntity = createExtrinsic(extrinsic, call, block, log);
+        const extrinsicEntity = createExtrinsic(extrinsic, call, block);
         const eventEntity = createEvent(extrinsicEntity, event);
-        const { account } = new NormalisedSystemNewAccountEvent(
-          ctx,
-          event
-        ).resolve();
-        const accountEntity = createAccount(account, new Date(block.timestamp));
-
-        await store.save(accountEntity);
         await store.save(extrinsicEntity);
         await store.save(eventEntity);
+      } else {
+        log.debug(
+          { block: block.height, name: event.name, id: event.id },
+          "No extrinsic or call field in event"
+        );
+        log.trace({ block, event });
       }
     } catch (error) {
       log.error(<Error>error, "Error handling system NewAccount event.");
