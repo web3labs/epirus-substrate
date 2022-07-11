@@ -1,9 +1,7 @@
 import {
-  BatchProcessorItem,
   BatchContext,
   SubstrateExtrinsic,
   SubstrateBlock,
-  SubstrateBatchProcessor,
   QualifiedName,
   SubstrateCall,
 } from "@subsquid/substrate-processor";
@@ -50,10 +48,9 @@ export interface SubsquidCall {
 
 export type Ctx = BatchContext<Store, Item>;
 
-export interface ExtrinsicHandlerParams {
+export interface EventHandlerParams {
   ctx: Ctx;
-  call: SubstrateCall;
-  extrinsic: SubstrateExtrinsic;
+  event: Event;
   block: SubstrateBlock;
 }
 
@@ -64,12 +61,6 @@ export interface Event {
   call?: SubstrateCall;
   extrinsic?: SubstrateExtrinsic;
   args: Record<string, unknown>;
-}
-
-export interface EventHandlerParams {
-  ctx: Ctx;
-  event: Event;
-  block: SubstrateBlock;
 }
 
 export interface ContractInstantiatedArgs {
