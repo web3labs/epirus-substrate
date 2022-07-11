@@ -6,7 +6,7 @@ import { classNames, sanitize } from "../../../utils/strings"
 import { Transition } from "@headlessui/react"
 import Loading from "../../loading/Loading"
 import { XIcon } from "@heroicons/react/outline"
-import { NavLink, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { linkOf, SearchResult, SearchResultOption, SearchResults } from "./SearchResults"
 
 const QUERY = `
@@ -46,8 +46,8 @@ export default function SearchBox () {
 
   function doSearch (input: string) {
     if (input.length > 4) {
-      setSearchString(input)
       setShowResults(true)
+      setSearchString(input)
       reexecuteQuery()
     }
   }
@@ -210,22 +210,23 @@ export default function SearchBox () {
             translate-y-0">
             <ul className="flex flex-col divide-y">
               {searchResults.results.length === 0
-                ? <li>
-                  <span>No results for your query</span>
+                ? <li className="py-3 px-4">
+                  <span className="text-light">No results for your query</span>
                 </li>
                 : searchResults.results.map((result, index) => (
                   <li
                     className={classNames(
-                      "py-1 px-2",
+                      "py-1 px-2 cursor-pointer",
                       highlightedItem === index ? "selected bg-blue-100" : ""
                     )}
                     onMouseEnter={() => setHighlightedItem(index)}
                     key={`result-${index}`}
+                    onClick={() => {
+                      navigate(linkOf(result))
+                      clear()
+                    }}
                   >
-                    {/* TODO: no nav link, clear on click!!!!! */}
-                    <NavLink to={linkOf(result)}>
-                      {result.element}
-                    </NavLink>
+                    {result.element}
                   </li>
                 ))}
             </ul>
