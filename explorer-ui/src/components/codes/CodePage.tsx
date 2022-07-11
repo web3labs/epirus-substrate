@@ -123,7 +123,7 @@ export default function CodePage () {
             <DefinitionList>
               <Definition label="Deposit Limit" term={
                 <span className="font-mono">
-                  {depositLimit === "null" ? "unlimited" : depositLimit}
+                  {depositLimit || "unlimited"}
                 </span>
               }/>
               <Definition label="Salt" term={
