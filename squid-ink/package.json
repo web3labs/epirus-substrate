@@ -7,7 +7,7 @@
     "db:migrate": "npx sqd db migrate",
     "schema:reset": "bash scripts/reset-db.sh",
     "processor:migrate": "echo skip",
-    "processor:start": "node -r dotenv/config lib/processor.js dotenv_config_path=$ENV",
+    "processor:start": "npm run build && node -r dotenv/config lib/processor.js dotenv_config_path=$ENV",
     "processor:docker-run": "bash scripts/docker-run.sh",
     "query-node:start": "squid-graphql-server",
     "lint": "npm run lint:prod -- --fix",

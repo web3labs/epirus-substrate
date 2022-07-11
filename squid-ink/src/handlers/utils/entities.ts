@@ -1,9 +1,12 @@
 import {
+  decodeHex,
   SubstrateBlock,
   SubstrateCall,
   SubstrateExtrinsic,
   SubstrateExtrinsicSignature,
 } from "@subsquid/substrate-processor";
+import * as ss58 from "@subsquid/ss58";
+import { ss58Format } from "../../chain-config";
 import {
   ContractCodeUpdatedArgs,
   ContractInstantiatedArgs,
@@ -81,8 +84,17 @@ interface Signature {
 }
 
 function getSignerAddress(signature: SubstrateExtrinsicSignature): string {
-  const { value } = <Signature>signature.address;
-  return value;
+  // Disabling linter as address.__kind comes as Id, Index, Address32 or Address20
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  const { __kind, value } = <Signature>signature.address;
+  switch (__kind) {
+    case "Index":
+      throw new Error("Address of type Index not supported");
+    default: {
+      const uint8a = decodeHex(value);
+      return ss58.codec(ss58Format).encode(uint8a);
+    }
+  }
 }
 
 function getSignature(signature: SubstrateExtrinsicSignature): string {
