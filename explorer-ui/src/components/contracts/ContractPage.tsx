@@ -12,13 +12,12 @@ import { classNames } from "../../utils/strings"
 import AccountLink from "../accounts/AccountLink"
 import Breadcrumbs from "../navigation/Breadcrumbs"
 import Tag from "../commons/Tag"
-import { formatUnits } from "../../formats/units"
 import Tabs, { TabItem } from "../navigation/Tabs"
 import ActivityTab, { activityByAccount } from "../activities/ActivityTab"
 import EventTab from "../events/EventTab"
 import CodeLink from "../codes/CodeLink"
 import Copy from "../commons/Copy"
-import { HexText } from "../commons/Hex"
+import { AccountUnit, HexText } from "../commons/Text"
 import ExtrinsicSummary from "../commons/ExtrinsicSummary"
 
 const QUERY = `
@@ -183,17 +182,17 @@ export default function ContractPage () {
                 <Definition
                   className="justify-between"
                   label="Free"
-                  term={formatUnits(balance.free, token)}
+                  term={<AccountUnit amount={balance?.free} token={token} />}
                 />
                 <Definition
                   className="justify-between"
                   label="Reserved"
-                  term={formatUnits(balance.reserved, token)}
+                  term={<AccountUnit amount={balance?.reserved} token={token} />}
                 />
                 <Definition
                   className="justify-between"
                   label="Storage Deposit"
-                  term={formatUnits(storageDeposit, token)}
+                  term={<AccountUnit amount={storageDeposit} token={token} />}
                 />
               </DefinitionList>
             </Segment>

@@ -7,8 +7,9 @@ import AccountLink from "../accounts/AccountLink"
 import { classNames } from "../../utils/strings"
 import Lane from "../commons/Lane"
 import { Label } from "../commons/Label"
-import { formatValue } from "../commons/Args"
+import { getArgValue } from "../commons/Args"
 import { useChainProperties } from "../../contexts/ChainContext"
+import { AccountUnit } from "../commons/Text"
 
 function actionAlias (action: string) {
   switch (action.toLocaleLowerCase()) {
@@ -26,7 +27,7 @@ function actionAlias (action: string) {
 export default function ActivityRow ({
   obj,
   currentId,
-  short = false
+  short = true
 }: TypedRow<Activity>) {
   const { token } = useChainProperties()
   const { id, from, to, action, createdAt } = obj
@@ -47,17 +48,19 @@ export default function ActivityRow ({
           </div>
         }
         tail={
-          formatValue(obj.args, token)
+          <AccountUnit amount={getArgValue(obj.args)} token={token} />
         }
       >
         {from &&
           (<div className="flex gap-2 text-sm">
-            <Label>From</Label><AccountLink account={from} currentId={currentId} short={short} size={21} />
+            <Label>From</Label>
+            <AccountLink account={from} currentId={currentId} short={short} size={21} />
           </div>)
         }
         {to &&
           (<div className="flex gap-2 text-sm">
-            <Label>To</Label><AccountLink account={to} currentId={currentId} short={short} size={21} />
+            <Label>To</Label>
+            <AccountLink account={to} currentId={currentId} short={short} size={21} />
           </div>)
         }
       </Lane>

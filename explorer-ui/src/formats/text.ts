@@ -11,3 +11,20 @@ export function shorten (text?: string, start: number = 4, end: number = 4, elli
     return null
   }
 }
+
+export function textSpans (
+  text?: string,
+  charsNum: number = 8,
+  groupRegExp : RegExp = /.{1,4}/g,
+  ellipsis: string = "…"
+): string[] {
+  const str = text?.replace("0x", "").trim()
+  if (str && str.length > (charsNum * 2)) {
+    return ([] as string[])
+      .concat(str.substring(0, charsNum).match(groupRegExp) || [])
+      .concat(ellipsis)
+      .concat(str.substring(str.length - charsNum).match(groupRegExp) || [])
+  } else {
+    return []
+  }
+}

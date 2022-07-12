@@ -2,7 +2,7 @@ import { CodeIcon } from "@heroicons/react/solid"
 import React from "react"
 import AccountAddress from "../../accounts/AccountAddress"
 import CodeBadge from "../../badges/CodeBadge"
-import { HexText } from "../../commons/Hex"
+import { AddressText } from "../../commons/Text"
 
 interface Props {
   type:string,
@@ -38,14 +38,14 @@ function asDisplay ({ type, data } : Props) {
   case "accounts":
     return <div>
       <span>Account</span>
-      <AccountAddress address={data.id} short={true}>
+      <AccountAddress address={data.id}>
         {data.contract && <CodeBadge/>}
       </AccountAddress>
     </div>
   case "contracts":
     return <div>
       <span>Contract</span>
-      <AccountAddress address={data.id} short={true}>
+      <AccountAddress address={data.id}>
         <CodeBadge/>
       </AccountAddress>
     </div>
@@ -56,7 +56,7 @@ function asDisplay ({ type, data } : Props) {
         <span className="bg-lime-200 rounded-full p-0.5">
           <CodeIcon width={16} height={16} />
         </span>
-        <HexText short={true}>{data.id}</HexText>
+        <AddressText address={data.id} />
       </div>
     </div>
   default:

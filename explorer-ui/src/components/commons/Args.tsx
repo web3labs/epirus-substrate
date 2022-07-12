@@ -1,16 +1,19 @@
-import { formatUnits } from "../../formats/units"
-import { TokenProps } from "../../types/chain"
 import { Args } from "../../types/extrinsic"
-import { argValue } from "../../utils/types"
 
-export function formatValue (args: Args | undefined | null, token: TokenProps, name: string = "value") {
+export function getArgValue (args: Args | undefined | null, name: string = "value") {
   if (args === undefined || args === null) {
     return null
   }
 
-  const va = argValue(args, name)
-  if (va === "0") {
+  const va = getArg(args, name)
+
+  if (va === "0" || va === 0 || va === undefined) {
     return null
   }
-  return formatUnits(va, token)
+
+  return va
+}
+
+export function getArg (args: Args, name: string) {
+  return args[name]
 }

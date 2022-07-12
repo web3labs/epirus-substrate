@@ -57,7 +57,7 @@ export default function ActivityList ({
   title,
   description,
   pageQuery = { first: 5 },
-  short,
+  short = true,
   sortOptions,
   filterTypes,
   currentId
