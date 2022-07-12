@@ -30,8 +30,8 @@ import {
 
 export class NormalisedBalancesTransferEvent extends BalancesTransferEvent {
   resolve(): ResolvedBalancesTransferEvent {
-    if (this.isV16) {
-      const { from, to, amount } = this.asV16;
+    if (this.isCanvasKusamaV16) {
+      const { from, to, amount } = this.asCanvasKusamaV16;
       return {
         from: ss58.codec(ss58Format).encode(from),
         to: ss58.codec(ss58Format).encode(to),
@@ -46,8 +46,8 @@ export class NormalisedBalancesTransferEvent extends BalancesTransferEvent {
 
 export class NormalisedBalancesEndowedEvent extends BalancesEndowedEvent {
   resolve(): ResolvedBalancesEndowedEvent {
-    if (this.isV16) {
-      const { account, freeBalance } = this.asV16;
+    if (this.isCanvasKusamaV16) {
+      const { account, freeBalance } = this.asCanvasKusamaV16;
       return {
         account: ss58.codec(ss58Format).encode(account),
         freeBalance,
@@ -61,8 +61,8 @@ export class NormalisedBalancesEndowedEvent extends BalancesEndowedEvent {
 
 export class NormalisedBalancesWithdrawEvent extends BalancesWithdrawEvent {
   resolve(): ResolvedBalancesWithdrawEvent {
-    if (this.isV16) {
-      const { who, amount } = this.asV16;
+    if (this.isCanvasKusamaV16) {
+      const { who, amount } = this.asCanvasKusamaV16;
       return {
         account: ss58.codec(ss58Format).encode(who),
         amount,
@@ -76,8 +76,8 @@ export class NormalisedBalancesWithdrawEvent extends BalancesWithdrawEvent {
 
 export class NormalisedBalancesReservedEvent extends BalancesReservedEvent {
   resolve(): ResolvedBalancesReservedEvent {
-    if (this.isV16) {
-      const { who, amount } = this.asV16;
+    if (this.isCanvasKusamaV16) {
+      const { who, amount } = this.asCanvasKusamaV16;
       return {
         account: ss58.codec(ss58Format).encode(who),
         amount,
@@ -91,8 +91,8 @@ export class NormalisedBalancesReservedEvent extends BalancesReservedEvent {
 
 export class NormalisedContractsInstantiatedEvent extends ContractsInstantiatedEvent {
   resolve(): ResolvedContractsInstantiatedEvent {
-    if (this.isV16) {
-      const { deployer, contract } = this.asV16;
+    if (this.isCanvasKusamaV16) {
+      const { deployer, contract } = this.asCanvasKusamaV16;
       return {
         deployer: ss58.codec(ss58Format).encode(deployer),
         contract: ss58.codec(ss58Format).encode(contract),
@@ -106,8 +106,8 @@ export class NormalisedContractsInstantiatedEvent extends ContractsInstantiatedE
 
 export class NormalisedCodeRemovedEvent extends ContractsCodeRemovedEvent {
   resolve(): ResolvedContractCodeRemovedEvent {
-    if (this.isV16) {
-      const { codeHash } = this.asV16;
+    if (this.isCanvasKusamaV16) {
+      const { codeHash } = this.asCanvasKusamaV16;
       return { codeHash: toHex(codeHash) };
     }
     throw new Error(
@@ -118,8 +118,8 @@ export class NormalisedCodeRemovedEvent extends ContractsCodeRemovedEvent {
 
 export class NormalisedContractsCodeStoredEvent extends ContractsCodeStoredEvent {
   resolve(): ResolvedContractsCodeStoredEvent {
-    if (this.isV16) {
-      const { codeHash } = this.asV16;
+    if (this.isCanvasKusamaV16) {
+      const { codeHash } = this.asCanvasKusamaV16;
       return { codeHash: toHex(codeHash) };
     }
     throw new Error(
@@ -130,8 +130,8 @@ export class NormalisedContractsCodeStoredEvent extends ContractsCodeStoredEvent
 
 export class NormalisedContractsCodeUpdatedEvent extends ContractsContractCodeUpdatedEvent {
   resolve(): ResolvedContractsCodeUpdatedEvent {
-    if (this.isV16) {
-      const { contract, newCodeHash, oldCodeHash } = this.asV16;
+    if (this.isCanvasKusamaV16) {
+      const { contract, newCodeHash, oldCodeHash } = this.asCanvasKusamaV16;
       return {
         contract: ss58.codec(ss58Format).encode(contract),
         newCodeHash: toHex(newCodeHash),
@@ -146,8 +146,8 @@ export class NormalisedContractsCodeUpdatedEvent extends ContractsContractCodeUp
 
 export class NormalisedContractEmittedEvent extends ContractsContractEmittedEvent {
   resolve(): ResolvedContractEmittedEvent {
-    if (this.isV16) {
-      const { contract, data } = this.asV16;
+    if (this.isCanvasKusamaV16) {
+      const { contract, data } = this.asCanvasKusamaV16;
       return { contract: ss58.codec(ss58Format).encode(contract), data };
     }
     throw new Error(
@@ -158,8 +158,8 @@ export class NormalisedContractEmittedEvent extends ContractsContractEmittedEven
 
 export class NormalisedSystemNewAccountEvent extends SystemNewAccountEvent {
   resolve(): ResolvedNewAccountEvent {
-    if (this.isV16) {
-      const { account } = this.asV16;
+    if (this.isCanvasKusamaV16) {
+      const { account } = this.asCanvasKusamaV16;
       return { account: ss58.codec(ss58Format).encode(account) };
     }
     throw new Error(

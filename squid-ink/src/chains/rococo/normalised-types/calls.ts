@@ -5,8 +5,9 @@ import { ContractsCallCall } from "../types/calls";
 
 export class NormalisedContractsCallCall extends ContractsCallCall {
   resolve(): ResolvedContractsCallCall {
-    if (this.isV16) {
-      const { dest, value, gasLimit, storageDepositLimit, data } = this.asV16;
+    if (this.isCanvasKusamaV16) {
+      const { dest, value, gasLimit, storageDepositLimit, data } =
+        this.asCanvasKusamaV16;
       // TODO: Ensure proper support of MultiAddress
       if (dest.__kind === "Index") {
         throw new Error("Multi-address of type Index is not supported!");

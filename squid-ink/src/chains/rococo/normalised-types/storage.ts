@@ -14,14 +14,16 @@ import {
   OwnerInfo,
   PrefabWasmModule,
   RawContractInfo,
-} from "../types/v16";
+} from "../types/canvasKusamaV16";
 import { ss58Format } from "../../../chain-config";
 
 export class NormalisedSystemAccountStorage extends SystemAccountStorage {
   async get(accountId: string): Promise<AccountInfo> {
     assert(this.isExists);
-    if (this.isV16) {
-      return this.getAsV16(ss58.codec(ss58Format).decode(accountId));
+    if (this.isCanvasKusamaV16) {
+      return this.getAsCanvasKusamaV16(
+        ss58.codec(ss58Format).decode(accountId)
+      );
     }
     throw new Error("No Runtime version found");
   }
@@ -30,8 +32,10 @@ export class NormalisedSystemAccountStorage extends SystemAccountStorage {
 export class NormalisedBalancesAccountStorage extends BalancesAccountStorage {
   async get(accountId: string): Promise<AccountData> {
     assert(this.isExists);
-    if (this.isV16) {
-      return this.getAsV16(ss58.codec(ss58Format).decode(accountId));
+    if (this.isCanvasKusamaV16) {
+      return this.getAsCanvasKusamaV16(
+        ss58.codec(ss58Format).decode(accountId)
+      );
     }
     throw new Error("No Runtime version found");
   }
@@ -41,8 +45,10 @@ export class NormalisedContractInfoOfStorage extends ContractsContractInfoOfStor
   async get(accountId: string): Promise<RawContractInfo> {
     assert(this.isExists);
     let info: RawContractInfo | undefined;
-    if (this.isV16) {
-      info = await this.getAsV16(ss58.codec(ss58Format).decode(accountId));
+    if (this.isCanvasKusamaV16) {
+      info = await this.getAsCanvasKusamaV16(
+        ss58.codec(ss58Format).decode(accountId)
+      );
     } else {
       throw new Error("No Runtime version found");
     }
@@ -59,8 +65,8 @@ export class NormalisedCodeStorageStorage extends ContractsCodeStorageStorage {
   async get(key: string): Promise<PrefabWasmModule> {
     assert(this.isExists);
     let info: PrefabWasmModule | undefined;
-    if (this.isV16) {
-      info = await this.getAsV16(decodeHex(key));
+    if (this.isCanvasKusamaV16) {
+      info = await this.getAsCanvasKusamaV16(decodeHex(key));
     } else {
       throw new Error("No Runtime version found");
     }
@@ -75,8 +81,8 @@ export class NormalisedOwnerInfoOfStorage extends ContractsOwnerInfoOfStorage {
   async get(key: string): Promise<OwnerInfo> {
     assert(this.isExists);
     let info: OwnerInfo | undefined;
-    if (this.isV16) {
-      info = await this.getAsV16(decodeHex(key));
+    if (this.isCanvasKusamaV16) {
+      info = await this.getAsCanvasKusamaV16(decodeHex(key));
     } else {
       throw new Error("No Runtime version found");
     }
