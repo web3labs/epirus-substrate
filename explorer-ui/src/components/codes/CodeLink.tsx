@@ -1,13 +1,13 @@
 import React from "react"
 import { NavLink } from "react-router-dom"
-import { HexText } from "../commons/Hex"
+import { AddressText } from "../commons/Text"
 
 export default function CodeLink (
-  { id, short = false }:{id:string, short?:boolean}
+  { id, short = true }:{id:string, short?:boolean}
 ) {
   return (
     <NavLink to={`/codes/${id}`} className="link">
-      <HexText short={short}>{id}</HexText>
+      <AddressText address={id} short={short} />
     </NavLink>
   )
 }

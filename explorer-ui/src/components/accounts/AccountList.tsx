@@ -66,7 +66,7 @@ export default function AccountList ({
   title,
   description,
   currentId,
-  short = false,
+  short = true,
   sortOptions,
   filterTypes
 } : ListProps) {

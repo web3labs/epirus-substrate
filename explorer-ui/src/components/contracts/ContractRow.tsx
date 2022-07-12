@@ -10,7 +10,7 @@ import { Label } from "../commons/Label"
 export default function ContractRow ({
   obj,
   currentId,
-  short
+  short = true
 }: TypedRow<LightContract>) {
   const { id, createdAt, deployer, account, contractCode } = obj
 
@@ -25,15 +25,17 @@ export default function ContractRow ({
         }
       >
         <div className="flex gap-2 text-sm">
-          <Label>Deployer</Label> <AccountLink
+          <Label>Deployer</Label>
+          <AccountLink
             account={deployer}
             currentId={currentId}
-            short={true}
+            short={short}
             size={21}
           />
         </div>
         <div className="flex gap-2 text-sm">
-          <Label>Code</Label> <CodeLink id={contractCode.id} short={true} />
+          <Label>Code</Label>
+          <CodeLink id={contractCode.id} short={short} />
         </div>
       </Lane>
     </Row>

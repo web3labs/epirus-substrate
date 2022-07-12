@@ -10,13 +10,13 @@ import Segment from "../commons/Segment"
 import Breadcrumbs from "../navigation/Breadcrumbs"
 import { Account } from "../../types/accounts"
 import Tag from "../commons/Tag"
-import { formatUnits } from "../../formats/units"
 import Tabs, { TabItem } from "../navigation/Tabs"
 import { Definition, DefinitionList } from "../commons/Definitions"
 import ActivityTab, { activityByAccount } from "../activities/ActivityTab"
 import ContractTab, { contractByDeployer } from "../contracts/ContractTab"
 import CodeTab, { codeByOwner } from "../codes/CodeTab"
 import Copy from "../commons/Copy"
+import { AccountUnit } from "../commons/Text"
 
 const QUERY = `
 query($id: ID!) {
@@ -126,12 +126,12 @@ export default function AccountPage () {
                 <Definition
                   className="justify-between"
                   label="Free"
-                  term={formatUnits(balance?.free, token)}
+                  term={<AccountUnit amount={balance?.free} token={token} />}
                 />
                 <Definition
                   className="justify-between"
                   label="Reserved"
-                  term={formatUnits(balance?.reserved, token)}
+                  term={<AccountUnit amount={balance?.reserved} token={token} />}
                 />
               </DefinitionList>
             </Segment>
@@ -140,12 +140,12 @@ export default function AccountPage () {
                 <Definition
                   className="justify-between"
                   label="Fee Frozen"
-                  term={formatUnits(balance?.feeFrozen, token)}
+                  term={<AccountUnit amount={balance?.feeFrozen} token={token} />}
                 />
                 <Definition
                   className="justify-between"
                   label="Misc Frozen"
-                  term={formatUnits(balance?.miscFrozen, token)}
+                  term={<AccountUnit amount={balance?.miscFrozen} token={token} />}
                 />
               </DefinitionList>
             </Segment>

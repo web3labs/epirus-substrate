@@ -4,15 +4,15 @@ import { Account } from "../../types/accounts"
 import AccountLink from "./AccountLink"
 import { Row, TypedRow } from "../commons/List"
 import { useChainProperties } from "../../contexts/ChainContext"
-import { formatUnits } from "../../formats/units"
 import { formatDate } from "../../formats/time"
 import { Label } from "../commons/Label"
 import Lane from "../commons/Lane"
+import { AccountUnit } from "../commons/Text"
 
 export default function AccountRow ({
   obj,
   currentId,
-  short = false
+  short = true
 }: TypedRow<Account>) {
   const { token } = useChainProperties()
   const { id, balance, codesOwned, contractsDeployed, createdAt } = obj
@@ -35,8 +35,10 @@ export default function AccountRow ({
           }
         </div>}
       >
-        {balance && <div className="flex gap-2 text-sm"><Label>Balance</Label>
-          {formatUnits(balance.free, token)} </div>}
+        {balance && <div className="flex gap-2 text-sm">
+          <Label>Balance</Label>
+          <AccountUnit amount={balance.free} token={token} />
+        </div>}
       </Lane>
     </Row>
   )

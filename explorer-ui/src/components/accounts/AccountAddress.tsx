@@ -1,9 +1,9 @@
 import Identicon from "@polkadot/react-identicon"
 import React from "react"
 
-import { shorten } from "../../formats/text"
 import { classNames } from "../../utils/strings"
 import { Default, Mobile } from "../responsive/Media"
+import { AddressText } from "../commons/Text"
 
 interface Props {
   address: string,
@@ -15,7 +15,7 @@ interface Props {
 
 export default function AccountAddress ({
   address,
-  short = false,
+  short = true,
   children,
   className = "",
   size = 32
@@ -36,13 +36,13 @@ export default function AccountAddress ({
           {children}
         </div>
         <Mobile>
-          <div className="font-mono overflow-hidden text-ellipsis">
-            {shorten(address)}
+          <div className="overflow-hidden text-ellipsis">
+            <AddressText address={address} />
           </div>
         </Mobile>
         <Default>
-          <div className="font-mono overflow-hidden text-ellipsis">
-            {short ? shorten(address) : address}
+          <div className="overflow-hidden text-ellipsis">
+            <AddressText address={address} short={short} />
           </div>
         </Default>
       </div>

@@ -64,7 +64,7 @@ export default function ContractList ({
   title,
   description,
   currentId,
-  short,
+  short = true,
   sortOptions,
   filterTypes
 } : ListProps) {

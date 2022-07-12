@@ -10,14 +10,14 @@ import Tag from "../commons/Tag"
 import Tabs, { TabItem } from "../navigation/Tabs"
 import { Definition, DefinitionList } from "../commons/Definitions"
 import { ContractCode } from "../../types/codes"
-import { argValue } from "../../utils/types"
 import { useChainProperties } from "../../contexts/ChainContext"
 import ContractTab, { contractByCodeHash } from "../contracts/ContractTab"
 import BinaryTab from "./BinaryTab"
 import Copy from "../commons/Copy"
-import { HexText } from "../commons/Hex"
 import { CodeIcon } from "@heroicons/react/outline"
 import ExtrinsicSummary from "../commons/ExtrinsicSummary"
+import { AddressText, HexText } from "../commons/Text"
+import { getArg } from "../commons/Args"
 
 const QUERY = `
 query($id: ID!) {
@@ -85,8 +85,8 @@ export default function CodePage () {
   }
 
   const { id, createdAt, owner, createdFrom } = data?.contractCodes[0] as ContractCode
-  const depositLimit = argValue(createdFrom.args, "storageDepositLimit")
-  const salt = argValue(createdFrom.args, "salt")
+  const depositLimit = getArg(createdFrom.args, "storageDepositLimit")
+  const salt = getArg(createdFrom.args, "salt")
 
   return (
     <>
@@ -100,7 +100,7 @@ export default function CodePage () {
                   <span className="bg-lime-200 rounded-full p-1.5">
                     <CodeIcon width={21} height={21} />
                   </span>
-                  <HexText>{id}</HexText>
+                  <AddressText address={id} />
                 </div>
               </Copy>
             }

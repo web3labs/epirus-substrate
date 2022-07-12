@@ -1,10 +1,9 @@
 import React from "react"
 import { TokenProps } from "../../types/chain"
 import { Extrinsic } from "../../types/extrinsic"
-import { argValue } from "../../utils/types"
-import { formatValue } from "./Args"
+import { getArg, getArgValue } from "./Args"
 import { DefinitionList, Definition } from "./Definitions"
-import { HexCallData, HexText } from "./Hex"
+import { AccountUnit, HexCallData, HexText } from "./Text"
 import Segment from "./Segment"
 
 export default function ExtrinsicSummary (
@@ -12,7 +11,7 @@ export default function ExtrinsicSummary (
   { extrinsic: Extrinsic, token: TokenProps, isOpen?: boolean}
 ) {
   const { blockNumber, blockHash, id, name, args } = extrinsic
-  const data = argValue(args, "data")
+  const data = getArg(args, "data")
 
   return (
     <Segment title="Extrinsic" collapsable={true} isOpen={isOpen}>
@@ -36,18 +35,14 @@ export default function ExtrinsicSummary (
         }/>
         <Definition label="Gas Limit" term={
           <span className="font-mono">
-            {argValue(args, "gasLimit")}
+            {getArg(args, "gasLimit")}
           </span>
         }/>
         <Definition label="Tip" term={
-          <span className="font-mono">
-            {formatValue(args, token, "tip") || 0}
-          </span>
+          <AccountUnit amount={getArgValue(args, "tip") || 0} token={token} />
         }/>
         <Definition label="Value" term={
-          <span className="font-mono">
-            {formatValue(args, token) || 0}
-          </span>
+          <AccountUnit amount={getArgValue(args) || 0} token={token} />
         }/>
       </DefinitionList>
     </Segment>

@@ -47,7 +47,7 @@ export default function EventList ({
   title,
   description,
   pageQuery = { first: 5 },
-  short = false,
+  short = true,
   sortOptions,
   filterTypes,
   currentId

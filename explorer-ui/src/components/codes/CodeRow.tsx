@@ -8,13 +8,14 @@ import { Label } from "../commons/Label"
 import CodeLink from "./CodeLink"
 import { CodeIcon } from "@heroicons/react/outline"
 import Lane from "../commons/Lane"
-import { formatValue } from "../commons/Args"
+import { getArgValue } from "../commons/Args"
 import { useChainProperties } from "../../contexts/ChainContext"
+import { AccountUnit } from "../commons/Text"
 
 export default function CodeRow ({
   obj,
   currentId,
-  short = false
+  short = true
 }: TypedRow<ContractCode>) {
   const { token } = useChainProperties()
   const { id, contractsDeployed, createdAt, owner, createdFrom } = obj
@@ -36,7 +37,7 @@ export default function CodeRow ({
           </div>
         }
         tail={
-          formatValue(createdFrom.args, token)
+          <AccountUnit amount={getArgValue(createdFrom.args)} token={token} />
         }
       >
         <div className="flex flex-wrap gap-2 text-sm">
