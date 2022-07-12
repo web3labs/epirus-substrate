@@ -22,7 +22,7 @@ export default function EventRow ({
           </div>
         } />
 
-        <Definition label="Created" term={
+        <Definition label="Emitted" term={
           shortDate(createdAt)
         }
         />
