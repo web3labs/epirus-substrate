@@ -211,7 +211,7 @@ export default function SearchBox () {
             shadow
             overflow-hidden
             translate-y-0">
-            <ul className="flex flex-col divide-y">
+            <ul className="flex flex-col p-1 border border-t-0 border-gray-200 divide-y">
               {searchResults.results.length === 0
                 ? <li className="py-3 px-4">
                   <span className="text-light">No results for your query</span>
@@ -219,8 +219,8 @@ export default function SearchBox () {
                 : searchResults.results.map((result, index) => (
                   <li
                     className={classNames(
-                      "py-1 px-2 cursor-pointer",
-                      highlightedItem === index ? "selected bg-blue-100" : ""
+                      "py-3 px-4 cursor-pointer",
+                      highlightedItem === index ? "selected bg-gray-100" : ""
                     )}
                     onMouseEnter={() => setHighlightedItem(index)}
                     key={`result-${index}`}
