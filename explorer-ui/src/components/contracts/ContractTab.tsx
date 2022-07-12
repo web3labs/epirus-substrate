@@ -32,10 +32,10 @@ export default function ContractTab ({ currentId, where }: TabQuery) {
       filterTypes={[
         DateRangeFilter,
         textFilterOf({
-          selector: "deployer",
-          label: "Deployer",
+          selector: "id_eq",
+          label: "Contract",
           template: value => (
-            { deployer: { id_eq: value } }
+            { id_eq: value }
           ),
           placeholder: "Address..."
         })
