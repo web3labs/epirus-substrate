@@ -26,6 +26,9 @@ query($str: ID!, $limit: Int = 5) {
 }
 `
 
+const MIN_QUERY_LEN = 4
+const DEBOUNCE_MS = 500
+
 const CLEAR_RESULTS = {
   results: [],
   fromSearch: false
@@ -38,21 +41,21 @@ export default function SearchBox () {
   const [result, reexecuteQuery] = useSquid({
     query: QUERY,
     variables: { str: searchString },
-    pause: searchString.length < 5
+    pause: searchString.length < MIN_QUERY_LEN
   })
   const [searchResults, setSearchResults] = useState<SearchResults>(CLEAR_RESULTS)
   const [highlightedItem, setHighlightedItem] = useState(0)
   const [showResults, setShowResults] = useState(false)
 
   function doSearch (input: string) {
-    if (input.length > 4) {
+    if (input.length >= MIN_QUERY_LEN) {
       setShowResults(true)
       setSearchString(input)
       reexecuteQuery()
     }
   }
 
-  const deboSearch = useCallback(debounce(doSearch, 500), [])
+  const deboSearch = useCallback(debounce(doSearch, DEBOUNCE_MS), [])
 
   useEffect(() => {
     deboSearch(searchInput)
