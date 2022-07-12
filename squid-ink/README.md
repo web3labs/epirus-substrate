@@ -4,6 +4,8 @@ A [Squid](https://subsquid.io) project to process [Substrate](https://substrate.
 
 It has been extended with capabilities to configure and spin up a new processor for different chains in the same project. Note that this is different from running a [multi-chain processor](https://docs.subsquid.io/recipes/running-a-squid/multi-chain-processors) as defined by Subsquid since Squid-ink stores the data model for different chains in different databases while the Subsquid multi-chain processor stores the data of all chains in the same database.
 
+Squid-ink is using the latest Fire Squid version of Subsquid.
+
 ## Summary
 
 - [Deployment](#deployment)
@@ -99,21 +101,19 @@ npx sqd codegen
 The Squid processor extracts block, extrinsic and event data from a Squid Archive to perform transformation and storage. As such, a Squid Archive endpoint is always required when running the processor. Subsquid provides Archive endpoints for a myriad of Substrate chains and parachains which can be found in the [archive-registry](https://github.com/subsquid/archive-registry). If the archive registry does not contain endpoints for the chain to index, the Squid Archive can be run locally.
 
 #### Run local Squid Archive
-Inspect `archive/.env` and provide the websocket endpoint for your node. If the network requires custom type bundles (for older versions of Substrate), mount them as volumes in `archive/docker-compose.yml` and uncomment the relevant sections in `archive/.env`.
+The `./archive` folder contains an example `docker-compose.yml` file for running a Fire Squid archive. Multiple node websocket endpoints can be specified in the command section of the ingest service to speed up processing.
 
-**Note:** When running a chain with EVM pallet, the indexer and indexer-gateway images should be changed to `subsquid/hydra-evm-indexer:5` and `subsquid/hydra-evm-indexer-gateway:5` respectively.
-
-Then run (in a separate terminal window)
+To run the archive locally
 
 ```bash
 docker compose -f archive/docker-compose.yml up
 ```
 
-Inspect your archive at `http://localhost:4010/console`. Run the processor with
+Inspect your archive at `http://localhost:8888`. Run the processor with
 
 ```typescript
 processor.setDataSource({
-  archive: `http://localhost:4010/v1/graphql`,
+  archive: `http://localhost:8888/graphql`,
   chain: // your network endpoint here
 });
 ```
@@ -127,37 +127,18 @@ docker compose -f archive/docker-compose.yml down -v
 The following steps are required when adding a new chain to the project:
 
 #### 1. Generate TypeScript definitions for substrate events and calls
-Generation of type-safe wrappers for events, calls and storage items is currently a two-step process.
-
-First, you need to explore the chain to find blocks which introduce new spec version and
-fetch corresponding metadata. 
-
-```bash
-npx squid-substrate-metadata-explorer \
-  --chain wss://kusama-rpc.polkadot.io \
-  --archive https://kusama.indexer.gc.subsquid.io/v4/graphql \
-  --out kusamaVersions.json
-```
-
-In the above command `--archive` parameter is optional, but it speeds up the process
-significantly. From scratch exploration of kusama network without archive takes 20-30 minutes.
-
-Pass the result of previous exploration to `--out` parameter. In that case exploration will
-start from the last known block and thus will take much less time.
-
-After chain exploration is complete, we move on to the next step which is to generate 
-required wrappers. Update the `typegen.json` file to update the outDir, chainVersions and typesBundle fields.
+Update the `typegen.json` file to update the outDir, specVersions and typesBundle fields.
 
 ```json5
 {
   "outDir": "src/chains/<your-chain-name>/types", // the directory where the type-safe wrappers are stored
-  "chainVersions": "<yourChainVersions>.json", // the result of chain exploration
+  "specVersions": "http://localhost:8888/graphql", // Fire Squid archive endpoint
   "typesBundle": "<yourTypesBundle>.json", // see types bundle section below
   "events": [ // list of events to generate.
-    "balances.Transfer"
+    "Balances.Transfer"
   ],
   "calls": [ // list of calls to generate
-    "timestamp.set"
+    "Contracts.call"
   ],
   "storage": [
     "System.Account" // list of storage items. To generate wrappers for all storage items, set "storage": true
@@ -165,7 +146,7 @@ required wrappers. Update the `typegen.json` file to update the outDir, chainVer
 }
 ```
 
-Run the `squid-substrate-typegen` command
+Run the `squid-substrate-typegen` command (Fire Squid archive needs to be running)
 
 ```bash
 npx squid-substrate-typegen typegen.json
@@ -191,6 +172,7 @@ docker compose up
 
 # 3.1. If it's the first time running, create the database first
 npx sqd db create
+npx sqd db create-migration Init
 npx sqd db migrate
 
 #3.2 For subsequent runs, if a clean db is needed, use the script

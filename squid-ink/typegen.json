@@ -16,8 +16,7 @@
     "System.NewAccount"
   ],
   "calls": [
-    "Contracts.call",
-    "Contracts.upload_code"
+    "Contracts.call"
   ],
   "storage": [
     "Contracts.CodeStorage",
