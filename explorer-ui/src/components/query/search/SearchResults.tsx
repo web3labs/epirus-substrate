@@ -1,8 +1,7 @@
-import { CodeIcon } from "@heroicons/react/solid"
 import React from "react"
 import AccountAddress from "../../accounts/AccountAddress"
 import CodeBadge from "../../badges/CodeBadge"
-import { AddressText } from "../../commons/Text"
+import CodeHash from "../../codes/CodeHash"
 
 interface Props {
   type:string,
@@ -52,12 +51,7 @@ function asDisplay ({ type, data } : Props) {
   case "contractCodes":
     return <div className="flex flex-col gap-y-2">
       <span className="text-sm">Code Hash</span>
-      <div className="flex gap-2 items-center text-sm">
-        <span className="bg-lime-200 rounded-full p-0.5">
-          <CodeIcon width={16} height={16} />
-        </span>
-        <AddressText address={data.id} />
-      </div>
+      <CodeHash hash={data.id} />
     </div>
   default:
     return null

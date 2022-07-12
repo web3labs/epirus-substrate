@@ -7,14 +7,14 @@ import { AccountUnit, HexCallData, HexText } from "./Text"
 import Segment from "./Segment"
 
 export default function ExtrinsicSummary (
-  { extrinsic, token, isOpen = true } :
-  { extrinsic: Extrinsic, token: TokenProps, isOpen?: boolean}
+  { extrinsic, token, isOpen = true, title = "Extrinsic" } :
+  { extrinsic: Extrinsic, token: TokenProps, isOpen?: boolean, title?: string}
 ) {
   const { blockNumber, blockHash, id, name, args } = extrinsic
   const data = getArg(args, "data")
 
   return (
-    <Segment title="Extrinsic" collapsable={true} isOpen={isOpen}>
+    <Segment title={title} collapsable={true} isOpen={isOpen}>
       <DefinitionList>
         <Definition label="ID" term={
           <span className="font-mono">{id}</span>

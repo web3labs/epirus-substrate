@@ -17,7 +17,7 @@ import ActivityTab, { activityByAccount } from "../activities/ActivityTab"
 import EventTab from "../events/EventTab"
 import CodeLink from "../codes/CodeLink"
 import Copy from "../commons/Copy"
-import { AccountUnit, HexText } from "../commons/Text"
+import { AccountUnit } from "../commons/Text"
 import ExtrinsicSummary from "../commons/ExtrinsicSummary"
 import { fullDateTime } from "../../formats/time"
 
@@ -126,7 +126,6 @@ export default function ContractPage () {
 
   const {
     id,
-    salt,
     createdAt,
     deployer,
     createdFrom,
@@ -158,24 +157,21 @@ export default function ContractPage () {
                 <Definition label="Time" term={
                   <span>{fullDateTime(createdAt)}</span>
                 }/>
+                <Definition label="Deployer" term={
+                  <AccountLink account={deployer} size={21} />
+                } />
                 <Definition label="Code Hash" term={
                   <CodeLink id={contractCode.id} />
                 }/>
               </DefinitionList>
             </Segment>
 
-            <ExtrinsicSummary extrinsic={createdFrom} token={token} isOpen={false} />
-
-            <Segment title="Additional details" collapsable={true} isOpen={false}>
-              <DefinitionList>
-                <Definition label="Deployer" term={
-                  <AccountLink account={deployer} size={21} />
-                } />
-                <Definition label="Salt" term={salt &&
-                  <HexText>{salt}</HexText>
-                }/>
-              </DefinitionList>
-            </Segment>
+            <ExtrinsicSummary
+              title="Creation Details"
+              extrinsic={createdFrom}
+              token={token}
+              isOpen={false}
+            />
           </Box>
           <Box>
             <Segment title="Balance">

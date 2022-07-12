@@ -14,11 +14,11 @@ import { useChainProperties } from "../../contexts/ChainContext"
 import ContractTab, { contractByCodeHash } from "../contracts/ContractTab"
 import BinaryTab from "./BinaryTab"
 import Copy from "../commons/Copy"
-import { CodeIcon } from "@heroicons/react/outline"
 import ExtrinsicSummary from "../commons/ExtrinsicSummary"
-import { AddressText, HexText } from "../commons/Text"
+import { HexText } from "../commons/Text"
 import { getArg } from "../commons/Args"
 import { fullDateTime } from "../../formats/time"
+import CodeHash from "./CodeHash"
 
 const QUERY = `
 query($id: ID!) {
@@ -97,12 +97,7 @@ export default function CodePage () {
           <BoxHead
             title={
               <Copy text={id}>
-                <div className="flex gap-2 items-center text-sm">
-                  <span className="bg-lime-200 rounded-full p-1.5">
-                    <CodeIcon width={21} height={21} />
-                  </span>
-                  <AddressText address={id} />
-                </div>
+                <CodeHash hash={id} size={21} padding="p-1.5" />
               </Copy>
             }
             tag={<Tag label="wasm" />}
@@ -115,25 +110,25 @@ export default function CodePage () {
               <Definition label="Owner" term={
                 <AccountLink account={owner} size={21} />
               }/>
-            </DefinitionList>
-          </Segment>
-
-          <ExtrinsicSummary extrinsic={createdFrom} token={token} isOpen={false} />
-
-          <Segment title="Additional details" collapsable={true} isOpen={false}>
-            <DefinitionList>
-              <Definition label="Deposit Limit" term={
-                <span className="font-mono">
-                  {depositLimit || "unlimited"}
-                </span>
-              }/>
               <Definition label="Salt" term={
                 <HexText>
                   {typeof salt === "string" ? salt : undefined}
                 </HexText>
               }/>
+              <Definition label="Deposit" term={
+                <span className="font-mono">
+                  {depositLimit || "unlimited"}
+                </span>
+              }/>
             </DefinitionList>
           </Segment>
+
+          <ExtrinsicSummary
+            title="Creation Details"
+            extrinsic={createdFrom}
+            token={token}
+            isOpen={false}
+          />
         </Box>
 
         <Box className="mt-2">
