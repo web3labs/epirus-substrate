@@ -2,6 +2,7 @@ import React from "react"
 import { textSpans, shortenHexString } from "../../formats/text"
 import { formatUnits } from "../../formats/units"
 import { TokenProps } from "../../types/chain"
+import { classNames } from "../../utils/strings"
 import { Default, Mobile } from "../responsive/Media"
 
 export function HexText ({ short, children }:{short?: boolean, children: string | undefined}) {
@@ -63,14 +64,19 @@ export function AddressText ({ address, short = true }: {address?: string, short
 
 export function AccountUnit ({
   amount,
-  token
-}: { amount?: string | number | null, token: TokenProps }) {
+  token,
+  className = ""
+}: {
+  amount?: string | number | null,
+  token: TokenProps,
+  className?: string
+}) {
   if (amount === null) {
     return null
   }
 
   return (
-    <span className="font-mono">
+    <span className={classNames("font-mono", className)}>
       {formatUnits(amount, token)}
     </span>
   )

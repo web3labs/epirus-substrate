@@ -37,7 +37,11 @@ export default function CodeRow ({
           </div>
         }
         tail={
-          <AccountUnit amount={getArgValue(createdFrom.args)} token={token} />
+          <AccountUnit
+            className="text-sm"
+            amount={getArgValue(createdFrom.args)}
+            token={token}
+          />
         }
       >
         <div className="flex flex-wrap gap-2 text-sm">

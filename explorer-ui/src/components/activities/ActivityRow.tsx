@@ -48,7 +48,11 @@ export default function ActivityRow ({
           </div>
         }
         tail={
-          <AccountUnit amount={getArgValue(obj.args)} token={token} />
+          <AccountUnit
+            className="text-sm"
+            amount={getArgValue(obj.args)}
+            token={token}
+          />
         }
       >
         {from &&
