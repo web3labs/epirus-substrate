@@ -19,6 +19,7 @@ import CodeLink from "../codes/CodeLink"
 import Copy from "../commons/Copy"
 import { AccountUnit, HexText } from "../commons/Text"
 import ExtrinsicSummary from "../commons/ExtrinsicSummary"
+import { fullDateTime } from "../../formats/time"
 
 const QUERY = `
 query($id: ID!) {
@@ -155,7 +156,7 @@ export default function ContractPage () {
             <Segment>
               <DefinitionList>
                 <Definition label="Time" term={
-                  <span>{createdAt.toString()}</span>
+                  <span>{fullDateTime(createdAt)}</span>
                 }/>
                 <Definition label="Code Hash" term={
                   <CodeLink id={contractCode.id} />

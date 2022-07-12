@@ -1,6 +1,7 @@
 /* Fixes */
-* {
-  text-rendering: geometricPrecision;
+body {
+  text-rendering: optimizeLegibility;
+  min-height: 100vh;
 }
 
 .ui--IdentityIcon {

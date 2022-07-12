@@ -4,7 +4,7 @@ import { Account } from "../../types/accounts"
 import AccountLink from "./AccountLink"
 import { Row, TypedRow } from "../commons/List"
 import { useChainProperties } from "../../contexts/ChainContext"
-import { formatDate } from "../../formats/time"
+import { shortDate } from "../../formats/time"
 import { Label } from "../commons/Label"
 import Lane from "../commons/Lane"
 import { AccountUnit } from "../commons/Text"
@@ -23,7 +23,7 @@ export default function AccountRow ({
         head={
           <div className="flex flex-col gap-2">
             <AccountLink account={obj} currentId={currentId} short={short} />
-            <Label className="text-xs">{formatDate(createdAt)}</Label>
+            <Label className="text-xs">{shortDate(createdAt)}</Label>
           </div>
         }
         tail={<div className="flex gap-2 text-sm">

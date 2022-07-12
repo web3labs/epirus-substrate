@@ -17,6 +17,7 @@ import ContractTab, { contractByDeployer } from "../contracts/ContractTab"
 import CodeTab, { codeByOwner } from "../codes/CodeTab"
 import Copy from "../commons/Copy"
 import { AccountUnit } from "../commons/Text"
+import { fullDateTime } from "../../formats/time"
 
 const QUERY = `
 query($id: ID!) {
@@ -115,7 +116,7 @@ export default function AccountPage () {
             <Segment>
               <DefinitionList>
                 <Definition label="Time" term={
-                  <span>{createdAt.toString()}</span>
+                  <span>{fullDateTime(createdAt)}</span>
                 }/>
               </DefinitionList>
             </Segment>

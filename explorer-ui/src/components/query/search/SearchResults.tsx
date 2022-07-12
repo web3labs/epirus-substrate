@@ -36,22 +36,22 @@ export function linkOf ({ type, data }: SearchResult) {
 function asDisplay ({ type, data } : Props) {
   switch (type) {
   case "accounts":
-    return <div>
-      <span>Account</span>
+    return <div className="flex flex-col gap-y-2">
+      <span className="text-sm">Account</span>
       <AccountAddress address={data.id}>
         {data.contract && <CodeBadge/>}
       </AccountAddress>
     </div>
   case "contracts":
-    return <div>
-      <span>Contract</span>
+    return <div className="flex flex-col gap-y-2">
+      <span className="text-sm">Contract</span>
       <AccountAddress address={data.id}>
         <CodeBadge/>
       </AccountAddress>
     </div>
   case "contractCodes":
-    return <div>
-      <span>Code Hash</span>
+    return <div className="flex flex-col gap-y-2">
+      <span className="text-sm">Code Hash</span>
       <div className="flex gap-2 items-center text-sm">
         <span className="bg-lime-200 rounded-full p-0.5">
           <CodeIcon width={16} height={16} />
