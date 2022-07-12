@@ -155,7 +155,7 @@ export default function ContractPage () {
             <Segment>
               <DefinitionList>
                 <Definition label="Time" term={
-                  <span className="font-mono">{createdAt.toString()}</span>
+                  <span>{createdAt.toString()}</span>
                 }/>
                 <Definition label="Code Hash" term={
                   <CodeLink id={contractCode.id} />

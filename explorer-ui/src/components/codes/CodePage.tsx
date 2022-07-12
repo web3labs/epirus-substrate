@@ -109,7 +109,7 @@ export default function CodePage () {
           <Segment>
             <DefinitionList>
               <Definition label="Time" term={
-                <span className="font-mono">{createdAt.toString()}</span>
+                <span>{createdAt.toString()}</span>
               }/>
               <Definition label="Owner" term={
                 <AccountLink account={owner} size={21} />

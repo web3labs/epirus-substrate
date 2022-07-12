@@ -115,7 +115,7 @@ export default function AccountPage () {
             <Segment>
               <DefinitionList>
                 <Definition label="Time" term={
-                  <span className="font-mono">{createdAt.toString()}</span>
+                  <span>{createdAt.toString()}</span>
                 }/>
               </DefinitionList>
             </Segment>
