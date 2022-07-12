@@ -10,7 +10,7 @@ export function HexText ({ short, children }:{short?: boolean, children: string 
   }
 
   return (
-    <div className="font-mono overflow-hidden text-ellipsis">
+    <div className="font-mono break-all">
       <Mobile>
         <span>{shortenHexString(children)}</span>
       </Mobile>
@@ -30,8 +30,11 @@ export function HexCallData ({ short, children }:{short?: boolean, children: str
   const args = children.slice(14)
 
   return (
-    <div className="flex font-mono">
-      <span className="underline underline-offset-4 decoration-2 decoration-lime-500">0x{selector}</span><HexText short={short}>{args}</HexText>
+    <div className="flex flex-col font-mono">
+      <span>
+        {selector}
+      </span>
+      <HexText short={short}>{args}</HexText>
     </div>
   )
 }
