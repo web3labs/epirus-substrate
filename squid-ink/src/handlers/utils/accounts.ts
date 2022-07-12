@@ -5,7 +5,7 @@ import {
   NormalisedSystemAccountStorage,
 } from "@chain/normalised-types";
 import { Store } from "@subsquid/typeorm-store";
-import { ss58Format } from "chain-config";
+import { ss58Format } from "../../chain-config";
 import { Ctx } from "../types";
 import { Account, Balance } from "../../model";
 
