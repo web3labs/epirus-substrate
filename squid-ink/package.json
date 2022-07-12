@@ -11,7 +11,8 @@
     "processor:docker-run": "bash scripts/docker-run.sh",
     "query-node:start": "squid-graphql-server",
     "lint": "npm run lint:prod -- --fix",
-    "lint:prod": "eslint . --ext .ts --ignore-path .gitignore --max-warnings 0"
+    "lint:prod": "eslint . --ext .ts --ignore-path .gitignore --max-warnings 0",
+    "test": "jest"
   },
   "dependencies": {
     "@subsquid/archive-registry": "^1.0.2",
@@ -31,6 +32,7 @@
   "devDependencies": {
     "@subsquid/substrate-metadata-explorer": "^1.0.3",
     "@subsquid/substrate-typegen": "^1.0.2",
+    "@types/jest": "^28.1.4",
     "@types/module-alias": "^2.0.1",
     "@types/node": "^16.11.27",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
@@ -41,6 +43,8 @@
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-type-graphql": "^0.3.2",
+    "jest": "^28.1.2",
+    "ts-jest": "^28.0.5",
     "typescript": "~4.6.2"
   }
 }
