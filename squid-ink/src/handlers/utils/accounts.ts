@@ -1,11 +1,23 @@
-import { SubstrateBlock } from "@subsquid/substrate-processor";
+import { decodeHex, SubstrateBlock } from "@subsquid/substrate-processor";
+import * as ss58 from "@subsquid/ss58";
 import {
   NormalisedBalancesAccountStorage,
   NormalisedSystemAccountStorage,
 } from "@chain/normalised-types";
 import { Store } from "@subsquid/typeorm-store";
+import { ss58Format } from "chain-config";
 import { Ctx } from "../types";
 import { Account, Balance } from "../../model";
+
+export function encodeAddress(address: Uint8Array | string): string {
+  let add: Uint8Array;
+  if (typeof address === "string") {
+    add = decodeHex(address);
+  } else {
+    add = address;
+  }
+  return ss58.codec(ss58Format).encode(add);
+}
 
 export async function updateAccountBalance(
   ctx: Ctx,
@@ -53,7 +65,7 @@ async function getBalances(
   block: SubstrateBlock
 ): Promise<Balance> {
   const balancesStorage = process.env.BALANCES_STORE;
-  if (!balancesStorage) {
+  if (balancesStorage === undefined) {
     throw new Error("BALANCES_STORE is not defined in .env");
   }
   if (balancesStorage === "system") {

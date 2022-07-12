@@ -1,4 +1,3 @@
-import * as ss58 from "@subsquid/ss58";
 import {
   NormalisedCodeStorageStorage,
   NormalisedContractEmittedEvent,
@@ -19,7 +18,6 @@ import {
 } from "../types";
 import {
   Account,
-  Activity,
   ActivityType,
   CodeHashChange,
   Contract,
@@ -31,9 +29,9 @@ import {
   createActivity,
   createEvent,
   createExtrinsic,
+  encodeAddress,
   getOrCreateAccount,
 } from "../utils";
-import { ss58Format } from "../../chain-config";
 
 const contractsInstantiatedHandler: EventHandler = {
   name: "Contracts.Instantiated",
@@ -52,23 +50,23 @@ const contractsInstantiatedHandler: EventHandler = {
       ).resolve();
       const deployerAccount = await getOrCreateAccount(store, deployer, block);
       const contractAccount = await getOrCreateAccount(store, contract, block);
+      await store.save([deployerAccount, contractAccount]);
 
+      const { codeHash, trieId, storageDeposit } =
+        await new NormalisedContractInfoOfStorage(ctx, block).get(contract);
+      const contractCodeEntity = await ctx.store.get(
+        ContractCode,
+        toHex(codeHash)
+      );
+
+      if (contractCodeEntity == null) {
+        throw new Error(
+          `ContractCode entity is not found in the database for contract address [${contract}], please make sure that it is created and saved first.`
+        );
+      }
       if (extrinsic && call) {
         const extrinsicEntity = createExtrinsic(extrinsic, call, block);
         const eventEntity = createEvent(extrinsicEntity, event);
-
-        const { codeHash, trieId, storageDeposit } =
-          await new NormalisedContractInfoOfStorage(ctx, block).get(contract);
-        const contractCodeEntity = await ctx.store.get(
-          ContractCode,
-          toHex(codeHash)
-        );
-
-        if (contractCodeEntity == null) {
-          throw new Error(
-            `ContractCode entity is not found in the database for contract address [${contract}], please make sure that it is created and saved first.`
-          );
-        }
 
         const args = extrinsicEntity.args
           ? <ContractInstantiatedArgs>extrinsicEntity.args
@@ -87,21 +85,17 @@ const contractsInstantiatedHandler: EventHandler = {
         });
 
         const allArgs: ContractInstantiatedArgs = args || {};
-        if (!allArgs.codeHash) {
+        if (allArgs.codeHash !== undefined) {
           allArgs.codeHash = toHex(codeHash);
         }
-        const activityEntity = new Activity({
-          id: contractEntity.id,
-          type: ActivityType.CONTRACT,
-          to: contractAccount,
-          action: extrinsicEntity.name,
-          createdAt: extrinsicEntity.createdAt,
-          from: deployerAccount,
-          args: allArgs,
-          extrinsic: extrinsicEntity,
-        });
+        const activityEntity = createActivity(
+          extrinsicEntity,
+          ActivityType.CONTRACT,
+          contractAccount,
+          deployerAccount,
+          allArgs
+        );
 
-        await store.save([deployerAccount, contractAccount]);
         await store.save(extrinsicEntity);
         await store.save(eventEntity);
         await store.save(contractEntity);
@@ -228,32 +222,28 @@ const contractsCodeUpdatedHandler: EventHandler = {
       "Got contracts ContractCodeUpdated event!"
     );
     try {
-      if (extrinsic && call) {
-        const { contract, newCodeHash, oldCodeHash } =
-          new NormalisedContractsCodeUpdatedEvent(ctx, event).resolve();
+      const { contract, newCodeHash, oldCodeHash } =
+        new NormalisedContractsCodeUpdatedEvent(ctx, event).resolve();
 
-        log.info(
-          {
-            contract,
-            oldCodeHash,
-            newCodeHash,
-          },
-          "Contract code hash has changed"
-        );
-
-        const contractEntity = await store.get(Contract, contract);
-        if (contractEntity === undefined) {
-          throw new Error(
-            `Contract entity is not found in the database for contract address [${contract}], please make sure that it is created and saved first.`
-          );
-        }
-        const accountEntities: Account[] = [];
-        const contractAccount = await getOrCreateAccount(
-          store,
+      log.info(
+        {
           contract,
-          block
+          oldCodeHash,
+          newCodeHash,
+        },
+        "Contract code hash has changed"
+      );
+
+      const contractEntity = await store.get(Contract, contract);
+      if (contractEntity === undefined) {
+        throw new Error(
+          `Contract entity is not found in the database for contract address [${contract}], please make sure that it is created and saved first.`
         );
-        accountEntities.push(contractAccount);
+      }
+      const contractAccount = await getOrCreateAccount(store, contract, block);
+      await store.save(contractAccount);
+
+      if (extrinsic && call) {
         const extrinsicEntity = createExtrinsic(extrinsic, call, block);
         const eventEntity = createEvent(extrinsicEntity, event);
         const { codeOwnerEntity, contractCodeEntity } =
@@ -263,7 +253,7 @@ const contractsCodeUpdatedHandler: EventHandler = {
             codeHash: newCodeHash,
             extrinsicEntity,
           });
-        accountEntities.push(codeOwnerEntity);
+        await store.save(codeOwnerEntity);
         contractEntity.contractCode = contractCodeEntity;
 
         const codeHashChangeEntity = new CodeHashChange({
@@ -279,7 +269,7 @@ const contractsCodeUpdatedHandler: EventHandler = {
           ? await getOrCreateAccount(store, extrinsicEntity.signer, block)
           : undefined;
         if (signerAccount !== undefined) {
-          accountEntities.push(signerAccount);
+          await store.save(signerAccount);
         }
 
         const args: ContractCodeUpdatedArgs = extrinsicEntity.args
@@ -295,7 +285,7 @@ const contractsCodeUpdatedHandler: EventHandler = {
           signerAccount,
           args
         );
-        await store.save(accountEntities);
+
         const entities = [
           extrinsicEntity,
           eventEntity,
@@ -343,7 +333,7 @@ async function buildContractCodeEntity({
 
   const codeOwnerEntity = await getOrCreateAccount(
     ctx.store,
-    ss58.codec(ss58Format).encode(owner),
+    encodeAddress(owner),
     block
   );
 

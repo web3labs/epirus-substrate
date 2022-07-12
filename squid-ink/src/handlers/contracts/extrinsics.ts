@@ -5,8 +5,8 @@ import {
   SubstrateExtrinsic,
 } from "@subsquid/substrate-processor";
 import { Ctx, ExtrinsicHandler } from "../types";
-import { createExtrinsic, getOrCreateAccount } from "../utils";
-import { Activity, ActivityType, ContractCall } from "../../model";
+import { createActivity, createExtrinsic, getOrCreateAccount } from "../utils";
+import { ActivityType, ContractCall } from "../../model";
 
 const contractsCallHandler: ExtrinsicHandler = {
   name: "Contracts.call",
@@ -37,20 +37,17 @@ const contractsCallHandler: ExtrinsicHandler = {
       const accountEntities = [to];
       const from = extrinsicEntity.signer
         ? await getOrCreateAccount(store, extrinsicEntity.signer, block)
-        : null;
-      if (from !== null) {
+        : undefined;
+      if (from !== undefined) {
         accountEntities.push(from);
       }
 
-      const activityEntity = new Activity({
-        id: contractCallEntity.id,
-        type: ActivityType.CONTRACTCALL,
+      const activityEntity = createActivity(
+        extrinsicEntity,
+        ActivityType.CONTRACTCALL,
         to,
-        action: extrinsicEntity.name,
-        createdAt: extrinsicEntity.createdAt,
-        from,
-        extrinsic: extrinsicEntity,
-      });
+        from
+      );
 
       await store.save(accountEntities);
       await store.save(extrinsicEntity);

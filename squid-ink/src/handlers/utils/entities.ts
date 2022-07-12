@@ -1,12 +1,9 @@
 import {
-  decodeHex,
   SubstrateBlock,
   SubstrateCall,
   SubstrateExtrinsic,
   SubstrateExtrinsicSignature,
 } from "@subsquid/substrate-processor";
-import * as ss58 from "@subsquid/ss58";
-import { ss58Format } from "../../chain-config";
 import {
   ContractCodeUpdatedArgs,
   ContractInstantiatedArgs,
@@ -19,6 +16,7 @@ import {
   Account,
   ActivityType,
 } from "../../model";
+import { encodeAddress } from "./accounts";
 
 type Args = Record<string, string> | Record<string, Record<string, string>>;
 
@@ -91,8 +89,7 @@ function getSignerAddress(signature: SubstrateExtrinsicSignature): string {
     case "Index":
       throw new Error("Address of type Index not supported");
     default: {
-      const uint8a = decodeHex(value);
-      return ss58.codec(ss58Format).encode(uint8a);
+      return encodeAddress(value);
     }
   }
 }
