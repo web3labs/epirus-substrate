@@ -7,19 +7,21 @@ export default function CodeHash ({
   hash,
   size = 16,
   padding = "p-0.5",
-  className = ""
+  className = "",
+  short = true
 }: {
   hash: string,
   padding?: string,
   size?: number,
-  className?: string
+  className?: string,
+  short?: boolean
 }) {
   return (
     <div className={classNames("flex gap-2 items-center text-sm", className)}>
       <span className={classNames("bg-lime-200 rounded-full", padding)}>
-        <CodeIcon width={size} height={size} />
+        <CodeIcon width={size} height={size} className="text-gray-700" />
       </span>
-      <AddressText address={hash} />
+      <AddressText address={hash} short={short} />
     </div>
   )
 }

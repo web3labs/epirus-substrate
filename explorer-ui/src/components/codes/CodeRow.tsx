@@ -6,7 +6,6 @@ import AccountLink from "../accounts/AccountLink"
 import { ContractCode } from "../../types/codes"
 import { Label } from "../commons/Label"
 import CodeLink from "./CodeLink"
-import { CodeIcon } from "@heroicons/react/outline"
 import Lane from "../commons/Lane"
 import { getArgValue } from "../commons/Args"
 import { useChainProperties } from "../../contexts/ChainContext"
@@ -25,12 +24,7 @@ export default function CodeRow ({
       <Lane
         head={
           <div className="flex flex-col gap-2">
-            <div className="flex gap-2 items-center text-sm">
-              <span className="bg-lime-200 rounded-full p-0.5">
-                <CodeIcon width={16} height={16} />
-              </span>
-              <CodeLink id={id}/>
-            </div>
+            <CodeLink id={id}/>
             <Label className="text-xs">
               {shortDate(createdAt)}
             </Label>
