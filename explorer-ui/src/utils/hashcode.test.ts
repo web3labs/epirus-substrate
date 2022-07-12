@@ -22,7 +22,91 @@ test("hash should be the same for equal objects", () => {
   }))
 })
 
+test("hash should be the same for equal nested objects", () => {
+  expect(objectHash({
+    a: 1,
+    b: true,
+    c: "ABC",
+    n: {
+      a: 1,
+      b: 2,
+      c: 0.5,
+      n: {
+        a: 1,
+        b: 2,
+        c: 0.5,
+        n: {
+          a: 1,
+          b: 2,
+          c: 0.5
+        }
+      }
+    }
+  })).toEqual(objectHash({
+    a: 1,
+    b: true,
+    c: "ABC",
+    n: {
+      a: 1,
+      b: 2,
+      c: 0.5,
+      n: {
+        a: 1,
+        b: 2,
+        c: 0.5,
+        n: {
+          a: 1,
+          b: 2,
+          c: 0.5
+        }
+      }
+    }
+  }))
+})
+
 test("hash should be different for a numeric change", () => {
+  expect(objectHash({
+    a: 1,
+    b: true,
+    c: "ABC",
+    n: {
+      a: 1,
+      b: 2,
+      c: 0.5,
+      n: {
+        a: 1,
+        b: 2,
+        c: 0.5,
+        n: {
+          a: 1,
+          b: 2,
+          c: 0.5
+        }
+      }
+    }
+  })).not.toEqual(objectHash({
+    a: 1,
+    b: true,
+    c: "ABC",
+    n: {
+      a: 1,
+      b: 2,
+      c: 0.5,
+      n: {
+        a: 1,
+        b: 2,
+        c: 0.5,
+        n: {
+          a: 1,
+          b: 2,
+          c: 0.4
+        }
+      }
+    }
+  }))
+})
+
+test("hash should be different for a nested numeric change", () => {
   expect(objectHash({
     a: 1,
     b: true,
