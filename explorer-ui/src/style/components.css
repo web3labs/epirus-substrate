@@ -77,10 +77,6 @@
     @apply text-lime-600 bg-lime-200
   }
 
-  .code {
-    @apply bg-gray-100 text-gray-800 border border-gray-200 rounded-md px-3 py-2 shadow-inner font-mono break-words overflow-y-auto max-h-20
-  }
-
   .input {
     @apply appearance-none block py-3 px-4 text-sm text-gray-900 border border-gray-200 focus:outline-none focus:border-blue-400
   }

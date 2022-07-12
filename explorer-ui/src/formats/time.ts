@@ -1,6 +1,6 @@
 import moment from "moment"
 
-export function formatDate (date: Date) {
+export function shortDate (date: Date) {
   const d = moment(date)
   const now = moment()
   if (now.isSame(d, "day")) {
@@ -10,4 +10,13 @@ export function formatDate (date: Date) {
   } else {
     return d.format("DD MMM YYYY")
   }
+}
+
+const dtf = new Intl.DateTimeFormat(undefined, {
+  dateStyle: "full", timeStyle: "long"
+})
+
+export function fullDateTime (date: Date) {
+  // XXX date needs to be re-instantiated
+  return dtf.format(new Date(date))
 }

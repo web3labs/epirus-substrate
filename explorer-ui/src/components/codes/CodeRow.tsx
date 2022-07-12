@@ -1,7 +1,7 @@
 import React from "react"
 
 import { Row, TypedRow } from "../commons/List"
-import { formatDate } from "../../formats/time"
+import { shortDate } from "../../formats/time"
 import AccountLink from "../accounts/AccountLink"
 import { ContractCode } from "../../types/codes"
 import { Label } from "../commons/Label"
@@ -32,7 +32,7 @@ export default function CodeRow ({
               <CodeLink id={id}/>
             </div>
             <Label className="text-xs">
-              {formatDate(createdAt)}
+              {shortDate(createdAt)}
             </Label>
           </div>
         }

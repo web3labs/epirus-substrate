@@ -2,7 +2,7 @@ import React from "react"
 
 import { Activity } from "../../types/contracts"
 import { Row, TypedRow } from "../commons/List"
-import { formatDate } from "../../formats/time"
+import { shortDate } from "../../formats/time"
 import AccountLink from "../accounts/AccountLink"
 import { classNames } from "../../utils/strings"
 import Lane from "../commons/Lane"
@@ -44,7 +44,7 @@ export default function ActivityRow ({
             )}>
               {`${alias}`}
             </div>
-            <Label className="text-xs">{formatDate(createdAt)}</Label>
+            <Label className="text-xs">{shortDate(createdAt)}</Label>
           </div>
         }
         tail={

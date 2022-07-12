@@ -18,6 +18,7 @@ import { CodeIcon } from "@heroicons/react/outline"
 import ExtrinsicSummary from "../commons/ExtrinsicSummary"
 import { AddressText, HexText } from "../commons/Text"
 import { getArg } from "../commons/Args"
+import { fullDateTime } from "../../formats/time"
 
 const QUERY = `
 query($id: ID!) {
@@ -109,7 +110,7 @@ export default function CodePage () {
           <Segment>
             <DefinitionList>
               <Definition label="Time" term={
-                <span>{createdAt.toString()}</span>
+                <span>{fullDateTime(createdAt)}</span>
               }/>
               <Definition label="Owner" term={
                 <AccountLink account={owner} size={21} />

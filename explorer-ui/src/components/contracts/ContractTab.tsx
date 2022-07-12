@@ -1,6 +1,8 @@
 import React from "react"
 import { TabQuery } from "../navigation/Tabs"
-import ContractList from "./ContractList"
+import DateRangeFilter from "../query/filters/DateRangeFilter"
+import { textFilterOf } from "../query/filters/TextFilter"
+import ContractList, { CONTRACT_SORT_OPTIONS } from "./ContractList"
 
 export function contractByDeployer (id: string) {
   return {
@@ -26,6 +28,18 @@ export default function ContractTab ({ currentId, where }: TabQuery) {
         first: 10,
         where
       }}
+      sortOptions={CONTRACT_SORT_OPTIONS}
+      filterTypes={[
+        DateRangeFilter,
+        textFilterOf({
+          selector: "deployer",
+          label: "Deployer",
+          template: value => (
+            { deployer: { id_eq: value } }
+          ),
+          placeholder: "Address..."
+        })
+      ]}
     />
   )
 }

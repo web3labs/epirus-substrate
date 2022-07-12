@@ -1,5 +1,5 @@
 import React from "react"
-import { formatDate } from "../../formats/time"
+import { shortDate } from "../../formats/time"
 import { LightContract } from "../../types/contracts"
 import AccountLink from "../accounts/AccountLink"
 import Lane from "../commons/Lane"
@@ -20,7 +20,7 @@ export default function ContractRow ({
         head={
           <div className="flex flex-col gap-1">
             <AccountLink account={account} currentId={currentId} short={short} />
-            <Label className="text-xs">{formatDate(createdAt)}</Label>
+            <Label className="text-xs">{shortDate(createdAt)}</Label>
           </div>
         }
       >
