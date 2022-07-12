@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState } from "react"
 import useSquid, { SquidRefreshProps } from "../../hooks/useSquid"
 import { PageQuery } from "../../types/pagination"
-import Hashcode from "../../utils/hashcode"
+import objectHash from "../../utils/hashcode"
 
 interface Props {
   query: string
@@ -22,7 +22,7 @@ export default function ListQuery (props: Props) {
       millis: 10000
     }
   } = props
-  const hash = useRef(Hashcode.object({}))
+  const hash = useRef(objectHash({}))
   const [queryInState, setQueryInState] = useState(pageQuery)
 
   const [result] = useSquid({
@@ -34,7 +34,7 @@ export default function ListQuery (props: Props) {
   const { data, fetching } = result
 
   if (data && data[dataSelector]) {
-    hash.current = Hashcode.object(data[dataSelector])
+    hash.current = objectHash(data[dataSelector])
   }
 
   return useMemo(() => {
