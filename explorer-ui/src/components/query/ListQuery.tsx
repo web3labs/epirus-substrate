@@ -4,6 +4,8 @@ import { PageQuery } from "../../types/pagination"
 import objectHash from "../../utils/hashcode"
 import { PageLoading } from "../loading/Loading"
 
+const DEFAULT_REFRESH_MS = 5000
+
 interface Props {
   query: string
   dataSelector: string
@@ -20,7 +22,7 @@ export default function ListQuery (props: Props) {
     render,
     pageQuery,
     refresh = {
-      millis: 10000
+      millis: DEFAULT_REFRESH_MS
     }
   } = props
   const hash = useRef(objectHash({}))
