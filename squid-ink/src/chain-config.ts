@@ -57,7 +57,7 @@ export class ChainPropertiesStore {
       return;
     }
     try {
-      await this.store(ctx);
+      await this._save(ctx);
       this.stored = true;
     } catch (error) {
       ctx.log.error(
@@ -67,7 +67,7 @@ export class ChainPropertiesStore {
     }
   }
 
-  private async store(ctx: Ctx): Promise<void> {
+  private async _save(ctx: Ctx): Promise<void> {
     const { log, store } = ctx;
     log.info({ name, ss58Format, token }, "Storing chain properties...");
 
