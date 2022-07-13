@@ -19,6 +19,7 @@ import { HexText } from "../commons/Text"
 import { getArg } from "../commons/Args"
 import { fullDateTime } from "../../formats/time"
 import CodeHash from "./CodeHash"
+import { PageLoading } from "../loading/Loading"
 
 const QUERY = `
 query($id: ID!) {
@@ -82,7 +83,7 @@ export default function CodePage () {
   }, [params.id, fetching])
 
   if (fetching) {
-    return null
+    return <PageLoading loading={fetching} />
   }
 
   const { id, createdAt, owner, createdFrom } = data?.contractCodes[0] as ContractCode

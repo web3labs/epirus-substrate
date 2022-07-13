@@ -20,6 +20,7 @@ import Copy from "../commons/Copy"
 import { AccountUnit } from "../commons/Text"
 import ExtrinsicSummary from "../commons/ExtrinsicSummary"
 import { fullDateTime } from "../../formats/time"
+import { PageLoading } from "../loading/Loading"
 
 const QUERY = `
 query($id: ID!) {
@@ -121,7 +122,7 @@ export default function ContractPage () {
   const { data, fetching } = result
 
   if (fetching) {
-    return null
+    return <PageLoading loading={fetching} />
   }
 
   const {

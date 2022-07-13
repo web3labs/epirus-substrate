@@ -21,7 +21,7 @@ export default function BinaryTab ({ id }:{id: string}) {
 
   const { data, fetching } = result
 
-  if (fetching) return <Loading />
+  if (fetching) return <Loading loading={fetching} />
 
   const codeHash = data?.contractCodes[0] as ContractCode
 

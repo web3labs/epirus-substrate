@@ -1,7 +1,8 @@
-import { useMemo, useRef, useState } from "react"
+import React, { useMemo, useRef, useState } from "react"
 import useSquid, { SquidRefreshProps } from "../../hooks/useSquid"
 import { PageQuery } from "../../types/pagination"
 import objectHash from "../../utils/hashcode"
+import Loading from "../loading/Loading"
 
 interface Props {
   query: string
@@ -39,7 +40,11 @@ export default function ListQuery (props: Props) {
 
   return useMemo(() => {
     if (data === undefined && fetching) {
-      return null
+      return <div className="flex w-full h-32 items-center justify-center text-gray-500">
+        <Loading
+          loading={fetching}
+        />
+      </div>
     }
 
     return render({

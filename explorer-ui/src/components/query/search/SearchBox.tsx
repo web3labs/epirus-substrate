@@ -4,7 +4,7 @@ import { debounce } from "debounce"
 import useSquid from "../../../hooks/useSquid"
 import { classNames, sanitize } from "../../../utils/strings"
 import { Transition } from "@headlessui/react"
-import Loading from "../../loading/Loading"
+import { InputLoading } from "../../loading/Loading"
 import { XIcon } from "@heroicons/react/outline"
 import { useNavigate } from "react-router-dom"
 import { linkOf, SearchResult, SearchResultOption, SearchResults } from "./SearchResults"
@@ -180,10 +180,7 @@ export default function SearchBox () {
               />
             </div>
           }
-          {fetching &&
-          <div className="flex absolute items-center inset-y-0 right-0 pr-3">
-            <Loading />
-          </div>}
+          {fetching && <InputLoading loading={fetching} delay={750} />}
         </div>
       </form>
       {showResults &&
