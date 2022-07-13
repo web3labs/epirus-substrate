@@ -234,14 +234,20 @@ const contractsCodeUpdatedHandler: EventHandler = {
         "Contract code hash has changed"
       );
 
-      const contractEntity = await store.get(Contract, contract);
+      const contractEntity = await store.get(Contract, {
+        where: { id: contract },
+        relations: {
+          account: true,
+          deployer: true,
+          createdFrom: true,
+        },
+      });
+
       if (contractEntity === undefined) {
         throw new Error(
           `Contract entity is not found in the database for contract address [${contract}], please make sure that it is created and saved first.`
         );
       }
-      const contractAccount = await getOrCreateAccount(store, contract, block);
-      await store.save(contractAccount);
 
       if (extrinsic && call) {
         const extrinsicEntity = createExtrinsic(extrinsic, call, block);
@@ -281,7 +287,7 @@ const contractsCodeUpdatedHandler: EventHandler = {
         const activityEntity = createActivity(
           extrinsicEntity,
           ActivityType.CODEUPDATED,
-          contractAccount,
+          contractEntity.account,
           signerAccount,
           args
         );
