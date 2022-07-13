@@ -53,6 +53,8 @@ processor.run(new TypeormDatabase(), async (ctx) => {
           log.debug({ item, header }, "Handling item");
           await handler(ctx, header);
         } else {
+          // Calls and extrinsics that we are not handling comes together with some events that we are (balances and systems events)
+          // There will be no handlers found but it's not an error
           log.debug(item, "No handler found for item");
         }
       } catch (error) {
