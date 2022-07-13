@@ -278,9 +278,7 @@ const contractsCodeUpdatedHandler: EventHandler = {
           await store.save(signerAccount);
         }
 
-        const args: ContractCodeUpdatedArgs = extrinsicEntity.args
-          ? <ContractCodeUpdatedArgs>extrinsicEntity.args
-          : {};
+        const args = (extrinsicEntity.args || {}) as ContractCodeUpdatedArgs;
         args.newCodeHash = newCodeHash;
         args.oldCodeHash = oldCodeHash;
 
