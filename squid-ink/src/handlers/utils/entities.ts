@@ -4,6 +4,7 @@ import {
   SubstrateExtrinsic,
   SubstrateExtrinsicSignature,
 } from "@subsquid/substrate-processor";
+import { Entity, Store } from "@subsquid/typeorm-store";
 import {
   ContractCodeUpdatedArgs,
   ContractInstantiatedArgs,
@@ -19,6 +20,17 @@ import {
 import { encodeAddress } from "./accounts";
 
 type Args = Record<string, string> | Record<string, Record<string, string>>;
+
+export async function saveAll<E extends Entity | undefined>(
+  store: Store,
+  entities: E[]
+): Promise<void> {
+  for (const entity of entities) {
+    if (entity !== undefined) {
+      await store.save(entity);
+    }
+  }
+}
 
 export function createEvent(extrinsicEntity: Extrinsic, event: Event): Events {
   const { id, name, call, indexInBlock } = event;

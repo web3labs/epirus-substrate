@@ -50,12 +50,16 @@ processor.run(new TypeormDatabase(), async (ctx) => {
       try {
         const handler = registry.resolve(item);
         if (handler) {
+          log.debug({ item, header }, "Handling item");
           await handler(ctx, header);
         } else {
           log.debug(item, "No handler found for item");
         }
       } catch (error) {
-        log.error(<Error>error, "Error while handling block items");
+        log.error(
+          { item, error: <Error>error },
+          "Error while handling block items"
+        );
       }
     }
   }

@@ -31,6 +31,7 @@ import {
   createExtrinsic,
   encodeAddress,
   getOrCreateAccount,
+  saveAll,
 } from "../utils";
 
 const contractsInstantiatedHandler: EventHandler = {
@@ -42,77 +43,71 @@ const contractsInstantiatedHandler: EventHandler = {
   ): Promise<void> => {
     const { store, log } = ctx;
     const { extrinsic, call } = event;
-    try {
-      log.debug({ block: block.height }, "Got contracts instantiated event!");
-      const { deployer, contract } = new NormalisedContractsInstantiatedEvent(
-        ctx,
-        event
-      ).resolve();
-      const deployerAccount = await getOrCreateAccount(store, deployer, block);
-      const contractAccount = await getOrCreateAccount(store, contract, block);
-      await store.save([deployerAccount, contractAccount]);
+    const { deployer, contract } = new NormalisedContractsInstantiatedEvent(
+      ctx,
+      event
+    ).resolve();
+    const deployerAccount = await getOrCreateAccount(store, deployer, block);
+    const contractAccount = await getOrCreateAccount(store, contract, block);
 
-      const { codeHash, trieId, storageDeposit } =
-        await new NormalisedContractInfoOfStorage(ctx, block).get(contract);
-      const contractCodeEntity = await ctx.store.get(
-        ContractCode,
-        toHex(codeHash)
+    const { codeHash, trieId, storageDeposit } =
+      await new NormalisedContractInfoOfStorage(ctx, block).get(contract);
+    const contractCodeEntity = await ctx.store.get(
+      ContractCode,
+      toHex(codeHash)
+    );
+
+    if (contractCodeEntity == null) {
+      throw new Error(
+        `ContractCode entity is not found in the database for contract address [${contract}], please make sure that it is created and saved first.`
+      );
+    }
+    if (extrinsic && call) {
+      const extrinsicEntity = createExtrinsic(extrinsic, call, block);
+      const eventEntity = createEvent(extrinsicEntity, event);
+
+      const args = extrinsicEntity.args
+        ? <ContractInstantiatedArgs>extrinsicEntity.args
+        : null;
+
+      const contractEntity = new Contract({
+        id: contract,
+        trieId,
+        account: contractAccount,
+        deployer: deployerAccount,
+        createdAt: extrinsicEntity.createdAt,
+        createdFrom: extrinsicEntity,
+        contractCode: contractCodeEntity,
+        storageDeposit,
+        salt: args ? args.salt : null,
+      });
+
+      const allArgs: ContractInstantiatedArgs = args || {};
+      if (allArgs.codeHash !== undefined) {
+        allArgs.codeHash = toHex(codeHash);
+      }
+      const activityEntity = createActivity(
+        extrinsicEntity,
+        ActivityType.CONTRACT,
+        contractAccount,
+        deployerAccount,
+        allArgs
       );
 
-      if (contractCodeEntity == null) {
-        throw new Error(
-          `ContractCode entity is not found in the database for contract address [${contract}], please make sure that it is created and saved first.`
-        );
-      }
-      if (extrinsic && call) {
-        const extrinsicEntity = createExtrinsic(extrinsic, call, block);
-        const eventEntity = createEvent(extrinsicEntity, event);
-
-        const args = extrinsicEntity.args
-          ? <ContractInstantiatedArgs>extrinsicEntity.args
-          : null;
-
-        const contractEntity = new Contract({
-          id: contract,
-          trieId,
-          account: contractAccount,
-          deployer: deployerAccount,
-          createdAt: extrinsicEntity.createdAt,
-          createdFrom: extrinsicEntity,
-          contractCode: contractCodeEntity,
-          storageDeposit,
-          salt: args ? args.salt : null,
-        });
-
-        const allArgs: ContractInstantiatedArgs = args || {};
-        if (allArgs.codeHash !== undefined) {
-          allArgs.codeHash = toHex(codeHash);
-        }
-        const activityEntity = createActivity(
-          extrinsicEntity,
-          ActivityType.CONTRACT,
-          contractAccount,
-          deployerAccount,
-          allArgs
-        );
-
-        await store.save(extrinsicEntity);
-        await store.save(eventEntity);
-        await store.save(contractEntity);
-        await store.save(activityEntity);
-      } else {
-        log.warn(
-          { block: block.height, name: event.name, id: event.id },
-          "No extrinsic or call field in event"
-        );
-        log.debug({ block, event });
-      }
-    } catch (error) {
-      console.log(error);
-      log.error(
-        <Error>error,
-        "Error while handling contracts instantiated event"
+      await saveAll(store, [
+        deployerAccount,
+        contractAccount,
+        extrinsicEntity,
+        eventEntity,
+        contractEntity,
+        activityEntity,
+      ]);
+    } else {
+      log.warn(
+        { block: block.height, name: event.name, id: event.id },
+        "No extrinsic or call field in event"
       );
+      log.debug({ block, event });
     }
   },
 };
@@ -126,38 +121,28 @@ const contractsEmittedHandler: EventHandler = {
   ): Promise<void> => {
     const { store, log } = ctx;
     const { extrinsic, call } = event;
-    log.debug({ block: block.height }, "Got contracts emitted event!");
-    try {
-      if (extrinsic && call) {
-        const extrinsicEntity = createExtrinsic(extrinsic, call, block);
-        const eventEntity = createEvent(extrinsicEntity, event);
-        const { contract, data } = new NormalisedContractEmittedEvent(
-          ctx,
-          event
-        ).resolve();
-        const contractEventEntity = new ContractEmittedEvent({
-          id: eventEntity.id,
-          contractAddress: contract,
-          data,
-          createdAt: extrinsicEntity.createdAt,
-          extrinsic: extrinsicEntity,
-        });
+    if (extrinsic && call) {
+      const extrinsicEntity = createExtrinsic(extrinsic, call, block);
+      const eventEntity = createEvent(extrinsicEntity, event);
+      const { contract, data } = new NormalisedContractEmittedEvent(
+        ctx,
+        event
+      ).resolve();
+      const contractEventEntity = new ContractEmittedEvent({
+        id: eventEntity.id,
+        contractAddress: contract,
+        data,
+        createdAt: extrinsicEntity.createdAt,
+        extrinsic: extrinsicEntity,
+      });
 
-        await store.save(extrinsicEntity);
-        await store.save(eventEntity);
-        await store.save(contractEventEntity);
-      } else {
-        log.warn(
-          { block: block.height, name: event.name, id: event.id },
-          "No extrinsic or call field in event"
-        );
-        log.debug({ block, event });
-      }
-    } catch (error) {
-      log.error(
-        <Error>error,
-        "Error handling contracts ContractEmitted event."
+      await saveAll(store, [extrinsicEntity, eventEntity, contractEventEntity]);
+    } else {
+      log.warn(
+        { block: block.height, name: event.name, id: event.id },
+        "No extrinsic or call field in event"
       );
+      log.debug({ block, event });
     }
   },
 };
@@ -171,39 +156,33 @@ const contractsCodeStoredHandler: EventHandler = {
   ): Promise<void> => {
     const { store, log } = ctx;
     const { extrinsic, call } = event;
-    log.debug({ block: block.height }, "Got contracts code stored event!");
-    try {
-      if (extrinsic && call) {
-        const extrinsicEntity = createExtrinsic(extrinsic, call, block);
-        const eventEntity = createEvent(extrinsicEntity, event);
-        const { codeHash } = new NormalisedContractsCodeStoredEvent(
+    if (extrinsic && call) {
+      const extrinsicEntity = createExtrinsic(extrinsic, call, block);
+      const eventEntity = createEvent(extrinsicEntity, event);
+      const { codeHash } = new NormalisedContractsCodeStoredEvent(
+        ctx,
+        event
+      ).resolve();
+      const { codeOwnerEntity, contractCodeEntity } =
+        await createContractCodeEntities({
           ctx,
-          event
-        ).resolve();
-        const { codeOwnerEntity, contractCodeEntity } =
-          await buildContractCodeEntity({
-            ctx,
-            block,
-            codeHash,
-            extrinsicEntity,
-          });
+          block,
+          codeHash,
+          extrinsicEntity,
+        });
 
-        await store.save(extrinsicEntity);
-        await store.save(eventEntity);
-        await store.save(codeOwnerEntity);
-        await store.save(contractCodeEntity);
-      } else {
-        log.warn(
-          { block: block.height, name: event.name, id: event.id },
-          "No extrinsic or call field in event"
-        );
-        log.debug({ block, event });
-      }
-    } catch (error) {
-      log.error(
-        <Error>error,
-        "Error while handling contract CodeStored event."
+      await saveAll(store, [
+        extrinsicEntity,
+        eventEntity,
+        codeOwnerEntity,
+        contractCodeEntity,
+      ]);
+    } else {
+      log.warn(
+        { block: block.height, name: event.name, id: event.id },
+        "No extrinsic or call field in event"
       );
+      log.debug({ block, event });
     }
   },
 };
@@ -217,107 +196,91 @@ const contractsCodeUpdatedHandler: EventHandler = {
   ): Promise<void> => {
     const { store, log } = ctx;
     const { extrinsic, call } = event;
-    log.debug(
-      { block: block.height },
-      "Got contracts ContractCodeUpdated event!"
+    const { contract, newCodeHash, oldCodeHash } =
+      new NormalisedContractsCodeUpdatedEvent(ctx, event).resolve();
+
+    log.info(
+      {
+        contract,
+        oldCodeHash,
+        newCodeHash,
+      },
+      "Contract code hash has changed"
     );
-    try {
-      const { contract, newCodeHash, oldCodeHash } =
-        new NormalisedContractsCodeUpdatedEvent(ctx, event).resolve();
 
-      log.info(
-        {
-          contract,
-          oldCodeHash,
-          newCodeHash,
-        },
-        "Contract code hash has changed"
+    const contractEntity = await store.get(Contract, {
+      where: { id: contract },
+      relations: {
+        account: true,
+        deployer: true,
+        createdFrom: true,
+      },
+    });
+
+    if (contractEntity === undefined) {
+      throw new Error(
+        `Contract entity is not found in the database for contract address [${contract}], please make sure that it is created and saved first.`
       );
+    }
 
-      const contractEntity = await store.get(Contract, {
-        where: { id: contract },
-        relations: {
-          account: true,
-          deployer: true,
-          createdFrom: true,
-        },
+    if (extrinsic && call) {
+      const extrinsicEntity = createExtrinsic(extrinsic, call, block);
+      const eventEntity = createEvent(extrinsicEntity, event);
+      const { codeOwnerEntity, contractCodeEntity } =
+        await createContractCodeEntities({
+          ctx,
+          block,
+          codeHash: newCodeHash,
+          extrinsicEntity,
+        });
+      contractEntity.contractCode = contractCodeEntity;
+
+      const codeHashChangeEntity = new CodeHashChange({
+        id: event.id,
+        contract: contractEntity,
+        newCodeHash,
+        oldCodeHash,
+        changedAt: extrinsicEntity.createdAt,
+        extrinsic: extrinsicEntity,
       });
 
-      if (contractEntity === undefined) {
-        throw new Error(
-          `Contract entity is not found in the database for contract address [${contract}], please make sure that it is created and saved first.`
-        );
-      }
+      const signerAccount = extrinsicEntity.signer
+        ? await getOrCreateAccount(store, extrinsicEntity.signer, block)
+        : undefined;
 
-      if (extrinsic && call) {
-        const extrinsicEntity = createExtrinsic(extrinsic, call, block);
-        const eventEntity = createEvent(extrinsicEntity, event);
-        const { codeOwnerEntity, contractCodeEntity } =
-          await buildContractCodeEntity({
-            ctx,
-            block,
-            codeHash: newCodeHash,
-            extrinsicEntity,
-          });
-        await store.save(codeOwnerEntity);
-        contractEntity.contractCode = contractCodeEntity;
+      const args = (extrinsicEntity.args || {}) as ContractCodeUpdatedArgs;
+      args.newCodeHash = newCodeHash;
+      args.oldCodeHash = oldCodeHash;
 
-        const codeHashChangeEntity = new CodeHashChange({
-          id: event.id,
-          contract: contractEntity,
-          newCodeHash,
-          oldCodeHash,
-          changedAt: extrinsicEntity.createdAt,
-          extrinsic: extrinsicEntity,
-        });
-
-        const signerAccount = extrinsicEntity.signer
-          ? await getOrCreateAccount(store, extrinsicEntity.signer, block)
-          : undefined;
-        if (signerAccount !== undefined) {
-          await store.save(signerAccount);
-        }
-
-        const args = (extrinsicEntity.args || {}) as ContractCodeUpdatedArgs;
-        args.newCodeHash = newCodeHash;
-        args.oldCodeHash = oldCodeHash;
-
-        const activityEntity = createActivity(
-          extrinsicEntity,
-          ActivityType.CODEUPDATED,
-          contractEntity.account,
-          signerAccount,
-          args
-        );
-
-        const entities = [
-          extrinsicEntity,
-          eventEntity,
-          contractCodeEntity,
-          contractEntity,
-          codeHashChangeEntity,
-          activityEntity,
-        ];
-        for (const entity of entities) {
-          await store.save(entity);
-        }
-      } else {
-        log.warn(
-          { block: block.height, name: event.name, id: event.id },
-          "No extrinsic or call field in event"
-        );
-        log.debug({ block, event });
-      }
-    } catch (error) {
-      log.error(
-        <Error>error,
-        "Error handling contracts ContractEmitted event."
+      const activityEntity = createActivity(
+        extrinsicEntity,
+        ActivityType.CODEUPDATED,
+        contractEntity.account,
+        signerAccount,
+        args
       );
+
+      await saveAll(store, [
+        codeOwnerEntity,
+        signerAccount,
+        extrinsicEntity,
+        eventEntity,
+        contractCodeEntity,
+        contractEntity,
+        codeHashChangeEntity,
+        activityEntity,
+      ]);
+    } else {
+      log.warn(
+        { block: block.height, name: event.name, id: event.id },
+        "No extrinsic or call field in event"
+      );
+      log.debug({ block, event });
     }
   },
 };
 
-async function buildContractCodeEntity({
+async function createContractCodeEntities({
   ctx,
   block,
   codeHash,

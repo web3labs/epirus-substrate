@@ -15,17 +15,11 @@ const balancesTransferHandler: EventHandler = {
     event: Event,
     block: SubstrateBlock
   ): Promise<void> => {
-    const { log } = ctx;
-    log.debug({ block: block.height }, "Got balances Transfer event!");
-    try {
-      const { from, to } = new NormalisedBalancesTransferEvent(
-        ctx,
-        event
-      ).resolve();
-      await updateEntities({ ctx, event, block, accounts: [from, to] });
-    } catch (error) {
-      log.error(<Error>error, "Error handling balances Transfer event.");
-    }
+    const { from, to } = new NormalisedBalancesTransferEvent(
+      ctx,
+      event
+    ).resolve();
+    await updateEntities({ ctx, event, block, accounts: [from, to] });
   },
 };
 
@@ -36,17 +30,11 @@ const balancesWithdrawHandler: EventHandler = {
     event: Event,
     block: SubstrateBlock
   ): Promise<void> => {
-    const { log } = ctx;
-    log.debug({ block: block.height }, "Got balances Withdraw event!");
-    try {
-      const { account } = new NormalisedBalancesWithdrawEvent(
-        ctx,
-        event
-      ).resolve();
-      await updateEntities({ ctx, event, block, accounts: [account] });
-    } catch (error) {
-      log.error(<Error>error, "Error handling balances Withdraw event.");
-    }
+    const { account } = new NormalisedBalancesWithdrawEvent(
+      ctx,
+      event
+    ).resolve();
+    await updateEntities({ ctx, event, block, accounts: [account] });
   },
 };
 
@@ -57,17 +45,11 @@ const balancesReservedHandler: EventHandler = {
     event: Event,
     block: SubstrateBlock
   ): Promise<void> => {
-    const { log } = ctx;
-    log.debug({ block: block.height }, "Got balances Reserved event!");
-    try {
-      const { account } = new NormalisedBalancesReservedEvent(
-        ctx,
-        event
-      ).resolve();
-      await updateEntities({ ctx, event, block, accounts: [account] });
-    } catch (error) {
-      log.error(<Error>error, "Error handling balances Reserved event.");
-    }
+    const { account } = new NormalisedBalancesReservedEvent(
+      ctx,
+      event
+    ).resolve();
+    await updateEntities({ ctx, event, block, accounts: [account] });
   },
 };
 
@@ -78,17 +60,11 @@ const balancesEndowedHandler: EventHandler = {
     event: Event,
     block: SubstrateBlock
   ): Promise<void> => {
-    const { log } = ctx;
-    log.debug({ block: block.height }, "Got balances Endowed event!");
-    try {
-      const { account } = new NormalisedBalancesEndowedEvent(
-        ctx,
-        event
-      ).resolve();
-      await updateEntities({ ctx, event, block, accounts: [account] });
-    } catch (error) {
-      log.error(<Error>error, "Error handling balances Endowed event.");
-    }
+    const { account } = new NormalisedBalancesEndowedEvent(
+      ctx,
+      event
+    ).resolve();
+    await updateEntities({ ctx, event, block, accounts: [account] });
   },
 };
 
