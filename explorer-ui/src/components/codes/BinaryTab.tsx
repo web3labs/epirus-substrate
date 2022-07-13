@@ -2,7 +2,7 @@ import React from "react"
 import useSquid from "../../hooks/useSquid"
 import { ContractCode } from "../../types/codes"
 import { hexToBytes } from "../../utils/hex"
-import Loading from "../loading/Loading"
+import { PageLoading } from "../loading/Loading"
 import { HexView } from "./HexView"
 
 const QUERY = `
@@ -21,7 +21,7 @@ export default function BinaryTab ({ id }:{id: string}) {
 
   const { data, fetching } = result
 
-  if (fetching) return <Loading loading={fetching} />
+  if (fetching) return <PageLoading loading={fetching} />
 
   const codeHash = data?.contractCodes[0] as ContractCode
 

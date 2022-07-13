@@ -172,15 +172,18 @@ export default function SearchBox () {
             }}
             onKeyDown={(event) => handleKeyDown({ event })}
             required />
-          {searchInput.length > 0 &&
-            <div className="flex absolute items-center inset-y-0 right-0 pr-3">
-              <XIcon
-                className="w-5 h-5 cursor-pointer"
-                onClick={clear}
-              />
-            </div>
-          }
-          {fetching && <InputLoading loading={fetching} delay={750} />}
+          {<InputLoading loading={fetching} delay={400}>
+            <>
+              {searchInput.length > 0 &&
+                <div className="flex absolute items-center inset-y-0 right-0 pr-3">
+                  <XIcon
+                    className="w-5 h-5 cursor-pointer"
+                    onClick={clear}
+                  />
+                </div>
+              }
+            </>
+          </InputLoading>}
         </div>
       </form>
       {showResults &&

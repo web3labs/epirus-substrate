@@ -1,10 +1,16 @@
 import React, { ReactElement, useCallback, useEffect, useState } from "react"
 
-export default function Loading ({
+function Loading ({
   delay = 200,
   loading,
-  loader = <PuffLoading/>
-}: {loading: boolean, delay?: number, loader?: ReactElement}) {
+  loader = <PuffLoading/>,
+  fallback = null
+}: {
+  loading: boolean,
+  delay?: number,
+  loader?: ReactElement,
+  fallback?: ReactElement | null
+}) {
   const [delayed, setDelayed] = useState(false)
   const [timeOutId, setTimeOutId] = useState<any>()
   useEffect(() => {
@@ -23,7 +29,7 @@ export default function Loading ({
     clearTimeout(timeOutId)
   }, [loading])
 
-  return delayed ? loader : null
+  return delayed ? loader : fallback
 }
 
 export function PageLoading ({ loading, delay }: { loading: boolean, delay?: number }) {
@@ -35,37 +41,56 @@ export function PageLoading ({ loading, delay }: { loading: boolean, delay?: num
   </div>
 }
 
-export function InputLoading ({ loading, delay }: { loading: boolean, delay?: number }) {
-  return <div className="flex absolute items-center inset-y-0 right-0 pr-3 text-gray-500">
+export function InputLoading (
+  { loading, delay, children }:
+  { loading: boolean, delay?: number, children: ReactElement }
+) {
+  return <div className="flex absolute items-center inset-y-0 right-1 text-gray-500">
     <Loading
       loading={loading}
       delay={delay}
+      fallback={children}
       loader={<DotsLoading/>}
     />
   </div>
 }
 
-export function DotsLoading () {
-  /* -- By Sam Herbert (@sherb), for everyone. More @ http://goo.gl/7AJzbL -- */
+function DotsLoading () {
   return (
-    <svg width="120" height="30" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-      <circle cx="15" cy="15" r="15">
-        <animate attributeName="r" from="15" to="15" begin="0s" dur="0.8s" values="15;9;15" calcMode="linear" repeatCount="indefinite"/>
-        <animate attributeName="fill-opacity" from="1" to="1" begin="0s" dur="0.8s" values="1;.5;1" calcMode="linear" repeatCount="indefinite"/>
+    <svg version="1.1" id="L4" xmlns="http://www.w3.org/2000/svg"
+      width="32px"
+      height="32px"
+      x="0px" y="0px"
+      viewBox="0 0 100 100" enableBackground="new 0 0 0 0" xmlSpace="preserve">
+      <circle fill="currentColor" stroke="none" cx="6" cy="50" r="6">
+        <animate
+          attributeName="opacity"
+          dur="1s"
+          values="0;1;0"
+          repeatCount="indefinite"
+          begin="0.1"/>
       </circle>
-      <circle cx="60" cy="15" r="9" fillOpacity="0.3">
-        <animate attributeName="r" from="9" to="9" begin="0s" dur="0.8s" values="9;15;9" calcMode="linear" repeatCount="indefinite"/>
-        <animate attributeName="fill-opacity" from="0.5" to="0.5" begin="0s" dur="0.8s" values=".5;1;.5" calcMode="linear" repeatCount="indefinite"/>
+      <circle fill="currentColor" stroke="none" cx="26" cy="50" r="6">
+        <animate
+          attributeName="opacity"
+          dur="1s"
+          values="0;1;0"
+          repeatCount="indefinite"
+          begin="0.2"/>
       </circle>
-      <circle cx="105" cy="15" r="15">
-        <animate attributeName="r" from="15" to="15" begin="0s" dur="0.8s" values="15;9;15" calcMode="linear" repeatCount="indefinite"/>
-        <animate attributeName="fill-opacity" from="1" to="1" begin="0s" dur="0.8s" values="1;.5;1" calcMode="linear" repeatCount="indefinite"/>
+      <circle fill="currentColor" stroke="none" cx="46" cy="50" r="6">
+        <animate
+          attributeName="opacity"
+          dur="1s"
+          values="0;1;0"
+          repeatCount="indefinite"
+          begin="0.3"/>
       </circle>
     </svg>
   )
 }
 
-export function PuffLoading () {
+function PuffLoading () {
   /* -- By Sam Herbert (@sherb), for everyone. More @ http://goo.gl/7AJzbL -- */
   return (
     <svg width="44" height="44" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
