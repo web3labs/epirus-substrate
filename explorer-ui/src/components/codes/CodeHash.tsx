@@ -6,16 +6,15 @@ import { AddressText } from "../commons/Text"
 export default function CodeHash ({
   hash,
   size = 16,
-  padding = "p-0.5",
   className = "",
   short = true
 }: {
   hash: string,
-  padding?: string,
   size?: number,
   className?: string,
   short?: boolean
 }) {
+  const padding = size > 20 ? "p-1.5" : "p-0.5"
   return (
     <div className={classNames("flex gap-2 items-center text-sm", className)}>
       <span className={classNames("bg-lime-200 rounded-full", padding)}>

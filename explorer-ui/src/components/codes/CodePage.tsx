@@ -97,7 +97,7 @@ export default function CodePage () {
           <BoxHead
             title={
               <Copy text={id}>
-                <CodeHash hash={id} size={21} padding="p-1.5" />
+                <CodeHash hash={id} size={21} />
               </Copy>
             }
             tag={<Tag label="wasm" />}
