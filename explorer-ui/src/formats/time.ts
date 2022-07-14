@@ -12,11 +12,28 @@ export function shortDate (date: Date) {
   }
 }
 
-const dtf = new Intl.DateTimeFormat(undefined, {
-  dateStyle: "full", timeStyle: "long"
-})
+interface DateTimeFormat {
+  dateStyle?: "full" | "long" | "medium" | "short" | undefined,
+  timeStyle?: "full" | "long" | "medium" | "short" | undefined
+}
 
-export function fullDateTime (date: Date) {
+const longFormat: DateTimeFormat = {
+  dateStyle: "long", timeStyle: "long"
+}
+const shortFormat: DateTimeFormat = {
+  dateStyle: "short", timeStyle: "short"
+}
+
+const dtf = (format: DateTimeFormat) => {
+  return new Intl.DateTimeFormat("default", format)
+}
+
+export function longDateTime (date: Date) {
   // XXX date needs to be re-instantiated
-  return dtf.format(new Date(date))
+  return dtf(longFormat).format(new Date(date))
+}
+
+export function shortDateTime (date: Date) {
+  // XXX date needs to be re-instantiated
+  return dtf(shortFormat).format(new Date(date))
 }

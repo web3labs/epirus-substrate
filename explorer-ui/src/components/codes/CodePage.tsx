@@ -17,7 +17,7 @@ import Copy from "../commons/Copy"
 import ExtrinsicSummary from "../commons/ExtrinsicSummary"
 import { HexText } from "../commons/Text"
 import { getArg } from "../commons/Args"
-import { fullDateTime } from "../../formats/time"
+import { longDateTime } from "../../formats/time"
 import CodeHash from "./CodeHash"
 import { PageLoading } from "../loading/Loading"
 
@@ -106,7 +106,7 @@ export default function CodePage () {
           <Segment>
             <DefinitionList>
               <Definition label="Time" term={
-                <span>{fullDateTime(createdAt)}</span>
+                <span>{longDateTime(createdAt)}</span>
               }/>
               <Definition label="Owner" term={
                 <AccountLink account={owner} size={21} />
