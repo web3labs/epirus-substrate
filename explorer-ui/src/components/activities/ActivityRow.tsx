@@ -11,16 +11,16 @@ import { getArgValue } from "../commons/Args"
 import { useChainProperties } from "../../contexts/ChainContext"
 import { AccountUnit } from "../commons/Text"
 
-function actionAlias (action: string) {
-  switch (action.toLocaleLowerCase()) {
-  case "contracts.instantiate":
-  case "contracts.instantiatewithcode":
-  case "contracts.instantiate_with_code":
+function typeAlias (type: string) {
+  switch (type) {
+  case "CONTRACT":
     return "instantiate"
-  case "contracts.call":
+  case "CONTRACTCALL":
     return "call"
+  case "CODEUPDATED":
+    return "upgrade"
   default:
-    return action
+    return type
   }
 }
 
@@ -30,8 +30,8 @@ export default function ActivityRow ({
   short = true
 }: TypedRow<Activity>) {
   const { token } = useChainProperties()
-  const { id, from, to, action, createdAt } = obj
-  const alias = actionAlias(action)
+  const { id, from, to, type, createdAt } = obj
+  const alias = typeAlias(type)
 
   return (
     <Row key={id}>

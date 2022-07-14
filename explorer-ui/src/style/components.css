@@ -70,6 +70,10 @@
     @apply border border-purple-300 bg-purple-100 text-purple-600;
   }
 
+  .tag.upgrade {
+    @apply border border-rose-300 bg-rose-100 text-rose-600;
+  }
+
   .tag.chain {
     @apply bg-emerald-100 text-emerald-800;
   }
@@ -84,6 +88,10 @@
 
   .tag.wasm {
     @apply text-lime-600 bg-lime-200
+  }
+
+  .tag.upgraded {
+    @apply bg-rose-200 text-rose-600;
   }
 
   /* Forms & Controls */ 
