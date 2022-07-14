@@ -15,8 +15,8 @@ export function Definition ({ label, term, className = "" }: {
   }
 
   return (
-    <div className={classNames(className, "flex flex-row flex-wrap gap-x-2 items-start")}>
-      <dt className="flex text-sm text-gray-400 basis-20">{label}</dt>
+    <div className={classNames(className, "flex flex-col flex-wrap gap-y-1 items-start md:flex-row md:gap-x-2")}>
+      <dt className="flex text-sm text-gray-400 md:basis-20">{label}</dt>
       <dd className="text-sm text-gray-900">{term}</dd>
     </div>
   )

@@ -19,6 +19,13 @@ export interface Event {
   extrinsic: Extrinsic
 }
 
+export interface CodeHashChange {
+  newCodeHash: string
+  oldCodeHash: string
+  changedAt: Date
+  extrinsic: Extrinsic
+}
+
 export type LightContract = {
   id: string,
   account: AccountRef
@@ -45,4 +52,5 @@ export interface Contract extends LightContract {
   }
   account: Account
   createdFrom: Extrinsic
+  codeHashChanges: CodeHashChange[]
 }

@@ -19,11 +19,12 @@ import CodeLink from "../codes/CodeLink"
 import Copy from "../commons/Copy"
 import { AccountUnit } from "../commons/Text"
 import ExtrinsicSummary from "../commons/ExtrinsicSummary"
-import { fullDateTime } from "../../formats/time"
+import { longDateTime } from "../../formats/time"
 import { PageLoading } from "../loading/Loading"
+import ContractUpgrades from "./ContractUpgrade"
 
 const QUERY = `
-query($id: ID!) {
+query($id: ID!, $codeHashChangeOrderBy: [CodeHashChangeOrderByInput] ) {
   contracts(where: {id_eq: $id}) {
     createdAt
     id
@@ -62,6 +63,14 @@ query($id: ID!) {
       tip
       versionInfo
       args
+    }
+    codeHashChanges(orderBy: $codeHashChangeOrderBy) {
+      newCodeHash
+      oldCodeHash
+      changedAt
+      extrinsic {
+        id
+      }
     }
   }
 }
@@ -116,7 +125,7 @@ export default function ContractPage () {
 
   const [result] = useSquid({
     query: QUERY,
-    variables: { id: params.id }
+    variables: { id: params.id, codeHashChangeOrderBy: "changedAt_DESC" }
   })
 
   const { data, fetching } = result
@@ -132,9 +141,11 @@ export default function ContractPage () {
     createdFrom,
     contractCode,
     account,
-    storageDeposit
+    storageDeposit,
+    codeHashChanges
   } = data?.contracts[0] as Contract
   const { balance } = account
+  const isUpgraded = codeHashChanges && codeHashChanges.length > 0
 
   return (
     <>
@@ -151,12 +162,17 @@ export default function ContractPage () {
                   </AccountAddress>
                 </Copy>
               }
-              tag={ <Tag label="wasm" />}
+              tag={
+                <>
+                  <Tag label="wasm" />
+                  {isUpgraded && <Tag label="upgraded" />}
+                </>
+              }
             />
             <Segment>
               <DefinitionList>
                 <Definition label="Time" term={
-                  <span>{fullDateTime(createdAt)}</span>
+                  <span>{longDateTime(createdAt)}</span>
                 }/>
                 <Definition label="Deployer" term={
                   <AccountLink account={deployer} size={21} />
@@ -173,6 +189,9 @@ export default function ContractPage () {
               token={token}
               isOpen={false}
             />
+            <>
+              {isUpgraded && <ContractUpgrades codeHashChanges={codeHashChanges}/>}
+            </>
           </Box>
           <Box>
             <Segment title="Balance">
