@@ -27,12 +27,14 @@ export function CollapsibleRow ({ children, collapsedDisplay, isOpen = false }: 
 
   return (
     <li className="flex flex-col pb-2 pt-4 px-6 hover:bg-over-hover" onClick={() => setOpen(!open)}>
-      <div className="flex flex-row justify-between">
+      <div className="flex flex-row justify-between items-center">
         {children}
-        {open
-          ? <ChevronDownIcon className="text-gray-300 w-5 h-5" />
-          : <ChevronRightIcon className="text-gray-300 w-5 h-5"/>
-        }
+        <span className="py-3 pl-3 cursor-pointer">
+          {open
+            ? <ChevronDownIcon className="text-gray-300 w-5 h-5" />
+            : <ChevronRightIcon className="text-gray-300 w-5 h-5"/>
+          }
+        </span>
       </div>
       {open && collapsedDisplay}
     </li>
