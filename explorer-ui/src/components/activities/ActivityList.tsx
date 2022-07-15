@@ -31,6 +31,11 @@ query($where: ActivityWhereInput = {} ,$first: Int = 5, $after: String = "", $or
         }
         type
         args
+        extrinsic {
+          id
+          success
+          error
+        }
       }
     }
     pageInfo {

@@ -1,7 +1,8 @@
-import React, { ReactNode } from "react"
+import React, { ReactNode, useState } from "react"
 import { PageQuery } from "../../types/pagination"
 import { FilterProps } from "../query/Filters"
 import { Option } from "../commons/Select"
+import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/outline"
 
 interface Props {
     title?: JSX.Element | string
@@ -17,6 +18,23 @@ export function Row ({ children }: {children: ReactNode}) {
   return (
     <li className="flex flex-row flex-wrap gap-2 items-stretch justify-between pb-2 pt-4 px-6 hover:bg-over-hover">
       {children}
+    </li>
+  )
+}
+
+export function CollapsibleRow ({ children, collapsedDisplay, isOpen = false }: {children: ReactNode, collapsedDisplay: ReactNode, isOpen?: boolean}) {
+  const [open, setOpen] = useState(isOpen)
+
+  return (
+    <li className="flex flex-col pb-2 pt-4 px-6 hover:bg-over-hover" onClick={() => setOpen(!open)}>
+      <div className="flex flex-row justify-between">
+        {children}
+        {open
+          ? <ChevronDownIcon className="text-gray-300 w-5 h-5" />
+          : <ChevronRightIcon className="text-gray-300 w-5 h-5"/>
+        }
+      </div>
+      {open && collapsedDisplay}
     </li>
   )
 }

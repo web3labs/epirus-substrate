@@ -8,7 +8,8 @@ export interface Activity {
   to: AccountRef,
   from: AccountRef,
   createdAt: Date,
-  args: Args
+  args: Args,
+  extrinsic: Extrinsic
 }
 
 export interface Event {

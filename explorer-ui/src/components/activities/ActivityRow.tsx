@@ -1,7 +1,7 @@
 import React from "react"
 
 import { Activity } from "../../types/contracts"
-import { Row, TypedRow } from "../commons/List"
+import { CollapsibleRow, TypedRow } from "../commons/List"
 import { shortDate } from "../../formats/time"
 import AccountLink from "../accounts/AccountLink"
 import { classNames } from "../../utils/strings"
@@ -10,6 +10,7 @@ import { Label } from "../commons/Label"
 import { getArgValue } from "../commons/Args"
 import { useChainProperties } from "../../contexts/ChainContext"
 import { AccountUnit } from "../commons/Text"
+import { Definition, DefinitionList } from "../commons/Definitions"
 
 function typeAlias (type: string) {
   switch (type) {
@@ -30,11 +31,36 @@ export default function ActivityRow ({
   short = true
 }: TypedRow<Activity>) {
   const { token } = useChainProperties()
-  const { id, from, to, type, createdAt } = obj
+  const { id, from, to, type, createdAt, args, extrinsic } = obj
   const alias = typeAlias(type)
+  const status = extrinsic.success ? "success" : "error"
+
+  const extrinsicDetails = (
+    <div className="flex flex-col md:flex-row border-t border-gray-200 bg-gray-50 py-4 px-6 mt-2 -mx-6 -mb-2">
+      <DefinitionList>
+        <Definition label="Extrinsic" term={
+          <span className="font-mono">{extrinsic.id}</span>
+        }/>
+        <Definition label="Data" term={
+          <span className="font-mono break-all">{args.data}</span>
+        }/>
+        <Definition label="Status" term={
+          <div className={classNames(
+            `tag ${status}`,
+            "w-24 text-[0.68rem] font-semibold uppercase py-0.5 px-1 rounded text-center"
+          )}>
+            {`${status}`}
+          </div>
+        }/>
+        {extrinsic.error && <Definition label="Error" term={
+          <pre id="json">{JSON.stringify(extrinsic.error, undefined, 2)}</pre>
+        }/>}
+      </DefinitionList>
+    </div>
+  )
 
   return (
-    <Row key={id}>
+    <CollapsibleRow key={id} collapsedDisplay={extrinsicDetails}>
       <Lane
         head={
           <div className="flex flex-col gap-2">
@@ -68,6 +94,6 @@ export default function ActivityRow ({
           </div>)
         }
       </Lane>
-    </Row>
+    </CollapsibleRow>
   )
 }

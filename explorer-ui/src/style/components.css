@@ -71,7 +71,15 @@
   }
 
   .tag.upgrade {
-    @apply border border-rose-300 bg-rose-100 text-rose-600;
+    @apply border border-cyan-300 bg-cyan-100 text-cyan-600;
+  }
+
+  .tag.error {
+    @apply bg-red-100 text-red-600;
+  }
+
+  .tag.success {
+    @apply bg-green-100 text-green-600;
   }
 
   .tag.chain {
@@ -91,7 +99,7 @@
   }
 
   .tag.upgraded {
-    @apply bg-rose-200 text-rose-600;
+    @apply bg-cyan-200 text-cyan-600;
   }
 
   /* Forms & Controls */ 

@@ -12,7 +12,7 @@ export default function Lane ({
     tail?: NodeType
 }) {
   return (
-    <div className="flex justify-between gap-4 items-start w-full md:gap-10">
+    <div className="flex flex-wrap justify-between gap-4 items-start w-full md:gap-10">
       <div className="flex shrink">
         {head}
       </div>
