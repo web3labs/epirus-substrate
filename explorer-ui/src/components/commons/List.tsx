@@ -26,15 +26,13 @@ export function CollapsibleRow ({ children, collapsedDisplay, isOpen = false }: 
   const [open, setOpen] = useState(isOpen)
 
   return (
-    <li className="flex flex-col pb-2 pt-4 px-6 hover:bg-over-hover" onClick={() => setOpen(!open)}>
+    <li className="group flex flex-col pb-2 pt-4 px-6 cursor-pointer hover:bg-over-hover" onClick={() => setOpen(!open)}>
       <div className="flex flex-row justify-between items-center">
         {children}
-        <span className="py-3 pl-3 cursor-pointer">
-          {open
-            ? <ChevronDownIcon className="text-gray-300 w-5 h-5" />
-            : <ChevronRightIcon className="text-gray-300 w-5 h-5"/>
-          }
-        </span>
+        {open
+          ? <ChevronDownIcon className="text-gray-300 w-5 h-5 group-hover:text-gray-500" />
+          : <ChevronRightIcon className="text-gray-300 w-5 h-5 group-hover:text-gray-500"/>
+        }
       </div>
       {open && collapsedDisplay}
     </li>
