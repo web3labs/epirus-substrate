@@ -1,16 +1,16 @@
-// import { balancesEventHandlers } from "./balances";
+import { balancesEventHandlers } from "./balances";
 import {
   contractsEventHandlers,
   contractsExtrinsicHandlers,
 } from "./contracts";
 import { HandlerRegistry } from "./registry";
-// import { systemEventHandlers } from "./system";
+import { systemEventHandlers } from "./system";
 import { EventHandler, ExtrinsicHandler } from "./types";
 
 const eventHandlers: Record<string, EventHandler> = {
-  // ...balancesEventHandlers,
+  ...balancesEventHandlers,
   ...contractsEventHandlers,
-  // ...systemEventHandlers,
+  ...systemEventHandlers,
 };
 
 const extrinsicHandlers: Record<string, ExtrinsicHandler> =
