@@ -73,6 +73,8 @@ type ContractCall @entity {
   storageDepositLimit: BigInt
   data: Bytes
   createdAt: DateTime! 
+  success: Boolean!
+  error: JSON
   extrinsic: Extrinsic!
 }
 
@@ -94,6 +96,7 @@ type Extrinsic @entity {
   signer: String
   signature: String
   success: Boolean!
+  error: JSON
   fee: BigInt
   tip: BigInt
   hash: String!

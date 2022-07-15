@@ -4,7 +4,7 @@ import {
   SubstrateCall,
   SubstrateExtrinsic,
 } from "@subsquid/substrate-processor";
-import { Ctx, ExtrinsicHandler } from "../types";
+import { Ctx, ExtrinsicError, ExtrinsicHandler } from "../types";
 import { createActivity, createExtrinsic, getOrCreateAccount } from "../utils";
 import { ActivityType, ContractCall } from "../../model";
 
@@ -30,6 +30,8 @@ const contractsCallHandler: ExtrinsicHandler = {
         storageDepositLimit,
         data,
         createdAt: extrinsicEntity.createdAt,
+        success: extrinsicEntity.success,
+        error: <ExtrinsicError>extrinsicEntity.error,
         extrinsic: extrinsicEntity,
       });
 

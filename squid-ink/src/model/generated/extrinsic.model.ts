@@ -32,6 +32,9 @@ export class Extrinsic {
   @Column_("bool", {nullable: false})
   success!: boolean
 
+  @Column_("jsonb", {nullable: true})
+  error!: unknown | undefined | null
+
   @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
   fee!: bigint | undefined | null
 

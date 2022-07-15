@@ -35,6 +35,12 @@ export class ContractCall {
   @Column_("timestamp with time zone", {nullable: false})
   createdAt!: Date
 
+  @Column_("bool", {nullable: false})
+  success!: boolean
+
+  @Column_("jsonb", {nullable: true})
+  error!: unknown | undefined | null
+
   @Index_()
   @ManyToOne_(() => Extrinsic, {nullable: false})
   extrinsic!: Extrinsic

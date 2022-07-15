@@ -102,3 +102,13 @@ export interface ExtrinsicHandler {
 }
 
 export type ItemHandler = (ctx: Ctx, block: SubstrateBlock) => Promise<void>;
+
+export interface ExtrinsicError {
+  __kind: string;
+  value: ModuleError;
+}
+
+export interface ModuleError {
+  error: string;
+  index: number;
+}

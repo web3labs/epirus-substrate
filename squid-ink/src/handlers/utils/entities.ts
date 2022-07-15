@@ -9,6 +9,7 @@ import {
   ContractCodeUpdatedArgs,
   ContractInstantiatedArgs,
   Event,
+  ExtrinsicError,
 } from "../types";
 import {
   Extrinsic,
@@ -61,6 +62,7 @@ export function createExtrinsic(
     signer: signature ? getSignerAddress(signature) : null,
     signature: signature ? getSignature(signature) : null,
     success: extrinsic.success,
+    error: <ExtrinsicError>extrinsic.error,
     fee: extrinsic.fee,
     tip: extrinsic.tip,
     hash: extrinsic.hash,
