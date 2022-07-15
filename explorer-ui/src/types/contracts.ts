@@ -21,6 +21,7 @@ export interface Event {
 }
 
 export interface CodeHashChange {
+  id: string
   newCodeHash: string
   oldCodeHash: string
   changedAt: Date

@@ -65,6 +65,7 @@ query($id: ID!, $codeHashChangeOrderBy: [CodeHashChangeOrderByInput] ) {
       args
     }
     codeHashChanges(orderBy: $codeHashChangeOrderBy) {
+      id
       newCodeHash
       oldCodeHash
       changedAt

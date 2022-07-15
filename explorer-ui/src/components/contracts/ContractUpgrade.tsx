@@ -13,7 +13,7 @@ export default function ContractUpgrades (
 ) {
   const changeDetails : JSX.Element[] = []
   for (const change of codeHashChanges) {
-    changeDetails.push(<ChangeDetails codeHashChange={change}/>)
+    changeDetails.push(<ChangeDetails key={change.id} codeHashChange={change}/>)
   }
   return (
     <Segment title={title} collapsable={true} isOpen={isOpen}>
