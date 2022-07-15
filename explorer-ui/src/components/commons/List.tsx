@@ -29,10 +29,12 @@ export function CollapsibleRow ({ children, collapsedDisplay, isOpen = false }: 
     <li className="group flex flex-col pb-2 pt-4 px-6 cursor-pointer hover:bg-over-hover" onClick={() => setOpen(!open)}>
       <div className="flex flex-row justify-between items-center">
         {children}
-        {open
-          ? <ChevronDownIcon className="text-gray-300 w-5 h-5 group-hover:text-gray-500" />
-          : <ChevronRightIcon className="text-gray-300 w-5 h-5 group-hover:text-gray-500"/>
-        }
+        <div className="pl-5">
+          {open
+            ? <ChevronDownIcon className="text-gray-300 w-5 h-5 group-hover:text-gray-500" />
+            : <ChevronRightIcon className="text-gray-300 w-5 h-5 group-hover:text-gray-500"/>
+          }
+        </div>
       </div>
       {open && collapsedDisplay}
     </li>

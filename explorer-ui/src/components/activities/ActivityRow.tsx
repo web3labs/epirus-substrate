@@ -46,8 +46,8 @@ export default function ActivityRow ({
         }/>
         <Definition label="Status" term={
           <div className={classNames(
-            `tag ${status}`,
-            "w-24 text-[0.68rem] font-semibold uppercase py-0.5 px-1 rounded text-center"
+            extrinsic.success ? "text-green-600" : "text-red-600",
+            "text-xs font-semibold uppercase py-0.5 px-1 text-center"
           )}>
             {`${status}`}
           </div>
