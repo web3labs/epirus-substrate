@@ -32,6 +32,7 @@ export default function ActivityRow ({
 }: TypedRow<Activity>) {
   const { token } = useChainProperties()
   const { id, from, to, type, createdAt, args, extrinsic } = obj
+  const value = getArgValue(obj.args)
   const alias = typeAlias(type)
   const status = extrinsic.success ? "success" : "error"
 
@@ -73,13 +74,6 @@ export default function ActivityRow ({
             <Label className="text-xs">{shortDate(createdAt)}</Label>
           </div>
         }
-        tail={
-          <AccountUnit
-            className="text-sm"
-            amount={getArgValue(obj.args)}
-            token={token}
-          />
-        }
       >
         {from &&
           (<div className="flex gap-2 text-sm">
@@ -91,6 +85,12 @@ export default function ActivityRow ({
           (<div className="flex gap-2 text-sm">
             <Label>To</Label>
             <AccountLink account={to} currentId={currentId} short={short} size={21} />
+          </div>)
+        }
+        {value &&
+          (<div className="flex gap-2 text-sm">
+            <Label>Amount</Label>
+            <AccountUnit className="text-sm" amount={value} token={token} />
           </div>)
         }
       </Lane>
