@@ -27,7 +27,7 @@ There is an example `docker-compose.yml` file found in `squid-ink/archive` folde
 To run the archive locally:
 ```bash
 # From project root
-docker compose -f squid-ink/archive/docker-compose.yml up
+docker-compose -f squid-ink/archive/docker-compose.yml up
 ```
 
 ### Squid-ink

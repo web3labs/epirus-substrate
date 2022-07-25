@@ -28,10 +28,6 @@ Head to [Adding custom environment variables](https://create-react-app.dev/docs/
 npm run start
 ```
 
-## Features
-
-TBD
-
 ## Testing
 To run tests, simply run the command
 
