@@ -13,6 +13,7 @@ Squid-ink is using the latest Fire Squid version of Subsquid.
   - [Squid Archive](#squid-archive)
   - [Adding New Chains](#adding-new-chains)
   - [Type Bundles](#types-bundle)
+- [Testing](#testing)
 
 ## Prerequisites
 
@@ -101,7 +102,7 @@ npx sqd codegen
 The Squid processor extracts block, extrinsic and event data from a Squid Archive to perform transformation and storage. As such, a Squid Archive endpoint is always required when running the processor. Subsquid provides Archive endpoints for a myriad of Substrate chains and parachains which can be found in the [archive-registry](https://github.com/subsquid/archive-registry). If the archive registry does not contain endpoints for the chain to index, the Squid Archive can be run locally.
 
 #### Run local Squid Archive
-The `./archive` folder contains an example `docker-compose.yml` file for running a Fire Squid archive. Multiple node websocket endpoints can be specified in the command section of the ingest service to speed up processing.
+The `./archive` folder contains an example `docker-compose.yml` file for running a Squid archive. Multiple node websocket endpoints can be specified in the command section of the ingest service to speed up processing.
 
 To run the archive locally
 
@@ -233,3 +234,10 @@ Type definitions (`typesBundle`) can be given to squid tools in two forms:
 
 All fields in types bundle are optional and applied on top of a fixed set of well known
 frame types.
+
+## Testing
+To run tests, simply run the command
+
+```bash
+npm run test
+```
