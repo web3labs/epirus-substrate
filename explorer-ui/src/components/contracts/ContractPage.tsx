@@ -22,6 +22,8 @@ import ExtrinsicSummary from "../commons/ExtrinsicSummary"
 import { longDateTime } from "../../formats/time"
 import { PageLoading } from "../loading/Loading"
 import ContractUpgrades from "./ContractUpgrade"
+import { Account } from "../../types/accounts"
+import { Extrinsic } from "../../types/extrinsic"
 
 const QUERY = `
 query($id: ID!, $codeHashChangeOrderBy: [CodeHashChangeOrderByInput] ) {
@@ -40,7 +42,7 @@ query($id: ID!, $codeHashChangeOrderBy: [CodeHashChangeOrderByInput] ) {
     contractCode {
       code
       id
-      removedOn
+      removedAt
       createdAt
     }
     account {
@@ -56,6 +58,7 @@ query($id: ID!, $codeHashChangeOrderBy: [CodeHashChangeOrderByInput] ) {
     createdFrom {
       blockNumber
       id
+      createdAt
       hash
       name
       signer
@@ -63,6 +66,18 @@ query($id: ID!, $codeHashChangeOrderBy: [CodeHashChangeOrderByInput] ) {
       tip
       versionInfo
       args
+    }
+    terminatedAt
+    terminatedFrom {
+      blockNumber
+      id
+      createdAt
+      name
+      tip
+      args
+    }
+    terminationBeneficiary {
+      id
     }
     codeHashChanges(orderBy: $codeHashChangeOrderBy) {
       id
@@ -143,6 +158,9 @@ export default function ContractPage () {
     contractCode,
     account,
     storageDeposit,
+    terminatedAt,
+    terminatedFrom,
+    terminationBeneficiary,
     codeHashChanges
   } = data?.contracts[0] as Contract
   const { balance } = account
@@ -167,12 +185,13 @@ export default function ContractPage () {
                 <>
                   <Tag label="wasm" />
                   {isUpgraded && <Tag label="upgraded" />}
+                  {terminatedAt && <Tag label="terminated" />}
                 </>
               }
             />
             <Segment>
               <DefinitionList>
-                <Definition label="Time" term={
+                <Definition label="Created on" term={
                   <span>{longDateTime(createdAt)}</span>
                 }/>
                 <Definition label="Deployer" term={
@@ -190,6 +209,14 @@ export default function ContractPage () {
               token={token}
               isOpen={false}
             />
+            <>
+              {terminatedFrom && <ContractTermination
+                title="Termination Details"
+                extrinsic={terminatedFrom}
+                beneficiary={terminationBeneficiary}
+                isOpen={false}
+              />}
+            </>
             <>
               {isUpgraded && <ContractUpgrades codeHashChanges={codeHashChanges}/>}
             </>
@@ -222,5 +249,27 @@ export default function ContractPage () {
         </Box>
       </div>
     </>
+  )
+}
+
+function ContractTermination (
+  { extrinsic, beneficiary, isOpen = true, title = "Termination Details" } :
+  { extrinsic: Extrinsic, beneficiary: Account, isOpen?: boolean, title?: string}
+) {
+  const { id, createdAt } = extrinsic
+  return (
+    <Segment title={title} collapsable={true} isOpen={isOpen}>
+      <DefinitionList>
+        <Definition label="Extrinsic" term={
+          <span className="font-mono">{id}</span>
+        }/>
+        <Definition label="Time" term={
+          <span>{longDateTime(createdAt)}</span>
+        }/>
+        <Definition label="Beneficiary" term={
+          <AccountLink account={beneficiary} />
+        }/>
+      </DefinitionList>
+    </Segment>
   )
 }

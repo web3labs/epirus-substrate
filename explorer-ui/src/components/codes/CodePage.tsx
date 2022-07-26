@@ -29,12 +29,9 @@ query($id: ID!) {
     createdFrom {
       blockNumber
       id
-      hash
       name
-      signer
-      signature
+      createdAt
       tip
-      versionInfo
       args
     }
     owner {
@@ -46,7 +43,15 @@ query($id: ID!) {
     contractsDeployed {
       id
     }
-    removedOn
+    removedAt
+    removedFrom {
+      blockNumber
+      id
+      name
+      createdAt
+      tip
+      args
+    }
   }
 }
 `
@@ -86,7 +91,7 @@ export default function CodePage () {
     return <PageLoading loading={fetching} />
   }
 
-  const { id, createdAt, owner, createdFrom } = data?.contractCodes[0] as ContractCode
+  const { id, createdAt, owner, createdFrom, removedAt, removedFrom } = data?.contractCodes[0] as ContractCode
   const depositLimit = getArg(createdFrom.args, "storageDepositLimit")
   const salt = getArg(createdFrom.args, "salt")
 
@@ -101,11 +106,15 @@ export default function CodePage () {
                 <CodeHash hash={id} size={21} />
               </Copy>
             }
-            tag={<Tag label="wasm" />}
+            tag={
+              <>
+                <Tag label="wasm" />
+                {removedAt && <Tag label="removed" />}
+              </>}
           />
           <Segment>
             <DefinitionList>
-              <Definition label="Time" term={
+              <Definition label="Created on" term={
                 <span>{longDateTime(createdAt)}</span>
               }/>
               <Definition label="Owner" term={
@@ -130,6 +139,14 @@ export default function CodePage () {
             token={token}
             isOpen={false}
           />
+          <>
+            {removedFrom && <ExtrinsicSummary
+              title="Removal Details"
+              extrinsic={removedFrom}
+              token={token}
+              isOpen={false}
+            />}
+          </>
         </Box>
 
         <Box className="mt-2">

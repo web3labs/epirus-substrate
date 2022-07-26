@@ -28,7 +28,7 @@ query($where: ContractCodeWhereInput = {} ,$first: Int = 5, $after: String = "",
         contractsDeployed {
           id
         }
-        removedOn
+        removedAt
       }
     }
     pageInfo {

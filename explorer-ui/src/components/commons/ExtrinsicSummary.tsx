@@ -5,13 +5,15 @@ import { getArg, getArgValue } from "./Args"
 import { DefinitionList, Definition } from "./Definitions"
 import { AccountUnit, HexCallData, HexText } from "./Text"
 import Segment from "./Segment"
+import { longDateTime } from "../../formats/time"
 
 export default function ExtrinsicSummary (
   { extrinsic, token, isOpen = true, title = "Extrinsic" } :
   { extrinsic: Extrinsic, token: TokenProps, isOpen?: boolean, title?: string}
 ) {
-  const { blockNumber, blockHash, id, name, args } = extrinsic
+  const { blockNumber, blockHash, id, name, args, createdAt } = extrinsic
   const data = getArg(args, "data")
+  const gasLimit = getArg(args, "gasLimit")
 
   return (
     <Segment title={title} collapsable={true} isOpen={isOpen}>
@@ -25,19 +27,31 @@ export default function ExtrinsicSummary (
             <HexText>{blockHash}</HexText>
           </div>
         }/>
+        <Definition label="Time" term={
+          <span>{longDateTime(createdAt)}</span>
+        }/>
         <Definition label="Name" term={
           <span>{name}</span>
         }/>
-        <Definition label="Data" term={
-          <HexCallData>
-            {typeof data === "string" ? data : undefined}
-          </HexCallData>
-        }/>
-        <Definition label="Gas Limit" term={
-          <span className="font-mono">
-            {getArg(args, "gasLimit")}
-          </span>
-        }/>
+        <>
+          { data && typeof data === "string" &&
+            <Definition label="Data" term={
+              <HexCallData>
+                {data}
+              </HexCallData>
+            }/>
+          }
+        </>
+        <>
+          {
+            gasLimit &&
+            <Definition label="Gas Limit" term={
+              <span className="font-mono">
+                {gasLimit}
+              </span>
+            }/>
+          }
+        </>
         <Definition label="Tip" term={
           <AccountUnit amount={getArgValue(args, "tip") || 0} token={token} />
         }/>

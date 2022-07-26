@@ -292,6 +292,45 @@ export class ContractsInstantiatedEvent {
   }
 }
 
+export class ContractsTerminatedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Contracts.Terminated')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  /**
+   * Contract has been removed.
+   * 
+   * # Note
+   * 
+   * The only way for a contract to be removed and emitting this event is by calling
+   * `seal_terminate`.
+   */
+  get isV100(): boolean {
+    return this._chain.getEventHash('Contracts.Terminated') === '8e0b376b4821223ecd835a0ae76a615e7aa14158260ff9c7f87220449d98175b'
+  }
+
+  /**
+   * Contract has been removed.
+   * 
+   * # Note
+   * 
+   * The only way for a contract to be removed and emitting this event is by calling
+   * `seal_terminate`.
+   */
+  get asV100(): {contract: v100.AccountId32, beneficiary: v100.AccountId32} {
+    assert(this.isV100)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
 export class SystemNewAccountEvent {
   private readonly _chain: Chain
   private readonly event: Event

@@ -12,6 +12,7 @@ import {
   ResolvedContractsCodeStoredEvent,
   ResolvedContractsCodeUpdatedEvent,
   ResolvedContractsInstantiatedEvent,
+  ResolvedContractTerminatedEvent,
   ResolvedNewAccountEvent,
 } from "chains/normalised-return-types";
 import { ss58Format } from "../../../chain-config";
@@ -25,6 +26,7 @@ import {
   ContractsContractCodeUpdatedEvent,
   ContractsContractEmittedEvent,
   ContractsInstantiatedEvent,
+  ContractsTerminatedEvent,
   SystemNewAccountEvent,
 } from "../types/events";
 
@@ -89,6 +91,18 @@ export class NormalisedBalancesReservedEvent extends BalancesReservedEvent {
   }
 }
 
+export class NormalisedContractsCodeRemovedEvent extends ContractsCodeRemovedEvent {
+  resolve(): ResolvedContractCodeRemovedEvent {
+    if (this.isCanvasKusamaV16) {
+      const { codeHash } = this.asCanvasKusamaV16;
+      return { codeHash: toHex(codeHash) };
+    }
+    throw new Error(
+      "No runtime version found while decoding [ContractsCodeRemovedEvent]"
+    );
+  }
+}
+
 export class NormalisedContractsInstantiatedEvent extends ContractsInstantiatedEvent {
   resolve(): ResolvedContractsInstantiatedEvent {
     if (this.isCanvasKusamaV16) {
@@ -100,18 +114,6 @@ export class NormalisedContractsInstantiatedEvent extends ContractsInstantiatedE
     }
     throw new Error(
       "No runtime version found while decoding [ContractsInstantiatedEvent]"
-    );
-  }
-}
-
-export class NormalisedCodeRemovedEvent extends ContractsCodeRemovedEvent {
-  resolve(): ResolvedContractCodeRemovedEvent {
-    if (this.isCanvasKusamaV16) {
-      const { codeHash } = this.asCanvasKusamaV16;
-      return { codeHash: toHex(codeHash) };
-    }
-    throw new Error(
-      "No runtime version found while decoding [ContractsCodeRemovedEvent]"
     );
   }
 }
@@ -152,6 +154,21 @@ export class NormalisedContractEmittedEvent extends ContractsContractEmittedEven
     }
     throw new Error(
       "No runtime version found while decoding [ContractsContractEmittedEvent]"
+    );
+  }
+}
+
+export class NormalisedContractTerminatedEvent extends ContractsTerminatedEvent {
+  resolve(): ResolvedContractTerminatedEvent {
+    if (this.isCanvasKusamaV16) {
+      const { contract, beneficiary } = this.asCanvasKusamaV16;
+      return {
+        contract: ss58.codec(ss58Format).encode(contract),
+        beneficiary: ss58.codec(ss58Format).encode(beneficiary),
+      };
+    }
+    throw new Error(
+      "No runtime version found while decoding [ContractsTerminatedEvent]"
     );
   }
 }

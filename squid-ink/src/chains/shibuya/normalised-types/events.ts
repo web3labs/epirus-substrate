@@ -8,10 +8,12 @@ import {
   ResolvedBalancesReservedEvent,
   ResolvedBalancesTransferEvent,
   ResolvedBalancesWithdrawEvent,
+  ResolvedContractCodeRemovedEvent,
   ResolvedContractEmittedEvent,
   ResolvedContractsCodeStoredEvent,
   ResolvedContractsCodeUpdatedEvent,
   ResolvedContractsInstantiatedEvent,
+  ResolvedContractTerminatedEvent,
   ResolvedNewAccountEvent,
 } from "chains/normalised-return-types";
 import { ss58Format } from "../../../chain-config";
@@ -20,9 +22,11 @@ import {
   BalancesReservedEvent,
   BalancesTransferEvent,
   BalancesWithdrawEvent,
+  ContractsCodeRemovedEvent,
   ContractsCodeStoredEvent,
   ContractsContractEmittedEvent,
   ContractsInstantiatedEvent,
+  ContractsTerminatedEvent,
   SystemNewAccountEvent,
 } from "../types/events";
 
@@ -109,6 +113,18 @@ export class NormalisedBalancesReservedEvent extends BalancesReservedEvent {
   }
 }
 
+export class NormalisedContractsCodeRemovedEvent extends ContractsCodeRemovedEvent {
+  resolve(): ResolvedContractCodeRemovedEvent {
+    if (this.isV31) {
+      const { codeHash } = this.asV31;
+      return { codeHash: toHex(codeHash) };
+    }
+    throw new Error(
+      "No runtime version found while decoding [ContractsCodeRemovedEvent]"
+    );
+  }
+}
+
 export class NormalisedContractsInstantiatedEvent extends ContractsInstantiatedEvent {
   resolve(): ResolvedContractsInstantiatedEvent {
     if (this.isV31) {
@@ -160,6 +176,21 @@ export class NormalisedContractEmittedEvent extends ContractsContractEmittedEven
     }
     throw new Error(
       "No runtime version found while decoding [ContractsContractEmittedEvent]"
+    );
+  }
+}
+
+export class NormalisedContractTerminatedEvent extends ContractsTerminatedEvent {
+  resolve(): ResolvedContractTerminatedEvent {
+    if (this.isV31) {
+      const { contract, beneficiary } = this.asV31;
+      return {
+        contract: ss58.codec(ss58Format).encode(contract),
+        beneficiary: ss58.codec(ss58Format).encode(beneficiary),
+      };
+    }
+    throw new Error(
+      "No runtime version found while decoding [ContractsTerminatedEvent]"
     );
   }
 }

@@ -13,6 +13,7 @@
     "Contracts.CodeStored",
     "Contracts.ContractCodeUpdated",
     "Contracts.CodeRemoved",
+    "Contracts.Terminated",
     "System.NewAccount"
   ],
   "calls": [

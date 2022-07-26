@@ -37,6 +37,9 @@ type Contract @entity {
   deployer: Account!
   contractCode: ContractCode!
   createdAt: DateTime! @index
+  terminatedAt: DateTime
+  terminatedFrom: Extrinsic
+  terminationBeneficiary: Account
   salt: String
   createdFrom: Extrinsic!
   storageDeposit: BigInt!
@@ -58,9 +61,10 @@ type ContractCode @entity {
   code: Bytes!
   owner: Account!
   createdAt: DateTime!
-  removedOn: DateTime
-  contractsDeployed: [Contract!] @derivedFrom(field: "contractCode")
   createdFrom: Extrinsic!
+  removedAt: DateTime
+  removedFrom: Extrinsic
+  contractsDeployed: [Contract!] @derivedFrom(field: "contractCode")
 }
 
 type ContractCall @entity {
@@ -120,6 +124,7 @@ enum ActivityType {
   CONTRACT
   CONTRACTCALL
   CODEUPDATED
+  CONTRACTTERMINATE
 }
 
 type Events @entity {

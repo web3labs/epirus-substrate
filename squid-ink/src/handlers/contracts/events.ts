@@ -2,9 +2,11 @@ import {
   NormalisedCodeStorageStorage,
   NormalisedContractEmittedEvent,
   NormalisedContractInfoOfStorage,
+  NormalisedContractsCodeRemovedEvent,
   NormalisedContractsCodeStoredEvent,
   NormalisedContractsCodeUpdatedEvent,
   NormalisedContractsInstantiatedEvent,
+  NormalisedContractTerminatedEvent,
   NormalisedOwnerInfoOfStorage,
 } from "@chain/normalised-types";
 import { toHex } from "@subsquid/util-internal-hex";
@@ -280,6 +282,135 @@ const contractsCodeUpdatedHandler: EventHandler = {
   },
 };
 
+const contractsCodeRemovedHandler: EventHandler = {
+  name: "Contracts.CodeRemoved",
+  handle: async (
+    ctx: Ctx,
+    event: Event,
+    block: SubstrateBlock
+  ): Promise<void> => {
+    const { store, log } = ctx;
+    const { extrinsic, call } = event;
+    const { codeHash } = new NormalisedContractsCodeRemovedEvent(
+      ctx,
+      event
+    ).resolve();
+
+    log.info({ codeHash }, "Contract code hash has been removed");
+
+    const contractCodeEntity = await store.get(ContractCode, {
+      where: { id: codeHash },
+      relations: {
+        owner: true,
+        createdFrom: true,
+      },
+    });
+
+    if (contractCodeEntity === undefined) {
+      throw new Error(
+        `Contract code entity is not found in the database for code hash [${codeHash}]`
+      );
+    }
+
+    if (extrinsic && call) {
+      const extrinsicEntity = createExtrinsic(extrinsic, call, block);
+      const eventEntity = createEvent(extrinsicEntity, event);
+      contractCodeEntity.removedAt = new Date(block.timestamp);
+      contractCodeEntity.removedFrom = extrinsicEntity;
+      await saveAll(store, [extrinsicEntity, eventEntity, contractCodeEntity]);
+    } else {
+      log.warn(
+        {
+          block: block.height,
+          name: event.name,
+          id: event.id,
+          contractCode: codeHash,
+        },
+        "No extrinsic or call field in event. Code removed info not updated for contract code."
+      );
+      log.debug({ block, event });
+    }
+  },
+};
+
+const contractsTerminatedHandler: EventHandler = {
+  name: "Contracts.Terminated",
+  handle: async (
+    ctx: Ctx,
+    event: Event,
+    block: SubstrateBlock
+  ): Promise<void> => {
+    const { store, log } = ctx;
+    const { extrinsic, call } = event;
+    const { contract, beneficiary } = new NormalisedContractTerminatedEvent(
+      ctx,
+      event
+    ).resolve();
+
+    log.info({ contract, beneficiary }, "Contract has been terminated");
+
+    const contractEntity = await store.get(Contract, {
+      where: { id: contract },
+      relations: {
+        account: true,
+        deployer: true,
+        createdFrom: true,
+        contractCode: true,
+      },
+    });
+    const contractAccount = await getOrCreateAccount(store, contract, block);
+    const beneficiaryAccount = await getOrCreateAccount(
+      store,
+      beneficiary,
+      block
+    );
+
+    if (contractEntity === undefined) {
+      throw new Error(
+        `Contract entity is not found in the database for contract address [${contract}]`
+      );
+    }
+
+    if (extrinsic && call) {
+      const extrinsicEntity = createExtrinsic(extrinsic, call, block);
+      const eventEntity = createEvent(extrinsicEntity, event);
+      const extrinsicSigner = extrinsicEntity.signer
+        ? await getOrCreateAccount(store, extrinsicEntity.signer, block)
+        : undefined;
+      contractEntity.terminatedAt = new Date(block.timestamp);
+      contractEntity.terminatedFrom = extrinsicEntity;
+      contractEntity.terminationBeneficiary = beneficiaryAccount;
+      const activityEntity = createActivity(
+        extrinsicEntity,
+        ActivityType.CONTRACTTERMINATE,
+        contractAccount,
+        extrinsicSigner
+      );
+      await saveAll(store, [
+        contractAccount,
+        beneficiaryAccount,
+        extrinsicSigner,
+        extrinsicEntity,
+        eventEntity,
+        contractEntity,
+        activityEntity,
+      ]);
+    } else {
+      log.warn(
+        {
+          block: block.height,
+          name: event.name,
+          id: event.id,
+          contract,
+          beneficiary,
+        },
+        "No extrinsic or call field in event. Contract terminated info not updated."
+      );
+      log.debug({ block, event });
+    }
+  },
+};
+
 async function createContractCodeEntities({
   ctx,
   block,
@@ -320,4 +451,6 @@ export {
   contractsEmittedHandler,
   contractsCodeUpdatedHandler,
   contractsCodeStoredHandler,
+  contractsCodeRemovedHandler,
+  contractsTerminatedHandler,
 };

@@ -116,7 +116,7 @@ export default function AccountPage () {
 
             <Segment>
               <DefinitionList>
-                <Definition label="Time" term={
+                <Definition label="Created on" term={
                   <span>{longDateTime(createdAt)}</span>
                 }/>
               </DefinitionList>

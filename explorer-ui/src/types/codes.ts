@@ -5,8 +5,9 @@ export interface ContractCode {
   id: string,
   code: string,
   createdAt: Date,
-  removedOn?: Date,
+  removedAt?: Date,
   createdFrom: Extrinsic,
+  removedFrom?: Extrinsic,
   owner: AccountRef,
   contractsDeployed?: {id: string}[]
 }

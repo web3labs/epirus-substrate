@@ -56,6 +56,11 @@ export interface ResolvedContractEmittedEvent {
   data: Uint8Array;
 }
 
+export interface ResolvedContractTerminatedEvent {
+  contract: string;
+  beneficiary: string;
+}
+
 export interface ResolvedNewAccountEvent {
   account: string;
 }

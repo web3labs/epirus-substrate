@@ -49,10 +49,13 @@ export interface Contract extends LightContract {
   contractCode: {
     code: string
     id: string
-    removedOn : Date
+    removedAt : Date
     createdAt: Date
   }
   account: Account
   createdFrom: Extrinsic
+  terminatedAt: Date
+  terminatedFrom: Extrinsic
+  terminationBeneficiary: Account
   codeHashChanges: CodeHashChange[]
 }

@@ -22,4 +22,5 @@ export interface Extrinsic {
   args: Args
   success: boolean
   error: ExtrinsicError
+  createdAt: Date
 }

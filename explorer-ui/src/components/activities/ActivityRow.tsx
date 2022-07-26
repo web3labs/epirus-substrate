@@ -20,6 +20,8 @@ function typeAlias (type: string) {
     return "call"
   case "CODEUPDATED":
     return "upgrade"
+  case "CONTRACTTERMINATE":
+    return "terminate"
   default:
     return type
   }
@@ -48,7 +50,7 @@ export default function ActivityRow ({
         <Definition label="Status" term={
           <div className={classNames(
             extrinsic.success ? "text-green-600" : "text-red-600",
-            "text-xs font-semibold uppercase py-0.5 px-1 text-center"
+            "text-xs font-semibold uppercase py-0.5 text-center"
           )}>
             {`${status}`}
           </div>

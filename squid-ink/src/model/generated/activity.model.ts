@@ -13,7 +13,7 @@ export class Activity {
   id!: string
 
   @Index_()
-  @Column_("varchar", {length: 12, nullable: false})
+  @Column_("varchar", {length: 17, nullable: false})
   type!: ActivityType
 
   @Column_("text", {nullable: false})

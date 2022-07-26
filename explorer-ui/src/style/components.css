@@ -74,6 +74,10 @@
     @apply border border-cyan-300 bg-cyan-100 text-cyan-600;
   }
 
+  .tag.terminate {
+    @apply border border-zinc-400 bg-zinc-200 text-zinc-700;
+  }
+
   .tag.chain {
     @apply bg-emerald-100 text-emerald-800;
   }
@@ -92,6 +96,14 @@
 
   .tag.upgraded {
     @apply bg-cyan-200 text-cyan-600;
+  }
+
+  .tag.removed {
+    @apply bg-red-600 text-red-200;
+  }
+
+  .tag.terminated {
+    @apply bg-zinc-600 text-zinc-200;
   }
 
   /* Forms & Controls */ 

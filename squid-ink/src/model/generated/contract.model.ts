@@ -37,6 +37,17 @@ export class Contract {
   @Column_("timestamp with time zone", {nullable: false})
   createdAt!: Date
 
+  @Column_("timestamp with time zone", {nullable: true})
+  terminatedAt!: Date | undefined | null
+
+  @Index_()
+  @ManyToOne_(() => Extrinsic, {nullable: true})
+  terminatedFrom!: Extrinsic | undefined | null
+
+  @Index_()
+  @ManyToOne_(() => Account, {nullable: true})
+  terminationBeneficiary!: Account | undefined | null
+
   @Column_("text", {nullable: true})
   salt!: string | undefined | null
 
