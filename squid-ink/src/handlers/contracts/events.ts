@@ -34,6 +34,7 @@ import {
   encodeAddress,
   getOrCreateAccount,
   saveAll,
+  updateAccountBalance,
 } from "../utils";
 
 const contractsInstantiatedHandler: EventHandler = {
@@ -358,9 +359,10 @@ const contractsTerminatedHandler: EventHandler = {
         contractCode: true,
       },
     });
-    const contractAccount = await getOrCreateAccount(store, contract, block);
-    const beneficiaryAccount = await getOrCreateAccount(
-      store,
+    // Update balances since terminated contract will transfer remaining balance to beneficiary
+    const contractAccount = await updateAccountBalance(ctx, contract, block);
+    const beneficiaryAccount = await updateAccountBalance(
+      ctx,
       beneficiary,
       block
     );

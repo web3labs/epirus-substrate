@@ -234,6 +234,10 @@ export default function ContractPage () {
                   label="Reserved"
                   term={<AccountUnit amount={balance?.reserved} token={token} />}
                 />
+              </DefinitionList>
+            </Segment>
+            <Segment>
+              <DefinitionList>
                 <Definition
                   className="justify-between"
                   label="Storage Deposit"
