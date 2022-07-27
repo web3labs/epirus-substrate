@@ -26,7 +26,7 @@ export function textSpans (
   groupRegExp : RegExp = /.{1,4}/g,
   ellipsis: string = "…"
 ): string[] {
-  const str = text?.replace("0x", "").trim()
+  const str = text?.trim()
   if (str && str.length > (charsNum * 2)) {
     return ([] as string[])
       .concat(str.substring(0, charsNum).match(groupRegExp) || [])
