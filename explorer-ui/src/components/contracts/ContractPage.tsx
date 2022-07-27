@@ -221,7 +221,7 @@ export default function ContractPage () {
               {isUpgraded && <ContractUpgrades codeHashChanges={codeHashChanges}/>}
             </>
           </Box>
-          <Box>
+          <Box className="divide-y">
             <Segment title="Balance">
               <DefinitionList>
                 <Definition
