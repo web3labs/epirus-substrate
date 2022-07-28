@@ -4,7 +4,8 @@ import {
   DocumentReportIcon,
   MenuIcon,
   UserIcon,
-  XIcon
+  XIcon,
+  CalendarIcon
 } from "@heroicons/react/outline"
 import { ChevronDownIcon, CodeIcon } from "@heroicons/react/solid"
 
@@ -32,6 +33,12 @@ const blockchain = [
     description: "Uploaded contract bytecodes",
     to: "/codes",
     icon: CodeIcon
+  },
+  {
+    name: "Activities",
+    description: "Contract-related activities",
+    to: "/activities",
+    icon: CalendarIcon
   }
 ]
 
