@@ -133,6 +133,8 @@ const contractsEmittedHandler: EventHandler = {
       ).resolve();
       const contractEventEntity = new ContractEmittedEvent({
         id: eventEntity.id,
+        blockNumber: eventEntity.blockNumber,
+        indexInBlock: eventEntity.indexInBlock,
         contractAddress: contract,
         data,
         createdAt: extrinsicEntity.createdAt,

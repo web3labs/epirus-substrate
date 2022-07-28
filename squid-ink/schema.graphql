@@ -85,6 +85,8 @@ type ContractCall @entity {
 type ContractEmittedEvent @entity {
   "Event ID"
   id: ID!
+  blockNumber: String!
+  indexInBlock: String!
   contractAddress: String!
   data: Bytes!
   createdAt: DateTime!

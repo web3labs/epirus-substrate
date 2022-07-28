@@ -14,6 +14,12 @@ export class ContractEmittedEvent {
   id!: string
 
   @Column_("text", {nullable: false})
+  blockNumber!: string
+
+  @Column_("text", {nullable: false})
+  indexInBlock!: string
+
+  @Column_("text", {nullable: false})
   contractAddress!: string
 
   @Column_("bytea", {nullable: false})
