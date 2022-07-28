@@ -46,7 +46,7 @@ query($id: ID!) {
     removedAt
     removedFrom {
       blockNumber
-      id
+      indexInBlock
       name
       createdAt
       tip
