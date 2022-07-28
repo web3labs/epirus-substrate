@@ -31,13 +31,13 @@ function ChangeDetails (
   const { newCodeHash, oldCodeHash, changedAt, extrinsic } = codeHashChange
 
   return (
-    <Segment className="divide-y" collapsable={false}>
+    <div className="py-2">
       <DefinitionList>
-        <Definition label="Extrinsic" term={
-          <span className="font-mono">{extrinsic.id}</span>
-        }/>
         <Definition label="Block" term={
           <span className="font-mono">#{extrinsic.blockNumber}</span>
+        }/>
+        <Definition label="Extrinsic" term={
+          <span className="font-mono">{extrinsic.blockNumber}-{extrinsic.indexInBlock}</span>
         }/>
         <Definition label="Time" term={
           <>
@@ -57,6 +57,6 @@ function ChangeDetails (
           </div>
         }/>
       </DefinitionList>
-    </Segment>
+    </div>
   )
 }

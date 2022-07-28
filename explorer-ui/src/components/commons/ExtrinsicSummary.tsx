@@ -11,21 +11,21 @@ export default function ExtrinsicSummary (
   { extrinsic, token, isOpen = true, title = "Extrinsic" } :
   { extrinsic: Extrinsic, token: TokenProps, isOpen?: boolean, title?: string}
 ) {
-  const { blockNumber, blockHash, id, name, args, createdAt } = extrinsic
+  const { blockNumber, blockHash, indexInBlock, name, args, createdAt } = extrinsic
   const data = getArg(args, "data")
   const gasLimit = getArg(args, "gasLimit")
 
   return (
     <Segment title={title} collapsable={true} isOpen={isOpen}>
       <DefinitionList>
-        <Definition label="ID" term={
-          <span className="font-mono">{id}</span>
-        }/>
         <Definition label="Block" term={
           <div>
             <span className="font-mono">#{blockNumber}</span>
             <HexText>{blockHash}</HexText>
           </div>
+        }/>
+        <Definition label="Extrinsic" term={
+          <span className="font-mono">{blockNumber}-{indexInBlock}</span>
         }/>
         <Definition label="Time" term={
           <span>{longDateTime(createdAt)}</span>

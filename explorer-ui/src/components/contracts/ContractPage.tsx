@@ -8,7 +8,6 @@ import CodeBadge from "../badges/CodeBadge"
 import Box, { BoxHead } from "../commons/Box"
 import AccountAddress from "../accounts/AccountAddress"
 import Segment from "../commons/Segment"
-import { classNames } from "../../utils/strings"
 import AccountLink from "../accounts/AccountLink"
 import Breadcrumbs from "../navigation/Breadcrumbs"
 import Tag from "../commons/Tag"
@@ -23,6 +22,7 @@ import { longDateTime } from "../../formats/time"
 import { PageLoading } from "../loading/Loading"
 import ContractUpgrades from "./ContractUpgrade"
 import { ContractTermination } from "./ContractTermination"
+import { DefinitionList, Definition } from "../commons/Definitions"
 
 const QUERY = `
 query($id: ID!, $codeHashChangeOrderBy: [CodeHashChangeOrderByInput] ) {
@@ -56,7 +56,7 @@ query($id: ID!, $codeHashChangeOrderBy: [CodeHashChangeOrderByInput] ) {
     }
     createdFrom {
       blockNumber
-      id
+      indexInBlock
       createdAt
       hash
       name
@@ -69,7 +69,7 @@ query($id: ID!, $codeHashChangeOrderBy: [CodeHashChangeOrderByInput] ) {
     terminatedAt
     terminatedFrom {
       blockNumber
-      id
+      indexInBlock
       createdAt
       name
       tip
@@ -84,34 +84,13 @@ query($id: ID!, $codeHashChangeOrderBy: [CodeHashChangeOrderByInput] ) {
       oldCodeHash
       changedAt
       extrinsic {
-        id
+        indexInBlock
         blockNumber
       }
     }
   }
 }
 `
-
-export function DefinitionList ({ children } :{ children: JSX.Element | JSX.Element[]}) {
-  return (<dl className="flex flex-col w-full gap-y-3 overflow-hidden text-ellipsis">
-    {children}
-  </dl>)
-}
-
-export function Definition ({ label, term, className = "" }: {
-  label: string, term: JSX.Element | string | undefined | null, className?: string
-}) {
-  if (term === undefined || term === null) {
-    return null
-  }
-
-  return (
-    <div className={classNames(className, "flex flex-row flex-wrap gap-x-2 items-center")}>
-      <dt className="flex text-sm text-gray-400 basis-32">{label}</dt>
-      <dd className="text-sm text-gray-900">{term}</dd>
-    </div>
-  )
-}
 
 export default function ContractPage () {
   const { token } = useChainProperties()

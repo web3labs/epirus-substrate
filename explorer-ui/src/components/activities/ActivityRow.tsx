@@ -41,11 +41,11 @@ export default function ActivityRow ({
   const extrinsicDetails = (
     <div className="flex flex-col md:flex-row border-t border-gray-200 bg-gray-50 py-4 px-6 mt-2 -mx-6 -mb-2">
       <DefinitionList>
-        <Definition label="Extrinsic" term={
-          <span className="font-mono">{extrinsic.id}</span>
-        }/>
         <Definition label="Block" term={
           <span className="font-mono">#{extrinsic.blockNumber}</span>
+        }/>
+        <Definition label="Extrinsic" term={
+          <span className="font-mono">{extrinsic.blockNumber}-{extrinsic.indexInBlock}</span>
         }/>
         <Definition label="Data" term={
           <span className="font-mono break-all">{args.data}</span>

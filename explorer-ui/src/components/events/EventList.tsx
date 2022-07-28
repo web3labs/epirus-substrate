@@ -18,7 +18,8 @@ query($where: ContractEmittedEventWhereInput = {} ,$first: Int = 5, $after: Stri
         contractAddress
         data
         extrinsic {
-          id
+          blockNumber
+          indexInBlock
           name
         }
       }

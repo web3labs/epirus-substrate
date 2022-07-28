@@ -18,7 +18,7 @@ export default function EventRow ({
         <Definition label="Extrinsic" term={
           <div className="flex flex-col">
             <span>{extrinsic.name}</span>
-            <span className="font-mono">{extrinsic.id}</span>
+            <span className="font-mono">{extrinsic.blockNumber}-{extrinsic.indexInBlock}</span>
           </div>
         } />
 
