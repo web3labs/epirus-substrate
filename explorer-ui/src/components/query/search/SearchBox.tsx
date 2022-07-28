@@ -127,6 +127,12 @@ export default function SearchBox () {
       case "Escape":
         clear()
         break
+      case "Enter":
+        if (results.length === 0) {
+          event.preventDefault()
+        }
+        doSearch(searchInput)
+        break
       default:
         break
       }
