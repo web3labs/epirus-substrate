@@ -14,7 +14,8 @@ query($where: ContractEmittedEventWhereInput = {} ,$first: Int = 5, $after: Stri
     edges {
       node {
         createdAt
-        id
+        blockNumber
+        indexInBlock
         contractAddress
         data
         extrinsic {

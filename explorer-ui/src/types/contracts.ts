@@ -14,6 +14,8 @@ export interface Activity {
 
 export interface Event {
   id: string,
+  blockNumber: string,
+  indexInBlock: string,
   contractAddress: string,
   createdAt: Date,
   data: string,

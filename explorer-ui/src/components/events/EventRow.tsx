@@ -9,12 +9,12 @@ export default function EventRow ({
   currentId,
   short = true
 }: TypedRow<Event>) {
-  const { id, createdAt, data, extrinsic } = obj
+  const { id, blockNumber, indexInBlock, createdAt, data, extrinsic } = obj
 
   return (
     <Row key={id}>
       <DefinitionList>
-        <Definition label="ID" term={<span className="font-mono">{id}</span>} />
+        <Definition label="ID" term={<span className="font-mono">{blockNumber}-{indexInBlock}</span>} />
         <Definition label="Extrinsic" term={
           <div className="flex flex-col">
             <span>{extrinsic.name}</span>
