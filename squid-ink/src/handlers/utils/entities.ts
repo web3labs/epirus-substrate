@@ -40,7 +40,7 @@ export function createEvent(extrinsicEntity: Extrinsic, event: Event): Events {
     extrinsic: extrinsicEntity,
     name,
     method: call?.name,
-    blockNumber: id.split("-")[0],
+    blockNumber: extrinsicEntity.blockNumber.toString(),
     indexInBlock: indexInBlock.toString(),
     createdAt: extrinsicEntity.createdAt,
     params: <Args>extrinsicEntity.args,
