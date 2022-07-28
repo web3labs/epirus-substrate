@@ -28,7 +28,7 @@ query($id: ID!) {
     createdAt
     createdFrom {
       blockNumber
-      id
+      indexInBlock
       name
       createdAt
       tip
@@ -91,7 +91,7 @@ export default function CodePage () {
     return <PageLoading loading={fetching} />
   }
 
-  const { id, createdAt, owner, createdFrom, removedAt, removedFrom } = data?.contractCodes[0] as ContractCode
+  const { id, createdAt, owner, createdFrom, removedFrom } = data?.contractCodes[0] as ContractCode
   const depositLimit = getArg(createdFrom.args, "storageDepositLimit")
   const salt = getArg(createdFrom.args, "salt")
 
@@ -106,11 +106,7 @@ export default function CodePage () {
                 <CodeHash hash={id} size={21} />
               </Copy>
             }
-            tag={
-              <>
-                <Tag label="wasm" />
-                {removedAt && <Tag label="removed" />}
-              </>}
+            tag={<Tag label="wasm" />}
           />
           <Segment>
             <DefinitionList>

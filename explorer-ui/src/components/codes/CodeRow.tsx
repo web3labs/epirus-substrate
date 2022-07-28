@@ -17,7 +17,7 @@ export default function CodeRow ({
   short = true
 }: TypedRow<ContractCode>) {
   const { token } = useChainProperties()
-  const { id, contractsDeployed, createdAt, owner, createdFrom, removedAt } = obj
+  const { id, contractsDeployed, createdAt, owner, createdFrom } = obj
 
   return (
     <Row key={id}>
@@ -46,7 +46,6 @@ export default function CodeRow ({
           {contractsDeployed && contractsDeployed.length > 0 &&
           <div className="flex gap-x-1">{contractsDeployed.length}<Label>instances</Label></div>
           }
-          {removedAt && <div className="text-red-600 text-xs font-semibold uppercase">Removed</div>}
         </div>
       </Lane>
     </Row>
