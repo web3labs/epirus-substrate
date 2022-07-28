@@ -26,8 +26,8 @@ export function CollapsibleRow ({ children, collapsedDisplay, isOpen = false }: 
   const [open, setOpen] = useState(isOpen)
 
   return (
-    <li className="group flex flex-col pb-2 pt-4 px-6 cursor-pointer hover:bg-over-hover" onClick={() => setOpen(!open)}>
-      <div className="flex flex-row justify-between items-center">
+    <li className="group flex flex-col pb-2 pt-4 px-6 hover:bg-over-hover">
+      <div className="flex flex-row justify-between items-center cursor-pointer" onClick={() => setOpen(!open)}>
         {children}
         <div className="pl-5">
           {open
