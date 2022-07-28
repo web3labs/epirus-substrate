@@ -22,8 +22,7 @@ import ExtrinsicSummary from "../commons/ExtrinsicSummary"
 import { longDateTime } from "../../formats/time"
 import { PageLoading } from "../loading/Loading"
 import ContractUpgrades from "./ContractUpgrade"
-import { Account } from "../../types/accounts"
-import { Extrinsic } from "../../types/extrinsic"
+import { ContractTermination } from "./ContractTermination"
 
 const QUERY = `
 query($id: ID!, $codeHashChangeOrderBy: [CodeHashChangeOrderByInput] ) {
@@ -86,19 +85,20 @@ query($id: ID!, $codeHashChangeOrderBy: [CodeHashChangeOrderByInput] ) {
       changedAt
       extrinsic {
         id
+        blockNumber
       }
     }
   }
 }
 `
 
-function DefinitionList ({ children } :{ children: JSX.Element | JSX.Element[]}) {
+export function DefinitionList ({ children } :{ children: JSX.Element | JSX.Element[]}) {
   return (<dl className="flex flex-col w-full gap-y-3 overflow-hidden text-ellipsis">
     {children}
   </dl>)
 }
 
-function Definition ({ label, term, className = "" }: {
+export function Definition ({ label, term, className = "" }: {
   label: string, term: JSX.Element | string | undefined | null, className?: string
 }) {
   if (term === undefined || term === null) {
@@ -253,27 +253,5 @@ export default function ContractPage () {
         </Box>
       </div>
     </>
-  )
-}
-
-function ContractTermination (
-  { extrinsic, beneficiary, isOpen = true, title = "Termination Details" } :
-  { extrinsic: Extrinsic, beneficiary: Account, isOpen?: boolean, title?: string}
-) {
-  const { id, createdAt } = extrinsic
-  return (
-    <Segment title={title} collapsable={true} isOpen={isOpen}>
-      <DefinitionList>
-        <Definition label="Extrinsic" term={
-          <span className="font-mono">{id}</span>
-        }/>
-        <Definition label="Time" term={
-          <span>{longDateTime(createdAt)}</span>
-        }/>
-        <Definition label="Beneficiary" term={
-          <AccountLink account={beneficiary} />
-        }/>
-      </DefinitionList>
-    </Segment>
   )
 }

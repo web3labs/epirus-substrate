@@ -44,6 +44,9 @@ export default function ActivityRow ({
         <Definition label="Extrinsic" term={
           <span className="font-mono">{extrinsic.id}</span>
         }/>
+        <Definition label="Block" term={
+          <span className="font-mono">#{extrinsic.blockNumber}</span>
+        }/>
         <Definition label="Data" term={
           <span className="font-mono break-all">{args.data}</span>
         }/>

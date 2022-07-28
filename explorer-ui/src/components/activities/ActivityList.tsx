@@ -33,6 +33,7 @@ query($where: ActivityWhereInput = {} ,$first: Int = 5, $after: String = "", $or
         args
         extrinsic {
           id
+          blockNumber
           success
           error
         }

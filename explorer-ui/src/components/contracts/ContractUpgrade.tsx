@@ -33,13 +33,16 @@ function ChangeDetails (
   return (
     <Segment className="divide-y" collapsable={false}>
       <DefinitionList>
+        <Definition label="Extrinsic" term={
+          <span className="font-mono">{extrinsic.id}</span>
+        }/>
+        <Definition label="Block" term={
+          <span className="font-mono">#{extrinsic.blockNumber}</span>
+        }/>
         <Definition label="Time" term={
           <>
             <span>{longDateTime(changedAt)}</span>
           </>
-        }/>
-        <Definition label="Extrinsic" term={
-          <span className="font-mono">{extrinsic.id}</span>
         }/>
         <Definition className="md:items-center" label="Upgraded from" term={
           <div className="flex flex-col flex-wrap items-center gap-y-2 md:flex-row md:gap-x-2">
