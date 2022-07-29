@@ -1,5 +1,13 @@
+/* eslint-disable no-unused-vars */
 import { AccountRef, Account } from "./accounts"
 import { Args, Extrinsic } from "./extrinsic"
+
+export enum ActivityType {
+  CONTRACT = "CONTRACT",
+  CONTRACTCALL = "CONTRACTCALL",
+  CODEUPDATED = "CODEUPDATED",
+  CONTRACTTERMINATE = "CONTRACTTERMINATE",
+}
 
 export interface Activity {
   id: string,

@@ -1,6 +1,6 @@
 import React from "react"
 
-import { Activity } from "../../types/contracts"
+import { Activity, ActivityType } from "../../types/contracts"
 import { CollapsibleRow, TypedRow } from "../commons/List"
 import { shortDate } from "../../formats/time"
 import AccountLink from "../accounts/AccountLink"
@@ -14,13 +14,13 @@ import { Definition, DefinitionList } from "../commons/Definitions"
 
 function typeAlias (type: string) {
   switch (type) {
-  case "CONTRACT":
+  case ActivityType.CONTRACT:
     return "instantiate"
-  case "CONTRACTCALL":
+  case ActivityType.CONTRACTCALL:
     return "call"
-  case "CODEUPDATED":
+  case ActivityType.CODEUPDATED:
     return "upgrade"
-  case "CONTRACTTERMINATE":
+  case ActivityType.CONTRACTTERMINATE:
     return "terminate"
   default:
     return type
