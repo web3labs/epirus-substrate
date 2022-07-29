@@ -35,7 +35,8 @@ function App () {
         },
         inputLabelMargin: "0px",
         inputLabelBorderRadius: "0px",
-        inputLabelBorder: `1px solid ${colors.gray[200]}`
+        inputLabelBorder: `1px solid ${colors.gray[200]}`,
+        datepickerZIndex: 10
       }
     }}>
       <Provider value={client}>
