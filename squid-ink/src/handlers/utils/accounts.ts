@@ -34,7 +34,7 @@ export async function updateAccountBalance(
  * If account doesn't exist, return a fresh one.
  * @param store - Store
  * @param id - ID of account
- * @param block - New account will have createdAt field = block timestamp
+ * @param block - New account will have createdAt = block timestamp
  * @returns Account promise
  */
 export async function getOrCreateAccount(
@@ -44,19 +44,9 @@ export async function getOrCreateAccount(
 ): Promise<Account> {
   let account = await store.get(Account, id);
   if (account == null) {
-    account = createAccount(id, new Date(block.timestamp));
+    account = new Account({ id, createdAt: new Date(block.timestamp) });
   }
   return account;
-}
-
-/**
- * Creates and returns a new Account object.
- * @param id address of the account
- * @param createdAt timestamp when account is created
- * @returns Account
- */
-function createAccount(id: string, createdAt: Date): Account {
-  return new Account({ id, createdAt });
 }
 
 async function getBalances(

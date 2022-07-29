@@ -6,4 +6,10 @@ module.exports = {
   moduleNameMapper: {
     '^@chain/(.*)$': '<rootDir>/src/chains/local/$1',
   },
+  coveragePathIgnorePatterns: [
+    "<rootDir>/src/model/",
+    "<rootDir>/lib/model/",
+    "<rootDir>/src/chains/local/types",
+    "<rootDir>/lib/chains/local/types"
+  ],
 };

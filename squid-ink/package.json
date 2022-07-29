@@ -12,7 +12,8 @@
     "query-node:start": "squid-graphql-server",
     "lint": "npm run lint:prod -- --fix",
     "lint:prod": "eslint . --ext .ts --ignore-path .gitignore --max-warnings 0",
-    "test": "jest"
+    "test": "jest",
+    "test:coverage": "npm test -- --coverage"
   },
   "dependencies": {
     "@subsquid/archive-registry": "^1.0.2",
