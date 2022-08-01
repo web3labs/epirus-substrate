@@ -12,13 +12,13 @@ test("Code hash", () => {
 })
 
 test("Code hash big", () => {
-    const { container } = render(
-      <CodeHash
-        hash="0x38ec0f8fde303c179bcabaa40e987d6da361c664438f866a9967e58f92c39b56"
-        size={80}
-      />
-    )
+  const { container } = render(
+    <CodeHash
+      hash="0x38ec0f8fde303c179bcabaa40e987d6da361c664438f866a9967e58f92c39b56"
+      size={80}
+    />
+  )
 
-    const icon = container.getElementsByTagName("svg")
-    expect(icon).toBeDefined()
-  })
+  const icon = container.getElementsByTagName("svg")
+  expect(icon).toBeDefined()
+})

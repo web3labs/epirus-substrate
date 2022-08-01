@@ -1,5 +1,5 @@
-export function emptyPage(dataProp = "edges") {
-    return {
+export function emptyPage (dataProp = "edges") {
+  return {
     totalCount: 0,
     [dataProp]: [],
     pageInfo: {
@@ -11,15 +11,15 @@ export function emptyPage(dataProp = "edges") {
   }
 }
 
-  export function testPageOf(data: any, dataProp = "edges") {
-    return {
-        totalCount: 10,
-        [dataProp]: data,
-        pageInfo: {
-          hasNextPage: true,
-          hasPreviousPage: false,
-          startCursor: "1",
-          endCursor: "5"
-        }
-      }
+export function testPageOf (data: any, dataProp = "edges") {
+  return {
+    totalCount: 10,
+    [dataProp]: data,
+    pageInfo: {
+      hasNextPage: true,
+      hasPreviousPage: false,
+      startCursor: "1",
+      endCursor: "5"
+    }
   }
+}
