@@ -4,8 +4,8 @@ import { MemoryRouter } from "react-router-dom"
 import { Provider } from "urql"
 import AccountList from "./AccountList"
 import { contractByDeployer } from "../contracts/ContractTab"
-import { createMockClient } from "../../mocks/mockClient"
-import mock from "../../mocks/accountsMockData"
+import { createMockClient } from "../../_mocks/mockClient"
+import mock from "../../_mocks/accountsMockData"
 
 test("Account list renders empty list", () => {
   const mockClient = createMockClient(mock.emptyConnections)

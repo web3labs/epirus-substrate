@@ -2,9 +2,9 @@ import React from "react"
 import { render } from "@testing-library/react"
 import { MemoryRouter, Route, Routes } from "react-router"
 import { Provider } from "urql"
-import { createMockClient } from "../../mocks/mockClient"
+import { createMockClient } from "../../_mocks/mockClient"
 import ActivityTab from "./ActivityTab"
-import mock from "../../mocks/activitiesMockData"
+import mock from "../../_mocks/activitiesMockData"
 
 test("Activities tab", () => {
   const mockClient = createMockClient(mock.connections)

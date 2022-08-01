@@ -2,7 +2,7 @@ import React from "react"
 import { render, screen } from "@testing-library/react"
 import BinaryTab from "./BinaryTab"
 import { Provider } from "urql"
-import { createMockClient } from "../../mocks/mockClient"
+import { createMockClient } from "../../_mocks/mockClient"
 
 test("Binary tab shows the bytecode", () => {
   const mockClient = createMockClient({

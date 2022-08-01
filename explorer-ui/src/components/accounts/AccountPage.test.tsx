@@ -2,9 +2,9 @@ import React from "react"
 import { render, screen } from "@testing-library/react"
 import { MemoryRouter, Route, Routes } from "react-router"
 import { Provider } from "urql"
-import { createMockClient } from "../../mocks/mockClient"
+import { createMockClient } from "../../_mocks/mockClient"
 import AccountPage from "./AccountPage"
-import mock from "../../mocks/accountsMockData"
+import mock from "../../_mocks/accountsMockData"
 
 test("Account not found page", () => {
   const mockClient = createMockClient(mock.empty)

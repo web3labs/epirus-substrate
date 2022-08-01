@@ -62,8 +62,8 @@
   "jest": {
     "coveragePathIgnorePatterns": [
       "src/reportWebVitals.ts",
-      "src/types",
-      "src/mocks"
+      "src/_mocks",
+      "src/types"
     ]
   },
   "devDependencies": {
