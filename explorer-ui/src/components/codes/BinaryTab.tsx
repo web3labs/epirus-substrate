@@ -23,6 +23,10 @@ export default function BinaryTab ({ id }:{id: string}) {
 
   if (fetching) return <PageLoading loading={fetching} />
 
+  if (data?.contractCodes[0] === undefined) {
+    return <span>Contract code not found</span>
+  }
+
   const codeHash = data?.contractCodes[0] as ContractCode
 
   return (
