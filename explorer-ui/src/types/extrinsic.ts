@@ -9,18 +9,18 @@ export interface ExtrinsicError {
 }
 
 export interface Extrinsic {
-  blockHash: string
+  id:string
+  createdAt: Date
   blockNumber: string
   indexInBlock: string
-  id:string
-  hash:string
-  name:string
-  signer:string
-  signature:string
-  tip:string
-  versionInfo:string
-  args: Args
   success: boolean
-  error: ExtrinsicError
-  createdAt: Date
+  args: Args
+  blockHash?: string
+  hash?:string
+  name?:string
+  signer?:string
+  signature?:string
+  tip?:string
+  versionInfo?:string
+  error?: ExtrinsicError
 }

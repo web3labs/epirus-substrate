@@ -1,4 +1,4 @@
-import { Args } from "../../types/extrinsic"
+import { Args } from "../types/extrinsic"
 
 export function getArgValue (args: Args | undefined | null, name: string = "value") {
   if (args === undefined || args === null) {

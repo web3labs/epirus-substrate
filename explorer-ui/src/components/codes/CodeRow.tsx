@@ -7,7 +7,7 @@ import { ContractCode } from "../../types/codes"
 import { Label } from "../commons/Label"
 import CodeLink from "./CodeLink"
 import Lane from "../commons/Lane"
-import { getArgValue } from "../commons/Args"
+import { getArgValue } from "../../utils/args"
 import { useChainProperties } from "../../contexts/ChainContext"
 import { AccountUnit } from "../commons/Text"
 

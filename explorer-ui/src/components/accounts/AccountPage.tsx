@@ -92,7 +92,11 @@ export default function AccountPage () {
     return <PageLoading loading={fetching} />
   }
 
-  const { id, contract, createdAt, balance } = data?.accounts[0] as Account
+  if (data?.accounts[0] === undefined) {
+    return <span>Account not found</span>
+  }
+
+  const { id, contract, createdAt, balance } = data.accounts[0] as Account
 
   return (
     <>

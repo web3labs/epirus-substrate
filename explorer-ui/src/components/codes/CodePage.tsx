@@ -16,7 +16,7 @@ import BinaryTab from "./BinaryTab"
 import Copy from "../commons/Copy"
 import ExtrinsicSummary from "../commons/ExtrinsicSummary"
 import { HexText } from "../commons/Text"
-import { getArg } from "../commons/Args"
+import { getArg } from "../../utils/args"
 import { longDateTime } from "../../formats/time"
 import CodeHash from "./CodeHash"
 import { PageLoading } from "../loading/Loading"
@@ -89,6 +89,10 @@ export default function CodePage () {
 
   if (fetching) {
     return <PageLoading loading={fetching} />
+  }
+
+  if (data?.contractCodes[0] === undefined) {
+    return <span>Contract code not found</span>
   }
 
   const { id, createdAt, owner, createdFrom, removedFrom } = data?.contractCodes[0] as ContractCode

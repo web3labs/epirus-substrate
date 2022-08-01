@@ -5,6 +5,10 @@ import { Page, PageQuery } from "../../types/pagination"
 export default function Pagination ({ page, pageQuery, setQuery }: {
     page: Page<any>, pageQuery: PageQuery, setQuery: (pageQuery: PageQuery) => void
   }) {
+  if (page === undefined) {
+    return null
+  }
+
   const { pageInfo, totalCount } = page
   const { first } = pageQuery
   const { hasNextPage, hasPreviousPage, startCursor, endCursor } = pageInfo
