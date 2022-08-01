@@ -61,6 +61,7 @@
   },
   "jest": {
     "coveragePathIgnorePatterns": [
+      "src/index.tsx",
       "src/reportWebVitals.ts",
       "src/_mocks",
       "src/types"
