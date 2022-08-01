@@ -2,7 +2,7 @@ import React, { FormEvent, Fragment, KeyboardEvent, useCallback, useEffect, useS
 import { debounce } from "debounce"
 
 import useSquid from "../../../hooks/useSquid"
-import { classNames, sanitize } from "../../../utils/strings"
+import { classNames, stripNonPrintable } from "../../../utils/strings"
 import { Transition } from "@headlessui/react"
 import { InputLoading } from "../../loading/Loading"
 import { XIcon } from "@heroicons/react/outline"
@@ -173,7 +173,7 @@ export default function SearchBox () {
             placeholder="Search Accounts, Contracts, ..."
             value={searchInput}
             onChange={event => {
-              const str = sanitize(event.target.value)
+              const str = stripNonPrintable(event.target.value)
               setSearchInput(str)
             }}
             onKeyDown={(event) => handleKeyDown({ event })}
