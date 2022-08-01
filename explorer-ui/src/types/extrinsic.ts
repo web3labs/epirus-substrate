@@ -14,6 +14,7 @@ export interface Extrinsic {
   blockNumber: string
   indexInBlock: string
   success: boolean
+  args: Args
   blockHash?: string
   hash?:string
   name?:string
@@ -21,6 +22,5 @@ export interface Extrinsic {
   signature?:string
   tip?:string
   versionInfo?:string
-  args?: Args
   error?: ExtrinsicError
 }

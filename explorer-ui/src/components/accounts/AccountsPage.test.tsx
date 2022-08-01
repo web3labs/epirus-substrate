@@ -4,10 +4,13 @@ import { MemoryRouter, Route, Routes } from "react-router"
 import { Provider } from "urql"
 import { createMockClient } from "../../_mocks/mockClient"
 import AccountsPage from "./AccountsPage"
-import mock from "../../_mocks/accountsMockData"
+import { mockPageOf } from "../../_mocks/utils"
+import { mockAccountEdges } from "../../_mocks/data"
 
 test("Accounts page", () => {
-  const mockClient = createMockClient(mock.connections)
+  const mockClient = createMockClient({
+    accountsConnection: mockPageOf(mockAccountEdges)
+  })
 
   const { container } = render(
     <Provider value={mockClient}>

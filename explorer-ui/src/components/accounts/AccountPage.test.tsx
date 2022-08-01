@@ -4,10 +4,10 @@ import { MemoryRouter, Route, Routes } from "react-router"
 import { Provider } from "urql"
 import { createMockClient } from "../../_mocks/mockClient"
 import AccountPage from "./AccountPage"
-import mock from "../../_mocks/accountsMockData"
+import { emptyMockPage, mockPageOf } from "../../_mocks/utils"
 
 test("Account not found page", () => {
-  const mockClient = createMockClient(mock.empty)
+  const mockClient = createMockClient(emptyMockPage("accounts"))
 
   render(
     <Provider value={mockClient}>
@@ -22,7 +22,16 @@ test("Account not found page", () => {
 })
 
 test("Account page", () => {
-  const mockClient = createMockClient(mock.single)
+  const mockClient = createMockClient(mockPageOf([
+    {
+      id: "5HdKDnfR2X8y4fkgQUxXJuBxu638PuKQGUy5G16cyTjT5RzL",
+      createdAt: new Date(),
+      balance: {
+        free: "0",
+        reserved: "0"
+      }
+    }
+  ], "accounts"))
 
   render(
     <Provider value={mockClient}>

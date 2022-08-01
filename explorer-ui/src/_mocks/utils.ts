@@ -1,4 +1,4 @@
-export function emptyPage (dataProp = "edges") {
+export function emptyMockPage (dataProp = "edges") {
   return {
     totalCount: 0,
     [dataProp]: [],
@@ -11,15 +11,16 @@ export function emptyPage (dataProp = "edges") {
   }
 }
 
-export function testPageOf (data: any, dataProp = "edges") {
+export function mockPageOf (data: any[], dataProp = "edges") {
+  const len = data.length
   return {
-    totalCount: 10,
+    totalCount: len * 2,
     [dataProp]: data,
     pageInfo: {
       hasNextPage: true,
       hasPreviousPage: false,
       startCursor: "1",
-      endCursor: "5"
+      endCursor: len
     }
   }
 }

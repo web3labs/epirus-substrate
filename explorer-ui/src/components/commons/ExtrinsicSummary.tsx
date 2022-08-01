@@ -1,7 +1,7 @@
 import React from "react"
 import { TokenProps } from "../../types/chain"
 import { Extrinsic } from "../../types/extrinsic"
-import { getArg, getArgValue } from "./Args"
+import { getArg, getArgValue } from "../../utils/args"
 import { DefinitionList, Definition } from "./Definitions"
 import { AccountUnit, HexCallData, HexText } from "./Text"
 import Segment from "./Segment"
