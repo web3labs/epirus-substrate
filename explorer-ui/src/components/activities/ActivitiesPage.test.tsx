@@ -3,17 +3,17 @@ import { render } from "@testing-library/react"
 import { MemoryRouter, Route, Routes } from "react-router"
 import { Provider } from "urql"
 import { createMockClient } from "../../mocks/mockClient"
-import AccountsPage from "./AccountsPage"
-import mock from "../../mocks/accountsMockData"
+import ActivitiesPage from "./ActivitiesPage"
+import mock from "../../mocks/activitiesMockData"
 
-test("Accounts page", () => {
+test("Activities page", () => {
   const mockClient = createMockClient(mock.connections)
 
   const { container } = render(
     <Provider value={mockClient}>
-      <MemoryRouter initialEntries={["/accounts"]}>
+      <MemoryRouter initialEntries={["/activities"]}>
         <Routes>
-          <Route path="accounts" element={<AccountsPage/>} />
+          <Route path="activities" element={<ActivitiesPage/>} />
         </Routes>
       </MemoryRouter>
     </Provider>

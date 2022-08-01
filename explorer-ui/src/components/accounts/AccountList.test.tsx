@@ -5,10 +5,10 @@ import { Provider } from "urql"
 import AccountList from "./AccountList"
 import { contractByDeployer } from "../contracts/ContractTab"
 import { createMockClient } from "../../mocks/mockClient"
-import { accountsConnectionMockData, noAccountsConnectionMockData } from "../../mocks/accountsMockData"
+import mock from "../../mocks/accountsMockData"
 
 test("Account list renders empty list", () => {
-  const mockClient = createMockClient(noAccountsConnectionMockData)
+  const mockClient = createMockClient(mock.emptyConnections)
 
   render(
     <Provider value={mockClient}>
@@ -28,7 +28,7 @@ test("Account list renders empty list", () => {
 })
 
 test("Account list renders the first page", () => {
-  const mockClient = createMockClient(accountsConnectionMockData)
+  const mockClient = createMockClient(mock.connections)
 
   const { container } = render(
     <Provider value={mockClient}>
