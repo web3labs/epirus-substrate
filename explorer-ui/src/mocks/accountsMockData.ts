@@ -1,5 +1,6 @@
 import { Account } from "../types/accounts"
 import { Edge } from "../types/pagination"
+import { emptyPage, testPageOf } from "./utils"
 
 const edges = [...Array(5)].map((_, i) => ({
   node: {
@@ -12,46 +13,14 @@ const edges = [...Array(5)].map((_, i) => ({
   }
 })) as Edge<Account>[]
 
-export const accountsConnectionMockData = {
-  accountsConnection: {
-    totalCount: 10,
-    edges,
-    pageInfo: {
-      hasNextPage: true,
-      hasPreviousPage: false,
-      startCursor: "1",
-      endCursor: "5"
-    }
-  }
-}
-
-export const noAccountsConnectionMockData = {
-  accountsConnection: {
-    totalCount: 0,
-    edges: [],
-    pageInfo: {
-      hasNextPage: false,
-      hasPreviousPage: false,
-      startCursor: "",
-      endCursor: ""
-    }
-  }
-}
-
-export const noAccountsMockData = {
-  totalCount: 0,
-  accounts: [],
-  pageInfo: {
-    hasNextPage: false,
-    hasPreviousPage: false,
-    startCursor: "",
-    endCursor: ""
-  }
-}
-
-export const accountsMockData = {
-  totalCount: 1,
-  accounts: [
+export default {
+  connections: {
+    accountsConnection: testPageOf(edges)
+  },
+  emptyConnections: {
+    accountsConnection: emptyPage()
+  },
+  single: testPageOf([
     {
       id: "5HdKDnfR2X8y4fkgQUxXJuBxu638PuKQGUy5G16cyTjT5RzL",
       createdAt: new Date(),
@@ -60,11 +29,6 @@ export const accountsMockData = {
         reserved: "0"
       }
     }
-  ],
-  pageInfo: {
-    hasNextPage: false,
-    hasPreviousPage: false,
-    startCursor: "1",
-    endCursor: "1"
-  }
+  ], "accounts"),
+  empty: emptyPage("accounts")
 }
