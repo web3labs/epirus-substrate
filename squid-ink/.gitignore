@@ -2,6 +2,7 @@
 /lib
 /db/migrations
 /db/backups
+/coverage
 
 /**Versions.json
 /**.log
