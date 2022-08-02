@@ -134,7 +134,7 @@ export function mockAccount (i = 0) {
       ]
       : undefined,
     tags: []
-  }
+  } as Account
 }
 
 export const mockAccountEdges = buildArrayOf(5, (i) => ({
