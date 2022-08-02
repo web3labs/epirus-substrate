@@ -16,24 +16,27 @@ const dtf = (format: Intl.DateTimeFormatOptions) => {
 }
 
 export function shortDate (date: Date) {
-  const d = moment(date)
+  // FIX: weird issue with
+  // "Uncaught RangeError: date value is not finite in DateTimeFormat.format()"
+  const nDate = new Date(date)
+  const d = moment(nDate)
   const now = moment()
 
   if (now.isSame(d, "day")) {
-    return dtf(sameDayFormatOpts).format(date)
+    return dtf(sameDayFormatOpts).format(nDate)
   } else if (now.isSame(d, "year")) {
-    return dtf(sameYearFormatOpts).format(date)
+    return dtf(sameYearFormatOpts).format(nDate)
   } else {
-    return dtf(distantFormatOpts).format(date)
+    return dtf(distantFormatOpts).format(nDate)
   }
 }
 
 export function longDateTime (date: Date) {
-  // XXX date needs to be re-instantiated
+  // FIX: see shortDate comment
   return dtf(longFormat).format(new Date(date))
 }
 
 export function shortDateTime (date: Date) {
-  // XXX date needs to be re-instantiated
+  // FIX: see shortDate comment
   return dtf(shortFormat).format(new Date(date))
 }
