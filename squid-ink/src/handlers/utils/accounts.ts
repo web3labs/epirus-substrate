@@ -25,7 +25,27 @@ export async function updateAccountBalance(
   block: SubstrateBlock
 ): Promise<Account> {
   const account = await getOrCreateAccount(ctx.store, id, block);
-  account.balance = await getBalances(ctx, id, block);
+
+  const balancesStorage = process.env.BALANCES_STORE;
+  if (balancesStorage === undefined) {
+    throw new Error("BALANCES_STORE is not defined in .env");
+  }
+  if (balancesStorage === "system") {
+    const accountStorage = await new NormalisedSystemAccountStorage(
+      ctx,
+      block
+    ).get(id);
+    const { free, reserved, miscFrozen, feeFrozen } = accountStorage.data;
+    account.balance = new Balance({ free, reserved, miscFrozen, feeFrozen });
+  }
+  if (balancesStorage === "balances") {
+    const { free, reserved, miscFrozen, feeFrozen } =
+      await new NormalisedBalancesAccountStorage(ctx, block).get(id);
+    account.balance = new Balance({ free, reserved, miscFrozen, feeFrozen });
+  }
+
+  ctx.log.warn({ balancesStorage }, "Storage type not supported.");
+
   return account;
 }
 
@@ -47,31 +67,4 @@ export async function getOrCreateAccount(
     account = new Account({ id, createdAt: new Date(block.timestamp) });
   }
   return account;
-}
-
-async function getBalances(
-  ctx: Ctx,
-  address: string,
-  block: SubstrateBlock
-): Promise<Balance> {
-  const balancesStorage = process.env.BALANCES_STORE;
-  if (balancesStorage === undefined) {
-    throw new Error("BALANCES_STORE is not defined in .env");
-  }
-  if (balancesStorage === "system") {
-    const accountStorage = await new NormalisedSystemAccountStorage(
-      ctx,
-      block
-    ).get(address);
-    const { free, reserved, miscFrozen, feeFrozen } = accountStorage.data;
-    return new Balance({ free, reserved, miscFrozen, feeFrozen });
-  }
-  if (balancesStorage === "balances") {
-    const { free, reserved, miscFrozen, feeFrozen } =
-      await new NormalisedBalancesAccountStorage(ctx, block).get(address);
-    return new Balance({ free, reserved, miscFrozen, feeFrozen });
-  }
-  throw new Error(
-    `Type of balances storage [${balancesStorage}] not supported!`
-  );
 }
