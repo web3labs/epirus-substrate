@@ -1,11 +1,10 @@
 {
-  "outDir": "src/chains/shibuya/types",
-  "specVersions": "https://shibuya.archive.subsquid.io/graphql",
-  "typesBundle": "shibuyaTypesBundle.json",
+  "outDir": "src/chains/local/types",
+  "specVersions": "https://suba.epirus.io/pom-archive/graphql",
+  "typesBundle": "kusama",
   "events": [
     "Balances.Transfer",
     "Balances.Endowed",
-    "Balances.Deposit",
     "Balances.Withdraw",
     "Balances.Reserved",
     "Contracts.Instantiated",

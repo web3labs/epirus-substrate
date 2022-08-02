@@ -40,17 +40,6 @@ describe("ChainPropertiesStore", () => {
     };
   });
 
-  // it("should save chain properties when called the first time", async () => {
-  //   const publicSaveMethod = jest.spyOn(mockChainPropertiesStore, "save");
-  //   const mockPrivateSaveMethod = jest
-  //     .spyOn(ChainPropertiesStore.prototype as any, "_save")
-  //     .mockImplementation(() => {});
-  //   await mockChainPropertiesStore.save(mockCtx);
-
-  //   expect(publicSaveMethod).toBeCalledTimes(1);
-  //   expect(mockPrivateSaveMethod).toBeCalledTimes(1);
-  // });
-
   it("should only save chain properties once", async () => {
     const publicSaveMethod = jest.spyOn(chainPropertiesStore, "save");
     const mockPrivateSaveMethod = jest

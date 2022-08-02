@@ -70,12 +70,12 @@ export class BalancesAccountStorage {
    *  `Balances` pallet, which uses a `StorageMap` to store balances data only.
    *  NOTE: This is only used in the case that this pallet is used to store balances.
    */
-  async getAsCanvasKusamaV16(key: canvasKusamaV16.AccountId32): Promise<canvasKusamaV16.AccountData> {
+  async getAsCanvasKusamaV16(key: Uint8Array): Promise<canvasKusamaV16.AccountData> {
     assert(this.isCanvasKusamaV16)
     return this._chain.getStorage(this.blockHash, 'Balances', 'Account', key)
   }
 
-  async getManyAsCanvasKusamaV16(keys: canvasKusamaV16.AccountId32[]): Promise<(canvasKusamaV16.AccountData)[]> {
+  async getManyAsCanvasKusamaV16(keys: Uint8Array[]): Promise<(canvasKusamaV16.AccountData)[]> {
     assert(this.isCanvasKusamaV16)
     return this._chain.queryStorage(this.blockHash, 'Balances', 'Account', keys.map(k => [k]))
   }
@@ -110,12 +110,12 @@ export class ContractsCodeStorageStorage {
   /**
    *  A mapping between an original code hash and instrumented wasm code, ready for execution.
    */
-  async getAsCanvasKusamaV16(key: canvasKusamaV16.H256): Promise<canvasKusamaV16.PrefabWasmModule | undefined> {
+  async getAsCanvasKusamaV16(key: Uint8Array): Promise<canvasKusamaV16.PrefabWasmModule | undefined> {
     assert(this.isCanvasKusamaV16)
     return this._chain.getStorage(this.blockHash, 'Contracts', 'CodeStorage', key)
   }
 
-  async getManyAsCanvasKusamaV16(keys: canvasKusamaV16.H256[]): Promise<(canvasKusamaV16.PrefabWasmModule | undefined)[]> {
+  async getManyAsCanvasKusamaV16(keys: Uint8Array[]): Promise<(canvasKusamaV16.PrefabWasmModule | undefined)[]> {
     assert(this.isCanvasKusamaV16)
     return this._chain.queryStorage(this.blockHash, 'Contracts', 'CodeStorage', keys.map(k => [k]))
   }
@@ -154,12 +154,12 @@ export class ContractsContractInfoOfStorage {
    * 
    *  TWOX-NOTE: SAFE since `AccountId` is a secure hash.
    */
-  async getAsCanvasKusamaV16(key: canvasKusamaV16.AccountId32): Promise<canvasKusamaV16.RawContractInfo | undefined> {
+  async getAsCanvasKusamaV16(key: Uint8Array): Promise<canvasKusamaV16.RawContractInfo | undefined> {
     assert(this.isCanvasKusamaV16)
     return this._chain.getStorage(this.blockHash, 'Contracts', 'ContractInfoOf', key)
   }
 
-  async getManyAsCanvasKusamaV16(keys: canvasKusamaV16.AccountId32[]): Promise<(canvasKusamaV16.RawContractInfo | undefined)[]> {
+  async getManyAsCanvasKusamaV16(keys: Uint8Array[]): Promise<(canvasKusamaV16.RawContractInfo | undefined)[]> {
     assert(this.isCanvasKusamaV16)
     return this._chain.queryStorage(this.blockHash, 'Contracts', 'ContractInfoOf', keys.map(k => [k]))
   }
@@ -194,12 +194,12 @@ export class ContractsOwnerInfoOfStorage {
   /**
    *  A mapping between an original code hash and its owner information.
    */
-  async getAsCanvasKusamaV16(key: canvasKusamaV16.H256): Promise<canvasKusamaV16.OwnerInfo | undefined> {
+  async getAsCanvasKusamaV16(key: Uint8Array): Promise<canvasKusamaV16.OwnerInfo | undefined> {
     assert(this.isCanvasKusamaV16)
     return this._chain.getStorage(this.blockHash, 'Contracts', 'OwnerInfoOf', key)
   }
 
-  async getManyAsCanvasKusamaV16(keys: canvasKusamaV16.H256[]): Promise<(canvasKusamaV16.OwnerInfo | undefined)[]> {
+  async getManyAsCanvasKusamaV16(keys: Uint8Array[]): Promise<(canvasKusamaV16.OwnerInfo | undefined)[]> {
     assert(this.isCanvasKusamaV16)
     return this._chain.queryStorage(this.blockHash, 'Contracts', 'OwnerInfoOf', keys.map(k => [k]))
   }
@@ -234,12 +234,12 @@ export class SystemAccountStorage {
   /**
    *  The full account information for a particular account ID.
    */
-  async getAsCanvasKusamaV16(key: canvasKusamaV16.AccountId32): Promise<canvasKusamaV16.AccountInfo> {
+  async getAsCanvasKusamaV16(key: Uint8Array): Promise<canvasKusamaV16.AccountInfo> {
     assert(this.isCanvasKusamaV16)
     return this._chain.getStorage(this.blockHash, 'System', 'Account', key)
   }
 
-  async getManyAsCanvasKusamaV16(keys: canvasKusamaV16.AccountId32[]): Promise<(canvasKusamaV16.AccountInfo)[]> {
+  async getManyAsCanvasKusamaV16(keys: Uint8Array[]): Promise<(canvasKusamaV16.AccountInfo)[]> {
     assert(this.isCanvasKusamaV16)
     return this._chain.queryStorage(this.blockHash, 'System', 'Account', keys.map(k => [k]))
   }

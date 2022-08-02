@@ -1,7 +1,12 @@
 import { NormalisedSystemNewAccountEvent } from "@chain/normalised-types";
 import { SubstrateBlock } from "@subsquid/substrate-processor";
 import { Ctx, EventHandler, Event } from "../types";
-import { createEvent, createExtrinsic, updateAccountBalance } from "../utils";
+import {
+  createEvent,
+  createExtrinsic,
+  saveAll,
+  updateAccountBalance,
+} from "../utils";
 
 /**
  * Handler for the systems pallet NewAccount event.
@@ -28,8 +33,7 @@ const systemNewAccountHandler: EventHandler = {
     if (extrinsic && call) {
       const extrinsicEntity = createExtrinsic(extrinsic, call, block);
       const eventEntity = createEvent(extrinsicEntity, event);
-      await store.save(extrinsicEntity);
-      await store.save(eventEntity);
+      await saveAll(store, [extrinsicEntity, eventEntity]);
     } else {
       log.debug(
         { block: block.height, name: event.name, id: event.id },

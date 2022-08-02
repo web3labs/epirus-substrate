@@ -6,7 +6,12 @@ import {
 } from "@chain/normalised-types";
 import { SubstrateBlock } from "@subsquid/substrate-processor";
 import { Ctx, Event, EventHandler, EventHandlerParams } from "../types";
-import { createEvent, createExtrinsic, updateAccountBalance } from "../utils";
+import {
+  createEvent,
+  createExtrinsic,
+  saveAll,
+  updateAccountBalance,
+} from "../utils";
 
 const balancesTransferHandler: EventHandler = {
   name: "Balances.Transfer",
@@ -83,14 +88,13 @@ async function updateEntities({
   if (extrinsic && call) {
     const extrinsicEntity = createExtrinsic(extrinsic, call, block);
     const eventEntity = createEvent(extrinsicEntity, event);
-    await store.save(extrinsicEntity);
-    await store.save(eventEntity);
+    await saveAll(store, [extrinsicEntity, eventEntity]);
   } else {
-    log.debug(
+    log.warn(
       { block: block.height, name: event.name, id: event.id },
       "No extrinsic or call field in event"
     );
-    log.trace({ block, event });
+    log.debug({ block, event });
   }
 }
 

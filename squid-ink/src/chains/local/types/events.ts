@@ -1,35 +1,5 @@
 import assert from 'assert'
 import {Chain, ChainContext, EventContext, Event, Result} from './support'
-import * as v100 from './v100'
-
-export class BalancesDepositEvent {
-  private readonly _chain: Chain
-  private readonly event: Event
-
-  constructor(ctx: EventContext)
-  constructor(ctx: ChainContext, event: Event)
-  constructor(ctx: EventContext, event?: Event) {
-    event = event || ctx.event
-    assert(event.name === 'Balances.Deposit')
-    this._chain = ctx._chain
-    this.event = event
-  }
-
-  /**
-   * Some amount was deposited (e.g. for transaction fees).
-   */
-  get isV100(): boolean {
-    return this._chain.getEventHash('Balances.Deposit') === 'e84a34a6a3d577b31f16557bd304282f4fe4cbd7115377f4687635dc48e52ba5'
-  }
-
-  /**
-   * Some amount was deposited (e.g. for transaction fees).
-   */
-  get asV100(): {who: v100.AccountId32, amount: bigint} {
-    assert(this.isV100)
-    return this._chain.decodeEvent(this.event)
-  }
-}
 
 export class BalancesEndowedEvent {
   private readonly _chain: Chain
@@ -54,7 +24,7 @@ export class BalancesEndowedEvent {
   /**
    * An account was created with some free balance.
    */
-  get asV100(): {account: v100.AccountId32, freeBalance: bigint} {
+  get asV100(): {account: Uint8Array, freeBalance: bigint} {
     assert(this.isV100)
     return this._chain.decodeEvent(this.event)
   }
@@ -83,7 +53,7 @@ export class BalancesReservedEvent {
   /**
    * Some balance was reserved (moved from free to reserved).
    */
-  get asV100(): {who: v100.AccountId32, amount: bigint} {
+  get asV100(): {who: Uint8Array, amount: bigint} {
     assert(this.isV100)
     return this._chain.decodeEvent(this.event)
   }
@@ -112,7 +82,7 @@ export class BalancesTransferEvent {
   /**
    * Transfer succeeded.
    */
-  get asV100(): {from: v100.AccountId32, to: v100.AccountId32, amount: bigint} {
+  get asV100(): {from: Uint8Array, to: Uint8Array, amount: bigint} {
     assert(this.isV100)
     return this._chain.decodeEvent(this.event)
   }
@@ -141,7 +111,7 @@ export class BalancesWithdrawEvent {
   /**
    * Some amount was withdrawn from the account (e.g. for transaction fees).
    */
-  get asV100(): {who: v100.AccountId32, amount: bigint} {
+  get asV100(): {who: Uint8Array, amount: bigint} {
     assert(this.isV100)
     return this._chain.decodeEvent(this.event)
   }
@@ -170,7 +140,7 @@ export class ContractsCodeRemovedEvent {
   /**
    * A code with the specified hash was removed.
    */
-  get asV100(): {codeHash: v100.H256} {
+  get asV100(): {codeHash: Uint8Array} {
     assert(this.isV100)
     return this._chain.decodeEvent(this.event)
   }
@@ -199,7 +169,7 @@ export class ContractsCodeStoredEvent {
   /**
    * Code with the specified hash has been stored.
    */
-  get asV100(): {codeHash: v100.H256} {
+  get asV100(): {codeHash: Uint8Array} {
     assert(this.isV100)
     return this._chain.decodeEvent(this.event)
   }
@@ -228,7 +198,7 @@ export class ContractsContractCodeUpdatedEvent {
   /**
    * A contract's code was updated.
    */
-  get asV100(): {contract: v100.AccountId32, newCodeHash: v100.H256, oldCodeHash: v100.H256} {
+  get asV100(): {contract: Uint8Array, newCodeHash: Uint8Array, oldCodeHash: Uint8Array} {
     assert(this.isV100)
     return this._chain.decodeEvent(this.event)
   }
@@ -257,7 +227,7 @@ export class ContractsContractEmittedEvent {
   /**
    * A custom event emitted by the contract.
    */
-  get asV100(): {contract: v100.AccountId32, data: Uint8Array} {
+  get asV100(): {contract: Uint8Array, data: Uint8Array} {
     assert(this.isV100)
     return this._chain.decodeEvent(this.event)
   }
@@ -286,7 +256,7 @@ export class ContractsInstantiatedEvent {
   /**
    * Contract deployed by address at the specified address.
    */
-  get asV100(): {deployer: v100.AccountId32, contract: v100.AccountId32} {
+  get asV100(): {deployer: Uint8Array, contract: Uint8Array} {
     assert(this.isV100)
     return this._chain.decodeEvent(this.event)
   }
@@ -325,7 +295,7 @@ export class ContractsTerminatedEvent {
    * The only way for a contract to be removed and emitting this event is by calling
    * `seal_terminate`.
    */
-  get asV100(): {contract: v100.AccountId32, beneficiary: v100.AccountId32} {
+  get asV100(): {contract: Uint8Array, beneficiary: Uint8Array} {
     assert(this.isV100)
     return this._chain.decodeEvent(this.event)
   }
@@ -354,7 +324,7 @@ export class SystemNewAccountEvent {
   /**
    * A new account was created.
    */
-  get asV100(): {account: v100.AccountId32} {
+  get asV100(): {account: Uint8Array} {
     assert(this.isV100)
     return this._chain.decodeEvent(this.event)
   }

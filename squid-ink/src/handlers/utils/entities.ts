@@ -43,7 +43,7 @@ export function createEvent(extrinsicEntity: Extrinsic, event: Event): Events {
     blockNumber: extrinsicEntity.blockNumber.toString(),
     indexInBlock: indexInBlock.toString(),
     createdAt: extrinsicEntity.createdAt,
-    params: <Args>extrinsicEntity.args,
+    params: <Args>event.args,
   });
 }
 
@@ -63,8 +63,8 @@ export function createExtrinsic(
     signature: signature ? getSignature(signature) : null,
     success: extrinsic.success,
     error: <ExtrinsicError>extrinsic.error,
-    fee: extrinsic.fee,
-    tip: extrinsic.tip,
+    fee: extrinsic.fee || null,
+    tip: extrinsic.tip || null,
     hash: extrinsic.hash,
     createdAt: new Date(block.timestamp),
     args: <Args>call.args,
@@ -100,11 +100,12 @@ function getSignerAddress(signature: SubstrateExtrinsicSignature): string {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const { __kind, value } = <Signature>signature.address;
   switch (__kind) {
-    case "Index":
-      throw new Error("Address of type Index not supported");
-    default: {
+    case "Id":
+    case "Address32":
+    case "Address20":
       return encodeAddress(value);
-    }
+    default:
+      throw new Error(`Address of type [${__kind}] not supported`);
   }
 }
 

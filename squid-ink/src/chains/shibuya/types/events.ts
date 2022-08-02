@@ -1,53 +1,5 @@
 import assert from 'assert'
 import {Chain, ChainContext, EventContext, Event, Result} from './support'
-import * as v1 from './v1'
-import * as v27 from './v27'
-import * as v31 from './v31'
-import * as v45 from './v45'
-
-export class BalancesDepositEvent {
-  private readonly _chain: Chain
-  private readonly event: Event
-
-  constructor(ctx: EventContext)
-  constructor(ctx: ChainContext, event: Event)
-  constructor(ctx: EventContext, event?: Event) {
-    event = event || ctx.event
-    assert(event.name === 'Balances.Deposit')
-    this._chain = ctx._chain
-    this.event = event
-  }
-
-  /**
-   *  Some amount was deposited (e.g. for transaction fees). \[who, deposit\]
-   */
-  get isV1(): boolean {
-    return this._chain.getEventHash('Balances.Deposit') === '23bebce4ca9ed37548947d07d4dc50e772f07401b9a416b6aa2f3e9cb5adcaf4'
-  }
-
-  /**
-   *  Some amount was deposited (e.g. for transaction fees). \[who, deposit\]
-   */
-  get asV1(): [v1.AccountId, v1.Balance] {
-    assert(this.isV1)
-    return this._chain.decodeEvent(this.event)
-  }
-
-  /**
-   * Some amount was deposited (e.g. for transaction fees).
-   */
-  get isV27(): boolean {
-    return this._chain.getEventHash('Balances.Deposit') === 'e84a34a6a3d577b31f16557bd304282f4fe4cbd7115377f4687635dc48e52ba5'
-  }
-
-  /**
-   * Some amount was deposited (e.g. for transaction fees).
-   */
-  get asV27(): {who: v27.AccountId32, amount: bigint} {
-    assert(this.isV27)
-    return this._chain.decodeEvent(this.event)
-  }
-}
 
 export class BalancesEndowedEvent {
   private readonly _chain: Chain
@@ -72,7 +24,7 @@ export class BalancesEndowedEvent {
   /**
    *  An account was created with some free balance. \[account, free_balance\]
    */
-  get asV1(): [v1.AccountId, v1.Balance] {
+  get asV1(): [Uint8Array, bigint] {
     assert(this.isV1)
     return this._chain.decodeEvent(this.event)
   }
@@ -87,7 +39,7 @@ export class BalancesEndowedEvent {
   /**
    * An account was created with some free balance.
    */
-  get asV27(): {account: v27.AccountId32, freeBalance: bigint} {
+  get asV27(): {account: Uint8Array, freeBalance: bigint} {
     assert(this.isV27)
     return this._chain.decodeEvent(this.event)
   }
@@ -116,7 +68,7 @@ export class BalancesReservedEvent {
   /**
    *  Some balance was reserved (moved from free to reserved). \[who, value\]
    */
-  get asV1(): [v1.AccountId, v1.Balance] {
+  get asV1(): [Uint8Array, bigint] {
     assert(this.isV1)
     return this._chain.decodeEvent(this.event)
   }
@@ -131,7 +83,7 @@ export class BalancesReservedEvent {
   /**
    * Some balance was reserved (moved from free to reserved).
    */
-  get asV27(): {who: v27.AccountId32, amount: bigint} {
+  get asV27(): {who: Uint8Array, amount: bigint} {
     assert(this.isV27)
     return this._chain.decodeEvent(this.event)
   }
@@ -160,7 +112,7 @@ export class BalancesTransferEvent {
   /**
    *  Transfer succeeded. \[from, to, value\]
    */
-  get asV1(): [v1.AccountId, v1.AccountId, v1.Balance] {
+  get asV1(): [Uint8Array, Uint8Array, bigint] {
     assert(this.isV1)
     return this._chain.decodeEvent(this.event)
   }
@@ -175,7 +127,7 @@ export class BalancesTransferEvent {
   /**
    * Transfer succeeded.
    */
-  get asV27(): {from: v27.AccountId32, to: v27.AccountId32, amount: bigint} {
+  get asV27(): {from: Uint8Array, to: Uint8Array, amount: bigint} {
     assert(this.isV27)
     return this._chain.decodeEvent(this.event)
   }
@@ -204,7 +156,7 @@ export class BalancesWithdrawEvent {
   /**
    * Some amount was withdrawn from the account (e.g. for transaction fees).
    */
-  get asV27(): {who: v27.AccountId32, amount: bigint} {
+  get asV27(): {who: Uint8Array, amount: bigint} {
     assert(this.isV27)
     return this._chain.decodeEvent(this.event)
   }
@@ -233,7 +185,7 @@ export class ContractsCodeRemovedEvent {
   /**
    * A code with the specified hash was removed.
    */
-  get asV31(): {codeHash: v31.H256} {
+  get asV31(): {codeHash: Uint8Array} {
     assert(this.isV31)
     return this._chain.decodeEvent(this.event)
   }
@@ -262,7 +214,7 @@ export class ContractsCodeStoredEvent {
   /**
    * Code with the specified hash has been stored.
    */
-  get asV31(): {codeHash: v31.H256} {
+  get asV31(): {codeHash: Uint8Array} {
     assert(this.isV31)
     return this._chain.decodeEvent(this.event)
   }
@@ -291,7 +243,7 @@ export class ContractsContractCodeUpdatedEvent {
   /**
    * A contract's code was updated.
    */
-  get asV45(): {contract: v45.AccountId32, newCodeHash: v45.H256, oldCodeHash: v45.H256} {
+  get asV45(): {contract: Uint8Array, newCodeHash: Uint8Array, oldCodeHash: Uint8Array} {
     assert(this.isV45)
     return this._chain.decodeEvent(this.event)
   }
@@ -320,7 +272,7 @@ export class ContractsContractEmittedEvent {
   /**
    * A custom event emitted by the contract.
    */
-  get asV31(): {contract: v31.AccountId32, data: Uint8Array} {
+  get asV31(): {contract: Uint8Array, data: Uint8Array} {
     assert(this.isV31)
     return this._chain.decodeEvent(this.event)
   }
@@ -349,7 +301,7 @@ export class ContractsInstantiatedEvent {
   /**
    * Contract deployed by address at the specified address.
    */
-  get asV31(): {deployer: v31.AccountId32, contract: v31.AccountId32} {
+  get asV31(): {deployer: Uint8Array, contract: Uint8Array} {
     assert(this.isV31)
     return this._chain.decodeEvent(this.event)
   }
@@ -388,7 +340,7 @@ export class ContractsTerminatedEvent {
    * The only way for a contract to be removed and emitting this event is by calling
    * `seal_terminate`.
    */
-  get asV31(): {contract: v31.AccountId32, beneficiary: v31.AccountId32} {
+  get asV31(): {contract: Uint8Array, beneficiary: Uint8Array} {
     assert(this.isV31)
     return this._chain.decodeEvent(this.event)
   }
@@ -417,7 +369,7 @@ export class SystemNewAccountEvent {
   /**
    *  A new \[account\] was created.
    */
-  get asV1(): v1.AccountId {
+  get asV1(): Uint8Array {
     assert(this.isV1)
     return this._chain.decodeEvent(this.event)
   }
@@ -432,7 +384,7 @@ export class SystemNewAccountEvent {
   /**
    * A new account was created.
    */
-  get asV31(): {account: v31.AccountId32} {
+  get asV31(): {account: Uint8Array} {
     assert(this.isV31)
     return this._chain.decodeEvent(this.event)
   }

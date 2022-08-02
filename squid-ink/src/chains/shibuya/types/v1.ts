@@ -1,24 +1,16 @@
 import type {Result} from './support'
 
-export type AccountId = Uint8Array
-
-export type Balance = bigint
-
 export interface AccountData {
-  free: Balance
-  reserved: Balance
-  miscFrozen: Balance
-  feeFrozen: Balance
+  free: bigint
+  reserved: bigint
+  miscFrozen: bigint
+  feeFrozen: bigint
 }
 
 export interface AccountInfo {
-  nonce: Index
-  consumers: RefCount
-  providers: RefCount
-  sufficients: RefCount
+  nonce: number
+  consumers: number
+  providers: number
+  sufficients: number
   data: AccountData
 }
-
-export type Index = number
-
-export type RefCount = number

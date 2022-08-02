@@ -86,7 +86,7 @@ const contractsInstantiatedHandler: EventHandler = {
       });
 
       const allArgs: ContractInstantiatedArgs = args || {};
-      if (allArgs.codeHash !== undefined) {
+      if (allArgs.codeHash === undefined) {
         allArgs.codeHash = toHex(codeHash);
       }
       const activityEntity = createActivity(

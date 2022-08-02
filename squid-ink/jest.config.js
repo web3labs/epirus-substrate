@@ -8,7 +8,10 @@ module.exports = {
   },
   testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.ts?$",
   coveragePathIgnorePatterns: [
+    "<rootDir>/src/initialise.ts",
+    "<rootDir>/src/processor.ts",
     "<rootDir>/src/model/",
-    "<rootDir>/src/chains/local/types",
+    "<rootDir>/src/chains/rococo",
+    "<rootDir>/src/chains/shibuya",
   ],
 };

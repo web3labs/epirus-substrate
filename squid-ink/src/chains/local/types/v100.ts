@@ -1,14 +1,10 @@
 import type {Result} from './support'
 
-export type AccountId32 = Uint8Array
-
-export type H256 = Uint8Array
-
 export type MultiAddress = MultiAddress_Id | MultiAddress_Index | MultiAddress_Raw | MultiAddress_Address32 | MultiAddress_Address20
 
 export interface MultiAddress_Id {
   __kind: 'Id'
-  value: AccountId32
+  value: Uint8Array
 }
 
 export interface MultiAddress_Index {
@@ -47,12 +43,12 @@ export interface PrefabWasmModule {
 
 export interface RawContractInfo {
   trieId: Uint8Array
-  codeHash: H256
+  codeHash: Uint8Array
   storageDeposit: bigint
 }
 
 export interface OwnerInfo {
-  owner: AccountId32
+  owner: Uint8Array
   deposit: bigint
   refcount: bigint
 }

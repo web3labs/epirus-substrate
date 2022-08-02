@@ -29,12 +29,12 @@ export class BalancesAccountStorage {
    * 
    *  NOTE: This is only used in the case that this pallet is used to store balances.
    */
-  async getAsV1(key: v1.AccountId): Promise<v1.AccountData> {
+  async getAsV1(key: Uint8Array): Promise<v1.AccountData> {
     assert(this.isV1)
     return this._chain.getStorage(this.blockHash, 'Balances', 'Account', key)
   }
 
-  async getManyAsV1(keys: v1.AccountId[]): Promise<(v1.AccountData)[]> {
+  async getManyAsV1(keys: Uint8Array[]): Promise<(v1.AccountData)[]> {
     assert(this.isV1)
     return this._chain.queryStorage(this.blockHash, 'Balances', 'Account', keys.map(k => [k]))
   }
@@ -69,12 +69,12 @@ export class ContractsCodeStorageStorage {
   /**
    *  A mapping between an original code hash and instrumented wasm code, ready for execution.
    */
-  async getAsV31(key: v31.H256): Promise<v31.PrefabWasmModule | undefined> {
+  async getAsV31(key: Uint8Array): Promise<v31.PrefabWasmModule | undefined> {
     assert(this.isV31)
     return this._chain.getStorage(this.blockHash, 'Contracts', 'CodeStorage', key)
   }
 
-  async getManyAsV31(keys: v31.H256[]): Promise<(v31.PrefabWasmModule | undefined)[]> {
+  async getManyAsV31(keys: Uint8Array[]): Promise<(v31.PrefabWasmModule | undefined)[]> {
     assert(this.isV31)
     return this._chain.queryStorage(this.blockHash, 'Contracts', 'CodeStorage', keys.map(k => [k]))
   }
@@ -113,12 +113,12 @@ export class ContractsContractInfoOfStorage {
    * 
    *  TWOX-NOTE: SAFE since `AccountId` is a secure hash.
    */
-  async getAsV31(key: v31.AccountId32): Promise<v31.RawContractInfo | undefined> {
+  async getAsV31(key: Uint8Array): Promise<v31.RawContractInfo | undefined> {
     assert(this.isV31)
     return this._chain.getStorage(this.blockHash, 'Contracts', 'ContractInfoOf', key)
   }
 
-  async getManyAsV31(keys: v31.AccountId32[]): Promise<(v31.RawContractInfo | undefined)[]> {
+  async getManyAsV31(keys: Uint8Array[]): Promise<(v31.RawContractInfo | undefined)[]> {
     assert(this.isV31)
     return this._chain.queryStorage(this.blockHash, 'Contracts', 'ContractInfoOf', keys.map(k => [k]))
   }
@@ -153,12 +153,12 @@ export class ContractsOwnerInfoOfStorage {
   /**
    *  A mapping between an original code hash and its owner information.
    */
-  async getAsV31(key: v31.H256): Promise<v31.OwnerInfo | undefined> {
+  async getAsV31(key: Uint8Array): Promise<v31.OwnerInfo | undefined> {
     assert(this.isV31)
     return this._chain.getStorage(this.blockHash, 'Contracts', 'OwnerInfoOf', key)
   }
 
-  async getManyAsV31(keys: v31.H256[]): Promise<(v31.OwnerInfo | undefined)[]> {
+  async getManyAsV31(keys: Uint8Array[]): Promise<(v31.OwnerInfo | undefined)[]> {
     assert(this.isV31)
     return this._chain.queryStorage(this.blockHash, 'Contracts', 'OwnerInfoOf', keys.map(k => [k]))
   }
@@ -193,12 +193,12 @@ export class SystemAccountStorage {
   /**
    *  The full account information for a particular account ID.
    */
-  async getAsV1(key: v1.AccountId): Promise<v1.AccountInfo> {
+  async getAsV1(key: Uint8Array): Promise<v1.AccountInfo> {
     assert(this.isV1)
     return this._chain.getStorage(this.blockHash, 'System', 'Account', key)
   }
 
-  async getManyAsV1(keys: v1.AccountId[]): Promise<(v1.AccountInfo)[]> {
+  async getManyAsV1(keys: Uint8Array[]): Promise<(v1.AccountInfo)[]> {
     assert(this.isV1)
     return this._chain.queryStorage(this.blockHash, 'System', 'Account', keys.map(k => [k]))
   }
