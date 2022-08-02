@@ -25,8 +25,16 @@ Head to [Adding custom environment variables](https://create-react-app.dev/docs/
 
 ## Running locally
 
+After installing the project dependencies, only for the first time, using
+
 ```bash
-npm run start
+npm i
+```
+
+you can start a development server
+
+```bash
+npm start
 ```
 
 ## Testing
