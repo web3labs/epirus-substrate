@@ -1,21 +1,33 @@
 import React from "react"
-import { render } from "@testing-library/react"
+import { fireEvent, render } from "@testing-library/react"
 import EnumTypeFilter from "./EnumTypeFilter"
 
 test("Enum Type Filter", () => {
+  const mockSetFilter = jest.fn()
+
   const { container } = render(
     <EnumTypeFilter
-      label="initial"
+      label="select"
       selector="x"
       filterQuery={{}}
-      setFilterQuery={() => {}}
+      setFilterQuery={mockSetFilter}
       template={() => {}}
-      inputValues={[{
-        label: "x",
-        value: "x"
-      }]} />
+      inputValues={[
+        { label: "one", value: "one" },
+        { label: "two", value: "two" }
+      ]} />
   )
 
-  const chip = container.childNodes[0]
-  expect(chip.textContent).toBe("initialx")
+  const button = container.getElementsByTagName("button")[0]
+  expect(button).toBeInTheDocument()
+
+  expect(container.getElementsByTagName("li").length).toBe(0)
+
+  fireEvent.click(button)
+
+  expect(container.getElementsByTagName("li").length).toBe(2)
+
+  fireEvent.click(container.getElementsByTagName("li")[1])
+
+  expect(mockSetFilter).toBeCalled()
 })
