@@ -1,31 +1,31 @@
 import moment from "moment"
 
-export function shortDate (date: Date) {
-  const d = moment(date)
-  const now = moment()
-  if (now.isSame(d, "day")) {
-    return d.format("h:mm a")
-  } else if (now.isSame(d, "year")) {
-    return d.format("DD MMM")
-  } else {
-    return d.format("DD MMM YYYY")
-  }
-}
+const sameYearFormatOpts : Intl.DateTimeFormatOptions = { month: "short", day: "numeric" }
+const sameDayFormatOpts : Intl.DateTimeFormatOptions = { hour: "numeric", minute: "numeric" }
+const distantFormatOpts : Intl.DateTimeFormatOptions = { month: "short", day: "numeric", year: "numeric" }
 
-interface DateTimeFormat {
-  dateStyle?: "full" | "long" | "medium" | "short" | undefined,
-  timeStyle?: "full" | "long" | "medium" | "short" | undefined
-}
-
-const longFormat: DateTimeFormat = {
+const longFormat: Intl.DateTimeFormatOptions = {
   dateStyle: "long", timeStyle: "long"
 }
-const shortFormat: DateTimeFormat = {
+const shortFormat: Intl.DateTimeFormatOptions = {
   dateStyle: "short", timeStyle: "short"
 }
 
-const dtf = (format: DateTimeFormat) => {
+const dtf = (format: Intl.DateTimeFormatOptions) => {
   return new Intl.DateTimeFormat("default", format)
+}
+
+export function shortDate (date: Date) {
+  const d = moment(date)
+  const now = moment()
+
+  if (now.isSame(d, "day")) {
+    return dtf(sameDayFormatOpts).format(date)
+  } else if (now.isSame(d, "year")) {
+    return dtf(sameYearFormatOpts).format(date)
+  } else {
+    return dtf(distantFormatOpts).format(date)
+  }
 }
 
 export function longDateTime (date: Date) {
