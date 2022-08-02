@@ -7,7 +7,7 @@ import { Row, TypedRow } from "../commons/List"
 export default function EventRow ({
   obj,
   currentId,
-  short = true
+  short
 }: TypedRow<Event>) {
   const { id, blockNumber, indexInBlock, createdAt, data, extrinsic } = obj
 

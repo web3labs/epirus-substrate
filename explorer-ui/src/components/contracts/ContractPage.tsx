@@ -129,6 +129,10 @@ export default function ContractPage () {
     return <PageLoading loading={fetching} />
   }
 
+  if (data?.contracts[0] === undefined) {
+    return <span>Contract not found</span>
+  }
+
   const {
     id,
     createdAt,

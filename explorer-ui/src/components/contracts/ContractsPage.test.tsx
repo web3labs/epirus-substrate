@@ -3,20 +3,20 @@ import { render } from "@testing-library/react"
 import { MemoryRouter, Route, Routes } from "react-router"
 import { Provider } from "urql"
 import { createMockClient } from "../../_mocks/mockClient"
-import CodesPage from "./CodesPage"
+import ContractsPage from "./ContractsPage"
 import { mockPageOf } from "../../_mocks/utils"
-import { mockContractCodeEdges } from "../../_mocks/data"
+import { mockContractEdges } from "../../_mocks/data"
 
-test("Contract codes page", () => {
+test("Contracts page", () => {
   const mockClient = createMockClient({
-    contractCodesConnection: mockPageOf(mockContractCodeEdges)
+    contractsConnection: mockPageOf(mockContractEdges)
   })
 
   const { container } = render(
     <Provider value={mockClient}>
-      <MemoryRouter initialEntries={["/codes"]}>
+      <MemoryRouter initialEntries={["/contracts"]}>
         <Routes>
-          <Route path="codes" element={<CodesPage/>} />
+          <Route path="contracts" element={<ContractsPage/>} />
         </Routes>
       </MemoryRouter>
     </Provider>

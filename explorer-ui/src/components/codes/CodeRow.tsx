@@ -14,7 +14,7 @@ import { AccountUnit } from "../commons/Text"
 export default function CodeRow ({
   obj,
   currentId,
-  short = true
+  short
 }: TypedRow<ContractCode>) {
   const { token } = useChainProperties()
   const { id, contractsDeployed, createdAt, owner, createdFrom } = obj
