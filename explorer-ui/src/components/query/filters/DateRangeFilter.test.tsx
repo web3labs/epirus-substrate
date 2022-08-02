@@ -9,6 +9,8 @@ test("Date range filter", () => {
     />
   )
 
+  // NOTE: the date range component is 3rd party and will
+  // be likely replaced
   const chip = container.childNodes[0]
   expect(chip.textContent).toBe("Date Range")
 })
