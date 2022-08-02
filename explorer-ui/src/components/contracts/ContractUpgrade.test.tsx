@@ -1,11 +1,12 @@
 import React from "react"
-import { render, screen } from "@testing-library/react"
+import { fireEvent, getByRole, render } from "@testing-library/react"
 import ContractUpgrade from "./ContractUpgrade"
 import { mockExtrinsic } from "../../_mocks/data"
 import { buildArrayOf, randomCodeHash } from "../../_mocks/utils"
 import { CodeHashChange } from "../../types/contracts"
+import { MemoryRouter } from "react-router-dom"
 
-test("Contract termination details", () => {
+test("Contract upgrade details", async () => {
   const changes = buildArrayOf(5, (i) => (
     {
       id: `change-${i}`,
@@ -15,10 +16,15 @@ test("Contract termination details", () => {
       extrinsic: mockExtrinsic
     }
   )) as CodeHashChange[]
-  render(
-    <ContractUpgrade codeHashChanges={changes} />
+  const { container } = render(
+    <MemoryRouter initialEntries={["/contracts"]}>
+      <ContractUpgrade codeHashChanges={changes} isOpen={false} />
+    </MemoryRouter>
   )
 
-  const details = screen.findByText("Termination Details")
-  expect(details).toBeDefined()
+  expect(container.getElementsByTagName("dl").length).toBe(0)
+
+  fireEvent.click(getByRole(container, "switch"))
+
+  expect(container.getElementsByTagName("dl").length).toBe(5)
 })

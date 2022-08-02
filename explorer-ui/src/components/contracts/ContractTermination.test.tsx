@@ -1,19 +1,23 @@
 import React from "react"
-import { render, screen } from "@testing-library/react"
+import { fireEvent, getByRole, render } from "@testing-library/react"
 import { ContractTermination } from "./ContractTermination"
 import { mockAccount, mockExtrinsic } from "../../_mocks/data"
 import { MemoryRouter } from "react-router-dom"
 
 test("Contract termination details", () => {
-  render(
+  const { container } = render(
     <MemoryRouter initialEntries={["/contracts"]}>
       <ContractTermination
         extrinsic={mockExtrinsic}
         beneficiary={mockAccount()}
+        isOpen={false}
       />
     </MemoryRouter>
   )
 
-  const details = screen.findByText("Termination Details")
-  expect(details).toBeDefined()
+  expect(container.getElementsByTagName("dl").length).toBe(0)
+
+  fireEvent.click(getByRole(container, "switch"))
+
+  expect(container.getElementsByTagName("dl").length).toBe(1)
 })

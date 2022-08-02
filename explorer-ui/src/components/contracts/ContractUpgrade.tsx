@@ -7,26 +7,8 @@ import { longDateTime } from "../../formats/time"
 import CodeLink from "../codes/CodeLink"
 import { Default, Mobile } from "../responsive/Media"
 
-export default function ContractUpgrades (
-  { codeHashChanges, isOpen = false, title = "Contract Upgrades" } :
-  { codeHashChanges: CodeHashChange[], isOpen?: boolean, title?: string}
-) {
-  const changeDetails : JSX.Element[] = []
-  for (const change of codeHashChanges) {
-    changeDetails.push(<ChangeDetails key={change.id} codeHashChange={change}/>)
-  }
-  return (
-    <Segment title={title} collapsable={true} isOpen={isOpen}>
-      <div className="divide-y">
-        {changeDetails}
-      </div>
-    </Segment>
-  )
-}
-
 function ChangeDetails (
-  { codeHashChange } :
-  { codeHashChange: CodeHashChange }
+  { codeHashChange } : { codeHashChange: CodeHashChange }
 ) {
   const { newCodeHash, oldCodeHash, changedAt, extrinsic } = codeHashChange
 
@@ -58,5 +40,20 @@ function ChangeDetails (
         }/>
       </DefinitionList>
     </div>
+  )
+}
+
+export default function ContractUpgrades (
+  { codeHashChanges, isOpen = false, title = "Contract Upgrades" } :
+  { codeHashChanges: CodeHashChange[], isOpen?: boolean, title?: string}
+) {
+  return (
+    <Segment title={title} collapsable={true} isOpen={isOpen}>
+      <div className="divide-y">
+        {codeHashChanges.map((change) => (
+          <ChangeDetails key={change.id} codeHashChange={change}/>
+        ))}
+      </div>
+    </Segment>
   )
 }
