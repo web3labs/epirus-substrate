@@ -3,12 +3,12 @@ export function shortenHexString (text?: string, ellipsis: string = "…") {
 }
 
 export function shorten (text?: string, start: number = 4, end: number = 4, ellipsis: string = "…") {
-  if (text) {
+  if (text && text.length > start * 2) {
     return text.substring(0, start) +
             ellipsis +
             text.substring(text.length - end)
   } else {
-    return null
+    return text
   }
 }
 

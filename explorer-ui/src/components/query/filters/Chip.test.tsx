@@ -2,7 +2,7 @@ import React from "react"
 import { render } from "@testing-library/react"
 import Chip from "./Chip"
 
-test("Chip", () => {
+test("Chip component", () => {
   const { container } = render(
     <Chip label="hello" />
   )

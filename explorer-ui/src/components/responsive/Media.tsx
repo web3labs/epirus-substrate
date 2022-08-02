@@ -17,7 +17,7 @@ export function Mobile ({ children }: Props) {
   const isMobile = useMediaQuery({ maxWidth: 767 })
   return isMobile ? children : null
 }
-export function Default ({ children }:Props) {
+export function Default ({ children }: Props) {
   const isNotMobile = useMediaQuery({ minWidth: 768 })
   return isNotMobile ? children : null
 }

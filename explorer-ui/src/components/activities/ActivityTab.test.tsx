@@ -7,23 +7,31 @@ import ActivityTab from "./ActivityTab"
 import { mockPageOf } from "../../_mocks/utils"
 import { mockActivityEdges } from "../../_mocks/data"
 
-test("Activities tab", () => {
-  const mockClient = createMockClient({
-    activitiesConnection: mockPageOf(mockActivityEdges)
+describe("ActivitiesTab component", () => {
+  it("should render a list of activities", () => {
+    const mockClient = createMockClient({
+      activitiesConnection: mockPageOf(mockActivityEdges)
+    })
+
+    const { container } = render(
+      <Provider value={mockClient}>
+        <MemoryRouter initialEntries={["/activities"]}>
+          <Routes>
+            <Route path="activities" element={
+              <ActivityTab where={
+                {
+                  from: {
+                    id_eq: "0x01"
+                  }
+                }
+              } />
+            } />
+          </Routes>
+        </MemoryRouter>
+      </Provider>
+    )
+
+    const listItems = container.getElementsByTagName("li")
+    expect(listItems.length).toBeGreaterThanOrEqual(5)
   })
-
-  const { container } = render(
-    <Provider value={mockClient}>
-      <MemoryRouter initialEntries={["/activities"]}>
-        <Routes>
-          <Route path="activities" element={
-            <ActivityTab where="" />
-          } />
-        </Routes>
-      </MemoryRouter>
-    </Provider>
-  )
-
-  const listItems = container.getElementsByTagName("li")
-  expect(listItems.length).toBeGreaterThanOrEqual(5)
 })

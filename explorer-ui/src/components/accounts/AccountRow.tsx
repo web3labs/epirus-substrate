@@ -12,7 +12,7 @@ import { AccountUnit } from "../commons/Text"
 export default function AccountRow ({
   obj,
   currentId,
-  short = true
+  short
 }: TypedRow<Account>) {
   const { token } = useChainProperties()
   const { id, balance, codesOwned, contractsDeployed, createdAt } = obj

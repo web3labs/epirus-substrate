@@ -8,52 +8,55 @@ import { createMockClient } from "../../_mocks/mockClient"
 import { emptyMockPage, mockPageOf } from "../../_mocks/utils"
 import { mockAccountEdges } from "../../_mocks/data"
 
-test("Account list renders empty list", () => {
-  const mockClient = createMockClient({
-    accountsConnection: emptyMockPage()
+describe("AccountList component", () => {
+  it("should render an empty list when there is no data to show", () => {
+    const mockClient = createMockClient({
+      accountsConnection: emptyMockPage()
+    })
+
+    render(
+      <Provider value={mockClient}>
+        <MemoryRouter initialEntries={["/accounts"]}>
+          <AccountList
+            key="0"
+            title="Test List"
+          />
+        </MemoryRouter>
+      </Provider>
+    )
+
+    const title = screen.getByText(/Test List/i)
+    expect(title).toBeInTheDocument()
+    const emptyList = screen.getByText(/No accounts to show/i)
+    expect(emptyList).toBeInTheDocument()
   })
 
-  render(
-    <Provider value={mockClient}>
-      <MemoryRouter initialEntries={["/accounts"]}>
-        <AccountList
-          key="0"
-          title="Test List"
-        />
-      </MemoryRouter>
-    </Provider>
-  )
+  it("should display the first page of a paginated response data", () => {
+    const mockClient = createMockClient({
+      accountsConnection: mockPageOf(mockAccountEdges)
+    })
 
-  const title = screen.getByText(/Test List/i)
-  expect(title).toBeInTheDocument()
-  const emptyList = screen.getByText(/No accounts to show/i)
-  expect(emptyList).toBeInTheDocument()
-})
+    const { container } = render(
+      <Provider value={mockClient}>
+        <MemoryRouter initialEntries={["/accounts"]}>
+          <AccountList
+            key="0"
+            title="Test List"
+            pageQuery={{
+              first: 5,
+              where: contractByDeployer(
+                "5HdKDnfR2X8y4fkgQUxXJuBxu638PuKQGUy5G16cyTjT5RzL"
+              )
+            }}
+            short={false}
+          />
+        </MemoryRouter>
+      </Provider>
+    )
 
-test("Account list renders the first page", () => {
-  const mockClient = createMockClient({
-    accountsConnection: mockPageOf(mockAccountEdges)
+    const title = screen.getByText(/Test List/i)
+    expect(title).toBeInTheDocument()
+    const listItems = container.getElementsByTagName("li")
+    expect(listItems.length).toBe(5)
   })
-
-  const { container } = render(
-    <Provider value={mockClient}>
-      <MemoryRouter initialEntries={["/accounts"]}>
-        <AccountList
-          key="0"
-          title="Test List"
-          pageQuery={{
-            first: 5,
-            where: contractByDeployer(
-              "5HdKDnfR2X8y4fkgQUxXJuBxu638PuKQGUy5G16cyTjT5RzL"
-            )
-          }}
-        />
-      </MemoryRouter>
-    </Provider>
-  )
-
-  const title = screen.getByText(/Test List/i)
-  expect(title).toBeInTheDocument()
-  const listItems = container.getElementsByTagName("li")
-  expect(listItems.length).toBe(5)
 })

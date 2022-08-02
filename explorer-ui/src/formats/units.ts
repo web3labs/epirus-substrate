@@ -5,7 +5,7 @@ export function formatUnits (
   token: {tokenDecimals: number, tokenSymbol:string}
 ) {
   const amt = amountToString(amount)
-  const formatted = amt.length > 8
+  const formatted = amt.length > token.tokenDecimals
     ? formatBalance(amt, {
       decimals: token.tokenDecimals,
       withUnit: token.tokenSymbol,
@@ -26,7 +26,7 @@ function formatSmallBalance (amount: string, tokenConfig: { decimals: number, sy
   if (amount === "0") {
     return [amount, tokenConfig.symbol].join(" ")
   }
-  const numberOfLeadingZeros = tokenConfig.decimals - amount.length
+  const numberOfLeadingZeros = tokenConfig.decimals > amount.length ? tokenConfig.decimals - amount.length : 0
   const decimalArray = Array(numberOfLeadingZeros).fill("0")
   decimalArray.push(amount)
   return `0.${decimalArray.join("").substring(0, numberOfLeadingZeros + 2)} ${tokenConfig.symbol}`

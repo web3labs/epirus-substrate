@@ -24,15 +24,31 @@ REACT_APP_SQUID_ENDPOINT=http://localhost:4350/graphql
 Head to [Adding custom environment variables](https://create-react-app.dev/docs/adding-custom-environment-variables/) for further details.
 
 ## Running locally
+
 ```bash
 npm run start
 ```
 
 ## Testing
-To run tests, simply run the command
+
+To run the unit tests, use the command
 
 ```bash
-npm run test
+npm test
+```
+
+To generate a test coverage report, execute
+
+```bash
+npm run test:coverage
+```
+
+## Linting
+
+To apply the code linter and automatically fix issues
+
+```bash
+npm run lint:fix
 ```
 
 ## Others

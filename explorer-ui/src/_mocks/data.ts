@@ -1,17 +1,19 @@
 import { Account } from "../types/accounts"
 import { ContractCode } from "../types/codes"
-import { Activity, ActivityType } from "../types/contracts"
+import { Activity, ActivityType, Contract, Event } from "../types/contracts"
 import { Edge } from "../types/pagination"
 
+import { buildArrayOf, randomAccountId, randomCodeHash, randomHex, randomId } from "./utils"
+
 export const mockExtrinsic = {
-  id: "0000727898-000002-f645f",
+  id: randomId(),
   blockNumber: "727898",
   indexInBlock: "2",
   success: true,
   createdAt: new Date(),
   name: "module.call",
   args: {
-    data: "0x0",
+    data: randomHex(),
     storageDepositLimit: ""
   }
 }
@@ -21,72 +23,72 @@ export const mockActivityEdges : Edge<Activity>[] = [
     node: {
       type: ActivityType.CONTRACTCALL,
       action: "call",
-      id: "0000727898-000002-f645f-CONTRACTCALL",
+      id: randomId() + "CONTRACTCALL",
       createdAt: new Date(),
       extrinsic: mockExtrinsic,
       args: {
-        data: "0x0"
+        data: randomHex()
       },
       to: {
-        id: "5Hh1Zsd5kJ1v9RdbKXQvVS93CmwErJPC86g4s7qzEJzvZLiE"
+        id: randomAccountId()
       },
       from: {
-        id: "5DVQiQYBcMUm5YeQ4YoG54aRsiBtDr6P4iSTUvxntdXCrYgz"
+        id: randomAccountId()
       }
     }
   },
   {
     node: {
       type: ActivityType.CODEUPDATED,
-      action: "call",
-      id: "0000727898-000002-f645f-UPDATE",
+      action: "update",
+      id: randomId() + "UPDATE",
       createdAt: new Date(),
       extrinsic: mockExtrinsic,
       args: {
-        data: "0x0"
+        data: randomHex()
       },
       to: {
-        id: "5Hh1Zsd5kJ1v9RdbKXQvVS93CmwErJPC86g4s7qzEJzvZLiE"
+        id: randomAccountId()
       },
       from: {
-        id: "5DVQiQYBcMUm5YeQ4YoG54aRsiBtDr6P4iSTUvxntdXCrYgz"
+        id: randomAccountId()
       }
     }
   },
   {
     node: {
       type: ActivityType.CONTRACTTERMINATE,
-      action: "call",
-      id: "0000727898-000002-f645f-TERMINATE",
+      action: "terminate",
+      id: randomId() + "TERMINATE",
       createdAt: new Date(),
       extrinsic: mockExtrinsic,
       args: {
-        data: "0x0"
+        data: randomHex()
       },
       to: {
-        id: "5Hh1Zsd5kJ1v9RdbKXQvVS93CmwErJPC86g4s7qzEJzvZLiE"
+        id: randomAccountId()
       },
       from: {
-        id: "5DVQiQYBcMUm5YeQ4YoG54aRsiBtDr6P4iSTUvxntdXCrYgz"
+        id: randomAccountId()
       }
     }
   },
   {
     node: {
       type: ActivityType.CONTRACT,
-      action: "call",
-      id: "0000727898-000002-f645f-CONTRACT",
+      action: "instantiate",
+      id: randomId() + "CONTRACT",
       createdAt: new Date(),
       extrinsic: mockExtrinsic,
       args: {
-        code: "0x0",
-        data: "0x0"
+        code: randomHex(),
+        data: randomHex()
       },
       to: {
-        id: "5Hh1Zsd5kJ1v9RdbKXQvVS93CmwErJPC86g4s7qzEJzvZLiE"
+        id: randomAccountId()
       },
       from: {
-        id: "5DVQiQYBcMUm5YeQ4YoG54aRsiBtDr6P4iSTUvxntdXCrYgz"
+        id: randomAccountId()
       }
     }
   },
@@ -95,40 +97,96 @@ export const mockActivityEdges : Edge<Activity>[] = [
         {
           type: "UNK",
           action: "unk",
-          id: "0000727898-000002-f645f-UNK",
+          id: randomId() + "UNK",
           createdAt: new Date(),
           extrinsic: mockExtrinsic,
           args: {
-            data: "0x0"
+            data: randomHex()
           },
           to: {
-            id: "5Hh1Zsd5kJ1v9RdbKXQvVS93CmwErJPC86g4s7qzEJzvZLiE"
+            id: randomAccountId()
           },
           from: {
-            id: "5DVQiQYBcMUm5YeQ4YoG54aRsiBtDr6P4iSTUvxntdXCrYgz"
+            id: randomAccountId()
           }
         }
   }
 ]
 
-export const mockAccountEdges = [...Array(5)].map((_, i) => ({
-  node: {
-    id: `5HdKDnfR2X8y4fkgQUxXJuBxu638PuKQGUy5G16cyTjT5Rz${i}`,
+export function mockAccount (i = 0) {
+  return {
+    id: randomAccountId(),
     createdAt: new Date(),
     balance: {
       free: "0",
-      reserved: "0"
-    }
-  }
+      reserved: "0",
+      miscFrozen: "0",
+      feeFrozen: "0"
+    },
+    codesOwned: i % 2
+      ? [
+        { id: randomAccountId() }
+      ]
+      : undefined,
+    contractsDeployed: i % 2
+      ? [
+        { id: randomAccountId() }
+      ]
+      : undefined,
+    tags: []
+  } as Account
+}
+
+export const mockAccountEdges = buildArrayOf(5, (i) => ({
+  node: mockAccount(i)
 })) as Edge<Account>[]
 
-export function mockContractCode () {
+export function mockContractCode (i = 0) {
   return {
-    id: "0x38ec0f8fde303c179bcabaa40e987d6da361c664438f866a9967e58f92c39b56",
+    id: randomCodeHash(),
     createdAt: new Date(),
     createdFrom: mockExtrinsic,
     owner: {
-      id: "5HdKDnfR2X8y4fkgQUxXJuBxu638PuKQGUy5G16cyTjT5RzL"
-    }
+      id: randomAccountId()
+    },
+    contractsDeployed: i % 2
+      ? [
+        { id: randomAccountId() }
+      ]
+      : undefined
   } as unknown as ContractCode
 }
+
+export const mockContractCodeEdges = buildArrayOf(5, (i) => ({
+  node: mockContractCode(i)
+})) as Edge<ContractCode>[]
+
+export function mockContract () {
+  return {
+    id: randomAccountId(),
+    createdAt: new Date(),
+    createdFrom: mockExtrinsic,
+    contractCode: mockContractCode(),
+    account: mockAccount(),
+    deployer: mockAccount(),
+    salt: randomCodeHash(),
+    trieId: randomId(),
+    storageDeposit: "100000"
+  } as unknown as Contract
+}
+
+export const mockContractEdges = buildArrayOf(5, () => ({
+  node: mockContract()
+})) as Edge<Contract>[]
+
+export const mockEventEdges = buildArrayOf(5, () => ({
+  node: {
+    id: randomId(),
+    blockNumber: 10,
+    indexInBlock: 1,
+    contractAddress: randomAccountId(),
+    createdAt: new Date(),
+    data: randomHex(),
+    extrinsic: mockExtrinsic
+  }
+})) as Edge<Event>[]

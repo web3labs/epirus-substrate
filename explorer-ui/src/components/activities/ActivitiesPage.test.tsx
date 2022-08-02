@@ -7,21 +7,23 @@ import ActivitiesPage from "./ActivitiesPage"
 import { mockPageOf } from "../../_mocks/utils"
 import { mockActivityEdges } from "../../_mocks/data"
 
-test("Activities page", () => {
-  const mockClient = createMockClient({
-    activitiesConnection: mockPageOf(mockActivityEdges)
+describe("ActivitiesPage component", () => {
+  it("should render a list of activities", () => {
+    const mockClient = createMockClient({
+      activitiesConnection: mockPageOf(mockActivityEdges)
+    })
+
+    const { container } = render(
+      <Provider value={mockClient}>
+        <MemoryRouter initialEntries={["/activities"]}>
+          <Routes>
+            <Route path="activities" element={<ActivitiesPage/>} />
+          </Routes>
+        </MemoryRouter>
+      </Provider>
+    )
+
+    const listItems = container.getElementsByTagName("li")
+    expect(listItems.length).toBeGreaterThanOrEqual(5)
   })
-
-  const { container } = render(
-    <Provider value={mockClient}>
-      <MemoryRouter initialEntries={["/activities"]}>
-        <Routes>
-          <Route path="activities" element={<ActivitiesPage/>} />
-        </Routes>
-      </MemoryRouter>
-    </Provider>
-  )
-
-  const listItems = container.getElementsByTagName("li")
-  expect(listItems.length).toBeGreaterThanOrEqual(5)
 })

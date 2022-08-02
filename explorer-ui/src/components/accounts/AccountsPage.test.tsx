@@ -7,21 +7,23 @@ import AccountsPage from "./AccountsPage"
 import { mockPageOf } from "../../_mocks/utils"
 import { mockAccountEdges } from "../../_mocks/data"
 
-test("Accounts page", () => {
-  const mockClient = createMockClient({
-    accountsConnection: mockPageOf(mockAccountEdges)
+describe("AccountsPage component", () => {
+  it("should display a list of accounts", () => {
+    const mockClient = createMockClient({
+      accountsConnection: mockPageOf(mockAccountEdges)
+    })
+
+    const { container } = render(
+      <Provider value={mockClient}>
+        <MemoryRouter initialEntries={["/accounts"]}>
+          <Routes>
+            <Route path="accounts" element={<AccountsPage/>} />
+          </Routes>
+        </MemoryRouter>
+      </Provider>
+    )
+
+    const listItems = container.getElementsByTagName("li")
+    expect(listItems.length).toBeGreaterThanOrEqual(5)
   })
-
-  const { container } = render(
-    <Provider value={mockClient}>
-      <MemoryRouter initialEntries={["/accounts"]}>
-        <Routes>
-          <Route path="accounts" element={<AccountsPage/>} />
-        </Routes>
-      </MemoryRouter>
-    </Provider>
-  )
-
-  const listItems = container.getElementsByTagName("li")
-  expect(listItems.length).toBeGreaterThanOrEqual(5)
 })

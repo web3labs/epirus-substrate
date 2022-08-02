@@ -40,7 +40,7 @@ function CollapsableSegment ({
 
   return (
     <div className={classNames(className, "flex flex-col w-full px-5 py-3 gap-y-2")}>
-      <div className="flex flex-row cursor-pointer -ml-1" onClick={() => setOpen(!open)}>
+      <div role="switch" className="flex flex-row cursor-pointer -ml-1" onClick={() => setOpen(!open)}>
         {open
           ? <ChevronDownIcon className="text-gray-300 w-5 h-5" />
           : <ChevronRightIcon className="text-gray-300 w-5 h-5"/>
