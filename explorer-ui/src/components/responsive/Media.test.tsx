@@ -8,7 +8,7 @@ describe("Media queries", () => {
     jest.clearAllMocks()
   })
 
-  it("should render the default content", () => {
+  it("should render default content", () => {
     setScreenWidth()
     const { container } = render(
       <>
@@ -23,7 +23,7 @@ describe("Media queries", () => {
     expect(container.firstChild?.textContent).toBe("Default content")
   })
 
-  it("should render the mobile content", () => {
+  it("should render mobile content", () => {
     setScreenWidth(412)
     const { container } = render(
       <>
@@ -38,7 +38,7 @@ describe("Media queries", () => {
     expect(container.firstChild?.textContent).toBe("Mobile content")
   })
 
-  it("should render the tablet content", () => {
+  it("should render tablet content", () => {
     setScreenWidth(768)
     const { container } = render(
       <>
@@ -56,7 +56,7 @@ describe("Media queries", () => {
     expect(container.firstChild?.textContent).toBe("Tablet content")
   })
 
-  it("should render the tablet content", () => {
+  it("should render desktop content", () => {
     setScreenWidth(992)
     const { container } = render(
       <>
