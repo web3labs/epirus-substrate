@@ -48,6 +48,7 @@ describe("AccountList component", () => {
                 "5HdKDnfR2X8y4fkgQUxXJuBxu638PuKQGUy5G16cyTjT5RzL"
               )
             }}
+            short={false}
           />
         </MemoryRouter>
       </Provider>

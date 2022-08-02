@@ -113,7 +113,7 @@ export const mockActivityEdges : Edge<Activity>[] = [
   }
 ]
 
-export function mockAccount () {
+export function mockAccount (i = 0) {
   return {
     id: randomAccountId(),
     createdAt: new Date(),
@@ -123,32 +123,42 @@ export function mockAccount () {
       miscFrozen: "0",
       feeFrozen: "0"
     },
+    codesOwned: i % 2
+      ? [
+        { id: randomAccountId() }
+      ]
+      : undefined,
+    contractsDeployed: i % 2
+      ? [
+        { id: randomAccountId() }
+      ]
+      : undefined,
     tags: []
   }
 }
 
-export const mockAccountEdges = buildArrayOf(5, () => ({
-  node: mockAccount()
+export const mockAccountEdges = buildArrayOf(5, (i) => ({
+  node: mockAccount(i)
 })) as Edge<Account>[]
 
-export function mockContractCode ({
-  codeHash, ownerAddress
-}: { codeHash?: string, ownerAddress?: string} = {}) {
+export function mockContractCode (i = 0) {
   return {
-    id: codeHash || randomCodeHash(),
+    id: randomCodeHash(),
     createdAt: new Date(),
     createdFrom: mockExtrinsic,
     owner: {
-      id: ownerAddress || randomAccountId()
+      id: randomAccountId()
     },
-    contractsDeployed: [
-      { id: randomAccountId() }
-    ]
+    contractsDeployed: i % 2
+      ? [
+        { id: randomAccountId() }
+      ]
+      : undefined
   } as unknown as ContractCode
 }
 
-export const mockContractCodeEdges = buildArrayOf(5, () => ({
-  node: mockContractCode()
+export const mockContractCodeEdges = buildArrayOf(5, (i) => ({
+  node: mockContractCode(i)
 })) as Edge<ContractCode>[]
 
 export function mockContract () {
