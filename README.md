@@ -22,10 +22,10 @@ You can find examples of docker compose configurations in the [local-testnet](ht
 
 ## Others
 
-### Public Services
+### Public Services[^note]
 
-1. We host a public Squid Ink GraphQL endpoint for Rococo Canvas at [https://suba.epirus.io/squid/graphql](https://suba.epirus.io/squid/graphql)[^note]
-2. A development instance of the Explorer UI [https://epirus-sub.netlify.app/](https://epirus-sub.netlify.app/)[^note]
+1. We host a public Squid Ink GraphQL endpoint for Rococo Canvas at [https://suba.epirus.io/squid/graphql](https://suba.epirus.io/squid/graphql)
+2. A development instance of the Explorer UI [https://epirus-sub.netlify.app/](https://epirus-sub.netlify.app/)
 
 [^note]: Provided "as is" without any availability guarantee.
 
