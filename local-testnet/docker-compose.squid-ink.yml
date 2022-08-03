@@ -1,0 +1,46 @@
+version: "3.5"
+
+x-environment: &envs
+  CHAIN: local
+  PROCESSOR_NAME: squid-local
+  DB_NAME: postgres
+  DB_HOST: squid-db
+  DB_PASS: postgres
+  DB_PORT: 5432
+  PROCESSOR_PROMETHEUS_PORT: 3000
+  GQL_PORT: 4000
+  ARCHIVE_ENDPOINT: http://archive:8000/graphql
+  WS_ENDPOINT: ws://bob:9944
+  BALANCES_STORE: system
+
+services:
+  squid-db:
+    image: postgres:12
+    restart: always
+    volumes:
+      - .data/squid/ink/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: squid-db
+
+  processor:
+    container_name: subsquid-processor
+    image: ghcr.io/web3labs/squid-ink-epirus
+    environment: *envs
+    command: sh -c "(npx sqd db create-migration Init && npx sqd db migrate); exec npm run processor:start"
+    depends_on:
+      - squid-db
+
+  query:
+    container_name: query-node
+    image: ghcr.io/web3labs/squid-ink-epirus
+    environment: *envs
+    ports:
+      - "4000:4000"
+    depends_on:
+      - processor
+
+networks:
+  default:
+    name: local-testnet
