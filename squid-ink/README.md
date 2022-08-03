@@ -8,12 +8,13 @@ Squid-ink is using the latest Fire Squid version of Subsquid.
 
 ## Summary
 
+- [Prerequisites](#prerequisites)
 - [Deployment](#deployment)
+- [Testing](#testing)
 - [Development](#development)
   - [Squid Archive](#squid-archive)
   - [Adding New Chains](#adding-new-chains)
   - [Type Bundles](#types-bundle)
-- [Testing](#testing)
 
 ## Prerequisites
 
@@ -83,6 +84,19 @@ At this moment the migrations are not pushed neither in the git repository nor t
 docker-compose run processor /bin/sh
 npx sqd db create-migration Init
 npx sqd db migrate
+```
+
+## Testing
+To run the unit tests, use the command
+
+```bash
+npm test
+```
+
+To generate a test coverage report, execute
+
+```bash
+npm run test:coverage
 ```
 
 ## Development
@@ -234,10 +248,3 @@ Type definitions (`typesBundle`) can be given to squid tools in two forms:
 
 All fields in types bundle are optional and applied on top of a fixed set of well known
 frame types.
-
-## Testing
-To run tests, simply run the command
-
-```bash
-npm run test
-```
