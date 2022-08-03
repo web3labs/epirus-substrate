@@ -2,47 +2,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { Account } from "model";
-import { SubstrateBlock } from "@subsquid/substrate-processor";
-import {
-  NormalisedBalancesAccountStorage,
-  NormalisedSystemAccountStorage,
-} from "@chain/normalised-types";
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import {
   encodeAddress,
   getOrCreateAccount,
   updateAccountBalance,
 } from "./accounts";
-
-// jest.mock("@chain/normalised-types", () => ({
-//   __esModule: true,
-//   NormalisedBalancesAccountStorage: jest.fn().mockImplementation(() => {
-//     return {
-//       get: jest.fn(() => {
-//         return {
-//           free: 123456789,
-//           reserved: 12345,
-//           feeFrozen: 0,
-//           miscFrozen: 0,
-//         };
-//       }),
-//     };
-//   }),
-//   NormalisedSystemAccountStorage: jest.fn().mockImplementation(() => {
-//     return {
-//       get: jest.fn(() => {
-//         return {
-//           data: {
-//             free: 987654321,
-//             reserved: 54321,
-//             feeFrozen: 0,
-//             miscFrozen: 0,
-//           },
-//         };
-//       }),
-//     };
-//   }),
-// }));
+import { block, ctx, defaultGetStorageMock, store } from "../../_mocks";
 
 const ALICE_PUB_KEY =
   "d43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d";
@@ -51,33 +17,7 @@ const ALICE_SUBSTRATE_ADDRESS =
 const BOB_SUBSTRATE_ADDRESS =
   "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty";
 
-interface Ctx {
-  _chain: any;
-  store: any;
-  log: any;
-  blocks: any;
-}
-
 describe("account utils", () => {
-  const block: SubstrateBlock = {
-    id: "727219-312ee",
-    height: 727219,
-    hash: "0x312eec5bee97fc47a0b5b06f6006edd1465dcc6c6e1e864f099028376cbd3aa2",
-    parentHash:
-      "0x6379433608c3856d91277a0398bb38847d664a8c3c50c9a60a6f1e3fdb060390",
-    timestamp: 1659344359000,
-    specId: "",
-  };
-
-  const store: any = {
-    get: jest.fn(async (Entity: typeof Account, id: string) => {
-      if (id === ALICE_SUBSTRATE_ADDRESS) {
-        return Promise.resolve(new Entity({ id }));
-      }
-      return undefined;
-    }),
-  };
-
   test("CHAIN should be set to 'local'", () => {
     expect(process.env.CHAIN).toBeDefined();
     expect(process.env.CHAIN).toBe("local");
@@ -102,26 +42,9 @@ describe("account utils", () => {
   });
 
   describe("updateAccountBalance", () => {
-    const ctx: Ctx = {
-      _chain: {
-        getStorageItemTypeHash: jest.fn(() => {
-          return "1ddc7ade926221442c388ee4405a71c9428e548fab037445aaf4b3a78f4735c1";
-        }),
-        getStorage: jest.fn(() => {
-          return {
-            data: {
-              free: BigInt(987654321),
-              reserved: BigInt(54321),
-              feeFrozen: BigInt(0),
-              miscFrozen: BigInt(0),
-            },
-          };
-        }),
-      },
-      store,
-      log: { warn: jest.fn() },
-      blocks: jest.fn(),
-    };
+    beforeEach(() => {
+      ctx._chain.getStorage.mockImplementation(defaultGetStorageMock());
+    });
 
     it("should return an account with balance updated from system balance storage", async () => {
       const account = await updateAccountBalance(
