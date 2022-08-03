@@ -1,0 +1,14 @@
+version: "3.5"
+
+services:
+  explorer-ui:
+    container_name: explorer-ui
+    image: ghcr.io/web3labs/epirus-substrate-ui
+    environment:
+      - REACT_APP_SQUID_ENDPOINT=http://localhost:4000/graphql
+    ports:
+      - "80:80"
+
+networks:
+  default:
+    name: local-testnet
