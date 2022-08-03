@@ -24,6 +24,7 @@
     "react-responsive": "^9.0.0-beta.10",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
+    "runtime-env-cra": "^0.2.4",
     "twin.macro": "^2.8.2",
     "typescript": "^4.7.3",
     "urql": "^2.2.2",
@@ -31,8 +32,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "craco start",
+    "start": "npm run env:update && craco start",
     "build": "craco build",
+    "env:update": "NODE_ENV=development runtime-env-cra --config-name=./public/runtime-env.js --env-file=./.env.development",
     "test": "craco test",
     "test:coverage": "CI=true npm test -- --env=jsdom --coverage",
     "eject": "react-scripts eject",

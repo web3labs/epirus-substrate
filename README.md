@@ -36,7 +36,7 @@ docker-compose -f squid-ink/archive/docker-compose.yml up
 ### Explorer UI
 ```bash
 cd explorer-ui/
-npm run start
+npm start
 ```
 
 [UI configuration](./explorer-ui/README.md#configuration)
