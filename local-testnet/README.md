@@ -8,7 +8,7 @@ Includes:
 - Squid contracts indexer and GraphQL API connected to the archive
 - The explorer UI web application
 
-[^1] Required because the current implementation of instant-seal mode does not finalize blocks. See [Issue #102](https://github.com/paritytech/subport/issues/102) for discussion and workarounds.
+[^1]: Required because the current implementation of instant-seal mode does not finalize blocks. See [Issue #102](https://github.com/paritytech/subport/issues/102) for discussion and workarounds.
 
 ## Running
 
