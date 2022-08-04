@@ -33,18 +33,6 @@ describe("balances event handlers", () => {
       expect(updateAccountBalance).toBeCalledTimes(2);
       expect(saveAll).toBeCalled();
     });
-
-    it("should log warning if extrinsic and call are undefined", async () => {
-      const event: Event = getMockEvent({
-        name: "Balances.Transfer",
-        withCall: false,
-        withExtrinsic: false,
-      });
-
-      await balancesTransferHandler.handle(ctx, event, block);
-      expect(ctx.log.warn).toBeCalled();
-      expect(ctx.log.debug).toBeCalled();
-    });
   });
 
   describe("balancesWithdrawHandler", () => {

@@ -79,7 +79,7 @@ async function updateEntities({
   block,
   accounts,
 }: EventHandlerParams & { accounts: string[] }): Promise<void> {
-  const { store, log } = ctx;
+  const { store } = ctx;
   const { extrinsic, call } = event;
   for (const account of accounts) {
     const accountEntity = await updateAccountBalance(ctx, account, block);
@@ -89,12 +89,6 @@ async function updateEntities({
     const extrinsicEntity = createExtrinsic(extrinsic, call, block);
     const eventEntity = createEvent(extrinsicEntity, event);
     await saveAll(store, [extrinsicEntity, eventEntity]);
-  } else {
-    log.warn(
-      { block: block.height, name: event.name, id: event.id },
-      "No extrinsic or call field in event"
-    );
-    log.debug({ block, event });
   }
 }
 
