@@ -30,6 +30,14 @@
     "pg": "^8.7.3",
     "typeorm": "^0.3.7"
   },
+  "overrides": {
+    "@subsquid/cli": {
+      "simple-git": ">=3.5.0"
+    },
+    "yargs": {
+      "yargs-parser": ">=5.0.1"
+    }
+  },
   "devDependencies": {
     "@subsquid/substrate-metadata-explorer": "^1.0.3",
     "@subsquid/substrate-typegen": "^1.0.2",

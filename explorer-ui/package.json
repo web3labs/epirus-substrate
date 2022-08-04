@@ -17,7 +17,7 @@
     "@types/react-dom": "^18.0.5",
     "debounce": "^1.2.1",
     "graphql": "^16.5.0",
-    "moment": "^2.29.3",
+    "moment": "^2.29.4",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-hot-toast": "^2.2.0",
@@ -30,6 +30,26 @@
     "urql": "^2.2.2",
     "use-react-router-breadcrumbs": "^3.2.1",
     "web-vitals": "^2.1.4"
+  },
+  "overrides": {
+    "css-select": {
+      "nth-check": ">=2.0.1"
+    },
+    "twin.macro": {
+      "dset": ">=3.1.2"
+    },
+    "html-minifier-terser": {
+      "terser": ">=5.14.2"
+    },
+    "terser-webpack-plugin": {
+      "terser": ">=5.14.2"
+    },
+    "rollup-plugin-terser": {
+      "terser": ">=5.14.2"
+    },
+    "yargs": {
+      "yargs-parser": ">=5.0.1"
+    }
   },
   "scripts": {
     "start": "npm run env:update && craco start",
