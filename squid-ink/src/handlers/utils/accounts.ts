@@ -27,24 +27,27 @@ export async function updateAccountBalance(
   const account = await getOrCreateAccount(ctx.store, id, block);
 
   const balancesStorage = process.env.BALANCES_STORE;
-  if (balancesStorage === undefined) {
-    throw new Error("BALANCES_STORE is not defined in .env");
+  switch (balancesStorage) {
+    case "system": {
+      const accountStorage = await new NormalisedSystemAccountStorage(
+        ctx,
+        block
+      ).get(id);
+      const { free, reserved, miscFrozen, feeFrozen } = accountStorage.data;
+      account.balance = new Balance({ free, reserved, miscFrozen, feeFrozen });
+      break;
+    }
+    case "balances": {
+      const { free, reserved, miscFrozen, feeFrozen } =
+        await new NormalisedBalancesAccountStorage(ctx, block).get(id);
+      account.balance = new Balance({ free, reserved, miscFrozen, feeFrozen });
+      break;
+    }
+    case undefined:
+      throw new Error("BALANCES_STORE is not defined in .env");
+    default:
+      ctx.log.warn({ balancesStorage }, "Storage type not supported.");
   }
-  if (balancesStorage === "system") {
-    const accountStorage = await new NormalisedSystemAccountStorage(
-      ctx,
-      block
-    ).get(id);
-    const { free, reserved, miscFrozen, feeFrozen } = accountStorage.data;
-    account.balance = new Balance({ free, reserved, miscFrozen, feeFrozen });
-  }
-  if (balancesStorage === "balances") {
-    const { free, reserved, miscFrozen, feeFrozen } =
-      await new NormalisedBalancesAccountStorage(ctx, block).get(id);
-    account.balance = new Balance({ free, reserved, miscFrozen, feeFrozen });
-  }
-
-  ctx.log.warn({ balancesStorage }, "Storage type not supported.");
 
   return account;
 }
