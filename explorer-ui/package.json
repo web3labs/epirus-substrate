@@ -46,6 +46,9 @@
     },
     "rollup-plugin-terser": {
       "terser": ">=5.14.2"
+    },
+    "yargs": {
+      "yargs-parser": ">=5.0.1"
     }
   },
   "scripts": {
