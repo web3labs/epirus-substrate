@@ -19,6 +19,7 @@ export type EventTypes =
   | "Balances.Transfer"
   | "Balances.Withdraw"
   | "Balances.Reserved"
+  | "Balances.Endowed"
   | "System.NewAccount";
 
 export interface Ctx {

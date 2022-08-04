@@ -42,11 +42,35 @@ describe("account utils", () => {
   });
 
   describe("updateAccountBalance", () => {
+    const { env } = process;
+
     beforeEach(() => {
+      jest.resetModules();
+      process.env = { ...env };
       ctx._chain.getStorage.mockImplementation(defaultGetStorageMock());
     });
+    afterEach(() => {
+      process.env = env;
+    });
 
-    it("should return an account with balance updated from system balance storage", async () => {
+    it("should return an account with balance updated from system pallet balance storage", async () => {
+      const account = await updateAccountBalance(
+        ctx,
+        ALICE_SUBSTRATE_ADDRESS,
+        block
+      );
+
+      expect(account).toBeDefined();
+      expect(account.id).toEqual(ALICE_SUBSTRATE_ADDRESS);
+      expect(account.balance).toBeDefined();
+      expect(account.balance?.free).toEqual(BigInt(987654321));
+      expect(account.balance?.reserved).toEqual(BigInt(54321));
+      expect(account.balance?.feeFrozen).toEqual(BigInt(0));
+      expect(account.balance?.miscFrozen).toEqual(BigInt(0));
+    });
+
+    it("should return an account with balance updated from balances pallet balance storage", async () => {
+      process.env.BALANCES_STORE = "balances";
       const account = await updateAccountBalance(
         ctx,
         ALICE_SUBSTRATE_ADDRESS,

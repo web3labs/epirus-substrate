@@ -1,5 +1,5 @@
 import { assertNotNull } from "@subsquid/substrate-processor";
-import { Ctx } from "handlers/types";
+import { Ctx } from "./handlers/types";
 import { ChainProperties, Token } from "./model";
 
 export interface ChainConfig {

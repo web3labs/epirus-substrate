@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { SubstrateCall } from "@subsquid/substrate-processor";
 import { decodeHex } from "@subsquid/util-internal-hex";
 import { Event } from "handlers/types";
@@ -43,7 +44,7 @@ export const ctx: Ctx = {
     }),
   },
   store,
-  log: { info: jest.fn(), warn: jest.fn(), debug: jest.fn() },
+  log: { info: jest.fn(), error: jest.fn(), warn: jest.fn(), debug: jest.fn() },
   blocks: jest.fn(),
 };
 
@@ -140,6 +141,8 @@ function getEventHashByName(name: string): string {
     case "Balances.Withdraw":
     case "Balances.Reserved":
       return "e84a34a6a3d577b31f16557bd304282f4fe4cbd7115377f4687635dc48e52ba5";
+    case "Balances.Endowed":
+      return "75951f685df19cbb5fdda09cf928a105518ceca9576d95bd18d4fac8802730ca";
     case "System.NewAccount":
       return "7fb7672b764b0a4f0c4910fddefec0709628843df7ad0073a97eede13c53ca92";
     default:
@@ -186,6 +189,11 @@ function getDecodeEventByName(name: string): any {
       return {
         amount: BigInt(AMOUNT),
         who: decodeHex(EOA_ACCOUNT),
+      };
+    case "Balances.Endowed":
+      return {
+        account: decodeHex(EOA_ACCOUNT),
+        freeBalance: BigInt(AMOUNT),
       };
     case "System.NewAccount":
       return {

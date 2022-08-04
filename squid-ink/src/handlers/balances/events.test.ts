@@ -80,4 +80,21 @@ describe("balances event handlers", () => {
       );
     });
   });
+
+  describe("balancesEndowedHandler", () => {
+    const { balancesEndowedHandler } = balancesEventHandlers;
+    const event: Event = getMockEvent({ name: "Balances.Endowed" });
+    beforeEach(() => {
+      ctx._chain.getStorage.mockImplementation(defaultGetStorageMock());
+    });
+
+    it("should update balance of account returned in event", async () => {
+      await balancesEndowedHandler.handle(ctx, event, block);
+      expect(updateAccountBalance).toBeCalledWith(
+        ctx,
+        "5EyR7vEk7DtvEWeefGcXXMV6hKwB8Ex5uvjHufm466mbjJkR",
+        block
+      );
+    });
+  });
 });

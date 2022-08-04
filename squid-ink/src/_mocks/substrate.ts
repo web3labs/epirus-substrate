@@ -166,6 +166,11 @@ function getEventArgsByType(type: EventTypes): any {
         amount: AMOUNT,
         who: EOA_ACCOUNT,
       };
+    case "Balances.Endowed":
+      return {
+        account: EOA_ACCOUNT,
+        freeBalance: AMOUNT,
+      };
     case "System.NewAccount":
       return {
         account: EOA_ACCOUNT,
