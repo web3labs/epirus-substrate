@@ -2,7 +2,7 @@ import React, { ReactNode, useState } from "react"
 import { PageQuery } from "../../types/pagination"
 import { FilterProps } from "../query/Filters"
 import { Option } from "../commons/Select"
-import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/outline"
+import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline"
 
 interface Props {
     title?: JSX.Element | string

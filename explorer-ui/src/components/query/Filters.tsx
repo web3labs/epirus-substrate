@@ -1,6 +1,6 @@
 import { Popover, Transition } from "@headlessui/react"
-import { XIcon } from "@heroicons/react/outline"
-import { SelectorIcon } from "@heroicons/react/solid"
+import { XMarkIcon } from "@heroicons/react/24/outline"
+import { ChevronUpDownIcon } from "@heroicons/react/24/solid"
 
 import React, { Fragment, useEffect, useRef, useState } from "react"
 import { PageQuery } from "../../types/pagination"
@@ -136,7 +136,7 @@ export default function Filters ({
       <div className="flex w-full justify-end">
         <Popover.Button className="p-1 text-gray-400 hover:text-gray-500 focus:outline-none">
           <span className="sr-only">Close menu</span>
-          <XIcon className="h-6 w-6" aria-hidden="true" />
+          <XMarkIcon className="h-6 w-6" aria-hidden="true" />
         </Popover.Button>
       </div>
       <div className="flex flex-col gap-y-4 mx-5">
@@ -161,7 +161,7 @@ export default function Filters ({
           px-2 py-1 gap-x-1 inline-flex flex-wrap items-center focus:outline-none"
       >
         {chips}
-        <SelectorIcon className="text-gray-400 group-hover:text-gray-500"
+        <ChevronUpDownIcon className="text-gray-400 group-hover:text-gray-500"
           width={16}
           height={16}
           aria-hidden="true"

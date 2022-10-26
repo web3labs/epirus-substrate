@@ -20,6 +20,7 @@ import { getArg } from "../../utils/args"
 import { longDateTime } from "../../formats/time"
 import CodeHash from "./CodeHash"
 import { PageLoading } from "../loading/Loading"
+import SourceTab from "./source-codes/SourceTab"
 
 const QUERY = `
 query($id: String!) {
@@ -76,6 +77,11 @@ export default function CodePage () {
             currentId={params.id}
             where={contractByCodeHash(params.id)}
           />
+        },
+        {
+          label: "Source Code",
+          to: "sources",
+          element: <SourceTab id={params.id} />
         },
         {
           label: "Bytecode",

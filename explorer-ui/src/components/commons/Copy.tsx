@@ -1,4 +1,4 @@
-import { CheckIcon, DuplicateIcon } from "@heroicons/react/outline"
+import { CheckIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline"
 import React, { ReactElement, useState } from "react"
 
 export default function Copy ({ text, children }: {text: string, children: ReactElement}) {
@@ -16,7 +16,7 @@ export default function Copy ({ text, children }: {text: string, children: React
       }}>
         {copied
           ? <CheckIcon width={18} height={18} />
-          : <DuplicateIcon width={18} height={18} />
+          : <DocumentDuplicateIcon width={18} height={18} />
         }
       </div>
     </div>

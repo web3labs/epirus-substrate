@@ -1,4 +1,4 @@
-import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/solid"
+import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/solid"
 import React, { useState } from "react"
 import { classNames } from "../../utils/strings"
 

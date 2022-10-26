@@ -1,5 +1,5 @@
 import React from "react"
-import { ArrowRightIcon, ArrowDownIcon } from "@heroicons/react/solid"
+import { ArrowRightIcon, ArrowDownIcon } from "@heroicons/react/24/solid"
 import { DefinitionList, Definition } from "../commons/Definitions"
 import Segment from "../commons/Segment"
 import { CodeHashChange } from "../../types/contracts"

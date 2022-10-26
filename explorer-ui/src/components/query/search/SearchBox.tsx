@@ -5,7 +5,7 @@ import useSquid from "../../../hooks/useSquid"
 import { classNames, stripNonPrintable } from "../../../utils/strings"
 import { Transition } from "@headlessui/react"
 import { InputLoading } from "../../loading/Loading"
-import { XIcon } from "@heroicons/react/outline"
+import { XMarkIcon } from "@heroicons/react/24/outline"
 import { useNavigate } from "react-router-dom"
 import { linkOf, SearchResult, SearchResultOption, SearchResults } from "./SearchResults"
 
@@ -182,7 +182,7 @@ export default function SearchBox () {
             <>
               {searchInput.length > 0 &&
                 <div className="flex absolute items-center inset-y-0 right-0 pr-3">
-                  <XIcon
+                  <XMarkIcon
                     className="w-5 h-5 cursor-pointer"
                     onClick={clear}
                   />

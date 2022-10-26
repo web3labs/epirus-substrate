@@ -1,6 +1,6 @@
 import { Listbox, Transition } from "@headlessui/react"
-import { CheckIcon } from "@heroicons/react/outline"
-import { SelectorIcon } from "@heroicons/react/solid"
+import { CheckIcon } from "@heroicons/react/24/outline"
+import { ChevronUpDownIcon } from "@heroicons/react/24/solid"
 import React, { Fragment, useEffect, useRef, useState } from "react"
 import { classNames } from "../../utils/strings"
 import { Default, Mobile } from "../responsive/Media"
@@ -49,7 +49,7 @@ export default function Select (
             {selectedOption?.name || title || "select"}
           </span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center">
-            <SelectorIcon
+            <ChevronUpDownIcon
               className="text-gray-400 group-hover:text-gray-500"
               aria-hidden="true"
               width={16}

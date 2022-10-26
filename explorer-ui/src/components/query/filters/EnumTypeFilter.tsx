@@ -3,7 +3,7 @@ import { ActivityType } from "../../../types/contracts"
 import { FilterProps } from "../Filters"
 import Chip from "./Chip"
 import { Listbox } from "@headlessui/react"
-import { CheckIcon, SelectorIcon } from "@heroicons/react/outline"
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline"
 
 export interface SelectionInput {
   label: string,
@@ -70,7 +70,7 @@ export default function EnumTypeFilter ({
           <Listbox.Button className="input relative w-full cursor-default bg-white border border-gray-200 pt-3 pl-4 pr-10 text-left text-sm">
             <span className="block truncate">{selected.label}</span>
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-              <SelectorIcon
+              <ChevronUpDownIcon
                 className="h-5 w-5 text-gray-400"
                 aria-hidden="true"
               />

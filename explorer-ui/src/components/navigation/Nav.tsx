@@ -1,13 +1,13 @@
 import React, { Fragment } from "react"
 import { Popover, Transition } from "@headlessui/react"
 import {
-  DocumentReportIcon,
-  MenuIcon,
+  DocumentChartBarIcon,
+  Bars3Icon,
   UserIcon,
-  XIcon,
+  XMarkIcon,
   CalendarIcon
-} from "@heroicons/react/outline"
-import { ChevronDownIcon, CodeIcon } from "@heroicons/react/solid"
+} from "@heroicons/react/24/outline"
+import { ChevronDownIcon, CodeBracketIcon } from "@heroicons/react/24/solid"
 
 import Logo from "../../logo.svg"
 import SearchBox from "../query/search/SearchBox"
@@ -26,13 +26,13 @@ const blockchain = [
     name: "Contracts",
     description: "Browse the contract instances",
     to: "/contracts",
-    icon: DocumentReportIcon
+    icon: DocumentChartBarIcon
   },
   {
     name: "Codes",
     description: "Uploaded contract bytecodes",
     to: "/codes",
-    icon: CodeIcon
+    icon: CodeBracketIcon
   },
   {
     name: "Activities",
@@ -67,7 +67,7 @@ export default function Nav () {
               <div className="-mr-2 -my-2 md:hidden ml-auto">
                 <Popover.Button className="bg-white p-2 inline-flex items-center justify-center text-gray-600 focus:outline-none">
                   <span className="sr-only">Open menu</span>
-                  <MenuIcon className="h-6 w-6" aria-hidden="true" />
+                  <Bars3Icon className="h-6 w-6" aria-hidden="true" />
                 </Popover.Button>
               </div>
             </div>
@@ -173,7 +173,7 @@ export default function Nav () {
                   <div className="-mr-2">
                     <Popover.Button className="bg-white p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
                       <span className="sr-only">Close menu</span>
-                      <XIcon className="h-6 w-6" aria-hidden="true" />
+                      <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                     </Popover.Button>
                   </div>
                 </div>
