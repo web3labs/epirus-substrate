@@ -1,4 +1,4 @@
-import { ArrowPathIcon } from "@heroicons/react/24/outline"
+import { ArrowPathIcon, ArrowRightIcon } from "@heroicons/react/24/outline"
 import React, { Dispatch, useEffect, useState } from "react"
 import { SourceTabAction } from "../../../types/componentStates"
 
@@ -45,11 +45,23 @@ export default function ProcessingView (
     dispatch({ type: "verificationError" })
   }
 
+  function dispatchSuccess () {
+    dispatch({ type: "verificationSuccess" })
+  }
+
   return (
     <div className="p-2 m-2">
       {
         (socketClosed && outcome === "success") &&
-        <div>Verification successful!</div>
+        <div className="flex justify-between items-center font-semibold text-sm">
+          <div className="text-green-600">Verification successful!</div>
+          <button type="button" onClick={dispatchSuccess} >
+            <div className="flex gap-1 text-gray-800 items-center">
+              <ArrowRightIcon className="w-5 h-5"/>
+              <div className="font-semibold text-sm">See verified sources</div>
+            </div>
+          </button>
+        </div>
       }
       {
         (socketClosed && outcome === "error") &&
@@ -65,9 +77,8 @@ export default function ProcessingView (
       }
       {
         !socketClosed &&
-        <div>Your sources are being verified.</div>
+        <div className="font-semibold text-sm">Your sources are being verified.</div>
       }
-      {/* <label htmlFor="logs" className="block my-2 text-sm font-medium text-gray-900">Processing logs</label> */}
       <textarea className="mt-2 p-4 h-60 rounded border border-gray-300 bg-gray-50 text-gray-800 w-full text-sm font-mono" value={lines.join("")} readOnly={true}></textarea>
     </div>
   )
