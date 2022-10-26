@@ -8,6 +8,10 @@ const container = document.getElementById("app")
 container!.className += "theme default"
 const root = createRoot(container!)
 
+// React in strict mode executes twice the side effects
+// to catch errors. Only applies in development environment.
+//
+// https://reactjs.org/docs/strict-mode.html
 root.render(
   <React.StrictMode>
     <App />
