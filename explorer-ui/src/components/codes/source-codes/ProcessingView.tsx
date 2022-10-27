@@ -1,6 +1,8 @@
 import { ArrowPathIcon, ArrowRightIcon } from "@heroicons/react/24/outline"
 import React, { Dispatch, useEffect, useState } from "react"
+import { useChainProperties } from "../../../contexts/ChainContext"
 import { SourceTabAction } from "../../../types/componentStates"
+import api from "./verifierApi"
 
 export default function ProcessingView (
   {
@@ -11,32 +13,27 @@ export default function ProcessingView (
     dispatch: Dispatch<SourceTabAction>
   }
 ) {
+  const { info } = useChainProperties()
   const [lines, setLines] = useState<string[]>([])
   const [outcome, setOutcome] = useState("error")
   const [socketClosed, setSocketClosed] = useState(false)
 
   useEffect(() => {
     // TODO: Extract WS endpoint to env
-    const socket = new WebSocket(`ws://127.0.0.1:3000/tail/rococoContracts/${id}`)
-
-    // Connection opened
-    socket.addEventListener("open", (event) => {
-      console.log("socket opened", event)
-    })
+    const socket = api.tailWebsocket({ chain: info, codeHash: id })
 
     // Listen for messages
-    socket.addEventListener("message", (event) => {
-      console.log("Message from server ", event.data)
-
-      if (event.data === "special string to match success") {
-        setOutcome("success")
+    socket.addEventListener("message", ({ data }) => {
+      if (typeof data === "string") {
+        if (data.length > 0 && data.charAt(0) === "✅") {
+          setOutcome("success")
+        }
+        setLines(prevState => (prevState.concat(data)))
       }
-      setLines(prevState => (prevState.concat(event.data)))
     })
 
     // Connection closed
     socket.addEventListener("close", (event) => {
-      console.log("socket closed", event)
       setSocketClosed(true)
     })
   }, [id])

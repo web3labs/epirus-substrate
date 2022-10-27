@@ -6,9 +6,8 @@ import VerifiedView from "./VerifiedView"
 import { SourceTabAction, SourceTabState } from "../../../types/componentStates"
 import UnverifiedView from "./UnverifiedView"
 import { PageLoading } from "../../loading/Loading"
-
-const BASE_URL = "https://bc8a6852-7bb3-42b6-acde-63f49014975f.mock.pstmn.io"
-// const BASE_URL = "http://127.0.0.1:3000"
+import api from "./verifierApi"
+import { useChainProperties } from "../../../contexts/ChainContext"
 
 const reducer: Reducer<SourceTabState, SourceTabAction> = (state, action) => {
   if (action.type === "fetched") {
@@ -31,19 +30,23 @@ const reducer: Reducer<SourceTabState, SourceTabAction> = (state, action) => {
 }
 
 export default function SourceTab ({ id }:{id: string}) {
+  const { info } = useChainProperties()
   const [state, dispatch] = useReducer(reducer, { action: "init", status: undefined, error: undefined })
   const { action, status, error } = state
 
   useEffect(() => {
-    // TODO: Extract endpoint to env var
-    fetch(`${BASE_URL}/info/rococoContracts/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
+    async function getStatus () {
+      try {
+        const data = await api.info({ chain: info, codeHash: id })
         dispatch({ type: "fetched", status: data.status, error: data.error })
-      })
-      .catch(error => {
-        dispatch({ type: "networkError", error })
-      })
+      } catch (error) {
+        if (error instanceof Error) {
+          dispatch({ type: "networkError", error: error.message })
+        }
+      }
+    }
+
+    getStatus()
   }, [action])
 
   if (error) {
@@ -71,7 +74,7 @@ export default function SourceTab ({ id }:{id: string}) {
         status === "processing" && <ProcessingView id={id} dispatch={dispatch}/>
       }
       {
-        status === "verified" && <VerifiedView/>
+        status === "verified" && <VerifiedView id={id}/>
       }
     </>
   )

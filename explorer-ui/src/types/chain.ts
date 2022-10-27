@@ -5,6 +5,8 @@ export interface TokenProps {
 
 export interface ChainProperties {
   name: string | null
+  // info name for endpoint resolution
+  info?: string
   version: string | null
   ss58Format: number | null
   token: TokenProps

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from "react"
 import { useClient } from "urql"
 import { ChainProperties } from "../types/chain"
+import resolveInfoFromName from "./chainNames"
 
 const NULL_CHAIN_PROPERTIES : ChainProperties = {
   name: null,
@@ -47,7 +48,11 @@ export default function ChainContextProvider ({ children }: React.PropsWithChild
         }
 
         if (data?.chainProperties?.length > 0) {
-          setChainProps(data.chainProperties[0])
+          const chainProps = data.chainProperties[0]
+          setChainProps({
+            ...chainProps,
+            info: resolveInfoFromName(chainProps.name)
+          })
         }
       } catch (e) {
         console.log(e)
