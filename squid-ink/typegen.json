@@ -1,6 +1,6 @@
 {
-  "outDir": "src/chains/local/types",
-  "specVersions": "https://suba.epirus.io/pom-archive/graphql",
+  "outDir": "src/chains/rococo/types",
+  "specVersions": "https://suba.epirus.io/archive/graphql",
   "typesBundle": "kusama",
   "events": [
     "Balances.Transfer",
