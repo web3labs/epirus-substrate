@@ -1,7 +1,7 @@
 import { CheckIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline"
 import React, { ReactElement, useState } from "react"
 
-export default function Copy ({ text, children }: {text: string, children: ReactElement}) {
+export default function Copy ({ text, children }: {text: string, children?: ReactElement}) {
   const [copied, setCopied] = useState(false)
 
   return (
