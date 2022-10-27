@@ -34,14 +34,14 @@ export async function saveAll<E extends Entity | undefined>(
 }
 
 export function createEvent(extrinsicEntity: Extrinsic, event: Event): Events {
-  const { id, name, call, indexInBlock } = event;
+  const { id, name, call, pos } = event;
   return new Events({
     id,
     extrinsic: extrinsicEntity,
     name,
     method: call?.name,
     blockNumber: extrinsicEntity.blockNumber.toString(),
-    indexInBlock: indexInBlock.toString(),
+    indexInBlock: pos.toString(),
     createdAt: extrinsicEntity.createdAt,
     params: <Args>event.args,
   });

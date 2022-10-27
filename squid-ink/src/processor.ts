@@ -4,6 +4,7 @@ import "./initialise";
 import { SubstrateBatchProcessor } from "@subsquid/substrate-processor";
 import { TypeormDatabase } from "@subsquid/typeorm-store";
 import { createLogger } from "@subsquid/logger";
+import { Item } from "handlers/types";
 import { ChainPropertiesStore } from "./chain-config";
 import { registry } from "./handlers";
 import { config } from "./config";
@@ -48,7 +49,7 @@ processor.run(new TypeormDatabase(), async (ctx) => {
   for (const { items, header } of ctx.blocks) {
     for (const item of items) {
       try {
-        const handler = registry.resolve(item);
+        const handler = registry.resolve(item as unknown as Item);
         if (handler) {
           log.debug({ item, header }, "Handling item");
           await handler(ctx, header);

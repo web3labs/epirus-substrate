@@ -5,28 +5,13 @@ import {
   QualifiedName,
   SubstrateCall,
 } from "@subsquid/substrate-processor";
+import {
+  CallItem,
+  EventItem,
+} from "@subsquid/substrate-processor/lib/interfaces/dataSelection";
 import { Store } from "@subsquid/typeorm-store";
 
-export type Item = {
-  kind: string;
-  name: string;
-  event?: SubsquidEvent;
-  call?: SubsquidCall;
-  extrinsic?: SubstrateExtrinsic;
-};
-
-export type EventItem = {
-  kind: string;
-  name: string;
-  event: Event;
-};
-
-export type CallItem = {
-  kind: string;
-  name: string;
-  call: SubstrateCall;
-  extrinsic: SubstrateExtrinsic;
-};
+export type Item = EventItem<"*", true> | CallItem<"*", true>;
 
 export interface SubsquidEvent {
   id: string;
@@ -46,7 +31,10 @@ export interface SubsquidCall {
   pos: number;
 }
 
-export type Ctx = BatchContext<Store, Item>;
+export type Ctx = BatchContext<
+  Store,
+  EventItem<"*", false> | CallItem<"*", false>
+>;
 
 export interface EventHandlerParams {
   ctx: Ctx;
@@ -57,11 +45,30 @@ export interface EventHandlerParams {
 export interface Event {
   id: string;
   name: string;
-  indexInBlock: number;
+  pos: number;
   call?: SubstrateCall;
   extrinsic?: SubstrateExtrinsic;
   args: Record<string, unknown>;
 }
+/*
+| (Omit<
+  { id: string; name: string; pos: number } & {
+    call?: undefined;
+  } & {} & { extrinsic?: undefined } & {},
+  "name"
+> & { name: "*" })
+| (Omit<
+  { id: string; name: string; pos: number } & {} & {
+    call: {
+      id: string;
+      name: string;
+      pos: number;
+      success: boolean;
+    };
+  } & {} & {},
+  "name"
+> & { name: "*" })
+*/
 
 export interface ContractInstantiatedArgs {
   code?: string;

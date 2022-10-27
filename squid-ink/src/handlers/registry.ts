@@ -6,14 +6,12 @@ import {
 import {
   Ctx,
   EventHandlerCallback,
-  EventItem,
   ExtrinsicHandlerCallback,
   Item,
   ItemHandler,
-  Event,
-  CallItem,
   EventHandler,
   ExtrinsicHandler,
+  Event,
 } from "./types";
 
 export class HandlerRegistry {
@@ -50,7 +48,7 @@ export class HandlerRegistry {
   resolve(item: Item): ItemHandler | undefined {
     switch (item.kind) {
       case "event": {
-        const eventItem = <EventItem>item;
+        const eventItem = item;
         const handler = this.eventHandlers.get(eventItem.name);
 
         if (handler === undefined) {
@@ -64,7 +62,7 @@ export class HandlerRegistry {
         return curried(eventItem.event);
       }
       case "call": {
-        const callItem = <CallItem>item;
+        const callItem = item;
         const handler = this.extrinsicHandlers.get(callItem.name);
 
         if (handler === undefined) {
@@ -82,9 +80,7 @@ export class HandlerRegistry {
       }
       default:
         throw new Error(
-          `Kind of item [${
-            item.kind
-          }] unknown when getting handler for item ${JSON.stringify(item)}`
+          `Unknown when getting handler for item ${JSON.stringify(item)}`
         );
     }
   }
