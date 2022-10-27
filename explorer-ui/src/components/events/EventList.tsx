@@ -8,7 +8,7 @@ import SortBy from "../query/SortBy"
 import EventRow from "./EventRow"
 
 const QUERY = `
-query($where: ContractEmittedEventWhereInput = {} ,$first: Int = 5, $after: String = "", $orderBy: [ContractEmittedEventOrderByInput!]! = [createdAt_DESC]) {
+query($where: ContractEmittedEventWhereInput = {} ,$first: Int = 5, $after: String = null, $orderBy: [ContractEmittedEventOrderByInput!]! = [createdAt_DESC]) {
   contractEmittedEventsConnection(where: $where, orderBy: $orderBy, after: $after, first: $first) {
     totalCount
     edges {

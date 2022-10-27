@@ -22,7 +22,7 @@ import CodeHash from "./CodeHash"
 import { PageLoading } from "../loading/Loading"
 
 const QUERY = `
-query($id: ID!) {
+query($id: String!) {
   contractCodes(where: {id_eq: $id}) {
     id
     createdAt

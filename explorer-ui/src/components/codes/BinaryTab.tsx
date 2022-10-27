@@ -6,7 +6,7 @@ import { PageLoading } from "../loading/Loading"
 import { HexView } from "./HexView"
 
 const QUERY = `
-query($id: ID!) {
+query($id: String!) {
   contractCodes(where: {id_eq: $id}) {
     code
   }

@@ -25,7 +25,7 @@ import { ContractTermination } from "./ContractTermination"
 import { DefinitionList, Definition } from "../commons/Definitions"
 
 const QUERY = `
-query($id: ID!, $codeHashChangeOrderBy: [CodeHashChangeOrderByInput] ) {
+query($id: String!, $codeHashChangeOrderBy: [CodeHashChangeOrderByInput!] ) {
   contracts(where: {id_eq: $id}) {
     createdAt
     id

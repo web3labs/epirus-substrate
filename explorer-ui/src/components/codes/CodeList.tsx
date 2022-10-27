@@ -9,7 +9,7 @@ import CodeRow from "./CodeRow"
 import Filters from "../query/Filters"
 
 const QUERY = `
-query($where: ContractCodeWhereInput = {} ,$first: Int = 5, $after: String = "", $orderBy: [ContractCodeOrderByInput!]! = [createdAt_DESC]) {
+query($where: ContractCodeWhereInput = {} ,$first: Int = 5, $after: String = null, $orderBy: [ContractCodeOrderByInput!]! = [createdAt_DESC]) {
   contractCodesConnection(where: $where, orderBy: $orderBy, after: $after, first: $first) {
     totalCount
     edges {

@@ -9,7 +9,7 @@ import ListQuery from "../query/ListQuery"
 import Filters from "../query/Filters"
 
 const QUERY = `
-query($where: AccountWhereInput = {}, $first: Int!, $after: String = "", $orderBy: [AccountOrderByInput!]! = [id_ASC]) {
+query($where: AccountWhereInput = {}, $first: Int!, $after: String = null, $orderBy: [AccountOrderByInput!]! = [id_ASC]) {
   accountsConnection(where: $where, orderBy: $orderBy, first: $first, after: $after) {
     totalCount
     pageInfo {

@@ -13,6 +13,11 @@ export default function Pagination ({ page, pageQuery, setQuery }: {
   const { first } = pageQuery
   const { hasNextPage, hasPreviousPage, startCursor, endCursor } = pageInfo
 
+  function getStartCursor () {
+    const start = (parseInt(startCursor) - (first + 1))
+    return start < 1 ? undefined : start.toString()
+  }
+
   if (hasNextPage || hasPreviousPage) {
     return (
       <div className="w-full flex justify-between items-center border-t border-gray-200 mt-auto">
@@ -25,7 +30,7 @@ export default function Pagination ({ page, pageQuery, setQuery }: {
             ? <span
               onClick={() => setQuery(Object.assign({}, pageQuery,
                 {
-                  after: (parseInt(startCursor) - (first + 1)).toString()
+                  after: getStartCursor()
                 })
               )}
               aria-label="previous page"

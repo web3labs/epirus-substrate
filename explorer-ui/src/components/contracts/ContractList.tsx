@@ -9,7 +9,7 @@ import ListQuery from "../query/ListQuery"
 import Filters from "../query/Filters"
 
 const QUERY = `
-query($where: ContractWhereInput = {}, $first: Int!, $after: String = "", $orderBy: [ContractOrderByInput!]! = [createdAt_DESC]) {
+query($where: ContractWhereInput = {}, $first: Int!, $after: String = null, $orderBy: [ContractOrderByInput!]! = [createdAt_DESC]) {
   contractsConnection(where: $where, orderBy: $orderBy, first: $first, after: $after) {
     totalCount
     pageInfo {

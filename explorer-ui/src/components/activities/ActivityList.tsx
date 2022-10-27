@@ -9,7 +9,7 @@ import ActivityRow from "./ActivityRow"
 import Filters from "../query/Filters"
 
 const QUERY = `
-query($where: ActivityWhereInput = {} ,$first: Int = 5, $after: String = "", $orderBy: [ActivityOrderByInput!]! = [createdAt_DESC]) {
+query($where: ActivityWhereInput = {} ,$first: Int = 5, $after: String = null, $orderBy: [ActivityOrderByInput!]! = [createdAt_DESC]) {
   activitiesConnection(where: $where, orderBy: $orderBy, after: $after, first: $first) {
     totalCount
     edges {

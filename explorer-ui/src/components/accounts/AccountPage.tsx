@@ -21,7 +21,7 @@ import { longDateTime } from "../../formats/time"
 import { PageLoading } from "../loading/Loading"
 
 const QUERY = `
-query($id: ID!) {
+query($id: String!) {
   accounts(where: {id_eq: $id}) {
     id
     tags

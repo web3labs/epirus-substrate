@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom"
 import { linkOf, SearchResult, SearchResultOption, SearchResults } from "./SearchResults"
 
 const QUERY = `
-query($str: ID!, $limit: Int = 5) {
+query($str: String!, $limit: Int = 5) {
   contracts(where: { id_startsWith: $str }, limit: $limit) {
     id
   }
