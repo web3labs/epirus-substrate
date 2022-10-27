@@ -39,6 +39,11 @@ export class BalancesAccountStorage {
     return this._chain.queryStorage(this.blockHash, 'Balances', 'Account', keys.map(k => [k]))
   }
 
+  async getAllAsV1(): Promise<(v1.AccountData)[]> {
+    assert(this.isV1)
+    return this._chain.queryStorage(this.blockHash, 'Balances', 'Account')
+  }
+
   /**
    * Checks whether the storage item is defined for the current chain version.
    */
@@ -77,6 +82,11 @@ export class ContractsCodeStorageStorage {
   async getManyAsV31(keys: Uint8Array[]): Promise<(v31.PrefabWasmModule | undefined)[]> {
     assert(this.isV31)
     return this._chain.queryStorage(this.blockHash, 'Contracts', 'CodeStorage', keys.map(k => [k]))
+  }
+
+  async getAllAsV31(): Promise<(v31.PrefabWasmModule)[]> {
+    assert(this.isV31)
+    return this._chain.queryStorage(this.blockHash, 'Contracts', 'CodeStorage')
   }
 
   /**
@@ -123,6 +133,11 @@ export class ContractsContractInfoOfStorage {
     return this._chain.queryStorage(this.blockHash, 'Contracts', 'ContractInfoOf', keys.map(k => [k]))
   }
 
+  async getAllAsV31(): Promise<(v31.RawContractInfo)[]> {
+    assert(this.isV31)
+    return this._chain.queryStorage(this.blockHash, 'Contracts', 'ContractInfoOf')
+  }
+
   /**
    * Checks whether the storage item is defined for the current chain version.
    */
@@ -163,6 +178,11 @@ export class ContractsOwnerInfoOfStorage {
     return this._chain.queryStorage(this.blockHash, 'Contracts', 'OwnerInfoOf', keys.map(k => [k]))
   }
 
+  async getAllAsV31(): Promise<(v31.OwnerInfo)[]> {
+    assert(this.isV31)
+    return this._chain.queryStorage(this.blockHash, 'Contracts', 'OwnerInfoOf')
+  }
+
   /**
    * Checks whether the storage item is defined for the current chain version.
    */
@@ -201,6 +221,11 @@ export class SystemAccountStorage {
   async getManyAsV1(keys: Uint8Array[]): Promise<(v1.AccountInfo)[]> {
     assert(this.isV1)
     return this._chain.queryStorage(this.blockHash, 'System', 'Account', keys.map(k => [k]))
+  }
+
+  async getAllAsV1(): Promise<(v1.AccountInfo)[]> {
+    assert(this.isV1)
+    return this._chain.queryStorage(this.blockHash, 'System', 'Account')
   }
 
   /**
