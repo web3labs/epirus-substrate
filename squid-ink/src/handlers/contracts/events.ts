@@ -46,27 +46,35 @@ const contractsInstantiatedHandler: EventHandler = {
   ): Promise<void> => {
     const { store, log } = ctx;
     const { extrinsic, call } = event;
-    const { deployer, contract } = new NormalisedContractsInstantiatedEvent(
-      ctx,
-      event
-    ).resolve();
-    const deployerAccount = await getOrCreateAccount(store, deployer, block);
-    const contractAccount = await getOrCreateAccount(store, contract, block);
 
-    const { codeHash, trieId, storageDeposit } =
-      await new NormalisedContractInfoOfStorage(ctx, block).get(contract);
-    const contractCodeEntity = await ctx.store.get(
-      ContractCode,
-      toHex(codeHash)
-    );
-
-    if (contractCodeEntity == null) {
-      throw new Error(
-        `ContractCode entity is not found in the database for contract address [${contract}], please make sure that it is created and saved first.`
-      );
-    }
     if (extrinsic && call) {
+      const { deployer, contract } = new NormalisedContractsInstantiatedEvent(
+        ctx,
+        event
+      ).resolve();
+      const deployerAccount = await getOrCreateAccount(store, deployer, block);
+      const contractAccount = await getOrCreateAccount(store, contract, block);
       const extrinsicEntity = createExtrinsic(extrinsic, call, block);
+
+      const { codeHash, trieId, storageDeposit } =
+        await new NormalisedContractInfoOfStorage(ctx, block).get(contract);
+
+      let contractCodeEntity = await ctx.store.get(
+        ContractCode,
+        toHex(codeHash)
+      );
+
+      if (contractCodeEntity == null) {
+        const ents = await createContractCodeEntities({
+          ctx,
+          block,
+          codeHash: toHex(codeHash),
+          extrinsicEntity,
+        });
+        await saveAll(store, [ents.codeOwnerEntity, ents.contractCodeEntity]);
+        contractCodeEntity = ents.contractCodeEntity;
+      }
+
       const eventEntity = createEvent(extrinsicEntity, event);
 
       const args = extrinsicEntity.args
