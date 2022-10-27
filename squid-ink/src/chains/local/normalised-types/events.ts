@@ -161,7 +161,10 @@ export class NormalisedContractEmittedEvent extends ContractsContractEmittedEven
 export class NormalisedContractTerminatedEvent extends ContractsTerminatedEvent {
   resolve(): ResolvedContractTerminatedEvent {
     if (this.isV100) {
-      const { contract, beneficiary } = this.asV100;
+      const { contract, beneficiary } = this.asV100 as {
+        contract: Uint8Array;
+        beneficiary: Uint8Array;
+      };
       return {
         contract: ss58.codec(ss58Format).encode(contract),
         beneficiary: ss58.codec(ss58Format).encode(beneficiary),

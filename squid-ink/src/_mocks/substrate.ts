@@ -29,6 +29,8 @@ export const block: SubstrateBlock = {
   parentHash:
     "0x239e3b7ba93cbfef4f8f36cd76d5b9ce7bd4a73e125815f3390e1ab860d2a48d",
   timestamp: 1658395014000,
+  extrinsicsRoot: "0x0",
+  stateRoot: "0x0",
   specId: "",
 };
 
@@ -117,7 +119,7 @@ export function getMockEvent({
   return {
     id: "0000682013-000004-9ecc4",
     name,
-    indexInBlock: 4,
+    pos: 4,
     call: withCall ? getMockCall({ name: "Contracts.call" }) : undefined,
     extrinsic: withExtrinsic
       ? getMockExtrinsic({ withSignature: false })
