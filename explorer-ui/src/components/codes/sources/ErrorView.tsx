@@ -1,7 +1,7 @@
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline"
 import React from "react"
 
-export default function ErrorStatusView ({ id }:{id: string}) {
+export default function ErrorStatusView ({ codeHash }:{codeHash: string}) {
   function getErrorLogs () {
     console.log("download error logs here")
   }

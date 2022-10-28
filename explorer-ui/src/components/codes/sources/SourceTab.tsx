@@ -64,17 +64,17 @@ export default function SourceTab ({ id }:{id: string}) {
   return (
     <>
       {
-        status === "error" && <ErrorStatusView id={id}/>
+        status === "error" && <ErrorStatusView codeHash={id}/>
       }
       {
         (status === "unknown" || status === "error") &&
-        <UnverifiedView id={id} dispatch={dispatch}/>
+        <UnverifiedView codeHash={id} dispatch={dispatch}/>
       }
       {
-        status === "processing" && <ProcessingView id={id} dispatch={dispatch}/>
+        status === "processing" && <ProcessingView codeHash={id} dispatch={dispatch}/>
       }
       {
-        status === "verified" && <VerifiedView id={id}/>
+        status === "verified" && <VerifiedView codeHash={id}/>
       }
     </>
   )

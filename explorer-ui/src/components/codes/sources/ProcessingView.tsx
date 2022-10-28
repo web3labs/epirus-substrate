@@ -5,11 +5,8 @@ import { SourceTabAction } from "../../../types/componentStates"
 import api from "../../../apis/verifierApi"
 
 export default function ProcessingView (
-  {
-    id,
-    dispatch
-  } : {
-    id: string,
+  { codeHash, dispatch } : {
+    codeHash: string,
     dispatch: Dispatch<SourceTabAction>
   }
 ) {
@@ -19,7 +16,7 @@ export default function ProcessingView (
   const [socketClosed, setSocketClosed] = useState(false)
 
   useEffect(() => {
-    const socket = api.tailWebsocket({ chain: info, codeHash: id })
+    const socket = api.tailWebsocket({ chain: info, codeHash })
 
     // Listen for messages
     socket.addEventListener("message", ({ data }) => {
@@ -35,7 +32,7 @@ export default function ProcessingView (
     socket.addEventListener("close", (event) => {
       setSocketClosed(true)
     })
-  }, [id])
+  }, [codeHash])
 
   function dispatchError () {
     dispatch({ type: "verificationError" })

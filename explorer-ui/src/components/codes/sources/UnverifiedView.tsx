@@ -4,11 +4,19 @@ import { FileRejection, useDropzone, FileError } from "react-dropzone"
 import { Link } from "react-router-dom"
 import { SourceTabAction } from "../../../types/componentStates"
 import { formatBytes } from "../../../formats/bytes"
+import api from "../../../apis/verifierApi"
+import { useChainProperties } from "../../../contexts/ChainContext"
 
-export default function UnverifiedView ({ id, dispatch }:{id: string, dispatch: Dispatch<SourceTabAction>}) {
+export default function UnverifiedView (
+  { codeHash, dispatch } :{
+    codeHash: string,
+    dispatch: Dispatch<SourceTabAction>
+  }
+) {
   const [submitDisabled, setSubmitDisabled] = useState(true)
   const [file, setFile] = useState<File>()
   const [fileRejection, setFileRejection] = useState<FileRejection>()
+  const { info } = useChainProperties()
 
   const onDropAccepted = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles !== undefined && acceptedFiles.length > 0) {
@@ -46,15 +54,9 @@ export default function UnverifiedView ({ id, dispatch }:{id: string, dispatch: 
     const formData = new FormData()
     formData.append("File", file)
 
-    const requestOptions = {
-      method: "POST",
-      body: formData
-    }
-    // TODO: Extract endpoint to env var
-    fetch(`http://127.0.0.1:3000/upload/rococoContracts/${id}`, requestOptions)
+    api.upload({ chain: info, codeHash }, formData)
       .then(response => response.json())
       .then(data => {
-        // data { location: "/info/rococoContracts/0x3d89b4a26231209ce0190764c2104130887b99b724b7fdef598da58d40748ba3" }
         setTimeout(() => dispatch({ type: "uploaded" }), 10)
       })
       .catch(error => {
