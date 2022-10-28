@@ -3,6 +3,10 @@ export interface VerifierApiParams {
   codeHash: string
 }
 
+/**
+ * Exposes source code verification server APIs.
+ * https://github.com/web3labs/ink-verifier-server
+ */
 class VerifierApi {
   private api: string
   private ws: string

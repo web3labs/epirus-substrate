@@ -2,7 +2,7 @@ import { ArrowPathIcon, ArrowRightIcon } from "@heroicons/react/24/outline"
 import React, { Dispatch, useEffect, useState } from "react"
 import { useChainProperties } from "../../../contexts/ChainContext"
 import { SourceTabAction } from "../../../types/componentStates"
-import api from "./verifierApi"
+import api from "../../../apis/verifierApi"
 
 export default function ProcessingView (
   {
@@ -19,7 +19,6 @@ export default function ProcessingView (
   const [socketClosed, setSocketClosed] = useState(false)
 
   useEffect(() => {
-    // TODO: Extract WS endpoint to env
     const socket = api.tailWebsocket({ chain: info, codeHash: id })
 
     // Listen for messages

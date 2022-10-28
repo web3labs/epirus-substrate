@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useChainProperties } from "../../../contexts/ChainContext"
-import api from "./verifierApi"
+import api from "../../../apis/verifierApi"
 
 export default function VerifiedView ({
   id

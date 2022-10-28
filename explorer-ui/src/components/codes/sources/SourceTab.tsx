@@ -6,7 +6,7 @@ import VerifiedView from "./VerifiedView"
 import { SourceTabAction, SourceTabState } from "../../../types/componentStates"
 import UnverifiedView from "./UnverifiedView"
 import { PageLoading } from "../../loading/Loading"
-import api from "./verifierApi"
+import api from "../../../apis/verifierApi"
 import { useChainProperties } from "../../../contexts/ChainContext"
 
 const reducer: Reducer<SourceTabState, SourceTabAction> = (state, action) => {

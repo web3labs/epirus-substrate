@@ -20,7 +20,7 @@ import { getArg } from "../../utils/args"
 import { longDateTime } from "../../formats/time"
 import CodeHash from "./CodeHash"
 import { PageLoading } from "../loading/Loading"
-import SourceTab from "./source-codes/SourceTab"
+import SourceTab from "./sources/SourceTab"
 
 const QUERY = `
 query($id: String!) {
