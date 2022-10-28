@@ -36,6 +36,16 @@ class VerifierApi {
     return await res.json()
   }
 
+  async upload (
+    { chain = "local", codeHash } : VerifierApiParams,
+    formData: FormData
+  ) : Promise<Response> {
+    return fetch(`${this.api}/upload/${chain}/${codeHash}`, {
+      method: "POST",
+      body: formData
+    })
+  }
+
   tailWebsocket ({ chain = "local", codeHash } : VerifierApiParams) {
     return new WebSocket(`${this.ws}/tail/${chain}/${codeHash}`)
   }
