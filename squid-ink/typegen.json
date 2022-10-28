@@ -1,7 +1,7 @@
 {
-  "outDir": "src/chains/rococo/types",
-  "specVersions": "https://suba.epirus.io/archive/graphql",
-  "typesBundle": "kusama",
+  "outDir": "src/chains/shibuya/types",
+  "specVersions": "https://shibuya.archive.subsquid.io/graphql",
+  "typesBundle": "shibuya",
   "events": [
     "Balances.Transfer",
     "Balances.Endowed",

@@ -1,1 +1,1 @@
-window.__RUNTIME_CONFIG__ = {"PORT":"3300","REACT_APP_SQUID_ENDPOINT":"https://suba.epirus.io/squid/graphql"};
+window.__RUNTIME_CONFIG__ = {"PORT":"3300","REACT_APP_SQUID_ENDPOINT":"http://localhost:4350/graphql"};
