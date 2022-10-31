@@ -3,6 +3,25 @@ export interface VerifierApiParams {
   codeHash: string
 }
 
+export interface ResourceInfo {
+  name: string
+  type: string
+  mtime: string
+  size?: number
+}
+
+interface FileData {
+  type: "file"
+  data: string
+}
+
+export interface StructureData {
+  type: "json"
+  data: ResourceInfo[]
+}
+
+export type ResourceData = FileData | StructureData
+
 /**
  * Exposes source code verification server APIs.
  * https://github.com/web3labs/ink-verifier-server
@@ -10,7 +29,6 @@ export interface VerifierApiParams {
 class VerifierApi {
   private api: string
   private ws: string
-  private rsc: string
 
   constructor () {
     this.api = window.__RUNTIME_CONFIG__?.REACT_APP_VERIFIER_ENDPOINT ||
@@ -20,19 +38,10 @@ class VerifierApi {
     this.ws = window.__RUNTIME_CONFIG__?.REACT_APP_VERIFIER_WS_ENDPOINT ||
     process.env.REACT_APP_VERIFIER_WS_ENDPOINT ||
     "ws://127.0.0.1:3000"
-
-    this.rsc = window.__RUNTIME_CONFIG__?.REACT_APP_VERIFIER_RSC_ENDPOINT ||
-    process.env.REACT_APP_VERIFIER_RSC_ENDPOINT ||
-    "http://127.0.0.1:8080"
   }
 
   async info ({ chain = "local", codeHash } : VerifierApiParams) {
     const res = await fetch(`${this.api}/info/${chain}/${codeHash}`)
-    return await res.json()
-  }
-
-  async resources ({ chain = "local", codeHash } : VerifierApiParams) {
-    const res = await fetch(`${this.rsc}/${chain}/${codeHash}`)
     return await res.json()
   }
 
@@ -44,6 +53,16 @@ class VerifierApi {
       method: "POST",
       body: formData
     })
+  }
+
+  async metadata (codeHash: string) {
+    const res = await fetch(`${this.api}/contracts/${codeHash}/metadata.json`)
+    return await res.json()
+  }
+
+  async directoryList (codeHash: string) {
+    const res = await fetch(`${this.api}/contracts/${codeHash}/src`)
+    return await res.json()
   }
 
   tailWebsocket ({ chain = "local", codeHash } : VerifierApiParams) {
