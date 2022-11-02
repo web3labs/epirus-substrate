@@ -65,6 +65,11 @@ class VerifierApi {
     return await res.json()
   }
 
+  async resource ({ codeHash, path } : { codeHash: string, path: string }) {
+    const res = await fetch(`${this.api}/contracts/${codeHash}/src/${path}`)
+    return await res.text()
+  }
+
   tailWebsocket ({ chain = "local", codeHash } : VerifierApiParams) {
     return new WebSocket(`${this.ws}/tail/${chain}/${codeHash}`)
   }

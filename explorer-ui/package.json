@@ -17,6 +17,7 @@
     "@types/react-dom": "^18.0.8",
     "debounce": "^1.2.1",
     "graphql": "^16.6.0",
+    "highlight.js": "^11.6.0",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
