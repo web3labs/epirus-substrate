@@ -29,7 +29,10 @@ const reducer: Reducer<SourceTabState, SourceTabAction> = (state, action) => {
   }
 }
 
-export default function SourceTab ({ id }:{id: string}) {
+export default function SourceTab (
+  { id } :
+  { id: string }
+) {
   const { info } = useChainProperties()
   const [state, dispatch] = useReducer(reducer, { action: "init", status: undefined, error: undefined })
   const { action, status, error } = state
@@ -49,6 +52,7 @@ export default function SourceTab ({ id }:{id: string}) {
     getStatus()
   }, [action])
 
+  // TODO: Error handling and no data view
   if (error) {
     return <div>ERROR!!!</div>
   }

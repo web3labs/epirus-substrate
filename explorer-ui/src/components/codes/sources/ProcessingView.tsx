@@ -15,7 +15,8 @@ interface EndOfLog {
 }
 
 export default function ProcessingView (
-  { codeHash, dispatch } : {
+  { codeHash, dispatch } :
+  {
     codeHash: string,
     dispatch: Dispatch<SourceTabAction>
   }

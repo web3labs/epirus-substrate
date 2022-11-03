@@ -30,7 +30,10 @@ export interface ContractMetadata {
   version: string
 }
 
-export default function MetadataView ({ metadata }: {metadata: ContractMetadata}) {
+export default function MetadataView (
+  { metadata } :
+  { metadata: ContractMetadata }
+) {
   const [open, setOpen] = useState(false)
   const { contract, source } = metadata
   const { build_info } = source

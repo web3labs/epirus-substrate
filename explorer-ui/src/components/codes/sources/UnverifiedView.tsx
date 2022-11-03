@@ -8,7 +8,8 @@ import api from "../../../apis/verifierApi"
 import { useChainProperties } from "../../../contexts/ChainContext"
 
 export default function UnverifiedView (
-  { codeHash, dispatch } :{
+  { codeHash, dispatch } :
+  {
     codeHash: string,
     dispatch: Dispatch<SourceTabAction>
   }
