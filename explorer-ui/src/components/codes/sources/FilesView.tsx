@@ -22,6 +22,9 @@ export default function FilesView (
     codeHash: string
   }
 ) {
+  if (files.length === 0) {
+    return <div>This folder does not contain any files.</div>
+  }
   if (files.length > 10) {
     return <div>Too many files!</div>
   }
