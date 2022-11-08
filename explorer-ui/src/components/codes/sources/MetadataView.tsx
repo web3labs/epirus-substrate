@@ -1,10 +1,9 @@
 /* eslint-disable camelcase */
 import { InformationCircleIcon, ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline"
 import hljs from "highlight.js"
-import "highlight.js/styles/github.css"
 import React, { useState } from "react"
-import Copy from "../../commons/Copy"
 import { Definition } from "../../commons/Definitions"
+import SourceCodeView from "./SourceCodeView"
 
 export interface ContractMetadata {
   source: {
@@ -133,17 +132,7 @@ export default function MetadataView (
           <div className="text-sm font-semibold text-gray-500">Contract Metadata</div>
         </div>
         { metadataOpen &&
-        <div className="my-2 border border-neutral-200 rounded text-xs">
-          <div className="p-2 flex justify-between bg-neutral-100 items-center">
-            <div className="font-mono">metadata.json</div>
-            <div className="flex gap-1 items-center">
-              <Copy text={metadataAsString}/>
-            </div>
-          </div>
-          <pre className="github p-2 overflow-y-auto scroll-smooth">
-            <code dangerouslySetInnerHTML={{ __html: value }}/>
-          </pre>
-        </div>
+        <SourceCodeView name={"metadata.json"} content={metadataAsString} htmlContent={value} />
         }
       </div>
     </div>
