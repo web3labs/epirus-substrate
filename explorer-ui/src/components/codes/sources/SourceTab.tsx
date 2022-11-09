@@ -65,13 +65,15 @@ export default function SourceTab (
     return <PageLoading loading={true} />
   }
 
+  // TODO: add views for status === "metadata" and unknown
+
   return (
     <>
       {
         status === "error" && <ErrorStatusView codeHash={id}/>
       }
       {
-        (status === "unknown" || status === "error") &&
+        (status === "unverified" || status === "error") &&
         <UnverifiedView codeHash={id} dispatch={dispatch}/>
       }
       {

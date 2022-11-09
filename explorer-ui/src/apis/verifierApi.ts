@@ -45,11 +45,11 @@ class VerifierApi {
     return await res.json()
   }
 
-  async upload (
+  async verify (
     { chain = "local", codeHash } : VerifierApiParams,
     formData: FormData
   ) : Promise<Response> {
-    return fetch(`${this.api}/upload/${chain}/${codeHash}`, {
+    return fetch(`${this.api}/verify/${chain}/${codeHash}`, {
       method: "POST",
       body: formData
     })

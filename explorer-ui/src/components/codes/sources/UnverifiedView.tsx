@@ -55,7 +55,7 @@ export default function UnverifiedView (
     const formData = new FormData()
     formData.append("File", file)
 
-    api.upload({ chain: info, codeHash }, formData)
+    api.verify({ chain: info, codeHash }, formData)
       .then(response => response.json())
       .then(data => {
         setTimeout(() => dispatch({ type: "uploaded" }), 10)
