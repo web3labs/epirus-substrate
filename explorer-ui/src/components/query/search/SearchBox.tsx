@@ -166,7 +166,7 @@ export default function SearchBox () {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
             </svg>
           </div>
-          <input type="search"
+          <input type="text"
             id="default-search"
             spellCheck={false}
             className="input w-full px-10 text-sm"
