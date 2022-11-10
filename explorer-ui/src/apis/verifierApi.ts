@@ -22,6 +22,17 @@ export interface StructureData {
 
 export type ResourceData = FileData | StructureData
 
+export interface ErrorResponse {
+  code: number,
+  message: string
+}
+
+export interface InfoResponse {
+  status: "unverified" | "metadata" | "verified" | "processing" | "staging" | "error"
+}
+
+export type ApiResponse<T> = T | ErrorResponse
+
 /**
  * Exposes source code verification server APIs.
  * https://github.com/web3labs/ink-verifier-server
@@ -42,7 +53,7 @@ class VerifierApi {
 
   async info ({ chain = "local", codeHash } : VerifierApiParams) {
     const res = await fetch(`${this.api}/info/${chain}/${codeHash}`)
-    return await res.json()
+    return await res.json() as ApiResponse<InfoResponse>
   }
 
   async verify (
