@@ -11,6 +11,7 @@ import { getArgValue } from "../../utils/args"
 import { useChainProperties } from "../../contexts/ChainContext"
 import { AccountUnit } from "../commons/Text"
 import { Definition, DefinitionList } from "../commons/Definitions"
+import { ExclamationCircleIcon } from "@heroicons/react/24/outline"
 
 function typeAlias (type: string) {
   switch (type) {
@@ -76,7 +77,10 @@ export default function ActivityRow ({
             )}>
               {`${alias}`}
             </div>
-            <Label className="text-xs">{shortDate(createdAt)}</Label>
+            <div className="flex gap-1 items-center">
+              { status === "error" && <ExclamationCircleIcon height={18} width={18} className="text-orange-600"/>}
+              <Label className="text-xs">{shortDate(createdAt)}</Label>
+            </div>
           </div>
         }
         tail={
