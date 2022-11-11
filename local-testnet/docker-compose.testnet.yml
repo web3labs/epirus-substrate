@@ -1,47 +1,13 @@
 version: "3.5"
 
 services:
-  bob:
-    container_name: bob
-    # We cannot use the official image because of
-    # the instant seal configuration
-    # image: paritytech/contracts-ci-linux
+  contracts:
     image: ghcr.io/web3labs/finality-contracts-node
     volumes:
-      - .data/bob:/data/node
+      - .data/node:/data/node
+    command: --ws-external -d /data/node
     ports:
       - "9944:9944"
-    command: >
-      /usr/local/bin/node-template
-      --chain local
-      --bob
-      --base-path /data/node
-      --port 30333
-      --ws-port 9944
-      --unsafe-rpc-external
-      --unsafe-ws-external
-      --rpc-cors all
-      --pruning archive
-
-  alice:
-    container_name: alice
-    # We cannot use the official image because of
-    # the instant seal configuration
-    # image: paritytech/contracts-ci-linux
-    image: ghcr.io/web3labs/finality-contracts-node
-    volumes:
-      - .data/alice:/data/node
-    command: >
-      /usr/local/bin/node-template
-      --chain local
-      --alice
-      --base-path /data/node
-      --port 30334
-      --ws-port 9945
-      --unsafe-rpc-external
-      --unsafe-ws-external
-      --rpc-cors all
-      --pruning archive
 
 networks:
   default:

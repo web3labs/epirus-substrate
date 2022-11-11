@@ -10,13 +10,13 @@ x-environment: &envs
   PROCESSOR_PROMETHEUS_PORT: 3000
   GQL_PORT: 4000
   ARCHIVE_ENDPOINT: http://archive:8000/graphql
-  WS_ENDPOINT: ws://bob:9944
+  WS_ENDPOINT: ws://contracts:9944
   BALANCES_STORE: system
 
 services:
   squid-db:
     image: postgres:12
-    restart: always
+    restart: on-failure
     volumes:
       - .data/squid/ink/db:/var/lib/postgresql/data
     environment:
@@ -27,14 +27,16 @@ services:
   processor:
     container_name: subsquid-processor
     image: ghcr.io/web3labs/squid-ink-epirus
+    restart: on-failure
     environment: *envs
-    command: sh -c "(npx sqd db create-migration Init && npx sqd db migrate); exec npm run processor:start"
+    command: sh -c "(npx sqd db create-migration Init && npx sqd db migrate); sleep 5 && exec npm run processor:start"
     depends_on:
       - squid-db
 
   query:
     container_name: query-node
     image: ghcr.io/web3labs/squid-ink-epirus
+    restart: on-failure
     environment: *envs
     ports:
       - "4000:4000"

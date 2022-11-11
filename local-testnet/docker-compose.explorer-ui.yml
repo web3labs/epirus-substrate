@@ -7,7 +7,7 @@ services:
     environment:
       - REACT_APP_SQUID_ENDPOINT=http://localhost:4000/graphql
     ports:
-      - "80:80"
+      - "3000:80"
 
 networks:
   default:

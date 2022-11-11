@@ -19,6 +19,6 @@ Execute
 ```
 After a successful run
 
-* The UI is served at http://localhost/
+* The UI is served at http://localhost:3000/
 * The testnet WS endpoint listens at ws://localhost:9944 and can be used with [Polkadot/Substrate Portal](https://polkadot.js.org/apps/?rpc=ws%3A%2F%2F127.0.0.1%3A9944#/explorer) and [Substrate Contracts UI](https://contracts-ui.substrate.io/?rpc=ws://127.0.0.1:9944).
 

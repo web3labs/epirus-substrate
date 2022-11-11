@@ -32,7 +32,7 @@ You can find out published the published Docker images at [Epirus Substrate regi
 Example `docker-compose.yml` for Rococo Canvas
 
 ```yaml
-version: "3.4"
+version: "3.5"
 
 x-environment: &envs
   CHAIN: rococo
@@ -49,14 +49,12 @@ x-environment: &envs
 
 services:
   db:
-    container_name: subsquid-db
     image: postgres:12
     environment:
       POSTGRES_DB: squid
       POSTGRES_PASSWORD: squid
 
   processor:
-    container_name: subsquid-processor
     image: ghcr.io/web3labs/squid-ink-epirus:latest
     environment: *envs
     command: npm run processor:start
@@ -64,7 +62,6 @@ services:
       - "db"
 
   query:
-    container_name: query-node
     image: ghcr.io/web3labs/squid-ink-epirus:latest
     environment: *envs
     ports:
