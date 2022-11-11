@@ -1,1 +1,1 @@
-window.__RUNTIME_CONFIG__ = {"PORT":"3300","REACT_APP_SQUID_ENDPOINT":"http://localhost:4350/graphql","REACT_APP_VERIFIER_ENDPOINT":"http://127.0.0.1:3000","REACT_APP_VERIFIER_WS_ENDPOINT":"wss://ink-verifier.sirato.xyz/api"};
+window.__RUNTIME_CONFIG__ = {"PORT":"3300","REACT_APP_SQUID_ENDPOINT":"https://suba.epirus.io/squid/graphql","REACT_APP_VERIFIER_ENDPOINT":"http://127.0.0.1:3000","REACT_APP_VERIFIER_WS_ENDPOINT":"wss://127.0.0.1:3000"};

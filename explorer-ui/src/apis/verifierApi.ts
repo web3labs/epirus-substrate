@@ -28,7 +28,8 @@ export interface ErrorResponse {
 }
 
 export interface InfoResponse {
-  status: "unverified" | "metadata" | "verified" | "processing" | "staging" | "error"
+  status: "unverified" | "metadata" | "verified" | "processing" | "staging" | "error",
+  timestamp: string
 }
 
 export type ApiResponse<T> = T | ErrorResponse

@@ -6,14 +6,15 @@ import VerifiedView from "./VerifiedView"
 import { SourceTabAction, SourceTabState } from "../../../types/componentStates"
 import UnverifiedView from "./UnverifiedView"
 import { PageLoading } from "../../loading/Loading"
-import api, { InfoResponse } from "../../../apis/verifierApi"
+import api from "../../../apis/verifierApi"
 import { useChainProperties } from "../../../contexts/ChainContext"
 
 const reducer: Reducer<SourceTabState, SourceTabAction> = (state, action) => {
   if (action.type === "fetched") {
     return {
       ...state,
-      status: action.status
+      status: action.info?.status,
+      timestamp: action.info?.timestamp
     }
   } else if (action.type === "error") {
     return {
@@ -33,15 +34,23 @@ export default function SourceTab (
   { id: string }
 ) {
   const { info } = useChainProperties()
-  const [state, dispatch] = useReducer(reducer, { action: "init", status: undefined, error: undefined })
-  const { action, status, error } = state
+  const [state, dispatch] = useReducer(
+    reducer,
+    {
+      action: "init",
+      status: undefined,
+      timestamp: undefined,
+      error: undefined
+    }
+  )
+  const { action, status, timestamp, error } = state
 
   useEffect(() => {
     async function getStatus () {
       try {
         const res = await api.info({ chain: info, codeHash: id })
         if ("status" in res) {
-          dispatch({ type: "fetched", status: res.status })
+          dispatch({ type: "fetched", info: res })
         } else {
           dispatch({ type: "error", error: res.message })
         }
@@ -67,28 +76,22 @@ export default function SourceTab (
     return <PageLoading loading={true} />
   }
 
-  let currentView
   switch (status) {
   case "verified":
-    currentView = <VerifiedView codeHash={id}/>
-    break
+    return <VerifiedView codeHash={id}/>
   case "processing":
-    currentView = <ProcessingView codeHash={id} dispatch={dispatch}/>
-    break
+    return <ProcessingView codeHash={id} dispatch={dispatch}/>
   // TODO impl
   // case "metadata":
   //  break
   default:
-    currentView = <UnverifiedView codeHash={id} dispatch={dispatch}/>
-    break
+    return (
+      <>
+        {
+          status === "error" && <ErrorStatusView codeHash={id} timestamp={timestamp}/>
+        }
+        <UnverifiedView codeHash={id} dispatch={dispatch}/>
+      </>
+    )
   }
-
-  return (
-    <>
-      {
-        status === "error" && <ErrorStatusView codeHash={id}/>
-      }
-      {currentView}
-    </>
-  )
 }

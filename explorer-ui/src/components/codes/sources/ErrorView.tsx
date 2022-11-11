@@ -2,10 +2,13 @@ import { ArrowDownTrayIcon, ExclamationTriangleIcon } from "@heroicons/react/24/
 import React from "react"
 import api from "../../../apis/verifierApi"
 import { useChainProperties } from "../../../contexts/ChainContext"
+import { longDateTime } from "../../../formats/time"
 
 export default function ErrorStatusView (
-  { codeHash } :
-  { codeHash: string }
+  { codeHash, timestamp } :
+  { codeHash: string,
+    timestamp: string | undefined
+  }
 ) {
   const { info } = useChainProperties()
 
@@ -26,11 +29,15 @@ export default function ErrorStatusView (
     // Start download
     link.click()
   }
+
   return (
     <div onClick={getErrorLogs} className="flex flex-row m-4 p-2 cursor-pointer justify-between items-center border rounded border-red-100 bg-red-100">
       <div className="flex gap-2 text-sm items-center">
         <ExclamationTriangleIcon className="w-5 h-5" />
-        <span>The source code verification process exited with errors</span>
+        <div>
+          <span>The source code verification process exited with errors</span>
+          { timestamp && <span> on {longDateTime(new Date(timestamp))}</span>}
+        </div>
       </div>
       <div className="flex gap-2 text-xs items-center">
         <span>Download logs</span>
