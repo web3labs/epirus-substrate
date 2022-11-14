@@ -21,6 +21,11 @@ import CodeHash from "./CodeHash"
 import { PageLoading } from "../loading/Loading"
 import SourceTab from "./sources/SourceTab"
 
+const SOURCE_CODE_ENABLED = (
+  window.__RUNTIME_CONFIG__?.REACT_APP_SOURCE_CODE_ENABLED ||
+    process.env.REACT_APP_SOURCE_CODE_ENABLED ||
+    "false") === "true"
+
 const QUERY = `
 query($id: String!) {
   contractCodes(where: {id_eq: $id}) {
@@ -68,7 +73,7 @@ export default function CodePage () {
 
   const tabs : TabItem[] = useMemo(() => {
     if (params.id) {
-      return [
+      const _tabs = [
         {
           label: "Instances",
           to: "",
@@ -76,18 +81,22 @@ export default function CodePage () {
             currentId={params.id}
             where={contractByCodeHash(params.id)}
           />
-        },
-        {
+        }
+      ]
+      if (SOURCE_CODE_ENABLED) {
+        _tabs.push({
           label: "Source Code",
           to: "sources",
           element: <SourceTab id={params.id} />
-        },
-        {
-          label: "Bytecode",
-          to: "bytecode",
-          element: <BinaryTab id={params.id} />
-        }
-      ]
+        })
+      }
+      _tabs.push({
+        label: "Bytecode",
+        to: "bytecode",
+        element: <BinaryTab id={params.id} />
+      })
+
+      return _tabs
     }
     return []
   }, [params.id, fetching])
