@@ -8,6 +8,7 @@ import UnverifiedView from "./UnverifiedView"
 import { PageLoading } from "../../loading/Loading"
 import api from "../../../apis/verifierApi"
 import { useChainProperties } from "../../../contexts/ChainContext"
+import { Warning } from "../../commons/Alert"
 
 const reducer: Reducer<SourceTabState, SourceTabAction> = (state, action) => {
   if (action.type === "fetched") {
@@ -63,16 +64,18 @@ export default function SourceTab (
     getStatus()
   }, [action])
 
-  // TODO: Error handling and no data view
   if (error) {
-    return <div>ERROR!!!</div>
+    return <Warning
+      title="Error"
+      message={error || "Unknown error."}
+    />
   }
 
-  if (status === undefined) {
-    return <>No data</>
-  }
-
-  if (action === "uploading" || status === "staging") {
+  if (
+    status === undefined ||
+    action === "uploading" ||
+    status === "staging"
+  ) {
     return <PageLoading loading={true} />
   }
 
