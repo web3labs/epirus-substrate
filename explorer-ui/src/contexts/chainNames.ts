@@ -10,6 +10,10 @@ const names = [
   {
     chain: "shibuya testnet",
     endpoint: "shibuya"
+  },
+  {
+    chain: "local contracts chain",
+    endpoint: "local"
   }
 ]
 
