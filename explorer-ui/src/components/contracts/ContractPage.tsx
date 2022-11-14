@@ -16,13 +16,14 @@ import ActivityTab, { activityByAccount } from "../activities/ActivityTab"
 import EventTab from "../events/EventTab"
 import CodeLink from "../codes/CodeLink"
 import Copy from "../commons/Copy"
-import { AccountUnit } from "../commons/Text"
+import { AccountUnit, HexText } from "../commons/Text"
 import ExtrinsicSummary from "../commons/ExtrinsicSummary"
 import { longDateTime } from "../../formats/time"
 import { PageLoading } from "../loading/Loading"
 import ContractUpgrades from "./ContractUpgrade"
 import { ContractTermination } from "./ContractTermination"
 import { DefinitionList, Definition } from "../commons/Definitions"
+import { getArg } from "../../utils/args"
 
 const QUERY = `
 query($id: String!, $codeHashChangeOrderBy: [CodeHashChangeOrderByInput!] ) {
@@ -130,7 +131,7 @@ export default function ContractPage () {
   }
 
   if (data?.contracts[0] === undefined) {
-    return <span>Contract not found</span>
+    return <div className="m-3">Contract not found.</div>
   }
 
   const {
@@ -148,6 +149,7 @@ export default function ContractPage () {
   } = data?.contracts[0] as Contract
   const { balance } = account
   const isUpgraded = codeHashChanges && codeHashChanges.length > 0
+  const salt = getArg(createdFrom.args, "salt")
 
   return (
     <>
@@ -182,6 +184,11 @@ export default function ContractPage () {
                 } />
                 <Definition label="Code Hash" term={
                   <CodeLink id={contractCode.id} />
+                }/>
+                <Definition label="Salt" term={
+                  <HexText short={true}>
+                    {typeof salt === "string" ? salt : undefined}
+                  </HexText>
                 }/>
               </DefinitionList>
             </Segment>

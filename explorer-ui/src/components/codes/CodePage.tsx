@@ -15,7 +15,6 @@ import ContractTab, { contractByCodeHash } from "../contracts/ContractTab"
 import BinaryTab from "./BinaryTab"
 import Copy from "../commons/Copy"
 import ExtrinsicSummary from "../commons/ExtrinsicSummary"
-import { HexText } from "../commons/Text"
 import { getArg } from "../../utils/args"
 import { longDateTime } from "../../formats/time"
 import CodeHash from "./CodeHash"
@@ -103,7 +102,6 @@ export default function CodePage () {
 
   const { id, createdAt, owner, createdFrom, removedFrom } = data?.contractCodes[0] as ContractCode
   const depositLimit = getArg(createdFrom.args, "storageDepositLimit")
-  const salt = getArg(createdFrom.args, "salt")
 
   return (
     <>
@@ -125,11 +123,6 @@ export default function CodePage () {
               }/>
               <Definition label="Owner" term={
                 <AccountLink account={owner} size={21} />
-              }/>
-              <Definition label="Salt" term={
-                <HexText>
-                  {typeof salt === "string" ? salt : undefined}
-                </HexText>
               }/>
               <Definition label="Deposit" term={
                 <span className="font-mono">
