@@ -108,7 +108,7 @@ export default function MetadataView (
               <span>{source.compiler}</span>
             }/>
           </div>
-          <div className="col-span-2">
+          <div className="md:col-span-2">
             <Definition label="Authors" term={
               <div className="flex flex-col gap-2">
                 {contract.authors.map((a, i) => (<div key={`${i}-${a}`}>{a}</div>))}
