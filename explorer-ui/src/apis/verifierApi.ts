@@ -1,3 +1,5 @@
+import { ContractMetadata } from "../components/codes/sources/MetadataView"
+
 export interface VerifierApiParams {
   chain?: string,
   codeHash: string
@@ -69,7 +71,7 @@ class VerifierApi {
 
   async metadata (codeHash: string) {
     const res = await fetch(`${this.api}/contracts/${codeHash}/metadata.json`)
-    return await res.json()
+    return await res.json() as ApiResponse<ContractMetadata>
   }
 
   async directoryList (codeHash: string) {

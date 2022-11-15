@@ -1,9 +1,11 @@
 import { FolderIcon } from "@heroicons/react/24/solid"
 import React, { useEffect, useState } from "react"
 import api from "../../../apis/verifierApi"
+import { errMsg } from "../../../utils/errors"
+import { Warning } from "../../commons/Alert"
 import FilesView from "./FilesView"
 import FolderNavigation from "./FolderNavigation"
-import MetadataView, { ContractMetadata } from "./MetadataView"
+import MetadataView from "./MetadataView"
 
 interface DirectoryListEntry {
   type: string
@@ -18,23 +20,9 @@ export default function VerifiedView (
   { codeHash } :
   { codeHash: string }
 ) {
-  const [metadata, setMetadata] = useState<ContractMetadata | null>(null)
+  const [error, setError] = useState<string | null>(null)
   const [path, setPath] = useState("")
   const [currentDirectory, setCurrentDirectory] = useState<DirectoryListEntry[] | null>(null)
-
-  useEffect(() => {
-    async function fetchData () {
-      try {
-        const metadata = await api.metadata(codeHash) as ContractMetadata
-        setMetadata(metadata)
-      } catch (error) {
-        // TODO: handle error
-        console.log(error)
-      }
-    }
-
-    fetchData()
-  }, [])
 
   useEffect(() => {
     async function setCurrent () {
@@ -45,6 +33,7 @@ export default function VerifiedView (
       }
       const pathList = path.split("/")
 
+      // TODO review
       // how to find current dir by path in nested root dir
       const current = pathList.reduce((dir, path, index) => {
         const subdir = dir && dir.find(d => d.name === path)
@@ -55,19 +44,26 @@ export default function VerifiedView (
       }, dirList)
       setCurrentDirectory(current)
     }
-    setCurrent()
+    try {
+      setCurrent()
+    } catch (error: unknown) {
+      setError(errMsg(error))
+    }
   }, [path])
+
+  if (error !== null) {
+    return <Warning title="Error" message={error} />
+  }
 
   const folders = currentDirectory?.filter(item => item.type === "dir")
   const files = currentDirectory?.filter(item => item.type === "file")
 
   return (
-    <div className="p-4 flex flex-col gap-2 min-h-screen">
-      { metadata &&
-        <MetadataView metadata={metadata}/>
-      }
-      <div className="flex flex-col gap-2 text-gray-500">
-        <div className="py-2 text-sm font-semibold">Source Code</div>
+    <div className="content">
+      <MetadataView codeHash={codeHash} />
+
+      <div className="flex flex-col gap-2 mx-4 mt-5">
+        <div className="text-sm">Source Code</div>
         <FolderNavigation path={path} setPath={setPath}/>
         {
           folders &&
@@ -90,7 +86,6 @@ export default function VerifiedView (
           files &&
           <FilesView files={files} codeHash={codeHash}/>
         }
-
       </div>
     </div>
   )

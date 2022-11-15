@@ -9,6 +9,7 @@ import { PageLoading } from "../../loading/Loading"
 import api from "../../../apis/verifierApi"
 import { useChainProperties } from "../../../contexts/ChainContext"
 import { Warning } from "../../commons/Alert"
+import { errMsg } from "../../../utils/errors"
 
 const reducer: Reducer<SourceTabState, SourceTabAction> = (state, action) => {
   if (action.type === "fetched") {
@@ -56,8 +57,7 @@ export default function SourceTab (
           dispatch({ type: "error", error: res.message })
         }
       } catch (error: unknown) {
-        const errMsg = error instanceof Error ? error.message : error as string
-        dispatch({ type: "error", error: errMsg })
+        dispatch({ type: "error", error: errMsg(error) })
       }
     }
 
