@@ -15,7 +15,7 @@ x-environment: &envs
 
 services:
   squid-db:
-    image: postgres:12
+    image: postgres:15
     restart: on-failure
     volumes:
       - .data/squid/ink/db:/var/lib/postgresql/data
@@ -29,7 +29,7 @@ services:
     image: ghcr.io/web3labs/squid-ink-epirus
     restart: on-failure
     environment: *envs
-    command: sh -c "(npx sqd db create-migration Init && npx sqd db migrate); sleep 5 && exec npm run processor:start"
+    command: sh -c "(npx sqd db create-migration Init && npx sqd db migrate); sleep 5 && npm run processor:start"
     depends_on:
       - squid-db
 
