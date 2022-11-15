@@ -59,6 +59,10 @@ To apply the code linter and automatically fix issues
 npm run lint:fix
 ```
 
+## Container Image
+
+The environment configuration is a copy of the `.env.example` file.
+
 ## Others
 
 This project was bootstrapped using [CRA](https://create-react-app.dev/) for convinience.
