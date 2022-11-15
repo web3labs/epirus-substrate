@@ -75,21 +75,6 @@ export default function MetadataView (
 
   return (
     <div className="flex flex-col gap-4 divide-y">
-      <div className="flex flex-row px-4 pt-4 gap-2">
-        <h3 className="text-sm text-gray-400">Verification</h3>
-        <div className="flex gap-1 items-center text-sm">
-          <span>Bytecode Match</span>
-          <div className="flex items-center group">
-            <CheckBadgeIcon className="text-green-600" height={18} width={18}/>
-            <span
-              className="absolute mx-5 p-2 text-xs text-gray-50 border rounded border-gray-700
-                     bg-gray-700 text-wrap max-w-xs invisible group-hover:visible"
-            >
-                    The source code files were compiled and the output matched against the Wasm blob deployed on-chain.
-            </span>
-          </div>
-        </div>
-      </div>
       <Segment
         collapsable={true}
         isOpen={true}
@@ -100,9 +85,18 @@ export default function MetadataView (
             <Definition label="Name" term={
               <span>{contract.name}</span>
             }/>
-            <Definition label="Authors" term={
-              <div className="flex flex-col gap-2">
-                {contract.authors.map((a, i) => (<div key={`${i}-${a}`}>{a}</div>))}
+            <Definition label="Verification" term={
+              <div className="flex gap-1 items-center text-sm">
+                <span>Bytecode Match</span>
+                <div className="flex items-center group">
+                  <CheckBadgeIcon className="text-green-600" height={18} width={18}/>
+                  <span
+                    className="absolute mx-5 p-2 text-xs text-gray-50 border rounded border-gray-700
+                                 bg-gray-700 text-wrap max-w-xs invisible group-hover:visible"
+                  >
+                          The source code files were compiled and the output matched against the Wasm blob deployed on-chain.
+                  </span>
+                </div>
               </div>
             }/>
           </div>
@@ -112,6 +106,13 @@ export default function MetadataView (
             }/>
             <Definition label="Compiler" term={
               <span>{source.compiler}</span>
+            }/>
+          </div>
+          <div className="col-span-2">
+            <Definition label="Authors" term={
+              <div className="flex flex-col gap-2">
+                {contract.authors.map((a, i) => (<div key={`${i}-${a}`}>{a}</div>))}
+              </div>
             }/>
           </div>
         </div>
