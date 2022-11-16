@@ -125,10 +125,10 @@ export default function FilesNavigation (
     <div className="flex flex-col gap-2 p-4 mt-5 border-t">
       <SourcesBreadCrumbs path={path} setPath={setPath}/>
       {
-        folders &&
+        (folders && folders.length > 0) &&
             <div className="flex flex-col border mt-2">
               <div className="bg-neutral-100 text-xs px-2 py-3">Folders</div>
-              <div className="flex flex-wrap gap-2 text-sm text-blue-500 p-4 divide-x">
+              <div className="flex flex-wrap gap-2 text-sm text-blue-500 py-4 divide-x">
                 {folders.map(f => {
                   return (
                     <div
