@@ -10,6 +10,7 @@ import { Warning } from "../../commons/Alert"
 import { Definition } from "../../commons/Definitions"
 import Segment from "../../commons/Segment"
 import SourceCodeView from "./SourceCode"
+import { PageLoading } from "../../loading/Loading"
 
 export interface ContractMetadata {
   source: {
@@ -67,7 +68,7 @@ export default function MetadataView (
   }
 
   if (metadata == null) {
-    return null
+    return <PageLoading loading={true} />
   }
 
   const { contract, source } = metadata
