@@ -56,6 +56,7 @@
   "scripts": {
     "start": "npm run env:update && craco start",
     "build": "craco build",
+    "analyze": "source-map-explorer 'build/static/js/*.js' --html .analysis/source-map.html",
     "env:update": "NODE_ENV=development runtime-env-cra --config-name=./public/runtime-env.js --env-file=./.env.development",
     "test": "craco test",
     "test:coverage": "CI=true npm test -- --env=jsdom --coverage",
@@ -107,6 +108,7 @@
     "postcss": "^8.4.18",
     "postcss-import": "^14.1.0",
     "postcss-nesting": "^10.2.0",
+    "source-map-explorer": "^2.5.3",
     "tailwindcss": "^3.2.1"
   }
 }
