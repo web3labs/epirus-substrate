@@ -18,8 +18,15 @@ PORT=3300
 # Epirus Squid Ink query service endpoint
 REACT_APP_SQUID_ENDPOINT=http://localhost:4350/graphql
 
+# Source code verification
+REACT_APP_SOURCE_CODE_ENABLED=false
+REACT_APP_VERIFIER_ENDPOINT=http://127.0.0.1:3001
+REACT_APP_VERIFIER_WS_ENDPOINT=ws://127.0.0.1:3001
+
 # EOF
 ```
+
+See [.env.development](https://github.com/web3labs/epirus-substrate/blob/main/explorer-ui/.env.development) for reference.
 
 Head to [Adding custom environment variables](https://create-react-app.dev/docs/adding-custom-environment-variables/) for further details.
 
@@ -61,7 +68,7 @@ npm run lint:fix
 
 ## Container Image
 
-The environment configuration is a copy of the `.env.example` file.
+The environment configuration is a copy of `.env.example`.
 
 ## Others
 
