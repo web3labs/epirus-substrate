@@ -1,8 +1,9 @@
 import React, { useState } from "react"
-import FileView, { SourceFile } from "./FileView"
 import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline"
 
-export default function FilesView (
+import FileView, { SourceFile } from "./FileView"
+
+export default function FileList (
   { files, codeHash } :
   {
     files: SourceFile[],
@@ -40,7 +41,8 @@ function CollapsedFileView (
   }
 
   return (<div className="flex flex-col gap-2">
-    <div className="flex gap-1 cursor-pointer items-center text-sm text-gray-500 hover:text-gray-900" onClick={toggleOpen}>
+    <div className="flex gap-1 cursor-pointer items-center text-sm text-gray-500 hover:text-gray-900"
+      onClick={toggleOpen}>
       {open
         ? <ChevronDownIcon className="h-4 w-4"/>
         : <ChevronRightIcon className="h-4 w-4"/> }

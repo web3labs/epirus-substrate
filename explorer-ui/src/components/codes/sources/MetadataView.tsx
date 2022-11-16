@@ -1,13 +1,15 @@
 /* eslint-disable camelcase */
-import { CheckBadgeIcon } from "@heroicons/react/24/solid"
-import hljs from "highlight.js"
 import React, { useEffect, useState } from "react"
+import { CheckBadgeIcon } from "@heroicons/react/24/solid"
+
+import hljs from "highlight.js/lib/core"
+
 import api from "../../../apis/verifierApi"
 import { errMsg } from "../../../utils/errors"
 import { Warning } from "../../commons/Alert"
 import { Definition } from "../../commons/Definitions"
 import Segment from "../../commons/Segment"
-import SourceCodeView from "./SourceCodeView"
+import SourceCodeView from "./SourceCode"
 
 export interface ContractMetadata {
   source: {
@@ -71,7 +73,7 @@ export default function MetadataView (
   const { contract, source } = metadata
   const { build_info } = source
   const metadataAsString = JSON.stringify(metadata, null, 2)
-  const { value } = hljs.highlightAuto(metadataAsString, ["rust", "rs", "toml", "json", "text"])
+  const { value } = hljs.highlight(metadataAsString, { language: "json" })
 
   return (
     <div className="flex flex-col gap-4 divide-y">

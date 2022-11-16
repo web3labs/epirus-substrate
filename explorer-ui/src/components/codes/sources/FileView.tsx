@@ -1,9 +1,14 @@
 import { ArrowDownTrayIcon } from "@heroicons/react/24/outline"
-import hljs from "highlight.js"
 import React, { useState, useEffect } from "react"
+
+import hljs from "highlight.js/lib/core"
+import "highlight.js/styles/github.css"
+
 import api from "../../../apis/verifierApi"
 import { formatBytes } from "../../../formats/bytes"
-import SourceCodeView from "./SourceCodeView"
+import SourceCodeView from "./SourceCode"
+
+const SUPPORTED_LANGS = ["rust", "rs", "toml", "json", "text"]
 
 export interface SourceFile {
   type: string
@@ -32,7 +37,9 @@ export default function FileView (
       const rsc = await api.resource({ codeHash, path: file.url })
       if (rsc.ok) {
         const text = await rsc.text()
-        const { value } = hljs.highlightAuto(text, ["rust", "rs", "toml", "json", "text"])
+        const { value } = hljs.highlightAuto(
+          text, SUPPORTED_LANGS
+        )
 
         setContent(text)
         setHtmlContent(value)
@@ -48,7 +55,13 @@ export default function FileView (
     return <></>
   }
 
-  return (<SourceCodeView name={file.name} content={content} htmlContent={htmlContent}/>)
+  return (
+    <SourceCodeView
+      name={file.name}
+      content={content}
+      htmlContent={htmlContent}
+    />
+  )
 }
 
 function DownloadFileView (
@@ -80,7 +93,7 @@ function DownloadFileView (
 
   return (
     <div>
-      <div className="my-2 border border-neutral-200 rounded text-xs font-mono">
+      <div className="my-2 border border-neutral-200 text-xs font-mono">
         <div className="p-2 flex justify-between bg-neutral-100 items-center">
           <div>{file.name}</div>
           <div className="flex gap-1 items-center">
