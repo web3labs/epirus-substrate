@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react"
 import { CheckBadgeIcon } from "@heroicons/react/24/solid"
 
-import hljs from "highlight.js/lib/core"
+import hljs from "../../../highlight"
 
 import api from "../../../apis/verifierApi"
 import { errMsg } from "../../../utils/errors"

@@ -1,14 +1,11 @@
 import { ArrowDownTrayIcon } from "@heroicons/react/24/outline"
 import React, { useState, useEffect } from "react"
 
-import hljs from "highlight.js/lib/core"
-import "highlight.js/styles/github.css"
+import hljs, { SUPPORTED_LANGS } from "../../../highlight"
 
 import api from "../../../apis/verifierApi"
 import { formatBytes } from "../../../formats/bytes"
 import SourceCodeView from "./SourceCode"
-
-const SUPPORTED_LANGS = ["rust", "rs", "toml", "json", "text"]
 
 export interface SourceFile {
   type: string
