@@ -56,7 +56,7 @@ function SourcesBreadCrumbs (
                   onClick={c.navigate}
                   className={classNames(
                     isNotLast
-                      ? "text-blue-500 cursor-pointer"
+                      ? "link"
                       : "font-semibold text-gray-700",
                     isFirst ? "flex gap-x-1" : "",
                     "text-sm"
@@ -128,7 +128,7 @@ export default function FilesNavigation (
         (folders && folders.length > 0) &&
             <div className="flex flex-col border mt-2">
               <div className="bg-neutral-100 text-xs px-2 py-3">Folders</div>
-              <div className="flex flex-wrap gap-2 text-sm text-blue-500 py-4 divide-x">
+              <div className="flex flex-wrap gap-2 text-sm link py-4 divide-x">
                 {folders.map(f => {
                   return (
                     <div
