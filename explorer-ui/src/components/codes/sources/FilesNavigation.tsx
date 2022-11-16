@@ -22,7 +22,7 @@ function SourcesBreadCrumbs (
   setPath: (path: string) => void}
 ) {
   const crumbs = [{
-    name: "Sources Root",
+    name: "Sources",
     navigate: () => setPath("")
   }]
 
