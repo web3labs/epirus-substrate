@@ -12,19 +12,78 @@ import { useChainProperties } from "../../contexts/ChainContext"
 import { AccountUnit } from "../commons/Text"
 import { Definition, DefinitionList } from "../commons/Definitions"
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline"
+import CodeLink from "../codes/CodeLink"
 
-function typeAlias (type: string) {
+interface ActivityDisplay {
+  alias: string,
+  left?: React.ReactElement,
+  right?: React.ReactElement
+}
+
+function toCodeHash ({
+  obj
+} : TypedRow<Activity>) {
+  const { args } = obj
+  if (args.codeHash) {
+    return (<div className="flex gap-2 text-sm">
+      <Label>To</Label>
+      <CodeLink id={args.codeHash as string} />
+    </div>)
+  } else {
+    return undefined
+  }
+}
+
+function resolveActivityDisplay (
+  params : TypedRow<Activity>
+) : ActivityDisplay {
+  const { short, currentId } = params
+  const { type, from, to } = params.obj
+
+  const template = {
+    alias: type,
+    left: from &&
+    (<div className="flex gap-2 text-sm">
+      <Label>From</Label>
+      <AccountLink account={from} currentId={currentId} short={short} size={21} />
+    </div>),
+    right: to &&
+    (<div className="flex gap-2 text-sm">
+      <Label>To</Label>
+      <AccountLink account={to} currentId={currentId} short={short} size={21} />
+    </div>)
+  }
+
+  // Overrides by activity type
   switch (type) {
   case ActivityType.CONTRACT:
-    return "instantiate"
+    return {
+      ...template,
+      alias: "instantiate"
+    }
   case ActivityType.CONTRACTCALL:
-    return "call"
+    return {
+      ...template,
+      alias: "call"
+    }
+  case ActivityType.CODESTORED:
+    return {
+      ...template,
+      alias: "store",
+      right: toCodeHash(params)
+    }
   case ActivityType.CODEUPDATED:
-    return "upgrade"
+    return {
+      ...template,
+      alias: "upgrade"
+    }
   case ActivityType.CONTRACTTERMINATE:
-    return "terminate"
+    return {
+      ...template,
+      alias: "terminate"
+    }
   default:
-    return type
+    return template
   }
 }
 
@@ -34,9 +93,9 @@ export default function ActivityRow ({
   short = true
 }: TypedRow<Activity>) {
   const { token } = useChainProperties()
-  const { id, from, to, type, createdAt, args, extrinsic } = obj
-  // const value = getArgValue(obj.args)
-  const alias = typeAlias(type)
+  const { id, createdAt, args, extrinsic } = obj
+  const displaySpec = resolveActivityDisplay({ obj, currentId, short })
+  const { alias, left, right } = displaySpec
   const status = extrinsic.success ? "success" : "error"
 
   const extrinsicDetails = (
@@ -48,9 +107,10 @@ export default function ActivityRow ({
         <Definition label="Extrinsic" term={
           <span className="font-mono">{extrinsic.blockNumber}-{extrinsic.indexInBlock}</span>
         }/>
+        {args.data &&
         <Definition label="Data" term={
           <span className="font-mono break-all">{args.data}</span>
-        }/>
+        }/>}
         <Definition label="Status" term={
           <div className={classNames(
             extrinsic.success ? "text-green-600" : "text-red-600",
@@ -75,7 +135,7 @@ export default function ActivityRow ({
               `tag ${alias}`,
               "w-24 text-[0.68rem] font-semibold uppercase py-0.5 px-1 rounded text-center"
             )}>
-              {`${alias}`}
+              {alias}
             </div>
             <div className="flex gap-1 items-center">
               { status === "error" && <ExclamationCircleIcon height={18} width={18} className="text-orange-600"/>}
@@ -91,18 +151,8 @@ export default function ActivityRow ({
           />
         }
       >
-        {from &&
-          (<div className="flex gap-2 text-sm">
-            <Label>From</Label>
-            <AccountLink account={from} currentId={currentId} short={short} size={21} />
-          </div>)
-        }
-        {to &&
-          (<div className="flex gap-2 text-sm">
-            <Label>To</Label>
-            <AccountLink account={to} currentId={currentId} short={short} size={21} />
-          </div>)
-        }
+        {left}
+        {right}
       </Lane>
     </CollapsibleRow>
   )

@@ -14,6 +14,8 @@ export default function ActivitiesPage () {
       return { label: "Contract instantiate", value: type }
     case ActivityType.CONTRACTCALL:
       return { label: "Contract call", value: type }
+    case ActivityType.CODESTORED:
+      return { label: "Code stored", value: type }
     case ActivityType.CODEUPDATED:
       return { label: "Code upgrade", value: type }
     case ActivityType.CONTRACTTERMINATE:

@@ -70,6 +70,10 @@
     @apply border border-purple-300 bg-purple-100 text-purple-600;
   }
 
+  .tag.store {
+    @apply border border-green-300 bg-green-100 text-green-600;
+  }
+
   .tag.upgrade {
     @apply border border-cyan-300 bg-cyan-100 text-cyan-600;
   }
