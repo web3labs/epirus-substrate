@@ -2,11 +2,15 @@
 
 Epirus Substrate UI is the user interface for [Epirus squids](../squid-ink/).
 
+To enable contract source code verification capabilities you will need a running instance of
+the [Ink! Verifier Server](https://github.com/web3labs/ink-verifier-server).
+
 ## Configuration
 
 To configure the UI just create a `.env` file with the configuration variables.
 
 Example
+
 ```bash
 # =================================
 # Substrate UI config.
@@ -66,9 +70,25 @@ To apply the code linter and automatically fix issues
 npm run lint:fix
 ```
 
+## Analysis
+
+To generate a source code map analysis
+
+```
+npm run analysis
+```
+
+Will generate an HTML report in `.analysis/source-map.html`
+
+Quite useful to tackle down the cause of big sizes in production build artifacts.
+
 ## Container Image
 
-The environment configuration is a copy of `.env.example`.
+```bash
+docker build -t epirus-substrate-ui:develop .
+```
+
+Note that the build process copies the `.env.example` environment configuration.
 
 ## Others
 
