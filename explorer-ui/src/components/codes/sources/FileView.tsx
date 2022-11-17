@@ -7,6 +7,7 @@ import api from "../../../apis/verifierApi"
 import { formatBytes } from "../../../formats/bytes"
 import SourceCodeView from "./SourceCode"
 import { errMsg } from "../../../utils/errors"
+import FileBox from "./FileBox"
 
 export interface SourceFile {
   type: string
@@ -54,7 +55,9 @@ export default function FileView (
   }, [])
 
   if (!content || !htmlContent) {
-    return <span>Empty file</span>
+    return <FileBox name={file.name}>
+      Empty file
+    </FileBox>
   }
 
   return (
@@ -77,21 +80,17 @@ function DownloadFileView (
   const downloadLink = api.resourceDownloadLink({ codeHash, path: file.url })
 
   return (
-    <div>
-      <div className="my-2 border border-neutral-200 text-xs font-mono">
-        <div className="p-2 flex justify-between bg-neutral-100 items-center">
-          <div>{file.name}</div>
-          <div className="flex gap-1 items-center">
-            <div className="px-1">{formatBytes(file.size)}</div>
-            <a href={downloadLink} download target="_blank" className="rounded-full p-1 hover:bg-neutral-200" rel="noreferrer">
-              <ArrowDownTrayIcon height={18} width={18}/>
-            </a>
-          </div>
-        </div>
-        <div className="p-2 flex flex-col gap-1 items-center">
-          <div>{displayText}</div>
-        </div>
-      </div>
-    </div>
+    <FileBox name={file.name}
+      tools={<>
+        <div className="px-1">{formatBytes(file.size)}</div>
+        <a href={downloadLink}
+          download
+          target="_blank"
+          className="rounded-full p-1 hover:bg-neutral-200" rel="noreferrer">
+          <ArrowDownTrayIcon height={18} width={18}/>
+        </a>
+      </>}>
+      {displayText}
+    </FileBox>
   )
 }

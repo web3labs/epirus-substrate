@@ -73,6 +73,7 @@ export default function MetadataView (
 
   const { contract, source } = metadata
   const { build_info } = source
+
   const metadataAsString = JSON.stringify(metadata, null, 2)
   const { value } = hljs.highlight(metadataAsString, { language: "json" })
 
@@ -152,7 +153,11 @@ export default function MetadataView (
         isOpen={false}
         title="Metadata"
       >
-        <SourceCodeView name={"metadata.json"} content={metadataAsString} htmlContent={value} />
+        <SourceCodeView
+          name={"metadata.json"}
+          content={metadataAsString}
+          htmlContent={value}
+        />
       </Segment>
     </div>
   )
