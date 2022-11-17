@@ -11,27 +11,12 @@ export default function ErrorStatusView (
   }
 ) {
   const { info } = useChainProperties()
-
-  async function getErrorLogs () {
-    const logs = await api.errorLogs({ chain: info, codeHash })
-    const blob = await logs.blob()
-    const url = window.URL.createObjectURL(blob)
-    const link = document.createElement("a")
-    link.href = url
-    link.setAttribute(
-      "download",
-      "error.log"
-    )
-
-    // Append to html link element page
-    document.body.appendChild(link)
-
-    // Start download
-    link.click()
-  }
+  const downloadLink = api.errorLogDownloadLink({ chain: info, codeHash })
 
   return (
-    <div onClick={getErrorLogs} className="flex flex-row m-4 p-2 cursor-pointer justify-between items-center border rounded border-red-100 bg-red-100">
+    <a href={downloadLink}
+      className="flex flex-row m-4 p-2 cursor-pointer justify-between items-center border rounded border-red-100 bg-red-100"
+      download>
       <div className="flex gap-2 text-sm items-center">
         <ExclamationTriangleIcon className="w-5 h-5" />
         <div>
@@ -43,6 +28,6 @@ export default function ErrorStatusView (
         <span>Download logs</span>
         <ArrowDownTrayIcon height={15} width={15}/>
       </div>
-    </div>
+    </a>
   )
 }

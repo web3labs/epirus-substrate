@@ -83,8 +83,8 @@ class VerifierApi {
     return await fetch(`${this.api}/contracts/${codeHash}/src/${path}`)
   }
 
-  async errorLogs ({ chain = "local", codeHash } : VerifierApiParams) {
-    return await fetch(`${this.api}/contracts/${chain}/${codeHash}/error.log`)
+  errorLogDownloadLink ({ chain = "local", codeHash } : VerifierApiParams) {
+    return `${this.api}/contracts/${chain}/${codeHash}/error.log`
   }
 
   tailWebsocket ({ chain = "local", codeHash } : VerifierApiParams) {
