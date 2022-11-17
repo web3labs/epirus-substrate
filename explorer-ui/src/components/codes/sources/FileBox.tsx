@@ -16,7 +16,7 @@ export default function FileBox ({
         {tools}
       </div>
     </div>
-    <div className="p-2 flex flex-col gap-1 items-center">
+    <div className="p-2 flex flex-col gap-1">
       {children}
     </div>
   </div>)
