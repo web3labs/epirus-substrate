@@ -79,6 +79,11 @@ export interface ContractInstantiatedArgs {
   codeHash?: string;
 }
 
+export interface ContractCodeStoredArgs {
+  data?: string;
+  codeHash?: string;
+}
+
 export interface ContractCodeUpdatedArgs {
   data?: string;
   newCodeHash?: string;

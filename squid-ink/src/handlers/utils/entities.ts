@@ -6,6 +6,7 @@ import {
 } from "@subsquid/substrate-processor";
 import { Entity, Store } from "@subsquid/typeorm-store";
 import {
+  ContractCodeStoredArgs,
   ContractCodeUpdatedArgs,
   ContractInstantiatedArgs,
   Event,
@@ -74,9 +75,12 @@ export function createExtrinsic(
 export function createActivity(
   extrinsicEntity: Extrinsic,
   type: ActivityType,
-  to: Account,
+  to?: Account,
   from?: Account,
-  args?: ContractCodeUpdatedArgs | ContractInstantiatedArgs
+  args?:
+    | ContractCodeStoredArgs
+    | ContractCodeUpdatedArgs
+    | ContractInstantiatedArgs
 ): Activity {
   return new Activity({
     id: `${extrinsicEntity.id}-${type}`,

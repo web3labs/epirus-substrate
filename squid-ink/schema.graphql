@@ -125,6 +125,7 @@ type Activity @entity{
 enum ActivityType {
   CONTRACT
   CONTRACTCALL
+  CODESTORED
   CODEUPDATED
   CONTRACTTERMINATE
 }

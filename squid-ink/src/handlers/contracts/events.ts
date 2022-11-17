@@ -12,6 +12,7 @@ import {
 import { toHex } from "@subsquid/util-internal-hex";
 import { SubstrateBlock } from "@subsquid/substrate-processor";
 import {
+  ContractCodeStoredArgs,
   ContractCodeUpdatedArgs,
   ContractInstantiatedArgs,
   Ctx,
@@ -184,11 +185,23 @@ const contractsCodeStoredHandler: EventHandler = {
           extrinsicEntity,
         });
 
+      const args = (extrinsicEntity.args || {}) as ContractCodeStoredArgs;
+      args.codeHash = codeHash;
+
+      const activityEntity = createActivity(
+        extrinsicEntity,
+        ActivityType.CODESTORED,
+        undefined,
+        codeOwnerEntity,
+        args
+      );
+
       await saveAll(store, [
         extrinsicEntity,
         eventEntity,
         codeOwnerEntity,
         contractCodeEntity,
+        activityEntity,
       ]);
     } else {
       log.warn(
