@@ -79,8 +79,12 @@ class VerifierApi {
     return await res.json()
   }
 
-  async resource ({ codeHash, path } : { codeHash: string, path: string }) {
-    return await fetch(`${this.api}/contracts/${codeHash}/src/${path}`)
+  async resource (params : { codeHash: string, path: string }) {
+    return await fetch(this.resourceDownloadLink(params))
+  }
+
+  resourceDownloadLink ({ codeHash, path } : { codeHash: string, path: string }) {
+    return `${this.api}/contracts/${codeHash}/src/${path}`
   }
 
   errorLogDownloadLink ({ chain = "local", codeHash } : VerifierApiParams) {

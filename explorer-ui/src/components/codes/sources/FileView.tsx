@@ -6,6 +6,7 @@ import hljs, { SUPPORTED_LANGS } from "../../../highlight"
 import api from "../../../apis/verifierApi"
 import { formatBytes } from "../../../formats/bytes"
 import SourceCodeView from "./SourceCode"
+import { errMsg } from "../../../utils/errors"
 
 export interface SourceFile {
   type: string
@@ -45,11 +46,15 @@ export default function FileView (
         setContent(`Unable to fetch file due to error [${message}]`)
       }
     }
-    resource()
+    try {
+      resource()
+    } catch (error: unknown) {
+      setContent(errMsg(error))
+    }
   }, [])
 
   if (!content || !htmlContent) {
-    return <></>
+    return <span>Empty file</span>
   }
 
   return (
@@ -68,25 +73,8 @@ function DownloadFileView (
     file: SourceFile
   }
 ) {
-  const displayText = file.utf8 ? "This file is too large to be displayed." : "Binary file display is not supported."
-
-  async function downloadFile () {
-    const rsc = await api.resource({ codeHash, path: file.url })
-    const blob = await rsc.blob()
-    const url = window.URL.createObjectURL(blob)
-    const link = document.createElement("a")
-    link.href = url
-    link.setAttribute(
-      "download",
-      file.name
-    )
-
-    // Append to html link element page
-    document.body.appendChild(link)
-
-    // Start download
-    link.click()
-  }
+  const displayText = file.utf8 ? "This file is too large to be displayed." : "Binary content is not displayed."
+  const downloadLink = api.resourceDownloadLink({ codeHash, path: file.url })
 
   return (
     <div>
@@ -95,9 +83,9 @@ function DownloadFileView (
           <div>{file.name}</div>
           <div className="flex gap-1 items-center">
             <div className="px-1">{formatBytes(file.size)}</div>
-            <button type="button" onClick={downloadFile} className="rounded-full p-1 hover:bg-neutral-200">
+            <a href={downloadLink} download target="_blank" className="rounded-full p-1 hover:bg-neutral-200" rel="noreferrer">
               <ArrowDownTrayIcon height={18} width={18}/>
-            </button>
+            </a>
           </div>
         </div>
         <div className="p-2 flex flex-col gap-1 items-center">
