@@ -125,7 +125,7 @@ export default function FilesNavigation (
   const files = currentDirectory?.filter(item => item.type === "file")
 
   return (
-    <div className="flex flex-col gap-2 p-4 mt-5 border-t">
+    <div className="flex flex-col gap-2 p-4 border-t">
       <SourcesBreadCrumbs path={path} setPath={setPath}/>
       {
         (folders && folders.length > 0) &&

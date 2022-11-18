@@ -98,7 +98,7 @@ export default function MetadataView (
   const { value } = hljs.highlight(metadataAsString, { language: "json" })
 
   return (
-    <div className="flex flex-col gap-4 divide-y">
+    <div className="flex flex-col divide-y">
       <Segment
         collapsable={true}
         isOpen={true}
@@ -136,7 +136,7 @@ export default function MetadataView (
         title="Build Info"
         className="items-start"
       >
-        <div className="overflow-x-auto border relative rounded-lg">
+        <div className="my-2 overflow-x-auto border relative rounded-lg">
           <table className="table-auto border-collapse text-xs">
             <tbody>
               <tr className="border-b p-2">

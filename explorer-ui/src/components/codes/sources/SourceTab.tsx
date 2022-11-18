@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { Reducer, useEffect, useReducer } from "react"
+import React, { Dispatch, Reducer, useEffect, useReducer } from "react"
 import ErrorStatusView from "./ErrorView"
 import ProcessingView from "./ProcessingView"
 import VerifiedView from "./VerifiedView"
@@ -32,6 +32,12 @@ const reducer: Reducer<SourceTabState, SourceTabAction> = (state, action) => {
   }
 }
 
+export interface SourceTabProps {
+  codeHash: string,
+  chain: string,
+  dispatch: Dispatch<SourceTabAction>
+}
+
 export default function SourceTab (
   { id } :
   { id: string }
@@ -47,6 +53,7 @@ export default function SourceTab (
     }
   )
   const { action, status, timestamp, error } = state
+  const chain = info || "local"
 
   useEffect(() => {
     async function getStatus () {
@@ -84,7 +91,7 @@ export default function SourceTab (
   case "verified":
     return <VerifiedView codeHash={id} />
   case "processing":
-    return <ProcessingView codeHash={id} dispatch={dispatch}/>
+    return <ProcessingView chain={chain} codeHash={id} dispatch={dispatch}/>
   case "metadata":
     return <MetadataView codeHash={id} sourceType="signed-metadata" />
   default:
@@ -93,7 +100,7 @@ export default function SourceTab (
         {
           status === "error" && <ErrorStatusView codeHash={id} timestamp={timestamp}/>
         }
-        <UnverifiedView codeHash={id} dispatch={dispatch}/>
+        <UnverifiedView chain={chain} codeHash={id} dispatch={dispatch}/>
       </>
     )
   }

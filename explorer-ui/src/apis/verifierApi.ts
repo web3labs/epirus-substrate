@@ -69,6 +69,16 @@ class VerifierApi {
     })
   }
 
+  async uploadMetadata (
+    { chain = "local", codeHash } : VerifierApiParams,
+    formData: FormData
+  ) : Promise<Response> {
+    return fetch(`${this.api}/upload/${chain}/${codeHash}`, {
+      method: "POST",
+      body: formData
+    })
+  }
+
   async metadata (codeHash: string) {
     const res = await fetch(`${this.api}/contracts/${codeHash}/metadata.json`)
     return await res.json() as ApiResponse<ContractMetadata>

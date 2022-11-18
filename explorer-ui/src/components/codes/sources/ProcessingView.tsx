@@ -1,11 +1,10 @@
-import React, { Dispatch, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 
 import { ArrowPathIcon } from "@heroicons/react/24/outline"
-import { CheckBadgeIcon, InformationCircleIcon } from "@heroicons/react/24/solid"
+import { InformationCircleIcon, ShieldCheckIcon } from "@heroicons/react/24/solid"
 
-import { useChainProperties } from "../../../contexts/ChainContext"
-import { SourceTabAction } from "../../../types/componentStates"
 import api from "../../../apis/verifierApi"
+import { SourceTabProps } from "./SourceTab"
 
 interface LogMessage {
   type: "LOG",
@@ -41,19 +40,14 @@ class AutoScrollingTextarea extends React.Component<TextareaProps, {}> {
 }
 
 export default function ProcessingView (
-  { codeHash, dispatch } :
-  {
-    codeHash: string,
-    dispatch: Dispatch<SourceTabAction>
-  }
+  { chain, codeHash, dispatch } : SourceTabProps
 ) {
-  const { info } = useChainProperties()
   const [lines, setLines] = useState<string[]>([])
   const [outcome, setOutcome] = useState("error")
   const [socketClosed, setSocketClosed] = useState(false)
 
   useEffect(() => {
-    const socket = api.tailWebsocket({ chain: info, codeHash })
+    const socket = api.tailWebsocket({ chain, codeHash })
 
     // Listen for messages
     socket.addEventListener("message", ({ data }) => {
@@ -95,13 +89,13 @@ export default function ProcessingView (
   </svg>
   if (socketClosed) {
     if (outcome === "success") {
-      statusIcon = <CheckBadgeIcon className="text-green-600 w-6 h-6" />
+      statusIcon = <ShieldCheckIcon className="text-green-600 w-5 h-5" />
       status =
         <button type="button" className="link" onClick={dispatchSuccess} >
           Browse Verified Files
         </button>
     } else {
-      statusIcon = <InformationCircleIcon className="text-red-600 w-6 h-6" />
+      statusIcon = <InformationCircleIcon className="text-red-600 w-5 h-5" />
       status =
         <button type="button" className="link flex gap-2" onClick={dispatchError} >
           <ArrowPathIcon className="w-4 h-4 ml-2"/>
@@ -111,7 +105,7 @@ export default function ProcessingView (
   }
 
   return (
-    <div className="m-4 border">
+    <div className="mx-4 mt-4 mb-8 border">
       <div className="flex justify-between items-center bg-neutral-200">
         <div className="flex gap-x-2 p-2 items-center">
           {statusIcon}
@@ -122,7 +116,7 @@ export default function ProcessingView (
         </div>
       </div>
       <AutoScrollingTextarea
-        className="p-4 h-60 border-none focus:ring-0 focus:outline-none bg-neutral-50 text-gray-800 w-full text-sm font-mono"
+        className="p-4 h-96 border-none focus:ring-0 focus:outline-none bg-neutral-50 text-gray-800 w-full text-sm font-mono"
         value={lines.join("")}
         readOnly={true}
       />
