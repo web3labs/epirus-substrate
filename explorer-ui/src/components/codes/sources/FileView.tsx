@@ -56,7 +56,9 @@ export default function FileView (
 
   if (!content || !htmlContent) {
     return <FileBox name={file.name}>
-      Empty file
+      <span className="text-gray-400 p-2">
+        Empty file.
+      </span>
     </FileBox>
   }
 
@@ -90,7 +92,9 @@ function DownloadFileView (
           <ArrowDownTrayIcon height={18} width={18}/>
         </a>
       </>}>
-      {displayText}
+      <span className="text-gray-400 p-2">
+        {displayText}
+      </span>
     </FileBox>
   )
 }
