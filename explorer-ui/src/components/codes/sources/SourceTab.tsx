@@ -10,6 +10,7 @@ import api from "../../../apis/verifierApi"
 import { useChainProperties } from "../../../contexts/ChainContext"
 import { Warning } from "../../commons/Alert"
 import { errMsg } from "../../../utils/errors"
+import MetadataView from "./MetadataView"
 
 const reducer: Reducer<SourceTabState, SourceTabAction> = (state, action) => {
   if (action.type === "fetched") {
@@ -81,12 +82,11 @@ export default function SourceTab (
 
   switch (status) {
   case "verified":
-    return <VerifiedView codeHash={id}/>
+    return <VerifiedView codeHash={id} />
   case "processing":
     return <ProcessingView codeHash={id} dispatch={dispatch}/>
-  // TODO impl
-  // case "metadata":
-  //  break
+  case "metadata":
+    return <MetadataView codeHash={id} sourceType="signed-metadata" />
   default:
     return (
       <>

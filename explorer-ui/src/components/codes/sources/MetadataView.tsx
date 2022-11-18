@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import React, { useEffect, useState } from "react"
-import { CheckBadgeIcon } from "@heroicons/react/24/solid"
+import { ShieldCheckIcon, ShieldExclamationIcon } from "@heroicons/react/24/solid"
 
 import hljs from "../../../highlight"
 
@@ -11,6 +11,7 @@ import { Definition } from "../../commons/Definitions"
 import Segment from "../../commons/Segment"
 import SourceCodeView from "./SourceCode"
 import { PageLoading } from "../../loading/Loading"
+import Tooltip from "../../commons/Tooltip"
 
 export interface ContractMetadata {
   source: {
@@ -39,9 +40,28 @@ export interface ContractMetadata {
   version: string
 }
 
+const SourceTypes : Record<string, React.ReactElement> = {
+  "signed-metadata": <div className="flex gap-1 items-center text-sm">
+    <span>Signed Metadata</span>
+    <Tooltip
+      content="The metadata was uploaded and signed by the code hash owner. It is not verified."
+    >
+      <ShieldExclamationIcon className="text-orange-500" height={18} width={18}/>
+    </Tooltip>
+  </div>,
+  build: <div className="flex gap-1 items-center text-sm">
+    <span>Bytecode Match</span>
+    <Tooltip
+      content="The source code files were compiled and the output matched against the WASM blob deployed on-chain."
+    >
+      <ShieldCheckIcon className="text-green-500" height={18} width={18}/>
+    </Tooltip>
+  </div>
+}
+
 export default function MetadataView (
-  { codeHash } :
-  { codeHash: string }
+  { codeHash, sourceType } :
+  { codeHash: string, sourceType: "signed-metadata" | "build" }
 ) {
   const [metadata, setMetadata] = useState<ContractMetadata | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -89,20 +109,7 @@ export default function MetadataView (
             <Definition label="Name" term={
               <span>{contract.name}</span>
             }/>
-            <Definition label="Verification" term={
-              <div className="flex gap-1 items-center text-sm">
-                <span>Bytecode Match</span>
-                <div className="flex items-center group">
-                  <CheckBadgeIcon className="text-green-600" height={18} width={18}/>
-                  <span
-                    className="absolute mx-5 p-2 text-xs text-gray-50 border rounded border-gray-700
-                                 bg-gray-700 text-wrap max-w-xs invisible group-hover:visible"
-                  >
-                          The source code files were compiled and the output matched against the Wasm blob deployed on-chain.
-                  </span>
-                </div>
-              </div>
-            }/>
+            <Definition label="Verification" term={SourceTypes[sourceType]}/>
           </div>
           <div className="flex flex-col gap-2">
             <Definition label="Language" term={
@@ -121,6 +128,8 @@ export default function MetadataView (
           </div>
         </div>
       </Segment>
+      {
+        build_info &&
       <Segment
         collapsable={true}
         isOpen={false}
@@ -148,6 +157,7 @@ export default function MetadataView (
           </tbody>
         </table>
       </Segment>
+      }
       <Segment
         collapsable={true}
         isOpen={false}

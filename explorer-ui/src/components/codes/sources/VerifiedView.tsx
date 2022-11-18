@@ -8,7 +8,7 @@ export default function VerifiedView (
 ) {
   return (
     <div className="content">
-      <MetadataView codeHash={codeHash} />
+      <MetadataView codeHash={codeHash} sourceType="build" />
       <FilesNavigation codeHash={codeHash} />
     </div>
   )
