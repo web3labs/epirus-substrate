@@ -9,9 +9,9 @@ export default function FileBox ({
     tools?: React.ReactElement | React.ReactElement[],
     children: string | React.ReactElement | React.ReactElement[],
 }) {
-  return (<div className="my-2 border border-neutral-200 text-xs font-mono">
-    <div className="p-2 flex justify-between bg-neutral-100 items-center">
-      <div>{name}</div>
+  return (<div className="my-2 border border-neutral-200 text-xs font-mono rounded-lg">
+    <div className="p-2 flex justify-between items-center rounded-t-lg bg-neutral-50 border-b">
+      <div className="ml-2">{name}</div>
       <div className="flex gap-1 items-center">
         {tools}
       </div>

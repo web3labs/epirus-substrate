@@ -136,7 +136,7 @@ export default function MetadataView (
         title="Build Info"
         className="items-start"
       >
-        <div className="overflow-x-auto border relative sm:rounded-lg">
+        <div className="overflow-x-auto border relative rounded-lg">
           <table className="table-auto border-collapse text-xs">
             <tbody>
               <tr className="border-b p-2">
