@@ -1,7 +1,9 @@
 import { TrashIcon, ArrowUpTrayIcon, DocumentArrowUpIcon } from "@heroicons/react/24/outline"
 import React, { useState, useCallback, FormEvent } from "react"
 import { FileRejection, useDropzone, FileError, Accept } from "react-dropzone"
-import { Link } from "react-router-dom"
+
+import { sha256AsU8a } from "@polkadot/util-crypto/sha"
+
 import { formatBytes } from "../../../formats/bytes"
 import api from "../../../apis/verifierApi"
 import { classNames } from "../../../utils/strings"
@@ -19,11 +21,13 @@ function UploadForm ({
   onSubmit,
   actionName,
   accept,
+  onSetFile,
   children
 } :{
   onSubmit: (props: SubmitHandlerProps) => void,
   actionName: string,
   accept: Accept,
+  onSetFile?: (file: File) => void,
   children?: React.ReactElement
 }) {
   const [submitDisabled, setSubmitDisabled] = useState(true)
@@ -46,6 +50,9 @@ function UploadForm ({
   const onDropAccepted = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles !== undefined && acceptedFiles.length > 0) {
       setFile(acceptedFiles[0])
+      if (onSetFile) {
+        onSetFile(acceptedFiles[0])
+      }
       setFileRejection(undefined)
       setSubmitDisabled(false)
     }
@@ -67,9 +74,6 @@ function UploadForm ({
         }
         // TODO handle file undef
       }}>
-
-      {children}
-
       { file
         ? <div className="flex flex-col gap-6 my-2 w-48 rounded border">
           <div className="flex gap-2 my-3 mx-3 text-sm">
@@ -108,9 +112,13 @@ function UploadForm ({
   </div>
       }
 
+      {children}
+
       <button type="submit"
         disabled={submitDisabled}
-        className="py-2 my-2 border rounded border-emerald-600 bg-emerald-600 text-white font-semibold disabled:bg-emerald-200 disabled:border-emerald-200"
+        className="py-2 my-2 border rounded border-emerald-600 bg-emerald-600
+                  text-white font-semibold disabled:bg-emerald-200
+                  disabled:border-emerald-200"
       >
         {actionName}
       </button>
@@ -118,11 +126,18 @@ function UploadForm ({
   )
 }
 
+function toHex (a: Uint8Array) : string {
+  return a.reduce((a, b) => a + b.toString(16).padStart(2, "0"), "")
+}
+
 function UploadSignedMetadata (
   { codeHash, dispatch, chain } : SourceTabProps
 ) {
-  const [errorMsg, setErrorMsg] = useState()
+  const [errorMsg, setErrorMsg] = useState<string>()
   const [loading, setLoading] = useState(false)
+  const [msgToSign, setMsgToSign] = useState<string>()
+
+  const codeHashNoPrefix = codeHash.substring(2)
 
   async function onSubmit ({ event, file } : SubmitHandlerProps) {
     const targetForm = event.target as HTMLFormElement
@@ -130,8 +145,8 @@ function UploadSignedMetadata (
     setLoading(true)
 
     const formData = new FormData()
-    formData.append("signature", (targetForm[0] as HTMLInputElement).value)
-    formData.append("file", file)
+    formData.append("signature", (targetForm[1] as HTMLInputElement).value)
+    formData.append("metadata", file)
 
     try {
       const res = await api.uploadMetadata({ chain, codeHash }, formData)
@@ -139,7 +154,6 @@ function UploadSignedMetadata (
         setTimeout(() => dispatch({ type: "uploaded" }), 500)
       } else {
         const errorJson = await res.json()
-        console.log(errorJson)
         targetForm.reset()
         setErrorMsg(errorJson.message)
         setLoading(false)
@@ -154,9 +168,27 @@ function UploadSignedMetadata (
 
   return (<div className="flex flex-col p-2 m-4">
     <div className="text-gray-900 font-semibold">Upload Signed Metadata</div>
-    <div className="text-gray-900 text-sm my-2">
-      Metadata explainer here
+
+    <div className="flex flex-col gap-y-2 my-2 text-sm text-gray-900">
+      <div>
+          In order to decode the messages and events related to an smart contract the
+          blockchain explorer needs access to the <em>metadata.json</em> descriptor of the uploaded
+          code.
+      </div>
+      <div>
+            In the form below you should provide:
+        <ol className="flex flex-col mt-2 gap-y-2 list-decimal list-inside">
+          <li>
+            The <span className="font-mono">metadata.json</span> file corresponding to the current code hash
+          </li>
+          <li className="flex-col">
+            A signature by the owner of the code hash for the following content:
+            <code className="font-mono ml-2">sha256sum(metadata.json)|code hash</code>
+          </li>
+        </ol>
+      </div>
     </div>
+
     <div className="mt-3">
       {errorMsg && <Warning
         title="Error"
@@ -167,22 +199,51 @@ function UploadSignedMetadata (
         : <UploadForm
           actionName="Upload Metadata"
           onSubmit={onSubmit}
+          onSetFile={async file => {
+            const sha256sum = toHex(sha256AsU8a(await file.text()))
+            setMsgToSign(sha256sum + codeHashNoPrefix)
+          }}
           accept={{
             "application/json": [],
             "text/plain": []
           }}
         >
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-y-2 mb-3">
             <label htmlFor="sig">Owner Signature</label>
             <input
               id="sig"
               type="text"
               name="signature"
-              className="py-2 px-3 border rounded"
+              className={
+                classNames(
+                  "py-2 px-3 border rounded text-sm font-mono",
+                  msgToSign === undefined ? "bg-neutral-50" : ""
+                )
+              }
               placeholder="Signature of 'sha256(metadata.json) | code hash'"
+              readOnly={msgToSign === undefined}
               required
             >
             </input>
+            <div>
+              Current message to be signed by the owner account
+            </div>
+            <div className={classNames(
+              "py-2 px-3 font-mono text-sm overflow-auto border rounded bg-neutral-50",
+              msgToSign ? "" : "text-gray-400"
+            )}>
+              <code>{msgToSign || "Will be updated when the metadata file is uploaded"}</code>
+            </div>
+            {msgToSign && <>
+              <div>
+                Example <a href="https://docs.substrate.io/reference/command-line-tools/subkey/" target="_blank" rel="noreferrer">subkey</a>
+                          sign command
+              </div>
+              <div className="py-2 px-3 font-mono text-sm overflow-auto border rounded bg-neutral-50">
+                <code>echo -n &quot;{msgToSign}&quot; | subkey sign --suri &lt;your_secret_uri&gt;</code>
+              </div>
+            </>
+            }
           </div>
         </UploadForm>
       }
@@ -198,7 +259,7 @@ function UploadVerifiablePackage (
     dispatch({ type: "uploading" })
 
     const formData = new FormData()
-    formData.append("File", file)
+    formData.append("package", file)
 
     api.verify({ chain, codeHash }, formData)
       .then(response => response.json())
@@ -214,8 +275,12 @@ function UploadVerifiablePackage (
     <div className="flex flex-col p-2 m-4">
       <div className="text-gray-900 font-semibold">Upload Source Files for Verification</div>
       <div className="text-gray-900 text-sm my-2">
-        We will add simple instructions on source code upload here plus a
-        <Link to="route" target="_blank" rel="noopener noreferrer" className="text-blue-500">link</Link> to a detailed tutorial
+        You can upload the verifiable source package file corresponding to the current code hash.
+        <br/>
+        For more details check out the <a href="https://github.com/web3labs/ink-verifier#package-generation"
+          target="_blank" rel="noopener noreferrer" className="link">
+        Ink! Verifier documentation
+        </a>.
       </div>
       <div className="mt-3">
         <UploadForm
@@ -237,7 +302,7 @@ export default function UnverifiedView (
 ) {
   const [showMetadataUpload, setShowMetadataUpload] = useState(false)
 
-  return <div className="mb-6">
+  return <div className="mt-5 mb-6">
     <ul className="my-2 mx-6 flex flex-wrap text-sm divide-x divide-blue-200 text-center">
       <li className="">
         <a href="#"

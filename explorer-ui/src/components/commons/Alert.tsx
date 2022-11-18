@@ -3,7 +3,7 @@ import React from "react"
 export function Warning ({ title, message }: { title: string, message:string }) {
   return (
     <div
-      className="flex items-start max-w mb-3 px-2 py-1 border-orange-200 border text-gray-500 bg-white gap-x-2"
+      className="flex items-start max-w mb-3 px-2 py-1 border-orange-200 border-2 text-gray-500 bg-white gap-x-2"
       role="alert">
       <div className="inline-flex items-center justify-center flex-shrink-0 h-7 text-orange-500">
         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
