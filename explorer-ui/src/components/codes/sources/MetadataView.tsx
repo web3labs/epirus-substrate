@@ -136,26 +136,28 @@ export default function MetadataView (
         title="Build Info"
         className="items-start"
       >
-        <table className="table-auto border-collapse border border-slate-300 text-xs">
-          <tbody>
-            <tr className="p-2">
-              <td className="border border-slate-300 py-2 px-4">Build Mode</td>
-              <td className="border border-slate-300 py-2 px-4 font-mono">{build_info.build_mode}</td>
-            </tr>
-            <tr>
-              <td className="border border-slate-300 py-2 px-4">Cargo Contract Version</td>
-              <td className="border border-slate-300 py-2 px-4 font-mono">{build_info.cargo_contract_version}</td>
-            </tr>
-            <tr>
-              <td className="border border-slate-300 py-2 px-4">Rust Toolchain</td>
-              <td className="border border-slate-300 py-2 px-4 font-mono">{build_info.rust_toolchain}</td>
-            </tr>
-            <tr>
-              <td className="border border-slate-300 py-2 px-4">Wasm Opt Passes</td>
-              <td className="border border-slate-300 py-2 px-4 font-mono">{build_info.wasm_opt_settings.optimization_passes}</td>
-            </tr>
-          </tbody>
-        </table>
+        <div className="overflow-x-auto border relative sm:rounded-lg">
+          <table className="table-auto border-collapse text-xs">
+            <tbody>
+              <tr className="border-b p-2">
+                <td className="bg-neutral-50 py-2 px-4">Build Mode</td>
+                <td className="py-2 px-4 font-mono">{build_info.build_mode}</td>
+              </tr>
+              <tr className="border-b p-2">
+                <td className="bg-neutral-50 py-2 px-4">Cargo Contract Version</td>
+                <td className="py-2 px-4 font-mono">{build_info.cargo_contract_version}</td>
+              </tr>
+              <tr className="border-b p-2">
+                <td className="bg-neutral-50 py-2 px-4">Rust Toolchain</td>
+                <td className="py-2 px-4 font-mono">{build_info.rust_toolchain}</td>
+              </tr>
+              <tr className="p-2">
+                <td className="bg-neutral-50 py-2 px-4">Wasm Opt Passes</td>
+                <td className="py-2 px-4 font-mono">{build_info.wasm_opt_settings.optimization_passes}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </Segment>
       }
       <Segment
