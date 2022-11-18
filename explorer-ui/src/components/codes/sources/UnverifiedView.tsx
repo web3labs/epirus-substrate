@@ -126,8 +126,8 @@ function UploadForm ({
   )
 }
 
-function toHex (a: Uint8Array) : string {
-  return a.reduce((a, b) => a + b.toString(16).padStart(2, "0"), "")
+function toHex (arr: Uint8Array) : string {
+  return arr.reduce((a, b) => a + b.toString(16).padStart(2, "0"), "")
 }
 
 function UploadSignedMetadata (
