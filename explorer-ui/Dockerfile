@@ -13,7 +13,8 @@ RUN npm run build
 FROM nginx:stable-alpine
 COPY --from=build /app/build /usr/share/nginx/html
 
-# copy .env.example as .env to the relase build
+# copy .env.example as .env to the release build
+# see https://github.com/kHRISl33t/runtime-env-cra for details.
 COPY .env.example /usr/share/nginx/html/.env
 COPY etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
 
