@@ -13,8 +13,8 @@ RUN npm run build
 FROM nginx:stable-alpine
 COPY --from=build /app/build /usr/share/nginx/html
 
-# copy .env.example as .env to the relase build
-COPY .env.example /usr/share/nginx/html/.env
+# copy .env.docker as .env to the relase build
+COPY .env.docker /usr/share/nginx/html/.env
 COPY etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
 
 RUN apk add --update nodejs
