@@ -41,20 +41,20 @@ function CollapsableSegment ({
   return (
     <div className={classNames(className, "flex flex-col w-full px-5 py-3 gap-y-2")}>
       <div role="switch" className="group flex flex-row cursor-pointer -ml-1 items-center" onClick={() => setOpen(!open)}>
+        {open
+          ? <ChevronUpIcon
+            className="chevron text-gray-400 w-4 h-4 mr-2 group-hover:text-gray-600"
+            aria-hidden="true"
+          />
+          : <ChevronDownIcon
+            className="chevron text-gray-400 w-4 h-4 mr-2 group-hover:text-gray-600"
+            aria-hidden="true"
+          />
+        }
         {title &&
         <h3 className="tracking-wider text-sm">
           {title}
         </h3>
-        }
-        {open
-          ? <ChevronUpIcon
-            className="chevron text-gray-400 w-4 h-4 ml-2 group-hover:text-gray-600"
-            aria-hidden="true"
-          />
-          : <ChevronDownIcon
-            className="chevron text-gray-400 w-4 h-4 ml-2 group-hover:text-gray-600"
-            aria-hidden="true"
-          />
         }
       </div>
       {open && children}
