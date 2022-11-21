@@ -88,7 +88,8 @@ Quite useful to tackle down the cause of big sizes in production build artifacts
 docker build -t epirus-substrate-ui:develop .
 ```
 
-Note that the build process copies the `.env.docker` environment configuration.
+Note that the build process copies the `.env.example` environment configuration.
+See [Runtime ENV CRA](https://github.com/kHRISl33t/runtime-env-cra) for details.
 
 ## Others
 
