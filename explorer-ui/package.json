@@ -54,10 +54,11 @@
     }
   },
   "scripts": {
-    "start": "npm run env:update && craco start",
+    "start": "npm run env:update:dev && craco start",
     "build": "craco build",
     "analyze": "source-map-explorer 'build/static/js/*.js' --html .analysis/source-map.html",
-    "env:update": "NODE_ENV=development runtime-env-cra --config-name=./public/runtime-env.js --env-file=./.env.development",
+    "env:update": "runtime-env-cra --config-name=./public/runtime-env.js", 
+    "env:update:dev": "NODE_ENV=development runtime-env-cra --config-name=./public/runtime-env.js --env-file=./.env.development",
     "test": "craco test",
     "test:coverage": "CI=true npm test -- --env=jsdom --coverage",
     "eject": "react-scripts eject",
