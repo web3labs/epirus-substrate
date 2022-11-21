@@ -109,7 +109,7 @@ export default function ActivityRow ({
         }/>
         {args.data &&
         <Definition label="Data" term={
-          <span className="font-mono break-all">{args.data}</span>
+          <div className="max-h-32 overflow-y-auto font-mono break-all">{args.data}</div>
         }/>}
         <Definition label="Status" term={
           <div className={classNames(
