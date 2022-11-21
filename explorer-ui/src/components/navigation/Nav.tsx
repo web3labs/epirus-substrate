@@ -7,12 +7,11 @@ import {
   XMarkIcon,
   CalendarIcon
 } from "@heroicons/react/24/outline"
-import { ChevronDownIcon, CodeBracketIcon } from "@heroicons/react/24/solid"
+import { ChevronDownIcon, ChevronUpIcon, CodeBracketIcon } from "@heroicons/react/24/solid"
 
 import Logo from "../../logo.svg"
 import SearchBox from "../query/search/SearchBox"
 import { Link, NavLink } from "react-router-dom"
-import { classNames } from "../../utils/strings"
 import { useChainProperties } from "../../contexts/ChainContext"
 
 const blockchain = [
@@ -95,13 +94,16 @@ export default function Nav () {
                     className="group nav-link inline-flex items-center focus:outline-none"
                   >
                     <span>Blockchain</span>
-                    <ChevronDownIcon
-                      className={classNames(
-                        open ? "open" : "close",
-                        "chevron ml-2 h-5 w-5 group-hover:text-opacity-100"
-                      )}
-                      aria-hidden="true"
-                    />
+                    {open
+                      ? <ChevronUpIcon
+                        className="chevron w-4 h-4 ml-2 group-hover:text-opacity-100"
+                        aria-hidden="true"
+                      />
+                      : <ChevronDownIcon
+                        className="chevron w-4 h-4 ml-2 group-hover:text-opacity-100"
+                        aria-hidden="true"
+                      />
+                    }
                   </Popover.Button>
 
                   <Transition
@@ -195,6 +197,7 @@ export default function Nav () {
                   </nav>
                 </div>
               </div>
+              {/*
               <div className="py-6 px-5 space-y-6">
                 <div className="grid grid-cols-2 gap-y-4 gap-x-8">
                   <a href="#" className="text-base font-medium text-gray-900 hover:text-gray-700">
@@ -202,6 +205,7 @@ export default function Nav () {
                   </a>
                 </div>
               </div>
+              */}
             </div>
           )}
         </Popover.Panel>

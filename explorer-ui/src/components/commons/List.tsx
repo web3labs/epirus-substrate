@@ -1,8 +1,9 @@
 import React, { ReactNode, useState } from "react"
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid"
+
 import { PageQuery } from "../../types/pagination"
 import { FilterProps } from "../query/Filters"
 import { Option } from "../commons/Select"
-import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline"
 
 interface Props {
     title?: JSX.Element | string
@@ -31,8 +32,8 @@ export function CollapsibleRow ({ children, collapsedDisplay, isOpen = false }: 
         {children}
         <div className="pl-5">
           {open
-            ? <ChevronDownIcon className="text-gray-300 w-5 h-5 group-hover:text-gray-500" />
-            : <ChevronRightIcon className="text-gray-300 w-5 h-5 group-hover:text-gray-500"/>
+            ? <ChevronUpIcon className="text-gray-400 w-4 h-4 group-hover:text-gray-600" />
+            : <ChevronDownIcon className="text-gray-400 w-4 h-4 group-hover:text-gray-600"/>
           }
         </div>
       </div>

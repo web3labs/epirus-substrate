@@ -1,4 +1,4 @@
-import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/solid"
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid"
 import React, { useState } from "react"
 import { classNames } from "../../utils/strings"
 
@@ -40,15 +40,21 @@ function CollapsableSegment ({
 
   return (
     <div className={classNames(className, "flex flex-col w-full px-5 py-3 gap-y-2")}>
-      <div role="switch" className="flex flex-row cursor-pointer -ml-1" onClick={() => setOpen(!open)}>
-        {open
-          ? <ChevronDownIcon className="text-gray-300 w-5 h-5" />
-          : <ChevronRightIcon className="text-gray-300 w-5 h-5"/>
-        }
+      <div role="switch" className="group flex flex-row cursor-pointer -ml-1 items-center" onClick={() => setOpen(!open)}>
         {title &&
         <h3 className="tracking-wider text-sm">
           {title}
         </h3>
+        }
+        {open
+          ? <ChevronUpIcon
+            className="chevron text-gray-400 w-4 h-4 ml-2 group-hover:text-gray-600"
+            aria-hidden="true"
+          />
+          : <ChevronDownIcon
+            className="chevron text-gray-400 w-4 h-4 ml-2 group-hover:text-gray-600"
+            aria-hidden="true"
+          />
         }
       </div>
       {open && children}
