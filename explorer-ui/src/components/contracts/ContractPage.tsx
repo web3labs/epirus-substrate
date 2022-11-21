@@ -185,11 +185,11 @@ export default function ContractPage () {
                 <Definition label="Code Hash" term={
                   <CodeLink id={contractCode.id} />
                 }/>
-                <Definition label="Salt" term={
-                  <HexText short={true}>
-                    {typeof salt === "string" ? salt : undefined}
-                  </HexText>
-                }/>
+                {typeof salt === "string" && (salt as string).length > 2 &&
+                  <Definition label="Salt" term={
+                    <HexText short={true}>{salt}</HexText>
+                  }/>
+                }
               </DefinitionList>
             </Segment>
 
