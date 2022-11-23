@@ -58,7 +58,7 @@ export default function Nav () {
                     alt=""
                   />
                   <span className="hidden leading-tight md:block">
-                    <span className="font-semibold">Epirus</span><br/>
+                    <span className="font-semibold">Sirato</span><br/>
                     <span className="font-normal">substrate</span>
                   </span>
                 </div>
