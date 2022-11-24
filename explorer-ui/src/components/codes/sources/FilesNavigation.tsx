@@ -63,7 +63,7 @@ function SourcesBreadCrumbs (
                   onClick={c.navigate}
                   className={classNames(
                     isNotLast
-                      ? "link"
+                      ? "link hover:cursor-pointer"
                       : "font-semibold text-gray-700",
                     isFirst ? "flex gap-x-1" : "",
                     "text-sm"
