@@ -3,7 +3,7 @@
 /db/migrations
 /db/backups
 /coverage
-/.env
+.env
 
 /**Versions.json
 /**.log
