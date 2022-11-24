@@ -235,7 +235,7 @@ function getDecodeCallByName(name: string): any {
 function getCallHashByName(name: string): string {
   switch (name) {
     case "Contracts.call":
-      return "d96c8a6656d7a4d6af6d5d0d51dd36e041c9ea8a92a7ead343d711addd74780f";
+      return "02511922863054b5c354386a9605ca660c51d4316bc5c8d224b533cb6036f669";
     default:
       return "";
   }
