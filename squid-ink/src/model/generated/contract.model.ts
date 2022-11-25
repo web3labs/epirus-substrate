@@ -3,6 +3,7 @@ import * as marshal from "./marshal"
 import {Account} from "./account.model"
 import {ContractCode} from "./contractCode.model"
 import {Extrinsic} from "./extrinsic.model"
+import {StorageInfo} from "./_storageInfo"
 import {CodeHashChange} from "./codeHashChange.model"
 
 @Entity_()
@@ -55,8 +56,8 @@ export class Contract {
   @ManyToOne_(() => Extrinsic, {nullable: false})
   createdFrom!: Extrinsic
 
-  @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
-  storageDeposit!: bigint
+  @Column_("jsonb", {transformer: {to: obj => obj.toJSON(), from: obj => new StorageInfo(undefined, marshal.nonNull(obj))}, nullable: false})
+  storageInfo!: StorageInfo
 
   @OneToMany_(() => CodeHashChange, e => e.contract)
   codeHashChanges!: CodeHashChange[]

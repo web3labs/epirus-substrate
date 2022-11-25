@@ -1,6 +1,7 @@
 import assert from "assert";
 import * as ss58 from "@subsquid/ss58";
 import { decodeHex } from "@subsquid/util-internal-hex";
+import { ResolvedContractInfoOfStorage } from "chains/normalised-return-types";
 import {
   BalancesAccountStorage,
   ContractsCodeStorageStorage,
@@ -13,7 +14,6 @@ import {
   AccountInfo,
   OwnerInfo,
   PrefabWasmModule,
-  RawContractInfo,
 } from "../types/v100";
 import { ss58Format } from "../../../chain-config";
 
@@ -38,9 +38,9 @@ export class NormalisedBalancesAccountStorage extends BalancesAccountStorage {
 }
 
 export class NormalisedContractInfoOfStorage extends ContractsContractInfoOfStorage {
-  async get(accountId: string): Promise<RawContractInfo> {
+  async get(accountId: string): Promise<ResolvedContractInfoOfStorage> {
     assert(this.isExists);
-    let info: RawContractInfo | undefined;
+    let info: ResolvedContractInfoOfStorage | undefined;
     if (this.isV100) {
       info = await this.getAsV100(ss58.codec(ss58Format).decode(accountId));
     } else {

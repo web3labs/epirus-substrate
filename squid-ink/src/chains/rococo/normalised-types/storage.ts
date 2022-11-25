@@ -1,6 +1,7 @@
 import assert from "assert";
 import * as ss58 from "@subsquid/ss58";
 import { decodeHex } from "@subsquid/util-internal-hex";
+import { ResolvedContractInfoOfStorage } from "chains/normalised-return-types";
 import {
   BalancesAccountStorage,
   ContractsCodeStorageStorage,
@@ -13,7 +14,6 @@ import {
   AccountInfo,
   OwnerInfo,
   PrefabWasmModule,
-  RawContractInfo,
 } from "../types/canvasKusamaV16";
 import { ss58Format } from "../../../chain-config";
 
@@ -42,13 +42,14 @@ export class NormalisedBalancesAccountStorage extends BalancesAccountStorage {
 }
 
 export class NormalisedContractInfoOfStorage extends ContractsContractInfoOfStorage {
-  async get(accountId: string): Promise<RawContractInfo> {
+  async get(accountId: string): Promise<ResolvedContractInfoOfStorage> {
     assert(this.isExists);
-    let info: RawContractInfo | undefined;
+    let info: ResolvedContractInfoOfStorage | undefined;
+    const key = ss58.codec(ss58Format).decode(accountId);
     if (this.isCanvasKusamaV16) {
-      info = await this.getAsCanvasKusamaV16(
-        ss58.codec(ss58Format).decode(accountId)
-      );
+      info = await this.getAsCanvasKusamaV16(key);
+    } else if (this.isV9321) {
+      info = await this.getAsV9321(key);
     } else {
       throw new Error("No Runtime version found");
     }

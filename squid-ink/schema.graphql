@@ -29,6 +29,14 @@ type Balance {
   feeFrozen: BigInt
 }
 
+type StorageInfo {
+  storageBytes: Int
+  storageItems: Int
+  storageByteDeposit: BigInt
+  storageItemDeposit: BigInt
+  storageBaseDeposit: BigInt
+}
+
 type Contract @entity {
   "Contract address"
   id: ID!
@@ -42,7 +50,7 @@ type Contract @entity {
   terminationBeneficiary: Account
   salt: String
   createdFrom: Extrinsic!
-  storageDeposit: BigInt!
+  storageInfo: StorageInfo!
   codeHashChanges: [CodeHashChange!] @derivedFrom(field: "contract")
 }
 

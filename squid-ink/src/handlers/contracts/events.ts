@@ -12,14 +12,7 @@ import {
 import { toHex } from "@subsquid/util-internal-hex";
 import { SubstrateBlock } from "@subsquid/substrate-processor";
 import {
-  ContractCodeStoredArgs,
-  ContractCodeUpdatedArgs,
-  ContractInstantiatedArgs,
-  Ctx,
-  Event,
-  EventHandler,
-} from "../types";
-import {
+  StorageInfo,
   Account,
   ActivityType,
   CodeHashChange,
@@ -28,6 +21,14 @@ import {
   ContractEmittedEvent,
   Extrinsic,
 } from "../../model";
+import {
+  ContractCodeStoredArgs,
+  ContractCodeUpdatedArgs,
+  ContractInstantiatedArgs,
+  Ctx,
+  Event,
+  EventHandler,
+} from "../types";
 import {
   createActivity,
   createEvent,
@@ -57,8 +58,11 @@ const contractsInstantiatedHandler: EventHandler = {
       const contractAccount = await getOrCreateAccount(store, contract, block);
       const extrinsicEntity = createExtrinsic(extrinsic, call, block);
 
-      const { codeHash, trieId, storageDeposit } =
-        await new NormalisedContractInfoOfStorage(ctx, block).get(contract);
+      const contractInfo = await new NormalisedContractInfoOfStorage(
+        ctx,
+        block
+      ).get(contract);
+      const { codeHash, trieId, storageDeposit } = contractInfo;
 
       let contractCodeEntity = await ctx.store.get(
         ContractCode,
@@ -82,6 +86,17 @@ const contractsInstantiatedHandler: EventHandler = {
         ? <ContractInstantiatedArgs>extrinsicEntity.args
         : null;
 
+      const storageInfo =
+        storageDeposit === undefined
+          ? new StorageInfo({
+              storageBaseDeposit: contractInfo.storageBaseDeposit,
+              storageByteDeposit: contractInfo.storageByteDeposit,
+              storageBytes: contractInfo.storageBytes,
+              storageItemDeposit: contractInfo.storageItemDeposit,
+              storageItems: contractInfo.storageItems,
+            })
+          : new StorageInfo({ storageBaseDeposit: storageDeposit });
+
       const contractEntity = new Contract({
         id: contract,
         trieId,
@@ -90,7 +105,7 @@ const contractsInstantiatedHandler: EventHandler = {
         createdAt: extrinsicEntity.createdAt,
         createdFrom: extrinsicEntity,
         contractCode: contractCodeEntity,
-        storageDeposit,
+        storageInfo,
         salt: args ? args.salt : null,
       });
 

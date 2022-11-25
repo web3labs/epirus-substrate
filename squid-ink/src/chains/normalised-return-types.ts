@@ -66,3 +66,14 @@ export interface ResolvedContractTerminatedEvent {
 export interface ResolvedNewAccountEvent {
   account: string;
 }
+
+export interface ResolvedContractInfoOfStorage {
+  trieId: Uint8Array;
+  codeHash: Uint8Array;
+  storageDeposit?: bigint;
+  storageBytes?: number;
+  storageItems?: number;
+  storageByteDeposit?: bigint;
+  storageItemDeposit?: bigint;
+  storageBaseDeposit?: bigint;
+}
