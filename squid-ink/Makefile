@@ -22,19 +22,19 @@ codegen:
 	@npx sqd codegen
 
 
-typegen: kusamaVersions.json
+typegen: rococoContractsVersions.json
 	@npx squid-substrate-typegen typegen.json
 
 
-kusamaVersions.json:
+rococoContractsVersions.json:
 	@make explore
 
 
 explore:
 	@npx squid-substrate-metadata-explorer \
-		--chain wss://kusama-rpc.polkadot.io \
-		--archive https://kusama.indexer.gc.subsquid.io/v4/graphql \
-		--out kusamaVersions.json
+			--chain wss://suba.epirus.io/node \
+			--archive https://suba.epirus.io/archive/graphql \
+			--out rococoContractsVersions.json
 
 
 up:

@@ -1,6 +1,7 @@
 import assert from 'assert'
-import {Block, Chain, ChainContext, BlockContext, Result} from './support'
+import {Block, Chain, ChainContext, BlockContext, Result, Option} from './support'
 import * as canvasKusamaV16 from './canvasKusamaV16'
+import * as v9321 from './v9321'
 
 export class BalancesAccountStorage {
   private readonly _chain: Chain
@@ -176,6 +177,35 @@ export class ContractsContractInfoOfStorage {
 
   async getAllAsCanvasKusamaV16(): Promise<(canvasKusamaV16.RawContractInfo)[]> {
     assert(this.isCanvasKusamaV16)
+    return this._chain.queryStorage(this.blockHash, 'Contracts', 'ContractInfoOf')
+  }
+
+  /**
+   *  The code associated with a given account.
+   * 
+   *  TWOX-NOTE: SAFE since `AccountId` is a secure hash.
+   */
+  get isV9321() {
+    return this._chain.getStorageItemTypeHash('Contracts', 'ContractInfoOf') === 'b19f56551b6001070487b6e33ba3a88bf2e7a48df38a8c979b2d69856127de63'
+  }
+
+  /**
+   *  The code associated with a given account.
+   * 
+   *  TWOX-NOTE: SAFE since `AccountId` is a secure hash.
+   */
+  async getAsV9321(key: Uint8Array): Promise<v9321.ContractInfo | undefined> {
+    assert(this.isV9321)
+    return this._chain.getStorage(this.blockHash, 'Contracts', 'ContractInfoOf', key)
+  }
+
+  async getManyAsV9321(keys: Uint8Array[]): Promise<(v9321.ContractInfo | undefined)[]> {
+    assert(this.isV9321)
+    return this._chain.queryStorage(this.blockHash, 'Contracts', 'ContractInfoOf', keys.map(k => [k]))
+  }
+
+  async getAllAsV9321(): Promise<(v9321.ContractInfo)[]> {
+    assert(this.isV9321)
     return this._chain.queryStorage(this.blockHash, 'Contracts', 'ContractInfoOf')
   }
 

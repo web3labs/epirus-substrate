@@ -26,3 +26,18 @@ export interface MultiAddress_Address20 {
   __kind: 'Address20'
   value: Uint8Array
 }
+
+export interface Weight {
+  refTime: bigint
+  proofSize: bigint
+}
+
+export interface ContractInfo {
+  trieId: Uint8Array
+  codeHash: Uint8Array
+  storageBytes: number
+  storageItems: number
+  storageByteDeposit: bigint
+  storageItemDeposit: bigint
+  storageBaseDeposit: bigint
+}
