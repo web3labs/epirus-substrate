@@ -13,6 +13,7 @@ export default function ExtrinsicSummary (
 ) {
   const { blockNumber, blockHash, indexInBlock, name, args, createdAt } = extrinsic
   const data = getArg(args, "data")
+  // TODO: gasLimit arg could be a Weight struct
   const gasLimit = getArg(args, "gasLimit")
 
   return (
@@ -43,13 +44,16 @@ export default function ExtrinsicSummary (
           }
         </>
         <>
-          {
-            gasLimit &&
-            <Definition label="Gas Limit" term={
-              <span className="font-mono">
+          { gasLimit &&
+          <Definition label="Gas Limit" term={
+            typeof gasLimit === "object"
+              ? <span className="font-mono">
+                {(gasLimit as unknown as any).refTime}
+              </span>
+              : <span className="font-mono">
                 {gasLimit}
               </span>
-            }/>
+          }/>
           }
         </>
         <Definition label="Tip" term={
