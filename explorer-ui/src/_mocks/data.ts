@@ -171,7 +171,9 @@ export function mockContract () {
     deployer: mockAccount(),
     salt: randomCodeHash(),
     trieId: randomId(),
-    storageDeposit: "100000"
+    storageInfo: {
+      storageBaseDeposit: "100000"
+    }
   } as unknown as Contract
 }
 
