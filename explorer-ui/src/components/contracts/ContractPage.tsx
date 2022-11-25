@@ -32,7 +32,13 @@ query($id: String!, $codeHashChangeOrderBy: [CodeHashChangeOrderByInput!] ) {
     id
     salt
     trieId
-    storageDeposit
+    storageInfo {
+      storageBaseDeposit
+      storageByteDeposit
+      storageItemDeposit
+      storageItems
+      storageBytes
+    }
     deployer {
       id
       contract {
@@ -141,7 +147,7 @@ export default function ContractPage () {
     createdFrom,
     contractCode,
     account,
-    storageDeposit,
+    storageInfo,
     terminatedAt,
     terminatedFrom,
     terminationBeneficiary,
@@ -226,15 +232,20 @@ export default function ContractPage () {
                 />
               </DefinitionList>
             </Segment>
-            <Segment>
+            { storageInfo &&
+            <Segment title="Storage">
               <DefinitionList>
                 <Definition
                   className="justify-between"
-                  label="Storage Deposit"
-                  term={<AccountUnit amount={storageDeposit} token={token} />}
+                  label="Base"
+                  term={<AccountUnit
+                    amount={storageInfo.storageBaseDeposit}
+                    token={token}
+                  />}
                 />
               </DefinitionList>
             </Segment>
+            }
           </Box>
         </div>
 

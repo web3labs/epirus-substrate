@@ -56,7 +56,13 @@ export type LightContract = {
 export interface Contract extends LightContract {
   salt: string
   trieId : string
-  storageDeposit: string
+  storageInfo: {
+    storageBaseDeposit: string
+    storageByteDeposit: string
+    storageItemDeposit: string
+    storageItems: number
+    storageBytes: number
+  }
   contractCode: {
     code: string
     id: string
