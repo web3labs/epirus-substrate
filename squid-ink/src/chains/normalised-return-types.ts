@@ -1,8 +1,10 @@
+import { Weight } from "../model";
+
 export interface ResolvedContractsCallCall {
   contractAddress: string;
   value?: bigint;
-  gasLimit?: bigint;
-  storageDepositLimit?: bigint | undefined;
+  gasLimit?: Weight;
+  storageDepositLimit?: bigint;
   data?: Uint8Array;
 }
 

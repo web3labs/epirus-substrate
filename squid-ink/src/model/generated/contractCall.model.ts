@@ -1,5 +1,6 @@
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_} from "typeorm"
 import * as marshal from "./marshal"
+import {Weight} from "./_weight"
 import {Extrinsic} from "./extrinsic.model"
 
 @Entity_()
@@ -20,8 +21,8 @@ export class ContractCall {
   @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
   value!: bigint | undefined | null
 
-  @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
-  gasLimit!: bigint | undefined | null
+  @Column_("jsonb", {transformer: {to: obj => obj == null ? undefined : obj.toJSON(), from: obj => obj == null ? undefined : new Weight(undefined, obj)}, nullable: true})
+  gasLimit!: Weight | undefined | null
 
   @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
   gasUsed!: bigint | undefined | null

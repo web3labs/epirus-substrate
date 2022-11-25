@@ -1,5 +1,6 @@
 import * as ss58 from "@subsquid/ss58";
 import { ResolvedContractsCallCall } from "chains/normalised-return-types";
+import { Weight } from "../../../model";
 import { ss58Format } from "../../../chain-config";
 import { ContractsCallCall } from "../types/calls";
 
@@ -14,7 +15,9 @@ export class NormalisedContractsCallCall extends ContractsCallCall {
       return {
         contractAddress: ss58.codec(ss58Format).encode(dest.value),
         value,
-        gasLimit,
+        gasLimit: new Weight({
+          refTime: gasLimit,
+        }),
         storageDepositLimit,
         data,
       };

@@ -67,12 +67,17 @@ type ContractCode @entity {
   contractsDeployed: [Contract!] @derivedFrom(field: "contractCode")
 }
 
+type Weight {
+  refTime: BigInt
+  proofSize: BigInt
+}
+
 type ContractCall @entity {
   "Extrinsic ID"
   id: ID!
   contractAddress: String!
   value: BigInt
-  gasLimit: BigInt
+  gasLimit: Weight
   gasUsed: BigInt
   storageDepositLimit: BigInt
   data: Bytes
