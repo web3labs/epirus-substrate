@@ -3,7 +3,7 @@ import React, { Dispatch, Reducer, useEffect, useReducer } from "react"
 import ErrorStatusView from "./ErrorView"
 import ProcessingView from "./ProcessingView"
 import VerifiedView from "./VerifiedView"
-import { SourceTabAction, SourceTabState } from "../../../types/componentStates"
+import { ReducerActionType, SourceTabAction, SourceTabState } from "../../../types/componentStates"
 import UnverifiedView from "./UnverifiedView"
 import { PageLoading } from "../../loading/Loading"
 import api from "../../../apis/verifierApi"
@@ -13,13 +13,13 @@ import { errMsg } from "../../../utils/errors"
 import MetadataView from "./MetadataView"
 
 const reducer: Reducer<SourceTabState, SourceTabAction> = (state, action) => {
-  if (action.type === "fetched") {
+  if (action.type === ReducerActionType.FETCHED) {
     return {
       ...state,
       status: action.info?.status,
       timestamp: action.info?.timestamp
     }
-  } else if (action.type === "error") {
+  } else if (action.type === ReducerActionType.ERROR) {
     return {
       ...state,
       error: action.error
@@ -60,12 +60,12 @@ export default function SourceTab (
       try {
         const res = await api.info({ chain: info, codeHash: id })
         if ("status" in res) {
-          dispatch({ type: "fetched", info: res })
+          dispatch({ type: ReducerActionType.FETCHED, info: res })
         } else {
-          dispatch({ type: "error", error: res.message })
+          dispatch({ type: ReducerActionType.ERROR, error: res.message })
         }
       } catch (error: unknown) {
-        dispatch({ type: "error", error: errMsg(error) })
+        dispatch({ type: ReducerActionType.ERROR, error: errMsg(error) })
       }
     }
 

@@ -11,6 +11,7 @@ import { SourceTabProps } from "./SourceTab"
 import { errMsg } from "../../../utils/errors"
 import { Warning } from "../../commons/Alert"
 import { PageLoading } from "../../loading/Loading"
+import { ReducerActionType } from "../../../types/componentStates"
 
 interface SubmitHandlerProps {
   event: FormEvent<HTMLFormElement>
@@ -151,7 +152,7 @@ function UploadSignedMetadata (
     try {
       const res = await api.uploadMetadata({ chain, codeHash }, formData)
       if (res.ok) {
-        setTimeout(() => dispatch({ type: "uploaded" }), 500)
+        setTimeout(() => dispatch({ type: ReducerActionType.UPLOADED }), 500)
       } else {
         const errorJson = await res.json()
         targetForm.reset()
@@ -160,7 +161,7 @@ function UploadSignedMetadata (
       }
     } catch (error) {
       dispatch({
-        type: "networkError",
+        type: ReducerActionType.ERROR,
         error: errMsg(error)
       })
     }
@@ -256,7 +257,7 @@ function UploadVerifiablePackage (
   { codeHash, dispatch, chain } : SourceTabProps
 ) {
   function uploadFileToVerifier ({ file } : SubmitHandlerProps) {
-    dispatch({ type: "uploading" })
+    dispatch({ type: ReducerActionType.UPLOADING })
 
     const formData = new FormData()
     formData.append("package", file)
@@ -264,10 +265,10 @@ function UploadVerifiablePackage (
     api.verify({ chain, codeHash }, formData)
       .then(response => response.json())
       .then(_ => {
-        setTimeout(() => dispatch({ type: "uploaded" }), 10)
+        setTimeout(() => dispatch({ type: ReducerActionType.UPLOADED }), 10)
       })
       .catch(error => {
-        dispatch({ type: "networkError", error })
+        dispatch({ type: ReducerActionType.ERROR, error })
       })
   }
 

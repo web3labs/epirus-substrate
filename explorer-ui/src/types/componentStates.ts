@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { InfoResponse } from "../apis/verifierApi"
 
 export interface SourceTabState {
@@ -11,4 +12,11 @@ export interface SourceTabAction {
   type: string,
   info?: InfoResponse,
   error?: string
+}
+
+export const enum ReducerActionType {
+  FETCHED = "fetched",
+  UPLOADING = "uploading",
+  UPLOADED = "uploaded",
+  ERROR = "error"
 }
