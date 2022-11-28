@@ -95,5 +95,5 @@ See [Runtime ENV CRA](https://github.com/kHRISl33t/runtime-env-cra) project for 
 ## Others
 
 This project was bootstrapped using [CRA](https://create-react-app.dev/) for convinience.
-We are using [CRACO](https://github.com/dilanx/craco) alpha to enable PostCSS nesting capabilities in TailwindCSS without ejecting.
+We are using [CRACO](https://github.com/dilanx/craco) to enable PostCSS nesting capabilities in TailwindCSS without ejecting.
 
