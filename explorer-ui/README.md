@@ -30,7 +30,7 @@ REACT_APP_VERIFIER_WS_ENDPOINT=ws://127.0.0.1:3001
 # EOF
 ```
 
-See [.env.development](https://github.com/web3labs/epirus-substrate/blob/main/explorer-ui/.env.development) for reference.
+See [.env.example](https://github.com/web3labs/epirus-substrate/blob/main/explorer-ui/.env.example) for reference.
 
 Head to [Adding custom environment variables](https://create-react-app.dev/docs/adding-custom-environment-variables/) for further details.
 
