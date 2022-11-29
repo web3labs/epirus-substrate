@@ -18,5 +18,8 @@ export const enum ReducerActionType {
   FETCHED = "fetched",
   UPLOADING = "uploading",
   UPLOADED = "uploaded",
-  ERROR = "error"
+  ERROR = "error",
+  RE_UPLOAD = "reUpload",
+  VERIFICATION_ERROR = "verificationError",
+  VERIFICATION_SUCCESS = "verificationSuccess"
 }

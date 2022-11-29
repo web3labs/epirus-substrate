@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React, { useEffect, useState } from "react"
+import React, { Dispatch, useEffect, useState } from "react"
 import { ShieldCheckIcon, ShieldExclamationIcon } from "@heroicons/react/24/solid"
 
 import hljs from "../../../highlight"
@@ -12,6 +12,7 @@ import Segment from "../../commons/Segment"
 import SourceCodeView from "./SourceCode"
 import { PageLoading } from "../../loading/Loading"
 import Tooltip from "../../commons/Tooltip"
+import { ReducerActionType, SourceTabAction } from "../../../types/componentStates"
 
 export interface ContractMetadata {
   source: {
@@ -60,8 +61,11 @@ const SourceTypes : Record<string, React.ReactElement> = {
 }
 
 export default function MetadataView (
-  { codeHash, sourceType } :
-  { codeHash: string, sourceType: "signed-metadata" | "build" }
+  { codeHash, sourceType, dispatch } :
+  { codeHash: string,
+    sourceType: "signed-metadata" | "build",
+    dispatch: Dispatch<SourceTabAction>
+  }
 ) {
   const [metadata, setMetadata] = useState<ContractMetadata | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -82,6 +86,10 @@ export default function MetadataView (
 
     fetchData()
   }, [])
+
+  function dispatchReUpload () {
+    dispatch({ type: ReducerActionType.RE_UPLOAD })
+  }
 
   if (error !== null) {
     return <Warning title="Error" message={error} />
@@ -104,12 +112,19 @@ export default function MetadataView (
         isOpen={true}
         title="Contract"
       >
-        <div className="md:grid md:grid-cols-2 md:gap-2">
+        <div className="flex flex-col gap-2 md:grid md:grid-cols-2 md:gap-2">
           <div className="flex flex-col gap-2">
             <Definition label="Name" term={
               <span>{contract.name}</span>
             }/>
-            <Definition label="Verification" term={SourceTypes[sourceType]}/>
+            <Definition label="Verification" term={
+              <div className="flex flex-wrap gap-1 justify-start">
+                {SourceTypes[sourceType]}
+                <button type="button" className="link text-xs" onClick={dispatchReUpload} >
+                  Verify Source Code
+                </button>
+              </div>
+            }/>
           </div>
           <div className="flex flex-col gap-2">
             <Definition label="Language" term={

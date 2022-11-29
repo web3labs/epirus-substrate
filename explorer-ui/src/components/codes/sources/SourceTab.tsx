@@ -12,22 +12,39 @@ import { Warning } from "../../commons/Alert"
 import { errMsg } from "../../../utils/errors"
 import MetadataView from "./MetadataView"
 
+/**
+ * Reducer to keep track of complex state logic
+ * within the source code verification component
+ * @param state Current state of the component
+ * @param action dispatched action
+ * @returns New state
+ */
 const reducer: Reducer<SourceTabState, SourceTabAction> = (state, action) => {
-  if (action.type === ReducerActionType.FETCHED) {
+  switch (action.type) {
+  case ReducerActionType.FETCHED:
     return {
       ...state,
       status: action.info?.status,
       timestamp: action.info?.timestamp
     }
-  } else if (action.type === ReducerActionType.ERROR) {
+  case ReducerActionType.ERROR:
     return {
       ...state,
       error: action.error
     }
-  } else {
+  case ReducerActionType.UPLOADING:
+  case ReducerActionType.UPLOADED:
+  case ReducerActionType.RE_UPLOAD:
+  case ReducerActionType.VERIFICATION_ERROR:
+  case ReducerActionType.VERIFICATION_SUCCESS:
     return {
       ...state,
       action: action.type
+    }
+  default:
+    return {
+      ...state,
+      error: "Unknown action type on source code verification component state"
     }
   }
 }
@@ -81,19 +98,23 @@ export default function SourceTab (
 
   if (
     status === undefined ||
-    action === "uploading" ||
+    action === ReducerActionType.UPLOADING ||
     status === "staging"
   ) {
     return <PageLoading loading={true} />
   }
 
+  if (action === ReducerActionType.RE_UPLOAD) {
+    return <UnverifiedView chain={chain} codeHash={id} dispatch={dispatch}/>
+  }
+
   switch (status) {
   case "verified":
-    return <VerifiedView codeHash={id} />
+    return <VerifiedView codeHash={id} dispatch={dispatch}/>
   case "processing":
     return <ProcessingView chain={chain} codeHash={id} dispatch={dispatch}/>
   case "metadata":
-    return <MetadataView codeHash={id} sourceType="signed-metadata" />
+    return <MetadataView codeHash={id} sourceType="signed-metadata" dispatch={dispatch}/>
   default:
     return (
       <>
