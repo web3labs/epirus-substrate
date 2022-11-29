@@ -3,4 +3,5 @@ build
 coverage
 .dockerignore
 .analysis
+.env
 Dockerfile

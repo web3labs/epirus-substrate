@@ -59,7 +59,7 @@
     "build:env": "npm run env:update && npm run build",
     "analyze": "source-map-explorer 'build/static/js/*.js' --html .analysis/source-map.html",
     "env:update": "runtime-env-cra --config-name=./public/runtime-env.js --env-file=./.env.example",
-    "env:update:dev": "NODE_ENV=development runtime-env-cra --config-name=./public/runtime-env.js --env-file=./.env.development",
+    "env:update:dev": "NODE_ENV=development runtime-env-cra --config-name=./public/runtime-env.js",
     "test": "craco test",
     "test:coverage": "CI=true npm test -- --env=jsdom --coverage",
     "eject": "react-scripts eject",
