@@ -1,5 +1,5 @@
 import React from "react"
-import { render, screen } from "@testing-library/react"
+import { fireEvent, render, screen } from "@testing-library/react"
 import { MemoryRouter, Route, Routes } from "react-router"
 import { Provider } from "urql"
 import { createMockClient } from "../../_mocks/mockClient"
@@ -23,6 +23,13 @@ describe("AccountPage component", () => {
   })
 
   it("should render the account details for an existent id", () => {
+    Object.defineProperty(navigator, "clipboard", {
+      value: {
+        writeText: () => {}
+      }
+    })
+    jest.spyOn(navigator.clipboard, "writeText")
+
     const mockClient = createMockClient(mockPageOf([
       {
         id: "5HdKDnfR2X8y4fkgQUxXJuBxu638PuKQGUy5G16cyTjT5RzL",
@@ -48,5 +55,13 @@ describe("AccountPage component", () => {
       "5HdKDnfR2X8y4fkgQUxXJuBxu638PuKQGUy5G16cyTjT5RzL"
     )
     expect(idIcon).toBeInTheDocument()
+
+    // Click copy address
+    const copy = document.querySelector(".cursor-pointer")
+    expect(copy).toBeDefined()
+
+    fireEvent.click(copy!)
+    expect(navigator.clipboard.writeText)
+      .toHaveBeenCalledWith("5HdKDnfR2X8y4fkgQUxXJuBxu638PuKQGUy5G16cyTjT5RzL")
   })
 })
