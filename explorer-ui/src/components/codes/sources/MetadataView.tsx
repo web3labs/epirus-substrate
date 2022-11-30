@@ -106,7 +106,7 @@ export default function MetadataView (
   const { value } = hljs.highlight(metadataAsString, { language: "json" })
 
   return (
-    <div className="flex flex-col divide-y">
+    <div id="metadata-view" className="flex flex-col divide-y">
       <Segment
         collapsable={true}
         isOpen={true}

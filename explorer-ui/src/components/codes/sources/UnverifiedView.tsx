@@ -304,8 +304,8 @@ export default function UnverifiedView (
   const [showMetadataUpload, setShowMetadataUpload] = useState(false)
 
   return <div className="mt-5 mb-6">
-    <ul className="my-2 mx-6 flex flex-wrap text-sm divide-x divide-blue-200 text-center">
-      <li className="">
+    <ul id="tab-verification-opts" className="my-2 mx-6 flex flex-wrap text-sm divide-x divide-blue-200 text-center">
+      <li id="tab-verifiable-package">
         <a href="#"
           onClick={(e) => {
             e.preventDefault()
@@ -320,7 +320,7 @@ export default function UnverifiedView (
           Verifiable Package
         </a>
       </li>
-      <li className="">
+      <li id="tab-owner-signed">
         <a href="#"
           onClick={(e) => {
             e.preventDefault()
