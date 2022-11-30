@@ -1,8 +1,29 @@
 import React from "react"
 import { fireEvent, render } from "@testing-library/react"
-import EnumTypeFilter from "./EnumTypeFilter"
+import EnumTypeFilter, { enumTypeFilterOf } from "./EnumTypeFilter"
+
+const inputValues = [
+  { label: "one", value: "one" },
+  { label: "two", value: "two" }
+]
 
 describe("EnumTypeFilter component", () => {
+  it("should create from factory function", () => {
+    const Filter = enumTypeFilterOf({
+      label: "select",
+      selector: "x",
+      template: () => {},
+      inputValues
+    })
+    const { container } = render(
+      <Filter
+        filterQuery={{}}
+        setFilterQuery={jest.fn()}
+      />
+    )
+    expect(container).toBeDefined()
+  })
+
   it("should allow to select an option", () => {
     const mockSetFilter = jest.fn()
 
@@ -13,10 +34,7 @@ describe("EnumTypeFilter component", () => {
         filterQuery={{}}
         setFilterQuery={mockSetFilter}
         template={() => {}}
-        inputValues={[
-          { label: "one", value: "one" },
-          { label: "two", value: "two" }
-        ]} />
+        inputValues={inputValues} />
     )
 
     const button = container.getElementsByTagName("button")[0]
