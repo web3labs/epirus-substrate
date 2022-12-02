@@ -120,7 +120,12 @@ export default function MetadataView (
             <Definition label="Verification" term={
               <div className="flex flex-wrap gap-1 justify-start">
                 {SourceTypes[sourceType]}
-                <button type="button" className="link text-xs" onClick={dispatchReUpload} >
+                <button
+                  data-testid="btn-reup"
+                  type="button"
+                  className="link text-xs"
+                  onClick={dispatchReUpload}
+                >
                   Verify Source Code
                 </button>
               </div>
@@ -177,7 +182,7 @@ export default function MetadataView (
       }
       <Segment
         collapsable={true}
-        isOpen={false}
+        isOpen={true}
         title="Metadata"
       >
         <SourceCodeView

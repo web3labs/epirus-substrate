@@ -23,7 +23,9 @@ export default function SourceCodeView (
     <FileBox name={name}
       tools={<>
         <Copy text={content}/>
-        <div className="rounded-full p-1 cursor-pointer hover:bg-neutral-200">
+        <div
+          data-testid="expand-sourcecode"
+          className="rounded-full p-1 cursor-pointer hover:bg-neutral-200">
           {
             expanded
               ? <ArrowsPointingInIcon width={18} height={18} onClick={toggleExpanded}/>

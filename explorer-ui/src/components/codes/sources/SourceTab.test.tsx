@@ -1,5 +1,5 @@
 import React from "react"
-import { act, findByTestId, render } from "@testing-library/react"
+import { act, findByTestId, fireEvent, getByTestId, render } from "@testing-library/react"
 import SourceTab from "./SourceTab"
 import { mockMetadata, MockWebSocket, mockSourceCode } from "../../../_mocks/verifierApiData"
 
@@ -39,17 +39,25 @@ jest.mock("../../../apis/verifierApi", () => {
     },
     {
       type: "dir",
+      url: "dir0",
+      name: "dir0",
+      size: 0,
+      utf8: false,
+      ents: []
+    },
+    {
+      type: "dir",
       url: "dir1",
       name: "dir1",
       size: 0,
       utf8: false,
-      ents: {
+      ents: [{
         type: "dir",
         url: "dir1/dir2",
-        name: "dir2",
+        name: "dir12",
         size: 0,
         utf8: false
-      }
+      }]
     }
     ]),
     resource: ({ codeHash, path }:
@@ -108,9 +116,20 @@ describe("SourceTab component", () => {
     const { container } = await act(async () => render(
       <SourceTab id="test" />
     ))
+
     expect(
       container.querySelector("#metadata-view")
     ).toBeDefined()
+
+    // Browse a dir...
+    const navFiles = await getByTestId(container, "folders")
+    const dirs = navFiles.querySelectorAll("div div")
+    await act(async () => {
+      fireEvent.click(dirs[1])
+    })
+    await act(async () => {
+      fireEvent.click(dirs[0])
+    })
   })
 
   it("should display the processing view", async () => {
@@ -130,15 +149,43 @@ describe("SourceTab component", () => {
       timestamp: new Date()
     })
 
-    await act(async () => render(
+    const { container } = await act(async () => render(
       <SourceTab id="test" />
     ))
+
+    const expandDiv = await findByTestId(container, "expand-sourcecode")
+    fireEvent.click(expandDiv.children[0])
+
+    await act(async () => {
+      const reupBtn = await findByTestId(container, "btn-reup")
+      fireEvent.click(reupBtn)
+    })
   })
 
   it("should display the error view", async () => {
     mockInfoApi.mockReturnValue({
       status: "error",
       timestamp: new Date()
+    })
+
+    await act(async () => render(
+      <SourceTab id="test" />
+    ))
+  })
+
+  it("should display the error view with message", async () => {
+    mockInfoApi.mockReturnValue({
+      message: "Error"
+    })
+
+    await act(async () => render(
+      <SourceTab id="test" />
+    ))
+  })
+
+  it("should default to error view on exception", async () => {
+    mockInfoApi.mockImplementation(() => {
+      throw new Error("Error")
     })
 
     await act(async () => render(

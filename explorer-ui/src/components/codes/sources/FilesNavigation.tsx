@@ -48,7 +48,9 @@ function SourcesBreadCrumbs (
   }
 
   return (
-    <nav className="flex"
+    <nav
+      data-testid="nav-files"
+      className="flex"
       aria-label="Sources Navigation">
       <ol className="inline-flex items-center space-x-1">
         {
@@ -104,7 +106,7 @@ export default function FilesNavigation (
       const current = pathList.reduce((dir, path, index) => {
         const subdir : DirectoryListEntry | undefined = dir && dir.find(d => d.name === path)
         if (!subdir?.ents) {
-          throw new Error("Cannot find sub-directory")
+          return []
         }
         return subdir.ents
       }, dirList)
@@ -131,7 +133,9 @@ export default function FilesNavigation (
         (folders && folders.length > 0) &&
             <div className="flex flex-col border mt-2">
               <div className="bg-neutral-100 text-xs px-2 py-3">Folders</div>
-              <div className="flex flex-wrap gap-2 text-sm link py-4 divide-x">
+              <div
+                data-testid="folders"
+                className="flex flex-wrap gap-2 text-sm link py-4 divide-x">
                 {folders.map(f => {
                   return (
                     <div
