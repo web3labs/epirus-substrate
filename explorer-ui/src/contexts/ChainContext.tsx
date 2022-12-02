@@ -38,14 +38,10 @@ export default function ChainContextProvider ({ children }: React.PropsWithChild
   useEffect(() => {
     async function loadChainProperties () {
       try {
-        const { data, error } = await client
+        const { data } = await client
           .query(QUERY, {
             /* vars */
           }).toPromise()
-
-        if (error) {
-          console.log(error)
-        }
 
         if (data?.chainProperties?.length > 0) {
           const chainProps = data.chainProperties[0]
@@ -55,10 +51,12 @@ export default function ChainContextProvider ({ children }: React.PropsWithChild
           })
         }
       } catch (e) {
-        console.log(e)
+        // just keep the NULL_CONFIG
+        // console.log(e)
       }
     }
 
+    /* istanbul ignore next */
     if (init.current) {
       init.current = false
       loadChainProperties()
