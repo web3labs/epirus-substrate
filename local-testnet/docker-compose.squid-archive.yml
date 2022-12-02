@@ -5,7 +5,7 @@ services:
     image: postgres:15
     restart: on-failure
     volumes:
-      - .data/squid/archive/db:/var/lib/postgresql/data
+      - /var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres

@@ -4,7 +4,7 @@ services:
   contracts:
     image: ghcr.io/web3labs/finality-contracts-node
     volumes:
-      - .data/node:/data/node
+      - /data/node
     command: --ws-external -d /data/node
     ports:
       - "9944:9944"
