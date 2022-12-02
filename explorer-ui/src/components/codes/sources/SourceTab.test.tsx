@@ -1,5 +1,5 @@
 import React from "react"
-import { act, fireEvent, render } from "@testing-library/react"
+import { act, findByTestId, render } from "@testing-library/react"
 import SourceTab from "./SourceTab"
 import { mockMetadata, MockWebSocket, mockSourceCode } from "../../../_mocks/verifierApiData"
 
@@ -9,12 +9,32 @@ jest.mock("../../../apis/verifierApi", () => {
   return {
     info: () => mockInfoApi(),
     metadata: () => Promise.resolve(mockMetadata),
-    // TODO test data for more cases: no source, no utf8, subdir click
     directoryList: () => Promise.resolve([{
       type: "file",
       url: "lib.rs",
       name: "lib.rs",
       size: 1000,
+      utf8: true
+    },
+    {
+      type: "file",
+      url: "bin",
+      name: "bin",
+      size: 10,
+      utf8: false
+    },
+    {
+      type: "file",
+      url: "empty",
+      name: "empty",
+      size: 0,
+      utf8: true
+    },
+    {
+      type: "file",
+      url: "fail",
+      name: "fail",
+      size: 10,
       utf8: true
     },
     {
@@ -32,11 +52,30 @@ jest.mock("../../../apis/verifierApi", () => {
       }
     }
     ]),
-    resource: () => ({
-      ok: () => true,
-      text: () => Promise.resolve(mockSourceCode)
-    }),
+    resource: ({ codeHash, path }:
+      {codeHash: string, path: string}) => {
+      if (path === "empty") {
+        return {
+          ok: true,
+          text: () => Promise.resolve("")
+        }
+      }
+      if (path === "fail") {
+        return {
+          ok: false,
+          json: () => Promise.resolve(
+            JSON.stringify({ message: "error message" })
+          )
+        }
+      }
+      return {
+        ok: true,
+        text: () => Promise.resolve(mockSourceCode)
+      }
+    },
     errorLogDownloadLink: () => "somewhere/log",
+    resourceDownloadLink: ({ codeHash, path }:
+      {codeHash: string, path: string}) => path,
     tailWebsocket: () => new MockWebSocket()
   }
 })
@@ -56,14 +95,8 @@ describe("SourceTab component", () => {
       <SourceTab id="test" />
     ))
     expect(
-      container.querySelector("#tab-verification-opts")
+      findByTestId(container, "opts-verification")
     ).toBeDefined()
-
-    const signTab = container.querySelector("#tab-owner-signed a")
-    fireEvent.click(signTab!)
-
-    const packageTab = container.querySelector("#tab-verifiable-package a")
-    fireEvent.click(packageTab!)
   })
 
   it("should display the verified view", async () => {

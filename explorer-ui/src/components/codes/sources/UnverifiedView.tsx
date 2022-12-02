@@ -67,7 +67,9 @@ function UploadForm ({
   })
 
   return (
-    <form className="w-full flex flex-col"
+    <form
+      data-testid="form-upload"
+      className="w-full flex flex-col"
       onSubmit={event => {
         event.preventDefault()
         if (file) {
@@ -92,7 +94,7 @@ function UploadForm ({
           </div>
         </div>
         : <div {...getRootProps()}>
-          <input {...getInputProps()} />
+          <input data-testid="input-upload" {...getInputProps()} />
           <div className="flex flex-col w-full justify-center items-center p-4 my-2 h-60
                           rounded border-2 border-dashed border-gray-200 text-gray-500 cursor-pointer">
             <ArrowUpTrayIcon className="h-7 w-7"/>
@@ -115,7 +117,9 @@ function UploadForm ({
 
       {children}
 
-      <button type="submit"
+      <button
+        data-testid="submit-upload"
+        type="submit"
         disabled={submitDisabled}
         className="py-2 my-2 border rounded border-emerald-600 bg-emerald-600
                   text-white font-semibold disabled:bg-emerald-200
@@ -146,7 +150,9 @@ function UploadSignedMetadata (
     setLoading(true)
 
     const formData = new FormData()
-    formData.append("signature", (targetForm[1] as HTMLInputElement).value)
+    formData.append("signature",
+      (targetForm.querySelector("input#sig") as HTMLInputElement).value
+    )
     formData.append("metadata", file)
 
     try {
@@ -233,7 +239,7 @@ function UploadSignedMetadata (
               "py-2 px-3 font-mono text-sm overflow-auto border rounded bg-neutral-50",
               msgToSign ? "" : "text-gray-400"
             )}>
-              <code>{msgToSign || "Will be updated when the metadata file is uploaded"}</code>
+              <code data-testid="sig-msg">{msgToSign || "Will be updated when the metadata file is uploaded"}</code>
             </div>
             {msgToSign && <>
               <div>
@@ -256,20 +262,23 @@ function UploadSignedMetadata (
 function UploadVerifiablePackage (
   { codeHash, dispatch, chain } : SourceTabProps
 ) {
-  function uploadFileToVerifier ({ file } : SubmitHandlerProps) {
+  async function uploadFileToVerifier ({ file } : SubmitHandlerProps) {
     dispatch({ type: ReducerActionType.UPLOADING })
 
     const formData = new FormData()
     formData.append("package", file)
 
-    api.verify({ chain, codeHash }, formData)
-      .then(response => response.json())
-      .then(_ => {
+    try {
+      const res = await api.verify({ chain, codeHash }, formData)
+      if (res.ok) {
         setTimeout(() => dispatch({ type: ReducerActionType.UPLOADED }), 10)
-      })
-      .catch(error => {
-        dispatch({ type: ReducerActionType.ERROR, error })
-      })
+      } else {
+        const json = await res.json()
+        dispatch({ type: ReducerActionType.ERROR, error: json?.message || "unknown" })
+      }
+    } catch (error) {
+      dispatch({ type: ReducerActionType.ERROR, error: errMsg(error) })
+    }
   }
 
   return (
@@ -304,9 +313,10 @@ export default function UnverifiedView (
   const [showMetadataUpload, setShowMetadataUpload] = useState(false)
 
   return <div className="mt-5 mb-6">
-    <ul id="tab-verification-opts" className="my-2 mx-6 flex flex-wrap text-sm divide-x divide-blue-200 text-center">
-      <li id="tab-verifiable-package">
-        <a href="#"
+    <ul data-testid="opts-verification"
+      className="my-2 mx-6 flex flex-wrap text-sm divide-x divide-blue-200 text-center">
+      <li>
+        <a href="#" data-testid="tab-package"
           onClick={(e) => {
             e.preventDefault()
             setShowMetadataUpload(false)
@@ -320,8 +330,8 @@ export default function UnverifiedView (
           Verifiable Package
         </a>
       </li>
-      <li id="tab-owner-signed">
-        <a href="#"
+      <li>
+        <a href="#" data-testid="tab-sign"
           onClick={(e) => {
             e.preventDefault()
             setShowMetadataUpload(true)
