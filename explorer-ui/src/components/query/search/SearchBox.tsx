@@ -158,7 +158,7 @@ export default function SearchBox () {
 
   return (
     <div>
-      <form className="search" onSubmit={handleSubmit}>
+      <form data-testid="form-search" className="search" onSubmit={handleSubmit}>
         <div className="relative w-full">
           <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
             <svg className="w-5 h-5"
@@ -168,6 +168,7 @@ export default function SearchBox () {
           </div>
           <input type="text"
             id="default-search"
+            data-testid="input-search"
             spellCheck={false}
             className="input w-full px-10 text-sm"
             placeholder="Search Accounts, Contracts, ..."
@@ -216,7 +217,9 @@ export default function SearchBox () {
             opacity-100
             shadow
             overflow-hidden
-            translate-y-0">
+            translate-y-0"
+          data-testid="div-results"
+          >
             <ul className="flex flex-col p-1 border border-t-0 border-gray-200 divide-y">
               {searchResults.results.length === 0
                 ? <li className="py-3 px-4">
