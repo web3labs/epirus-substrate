@@ -1,11 +1,13 @@
-export class MockWebSocket {
+import { EventEmitter } from "stream"
+
+export class MockWebSocket extends EventEmitter {
   new () {
     return new MockWebSocket()
   }
 
-  removeEventListener = jest.fn()
-  addEventListener = jest.fn()
-  send = jest.fn()
+  addEventListener = this.addListener
+  removeEventListener = this.removeListener
+  send = this.emit
   close = jest.fn()
 }
 
