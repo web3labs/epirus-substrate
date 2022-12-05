@@ -54,11 +54,11 @@ export default function ProcessingView (
       const { type, data: msg } = JSON.parse(data) as LogMessage | EndOfLog
       if (type === "LOG") {
         setLines(prevState => (prevState.concat(msg)))
-      } else {
-        if (msg) {
-          setOutcome("success")
-        }
-      }
+      } else if (type === "EOT" && msg) {
+        setOutcome("success")
+      } /*
+      else handle unknown message type
+      */
     })
 
     function onClose () {
@@ -91,13 +91,23 @@ export default function ProcessingView (
     if (outcome === "success") {
       statusIcon = <ShieldCheckIcon className="text-green-600 w-5 h-5" />
       status =
-        <button type="button" className="link" onClick={dispatchSuccess} >
+        <button
+          data-testid="btn-success"
+          type="button"
+          className="link"
+          onClick={dispatchSuccess}
+        >
           Browse Verified Files
         </button>
     } else {
       statusIcon = <InformationCircleIcon className="text-red-600 w-5 h-5" />
       status =
-        <button type="button" className="link flex gap-2" onClick={dispatchError} >
+        <button
+          data-testid="btn-error"
+          type="button"
+          className="link flex gap-2"
+          onClick={dispatchError}
+        >
           <ArrowPathIcon className="w-4 h-4 ml-2"/>
           <span>Retry Verification</span>
         </button>
@@ -116,6 +126,7 @@ export default function ProcessingView (
         </div>
       </div>
       <AutoScrollingTextarea
+        data-testid="ta-logs"
         className="p-4 h-96 border-none focus:ring-0 focus:outline-none bg-neutral-50 text-gray-800 w-full text-sm font-mono"
         value={lines.join("")}
         readOnly={true}
