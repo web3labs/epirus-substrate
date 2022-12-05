@@ -1,5 +1,5 @@
 import React from "react"
-import { fireEvent, getByRole, render } from "@testing-library/react"
+import { findByText, fireEvent, getByRole, render } from "@testing-library/react"
 import ContractUpgrade from "./ContractUpgrade"
 import { mockExtrinsic } from "../../_mocks/data"
 import { buildArrayOf, randomCodeHash } from "../../_mocks/utils"
@@ -23,8 +23,19 @@ test("Contract upgrade details", async () => {
   )
 
   expect(container.getElementsByTagName("dl").length).toBe(0)
-
   fireEvent.click(getByRole(container, "switch"))
-
   expect(container.getElementsByTagName("dl").length).toBe(5)
+})
+
+test("Contract upgrade details with custom title and empty changes", async () => {
+  const { container } = render(
+    <MemoryRouter initialEntries={["/contracts"]}>
+      <ContractUpgrade
+        codeHashChanges={[]}
+        title="My Title"
+      />
+    </MemoryRouter>
+  )
+
+  expect(await findByText(container, "My Title")).toBeDefined()
 })
