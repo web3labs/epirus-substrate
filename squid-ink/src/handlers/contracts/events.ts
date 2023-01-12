@@ -11,6 +11,7 @@ import {
 } from "@chain/normalised-types";
 import { toHex } from "@subsquid/util-internal-hex";
 import { SubstrateBlock } from "@subsquid/substrate-processor";
+import abiDecoder, { DecodeType } from "../../abi-decoder";
 import {
   StorageInfo,
   Account,
@@ -20,6 +21,8 @@ import {
   ContractCode,
   ContractEmittedEvent,
   Extrinsic,
+  DecodedEvent,
+  DecodedArg,
 } from "../../model";
 import {
   ContractCodeStoredArgs,
@@ -78,6 +81,18 @@ const contractsInstantiatedHandler: EventHandler = {
         });
         await saveAll(store, [ents.codeOwnerEntity, ents.contractCodeEntity]);
         contractCodeEntity = ents.contractCodeEntity;
+      }
+
+      // Test out constructor decoding
+      const extrinsicArgs = <Args>extrinsicEntity.args;
+      const constructorData = extrinsicArgs.data || undefined;
+      if (constructorData && typeof constructorData === "string") {
+        const decoded = await abiDecoder.decode(
+          toHex(codeHash),
+          constructorData,
+          DecodeType.CONSTRUCTOR
+        );
+        console.log("DECODED CONSTRUCTOR: ", decoded);
       }
 
       const eventEntity = createEvent(extrinsicEntity, event);
@@ -139,6 +154,11 @@ const contractsInstantiatedHandler: EventHandler = {
   },
 };
 
+type Args =
+  | Record<string, string>
+  | Record<string, BigInt>
+  | Record<string, Buffer>;
+
 const contractsEmittedHandler: EventHandler = {
   name: "Contracts.ContractEmitted",
   handle: async (
@@ -166,6 +186,42 @@ const contractsEmittedHandler: EventHandler = {
       });
 
       await saveAll(store, [extrinsicEntity, eventEntity, contractEventEntity]);
+
+      // Test out ABI decoding
+      if (data) {
+        const { codeHash } = await new NormalisedContractInfoOfStorage(
+          ctx,
+          block
+        ).get(contract);
+        const decoded = await abiDecoder.decode(
+          toHex(codeHash),
+          toHex(data),
+          DecodeType.EVENT
+        );
+        console.log("DECODED EVENT: ", decoded);
+        if (decoded) {
+          const decodedArgDonor = new DecodedArg({
+            name: "donor",
+            value: "accountString",
+            type: "AccountId",
+          });
+
+          const decodedArgValue = new DecodedArg({
+            name: "value",
+            value: "10000",
+            bigInt: 1000000000000n,
+            type: "Balance",
+          });
+
+          const decodeEventEntity = new DecodedEvent({
+            id: eventEntity.id,
+            name: "Donation",
+            args: [decodedArgDonor, decodedArgValue],
+          });
+
+          await saveAll(store, [decodeEventEntity]);
+        }
+      }
     } else {
       log.warn(
         { block: block.height, name: event.name, id: event.id },

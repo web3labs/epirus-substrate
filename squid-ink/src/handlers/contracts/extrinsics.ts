@@ -1,9 +1,14 @@
-import { NormalisedContractsCallCall } from "@chain/normalised-types";
+import {
+  NormalisedContractInfoOfStorage,
+  NormalisedContractsCallCall,
+} from "@chain/normalised-types";
 import {
   SubstrateBlock,
   SubstrateCall,
   SubstrateExtrinsic,
+  toHex,
 } from "@subsquid/substrate-processor";
+import abiDecoder, { DecodeType } from "../../abi-decoder";
 import { Ctx, ExtrinsicError, ExtrinsicHandler } from "../types";
 import {
   createActivity,
@@ -57,6 +62,20 @@ const contractsCallHandler: ExtrinsicHandler = {
       contractCallEntity,
       activityEntity,
     ]);
+
+    // Test out ABI decoding
+    if (data) {
+      const { codeHash } = await new NormalisedContractInfoOfStorage(
+        ctx,
+        block
+      ).get(contractAddress);
+      const decoded = await abiDecoder.decode(
+        toHex(codeHash),
+        toHex(data),
+        DecodeType.MESSAGE
+      );
+      console.log("DECODED MESSAGE: ", decoded);
+    }
   },
 };
 

@@ -14,7 +14,7 @@ module.exports = {
   "rules": {
     // https://basarat.gitbooks.io/typescript/docs/tips/defaultIsBad.html
     "import/prefer-default-export": "off",
-    "import/no-default-export": "error",
+    "import/no-default-export": "off",
     // "import/no-cycle": "off",
     "max-classes-per-file": ["error", 8],
     // Don't forget debugs

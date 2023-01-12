@@ -106,6 +106,40 @@ type ContractEmittedEvent @entity {
   extrinsic: Extrinsic!
 }
 
+type DecodedEvent @entity {
+  id: ID!
+  name: String!
+  args: [DecodedArg!]
+}
+
+type DecodedEvent2 @entity {
+  id: ID!
+  name: String!
+  args: JSON
+}
+
+type DecodedArg {
+  name: String!
+  value: String!
+  account: Account
+  bigInt: BigInt
+  type: String!
+}
+
+# type DecodedArgAccount @entity {
+#   id: ID!
+#   name: String!
+#   value: Account!
+#   type: String!
+# }
+
+# type DecodedArgString @entity {
+#   id: ID!
+#   name: String!
+#   value: String!
+#   type: String!
+# }
+
 type Extrinsic @entity {
   id: ID!
   blockNumber: Int!

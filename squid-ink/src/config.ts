@@ -12,6 +12,7 @@ const config = {
     // archive: lookupArchive("shibuya", { release: "FireSquid" }),
     archive: process.env.ARCHIVE_ENDPOINT || "http://127.0.0.1:8888/graphql",
   },
+  verifierEndpoint: process.env.VERIFIER_ENDPOINT || "http://127.0.0.1:3001",
 };
 
 export { config };
