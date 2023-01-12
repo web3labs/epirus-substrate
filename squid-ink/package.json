@@ -37,7 +37,8 @@
     },
     "yargs": {
       "yargs-parser": ">=5.0.1"
-    }
+    },
+    "json5": "^2.2.2"
   },
   "devDependencies": {
     "@subsquid/substrate-metadata-explorer": "^1.0.8",
