@@ -45,6 +45,10 @@ This project is licensed under the [Apache LICENSE](LICENSE).
 
 You can find a repository with a Substrate network configuration and archive node for development at [dev-contracts-substrate](https://github.com/web3labs/dev-contracts-substrate).
 
+### Source Code Verification
+
+We have a source code verification service for ink! contracts in the [ink-verifier-server](https://github.com/web3labs/ink-verifier-server) repository. You can also find instructions on how to verify ink! contracts in our [tutorial](https://github.com/web3labs/ink-verifier-server/blob/main/docs/TUTORIAL.md)
+
 ---
 
 💫🪐✨💿
