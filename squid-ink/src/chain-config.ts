@@ -36,6 +36,14 @@ const chainConfig: Record<string, ChainConfig> = {
       tokenSymbol: "SBY",
     },
   },
+  watr: {
+    name: "Watr Network",
+    ss58Format: 19,
+    token: {
+      tokenDecimals: 18,
+      tokenSymbol: "WATRD",
+    },
+  },
 };
 
 function getChainConfig(): ChainConfig {

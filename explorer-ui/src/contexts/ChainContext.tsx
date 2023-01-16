@@ -42,7 +42,7 @@ export default function ChainContextProvider ({ children }: React.PropsWithChild
           .query(QUERY, {
             /* vars */
           }).toPromise()
-
+        console.log("Chain props: ", data)
         if (data?.chainProperties?.length > 0) {
           const chainProps = data.chainProperties[0]
           setChainProps({
@@ -52,7 +52,7 @@ export default function ChainContextProvider ({ children }: React.PropsWithChild
         }
       } catch (e) {
         // just keep the NULL_CONFIG
-        // console.log(e)
+        console.log(e)
       }
     }
 
