@@ -16,9 +16,11 @@
     "test:coverage": "npm test -- --coverage --collectCoverageFrom='src/**/*.{ts,jxs}'"
   },
   "dependencies": {
+    "@polkadot/api-contract": "^9.11.3",
     "@subsquid/archive-registry": "^1.0.16",
     "@subsquid/cli": "^0.5.1",
     "@subsquid/graphql-server": "^3.2.3",
+    "@subsquid/ink-abi": "../ink-abi",
     "@subsquid/logger": "^0.2.0",
     "@subsquid/scale-codec": "^1.0.5",
     "@subsquid/ss58": "^0.1.2",

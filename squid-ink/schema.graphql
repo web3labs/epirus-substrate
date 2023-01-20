@@ -106,39 +106,27 @@ type ContractEmittedEvent @entity {
   extrinsic: Extrinsic!
 }
 
-type DecodedEvent @entity {
-  id: ID!
-  name: String!
-  args: [DecodedArg!]
+enum ContractActionType {
+  CONSTRUCTOR
+  MESSAGE
+  EVENT
 }
 
-type DecodedEvent2 @entity {
+type DecodedContractAction @entity {
   id: ID!
   name: String!
-  args: JSON
+  type: ContractActionType!
+  args: [DecodedArg!] @derivedFrom(field: "decodedEvent")
 }
 
-type DecodedArg {
+type DecodedArg @entity {
+  id: ID!
+  decodedEvent: DecodedContractAction!
   name: String!
   value: String!
-  account: Account
-  bigInt: BigInt
   type: String!
+  displayName: String
 }
-
-# type DecodedArgAccount @entity {
-#   id: ID!
-#   name: String!
-#   value: Account!
-#   type: String!
-# }
-
-# type DecodedArgString @entity {
-#   id: ID!
-#   name: String!
-#   value: String!
-#   type: String!
-# }
 
 type Extrinsic @entity {
   id: ID!

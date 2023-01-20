@@ -11,7 +11,6 @@ import {
 } from "@chain/normalised-types";
 import { toHex } from "@subsquid/util-internal-hex";
 import { SubstrateBlock } from "@subsquid/substrate-processor";
-import abiDecoder, { DecodeType } from "../../abi-decoder";
 import {
   StorageInfo,
   Account,
@@ -21,8 +20,7 @@ import {
   ContractCode,
   ContractEmittedEvent,
   Extrinsic,
-  DecodedEvent,
-  DecodedArg,
+  ContractActionType,
 } from "../../model";
 import {
   ContractCodeStoredArgs,
@@ -41,6 +39,13 @@ import {
   saveAll,
   updateAccountBalance,
 } from "../utils";
+import { generateDecodedEntities } from "./metadata";
+
+type Args =
+  | Record<string, string>
+  | Record<string, Buffer>
+  | Record<string, Uint8Array>
+  | Record<string, undefined>;
 
 const contractsInstantiatedHandler: EventHandler = {
   name: "Contracts.Instantiated",
@@ -84,16 +89,14 @@ const contractsInstantiatedHandler: EventHandler = {
       }
 
       // Test out constructor decoding
-      const extrinsicArgs = <Args>extrinsicEntity.args;
-      const constructorData = extrinsicArgs.data || undefined;
-      if (constructorData && typeof constructorData === "string") {
-        const decoded = await abiDecoder.decode(
-          toHex(codeHash),
-          constructorData,
-          DecodeType.CONSTRUCTOR
-        );
-        console.log("DECODED CONSTRUCTOR: ", decoded);
-      }
+      const { data } = <Args>extrinsicEntity.args;
+      const decodedEnts = await generateDecodedEntities({
+        codeHash,
+        data,
+        actionType: ContractActionType.CONSTRUCTOR,
+      });
+
+      await saveAll(store, decodedEnts);
 
       const eventEntity = createEvent(extrinsicEntity, event);
 
@@ -154,11 +157,6 @@ const contractsInstantiatedHandler: EventHandler = {
   },
 };
 
-type Args =
-  | Record<string, string>
-  | Record<string, BigInt>
-  | Record<string, Buffer>;
-
 const contractsEmittedHandler: EventHandler = {
   name: "Contracts.ContractEmitted",
   handle: async (
@@ -187,41 +185,19 @@ const contractsEmittedHandler: EventHandler = {
 
       await saveAll(store, [extrinsicEntity, eventEntity, contractEventEntity]);
 
-      // Test out ABI decoding
-      if (data) {
-        const { codeHash } = await new NormalisedContractInfoOfStorage(
-          ctx,
-          block
-        ).get(contract);
-        const decoded = await abiDecoder.decode(
-          toHex(codeHash),
-          toHex(data),
-          DecodeType.EVENT
-        );
-        console.log("DECODED EVENT: ", decoded);
-        if (decoded) {
-          const decodedArgDonor = new DecodedArg({
-            name: "donor",
-            value: "accountString",
-            type: "AccountId",
-          });
+      // Decode metadata
+      const { codeHash } = await new NormalisedContractInfoOfStorage(
+        ctx,
+        block
+      ).get(contract);
 
-          const decodedArgValue = new DecodedArg({
-            name: "value",
-            value: "10000",
-            bigInt: 1000000000000n,
-            type: "Balance",
-          });
+      const decodedEnts = await generateDecodedEntities({
+        codeHash,
+        data,
+        actionType: ContractActionType.EVENT,
+      });
 
-          const decodeEventEntity = new DecodedEvent({
-            id: eventEntity.id,
-            name: "Donation",
-            args: [decodedArgDonor, decodedArgValue],
-          });
-
-          await saveAll(store, [decodeEventEntity]);
-        }
-      }
+      await saveAll(store, decodedEnts);
     } else {
       log.warn(
         { block: block.height, name: event.name, id: event.id },

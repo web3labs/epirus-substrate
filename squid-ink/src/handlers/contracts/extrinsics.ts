@@ -6,9 +6,7 @@ import {
   SubstrateBlock,
   SubstrateCall,
   SubstrateExtrinsic,
-  toHex,
 } from "@subsquid/substrate-processor";
-import abiDecoder, { DecodeType } from "../../abi-decoder";
 import { Ctx, ExtrinsicError, ExtrinsicHandler } from "../types";
 import {
   createActivity,
@@ -16,7 +14,8 @@ import {
   getOrCreateAccount,
   saveAll,
 } from "../utils";
-import { ActivityType, ContractCall } from "../../model";
+import { ActivityType, ContractActionType, ContractCall } from "../../model";
+import { generateDecodedEntities } from "./metadata";
 
 const contractsCallHandler: ExtrinsicHandler = {
   name: "Contracts.call",
@@ -63,19 +62,19 @@ const contractsCallHandler: ExtrinsicHandler = {
       activityEntity,
     ]);
 
-    // Test out ABI decoding
-    if (data) {
-      const { codeHash } = await new NormalisedContractInfoOfStorage(
-        ctx,
-        block
-      ).get(contractAddress);
-      const decoded = await abiDecoder.decode(
-        toHex(codeHash),
-        toHex(data),
-        DecodeType.MESSAGE
-      );
-      console.log("DECODED MESSAGE: ", decoded);
-    }
+    // Decode metadata
+    const { codeHash } = await new NormalisedContractInfoOfStorage(
+      ctx,
+      block
+    ).get(contractAddress);
+
+    const decodedEnts = await generateDecodedEntities({
+      codeHash,
+      data,
+      actionType: ContractActionType.MESSAGE,
+    });
+
+    await saveAll(store, decodedEnts);
   },
 };
 
