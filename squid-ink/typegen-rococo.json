@@ -1,7 +1,6 @@
 {
   "outDir": "src/chains/rococo/types",
   "specVersions": "https://suba.epirus.io/archive/graphql",
-  "typesBundle": "rococoContracts",
   "events": [
     "Balances.Transfer",
     "Balances.Endowed",

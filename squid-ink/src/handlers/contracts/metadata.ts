@@ -1,53 +1,78 @@
-import { toHex } from "@subsquid/util-internal-hex";
-import { dataToString } from "../utils";
+import { DecodedElement } from "abi-decoder";
+import { OptEntity } from "handlers/types";
 import {
-  ContractActionType,
-  DecodedArg,
-  DecodedContractAction,
-} from "../../model";
-import abiDecoder from "../../abi-decoder";
+  Activity,
+  ContractEvent,
+  DecodedActivityArg,
+  DecodedContractActivity,
+  DecodedContractEvent,
+  DecodedEventArg,
+} from "model";
 
-type DecodedEntity = DecodedContractAction | DecodedArg;
-
-export async function generateDecodedEntities({
-  codeHash,
-  actionType,
-  data,
+/**
+ *
+ * @param param0
+ */
+export function addDecodedEventEntities({
+  entities,
+  decodedElement,
+  contractEventEntity,
 }: {
-  codeHash: Uint8Array;
-  actionType: ContractActionType;
-  data: string | Buffer | Uint8Array | BigInt | undefined;
-}): Promise<DecodedEntity[]> {
-  const ents: DecodedEntity[] = [];
+  entities: OptEntity[];
+  decodedElement?: DecodedElement;
+  contractEventEntity: ContractEvent;
+}): void {
+  if (decodedElement) {
+    const decodedEventEntity = new DecodedContractEvent({
+      id: contractEventEntity.id,
+      name: decodedElement.name,
+      contractEvent: contractEventEntity,
+    });
 
-  try {
-    if (data) {
-      const metadata = await abiDecoder.getMetadata(codeHash);
-      if (metadata) {
-        const decoded = abiDecoder.decode(metadata, data, actionType);
-        const decodedActionEntity = new DecodedContractAction({
-          id: `${toHex(codeHash)}-${dataToString(data)}`, // Pretty sure we need extrinsic or event id here to avoid collisons
-          name: decoded.name,
-          type: actionType,
-        });
-        ents.push(decodedActionEntity);
-        for (const arg of decoded.args) {
-          ents.push(
-            new DecodedArg({
-              id: `${decodedActionEntity.id}-${arg.name}`,
-              decodedEvent: decodedActionEntity,
-              ...arg,
-            })
-          );
-        }
-      }
+    entities.push(decodedEventEntity);
+
+    for (const arg of decodedElement.args) {
+      entities.push(
+        new DecodedEventArg({
+          id: `${decodedEventEntity.id}-${arg.name}`,
+          decodedEvent: decodedEventEntity,
+          ...arg,
+        })
+      );
     }
-  } catch (error) {
-    console.log(
-      `Error at generating decoded entities for codeHash ${toHex(codeHash)}`,
-      error
-    );
   }
+}
 
-  return ents;
+/**
+ *
+ * @param param0
+ */
+export function addDecodedActivityEntities({
+  entities,
+  decodedElement,
+  activityEntity,
+}: {
+  entities: OptEntity[];
+  decodedElement?: DecodedElement;
+  activityEntity: Activity;
+}): void {
+  if (decodedElement) {
+    const decodedElementEntity = new DecodedContractActivity({
+      id: activityEntity.id,
+      name: decodedElement.name,
+      activity: activityEntity,
+    });
+
+    entities.push(decodedElementEntity);
+
+    for (const arg of decodedElement.args) {
+      entities.push(
+        new DecodedActivityArg({
+          id: `${decodedElementEntity.id}-${arg.name}`,
+          decodedActivity: decodedElementEntity,
+          ...arg,
+        })
+      );
+    }
+  }
 }

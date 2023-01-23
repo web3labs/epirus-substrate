@@ -1,4 +1,4 @@
-import { Weight } from "../model";
+import { Weight } from "../handlers/types";
 
 export interface ResolvedContractsCallCall {
   contractAddress: string;

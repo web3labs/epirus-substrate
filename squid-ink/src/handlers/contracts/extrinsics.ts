@@ -7,15 +7,16 @@ import {
   SubstrateCall,
   SubstrateExtrinsic,
 } from "@subsquid/substrate-processor";
-import { Ctx, ExtrinsicError, ExtrinsicHandler } from "../types";
+import { Ctx, ExtrinsicHandler, OptEntity } from "../types";
 import {
   createActivity,
   createExtrinsic,
   getOrCreateAccount,
   saveAll,
 } from "../utils";
-import { ActivityType, ContractActionType, ContractCall } from "../../model";
-import { generateDecodedEntities } from "./metadata";
+import { ActivityType } from "../../model";
+import { addDecodedActivityEntities } from "./metadata";
+import abiDecoder from "../../abi-decoder";
 
 const contractsCallHandler: ExtrinsicHandler = {
   name: "Contracts.call",
@@ -26,21 +27,12 @@ const contractsCallHandler: ExtrinsicHandler = {
     block: SubstrateBlock
   ): Promise<void> => {
     const { store } = ctx;
-    const { contractAddress, value, gasLimit, storageDepositLimit, data } =
-      new NormalisedContractsCallCall(ctx, call).resolve();
+    const { contractAddress, data } = new NormalisedContractsCallCall(
+      ctx,
+      call
+    ).resolve();
+    const entities: OptEntity[] = [];
     const extrinsicEntity = createExtrinsic(extrinsic, call, block);
-    const contractCallEntity = new ContractCall({
-      id: extrinsicEntity.id,
-      contractAddress,
-      value,
-      gasLimit,
-      storageDepositLimit,
-      data,
-      createdAt: extrinsicEntity.createdAt,
-      success: extrinsicEntity.success,
-      error: <ExtrinsicError>extrinsicEntity.error,
-      extrinsic: extrinsicEntity,
-    });
 
     const to = await getOrCreateAccount(store, contractAddress, block);
     const from = extrinsicEntity.signer
@@ -54,27 +46,26 @@ const contractsCallHandler: ExtrinsicHandler = {
       from
     );
 
-    await saveAll(store, [
-      to,
-      from,
-      extrinsicEntity,
-      contractCallEntity,
-      activityEntity,
-    ]);
+    entities.push(to, from, extrinsicEntity, activityEntity);
 
-    // Decode metadata
+    // TODO this can be toggled
     const { codeHash } = await new NormalisedContractInfoOfStorage(
       ctx,
       block
     ).get(contractAddress);
 
-    const decodedEnts = await generateDecodedEntities({
+    const decodedElement = await abiDecoder.decodeMessage({
       codeHash,
       data,
-      actionType: ContractActionType.MESSAGE,
     });
 
-    await saveAll(store, decodedEnts);
+    addDecodedActivityEntities({
+      entities,
+      decodedElement,
+      activityEntity,
+    });
+
+    await saveAll(store, entities);
   },
 };
 

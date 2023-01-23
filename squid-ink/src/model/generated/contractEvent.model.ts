@@ -2,8 +2,8 @@ import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, M
 import {Extrinsic} from "./extrinsic.model"
 
 @Entity_()
-export class ContractEmittedEvent {
-  constructor(props?: Partial<ContractEmittedEvent>) {
+export class ContractEvent {
+  constructor(props?: Partial<ContractEvent>) {
     Object.assign(this, props)
   }
 

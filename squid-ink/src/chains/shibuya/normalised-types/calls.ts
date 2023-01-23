@@ -1,6 +1,5 @@
 import * as ss58 from "@subsquid/ss58";
 import { ResolvedContractsCallCall } from "chains/normalised-return-types";
-import { Weight } from "../../../model";
 import { ss58Format } from "../../../chain-config";
 import { ContractsCallCall } from "../types/calls";
 import { MultiAddress } from "../types/v69";
@@ -16,9 +15,9 @@ export class NormalisedContractsCallCall extends ContractsCallCall {
       return {
         contractAddress: ss58.codec(ss58Format).encode(dest.value),
         value,
-        gasLimit: new Weight({
+        gasLimit: {
           refTime: gasLimit,
-        }),
+        },
         storageDepositLimit,
         data,
       };
@@ -39,9 +38,9 @@ export class NormalisedContractsCallCall extends ContractsCallCall {
       return {
         contractAddress: ss58.codec(ss58Format).encode(dest.value),
         value,
-        gasLimit: new Weight({
+        gasLimit: {
           refTime: gasLimit,
-        }),
+        },
         storageDepositLimit,
         data,
       };

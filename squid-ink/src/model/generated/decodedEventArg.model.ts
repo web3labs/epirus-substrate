@@ -1,9 +1,9 @@
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_} from "typeorm"
-import {DecodedContractAction} from "./decodedContractAction.model"
+import {DecodedContractEvent} from "./decodedContractEvent.model"
 
 @Entity_()
-export class DecodedArg {
-  constructor(props?: Partial<DecodedArg>) {
+export class DecodedEventArg {
+  constructor(props?: Partial<DecodedEventArg>) {
     Object.assign(this, props)
   }
 
@@ -11,8 +11,8 @@ export class DecodedArg {
   id!: string
 
   @Index_()
-  @ManyToOne_(() => DecodedContractAction, {nullable: false})
-  decodedEvent!: DecodedContractAction
+  @ManyToOne_(() => DecodedContractEvent, {nullable: false})
+  decodedEvent!: DecodedContractEvent
 
   @Column_("text", {nullable: false})
   name!: string

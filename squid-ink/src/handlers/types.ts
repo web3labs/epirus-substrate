@@ -9,7 +9,7 @@ import {
   CallItem,
   EventItem,
 } from "@subsquid/substrate-processor/lib/interfaces/dataSelection";
-import { Store } from "@subsquid/typeorm-store";
+import { Entity, Store } from "@subsquid/typeorm-store";
 
 export type Item = EventItem<"*", true> | CallItem<"*", true>;
 
@@ -123,4 +123,11 @@ export interface ExtrinsicError {
 export interface ModuleError {
   error: string;
   index: number;
+}
+
+export type OptEntity = Entity | undefined;
+
+export interface Weight {
+  refTime?: BigInt;
+  proofSize?: BigInt;
 }

@@ -7,7 +7,12 @@
 import { Contract, ContractCode } from "../../model";
 import { contractsEventHandlers } from "./index";
 import { saveAll } from "../utils";
-import { block, getMockEvent, ctx, defaultGetStorageMock } from "../../_mocks";
+import {
+  block,
+  getMockEvent,
+  ctx,
+  defaultGetStorageMock,
+} from "../../_mocks";
 
 jest.mock("../utils", () => {
   const originalModule = jest.requireActual("../utils");

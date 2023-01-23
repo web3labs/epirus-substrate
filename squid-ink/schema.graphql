@@ -75,27 +75,7 @@ type ContractCode @entity {
   contractsDeployed: [Contract!] @derivedFrom(field: "contractCode")
 }
 
-type Weight {
-  refTime: BigInt
-  proofSize: BigInt
-}
-
-type ContractCall @entity {
-  "Extrinsic ID"
-  id: ID!
-  contractAddress: String!
-  value: BigInt
-  gasLimit: Weight
-  gasUsed: BigInt
-  storageDepositLimit: BigInt
-  data: Bytes
-  createdAt: DateTime! 
-  success: Boolean!
-  error: JSON
-  extrinsic: Extrinsic!
-}
-
-type ContractEmittedEvent @entity {
+type ContractEvent @entity {
   "Event ID"
   id: ID!
   blockNumber: String!
@@ -106,22 +86,32 @@ type ContractEmittedEvent @entity {
   extrinsic: Extrinsic!
 }
 
-enum ContractActionType {
-  CONSTRUCTOR
-  MESSAGE
-  EVENT
-}
-
-type DecodedContractAction @entity {
+type DecodedContractActivity @entity {
   id: ID!
   name: String!
-  type: ContractActionType!
-  args: [DecodedArg!] @derivedFrom(field: "decodedEvent")
+  activity: Activity!
+  args: [DecodedActivityArg!] @derivedFrom(field: "decodedActivity")
 }
 
-type DecodedArg @entity {
+type DecodedActivityArg @entity {
   id: ID!
-  decodedEvent: DecodedContractAction!
+  decodedActivity: DecodedContractActivity!
+  name: String!
+  value: String!
+  type: String!
+  displayName: String
+}
+
+type DecodedContractEvent @entity {
+  id: ID!
+  name: String!
+  contractEvent: ContractEvent!
+  args: [DecodedEventArg!] @derivedFrom(field: "decodedEvent")
+}
+
+type DecodedEventArg @entity {
+  id: ID!
+  decodedEvent: DecodedContractEvent!
   name: String!
   value: String!
   type: String!

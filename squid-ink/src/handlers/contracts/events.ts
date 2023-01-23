@@ -11,6 +11,7 @@ import {
 } from "@chain/normalised-types";
 import { toHex } from "@subsquid/util-internal-hex";
 import { SubstrateBlock } from "@subsquid/substrate-processor";
+import abiDecoder from "../../abi-decoder";
 import {
   StorageInfo,
   Account,
@@ -18,9 +19,8 @@ import {
   CodeHashChange,
   Contract,
   ContractCode,
-  ContractEmittedEvent,
+  ContractEvent,
   Extrinsic,
-  ContractActionType,
 } from "../../model";
 import {
   ContractCodeStoredArgs,
@@ -39,7 +39,10 @@ import {
   saveAll,
   updateAccountBalance,
 } from "../utils";
-import { generateDecodedEntities } from "./metadata";
+import {
+  addDecodedActivityEntities,
+  addDecodedEventEntities,
+} from "./metadata";
 
 type Args =
   | Record<string, string>
@@ -58,6 +61,7 @@ const contractsInstantiatedHandler: EventHandler = {
     const { extrinsic, call } = event;
 
     if (extrinsic && call) {
+      const entities = [];
       const { deployer, contract } = new NormalisedContractsInstantiatedEvent(
         ctx,
         event
@@ -84,19 +88,9 @@ const contractsInstantiatedHandler: EventHandler = {
           codeHash: toHex(codeHash),
           extrinsicEntity,
         });
-        await saveAll(store, [ents.codeOwnerEntity, ents.contractCodeEntity]);
+        entities.push(ents.codeOwnerEntity, ents.contractCodeEntity);
         contractCodeEntity = ents.contractCodeEntity;
       }
-
-      // Test out constructor decoding
-      const { data } = <Args>extrinsicEntity.args;
-      const decodedEnts = await generateDecodedEntities({
-        codeHash,
-        data,
-        actionType: ContractActionType.CONSTRUCTOR,
-      });
-
-      await saveAll(store, decodedEnts);
 
       const eventEntity = createEvent(extrinsicEntity, event);
 
@@ -138,15 +132,29 @@ const contractsInstantiatedHandler: EventHandler = {
         deployerAccount,
         allArgs
       );
-
-      await saveAll(store, [
+      entities.push(
         deployerAccount,
         contractAccount,
         extrinsicEntity,
         eventEntity,
         contractEntity,
+        activityEntity
+      );
+
+      // Decode contract constructor if applicable
+      const { data } = <Args>extrinsicEntity.args;
+      const decodedElement = await abiDecoder.decodeConstructor({
+        codeHash,
+        data,
+      });
+
+      addDecodedActivityEntities({
+        entities,
+        decodedElement,
         activityEntity,
-      ]);
+      });
+
+      await saveAll(store, entities);
     } else {
       log.warn(
         { block: block.height, name: event.name, id: event.id },
@@ -167,13 +175,14 @@ const contractsEmittedHandler: EventHandler = {
     const { store, log } = ctx;
     const { extrinsic, call } = event;
     if (extrinsic && call) {
+      const entities = [];
       const extrinsicEntity = createExtrinsic(extrinsic, call, block);
       const eventEntity = createEvent(extrinsicEntity, event);
       const { contract, data } = new NormalisedContractEmittedEvent(
         ctx,
         event
       ).resolve();
-      const contractEventEntity = new ContractEmittedEvent({
+      const contractEventEntity = new ContractEvent({
         id: eventEntity.id,
         blockNumber: eventEntity.blockNumber,
         indexInBlock: eventEntity.indexInBlock,
@@ -183,7 +192,7 @@ const contractsEmittedHandler: EventHandler = {
         extrinsic: extrinsicEntity,
       });
 
-      await saveAll(store, [extrinsicEntity, eventEntity, contractEventEntity]);
+      entities.push(extrinsicEntity, eventEntity, contractEventEntity);
 
       // Decode metadata
       const { codeHash } = await new NormalisedContractInfoOfStorage(
@@ -191,13 +200,18 @@ const contractsEmittedHandler: EventHandler = {
         block
       ).get(contract);
 
-      const decodedEnts = await generateDecodedEntities({
+      const decodedElement = await abiDecoder.decodeEvent({
         codeHash,
         data,
-        actionType: ContractActionType.EVENT,
       });
 
-      await saveAll(store, decodedEnts);
+      addDecodedEventEntities({
+        entities,
+        decodedElement,
+        contractEventEntity,
+      });
+
+      await saveAll(store, entities);
     } else {
       log.warn(
         { block: block.height, name: event.name, id: event.id },
@@ -404,6 +418,41 @@ const contractsCodeRemovedHandler: EventHandler = {
   },
 };
 
+async function createContractCodeEntities({
+  ctx,
+  block,
+  codeHash,
+  extrinsicEntity,
+}: {
+  ctx: Ctx;
+  block: SubstrateBlock;
+  codeHash: string;
+  extrinsicEntity: Extrinsic;
+}): Promise<{ codeOwnerEntity: Account; contractCodeEntity: ContractCode }> {
+  const { code } = await new NormalisedCodeStorageStorage(ctx, block).get(
+    codeHash
+  );
+  const { owner } = await new NormalisedOwnerInfoOfStorage(ctx, block).get(
+    codeHash
+  );
+
+  const codeOwnerEntity = await getOrCreateAccount(
+    ctx.store,
+    encodeAddress(owner),
+    block
+  );
+
+  const contractCodeEntity = new ContractCode({
+    id: codeHash,
+    code,
+    owner: codeOwnerEntity,
+    createdFrom: extrinsicEntity,
+    createdAt: extrinsicEntity.createdAt,
+  });
+
+  return { codeOwnerEntity, contractCodeEntity };
+}
+
 const contractsTerminatedHandler: EventHandler = {
   name: "Contracts.Terminated",
   handle: async (
@@ -482,41 +531,6 @@ const contractsTerminatedHandler: EventHandler = {
     }
   },
 };
-
-async function createContractCodeEntities({
-  ctx,
-  block,
-  codeHash,
-  extrinsicEntity,
-}: {
-  ctx: Ctx;
-  block: SubstrateBlock;
-  codeHash: string;
-  extrinsicEntity: Extrinsic;
-}): Promise<{ codeOwnerEntity: Account; contractCodeEntity: ContractCode }> {
-  const { code } = await new NormalisedCodeStorageStorage(ctx, block).get(
-    codeHash
-  );
-  const { owner } = await new NormalisedOwnerInfoOfStorage(ctx, block).get(
-    codeHash
-  );
-
-  const codeOwnerEntity = await getOrCreateAccount(
-    ctx.store,
-    encodeAddress(owner),
-    block
-  );
-
-  const contractCodeEntity = new ContractCode({
-    id: codeHash,
-    code,
-    owner: codeOwnerEntity,
-    createdFrom: extrinsicEntity,
-    createdAt: extrinsicEntity.createdAt,
-  });
-
-  return { codeOwnerEntity, contractCodeEntity };
-}
 
 export {
   contractsInstantiatedHandler,
