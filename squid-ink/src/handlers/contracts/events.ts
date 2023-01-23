@@ -141,7 +141,7 @@ const contractsInstantiatedHandler: EventHandler = {
         activityEntity
       );
 
-      // Decode contract constructor if applicable
+      // Toggle decode
       const { data } = <Args>extrinsicEntity.args;
       const decodedElement = await abiDecoder.decodeConstructor({
         codeHash,
@@ -194,7 +194,7 @@ const contractsEmittedHandler: EventHandler = {
 
       entities.push(extrinsicEntity, eventEntity, contractEventEntity);
 
-      // Decode metadata
+      // TODO: Toggle decode
       const { codeHash } = await new NormalisedContractInfoOfStorage(
         ctx,
         block

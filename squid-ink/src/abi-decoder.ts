@@ -6,6 +6,7 @@ import { AbiParam } from "@polkadot/api-contract/types";
 import { dataToString } from "./handlers/utils";
 import { config } from "./config";
 
+// TODO: extract interfaces to types file
 interface ContractMetadata {
   source: JSON;
   contract: JSON;
@@ -84,11 +85,15 @@ class AbiDecoder {
     }
   ): Promise<DecodedElement | undefined> {
     return this.decode(params, (metadata) => {
+      // Subsquid Abi class that exposes decode methods for each element type
+      // We use this to decode instead of PolkadotJS since PolkadotJS decoder API is still unstable
+      // and seems to have trouble resolving the selector
       const subsquidDecoder = new SubsquidDecoder(metadata);
       const subsquidDecodedAction = subsquidDecoder[decoderMethodName](
         dataToString(params.data)
       ) as SubsquidDecodedAction;
-      // TODO rationale of using both ABIs... types stuff shit, polkadot nfojfo.
+      // PolkadotJS Abi class
+      // contains decoded Substrate types and display types for each arg that are easy to consume
       const polkadotAbi = new Abi(JSON.stringify(metadata));
       const message = (
         polkadotAbi[polkadotAbiKey] as PolkaDotAbiElement[]
