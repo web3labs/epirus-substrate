@@ -2,75 +2,61 @@ import { Abi as SubsquidDecoder } from "@subsquid/ink-abi";
 import fetch from "node-fetch";
 import { Abi } from "@polkadot/api-contract";
 import { toHex } from "@subsquid/util-internal-hex";
+import LRUCache from "lru-cache";
 import { dataToString } from "../handlers/utils";
 import { config } from "../config";
 import {
+  CodeParams,
   ContractMetadata,
   DecodedElement,
   PolkadotAbiElement,
   RawDecodedElement,
 } from "./types";
 
+type DecodingContext = {
+  decoder: SubsquidDecoder;
+  polkadotAbi: Abi;
+};
+
 class AbiDecoder {
   private verifier: string;
 
-  // TODO: implement proper caching mechanism
-  private metadatas: Map<Uint8Array, ContractMetadata>;
+  private cache: LRUCache<Uint8Array, DecodingContext>;
 
   constructor() {
     this.verifier = config.verifierEndpoint;
-    this.metadatas = new Map<Uint8Array, ContractMetadata>();
+    // TODO configurable
+    this.cache = new LRUCache<Uint8Array, DecodingContext>({
+      ttl: 8.64e7, // 1 day
+      max: 5000,
+      maxSize: 20000000, // 20 MB
+    });
   }
 
-  decodeConstructor(params: {
-    codeHash: Uint8Array;
-    data: string | Buffer | Uint8Array | BigInt | undefined;
-  }): Promise<DecodedElement | undefined> {
+  decodeConstructor(params: CodeParams): Promise<DecodedElement | undefined> {
     return this.decodeBy("decodeConstructor", "constructors", params);
   }
 
-  async decodeMessage(params: {
-    codeHash: Uint8Array;
-    data: string | Buffer | Uint8Array | BigInt | undefined;
-  }): Promise<DecodedElement | undefined> {
+  async decodeMessage(params: CodeParams): Promise<DecodedElement | undefined> {
     return this.decodeBy("decodeMessage", "messages", params);
   }
 
-  async decodeEvent(params: {
-    codeHash: Uint8Array;
-    data: string | Buffer | Uint8Array | BigInt | undefined;
-  }): Promise<DecodedElement | undefined> {
+  async decodeEvent(params: CodeParams): Promise<DecodedElement | undefined> {
     return this.decodeBy("decodeEvent", "events", params);
-  }
-
-  private async getMetadata(codeHash: Uint8Array) {
-    return this.metadatas.has(codeHash)
-      ? this.metadatas.get(codeHash)
-      : this.fetchMetadata(codeHash);
   }
 
   private async decodeBy(
     decoderMethodName: "decodeMessage" | "decodeEvent" | "decodeConstructor",
     polkadotAbiKey: "messages" | "events" | "constructors",
-    params: {
-      codeHash: Uint8Array;
-      data: string | Buffer | Uint8Array | BigInt | undefined;
-    }
+    { codeHash, data }: CodeParams
   ): Promise<DecodedElement | undefined> {
-    return this.decode(params, (metadata) => {
-      // Subsquid ABI class
-      // We use this to decode instead of PolkadotJS since PolkadotJS decoder API is still unstable
-      // and seems to have trouble resolving the selector
-      const decoder = new SubsquidDecoder(metadata);
-      const rawElement = decoder[decoderMethodName](
-        dataToString(params.data)
+    return this.decode(codeHash, (ctx) => {
+      const rawElement = ctx.decoder[decoderMethodName](
+        dataToString(data)
       ) as RawDecodedElement;
 
-      // PolkadotJS ABI class
-      // contains decoded Substrate types and display types for each arg that are easy to consume
-      const polkadotAbi = new Abi(JSON.stringify(metadata));
       const polkadotElement = (
-        polkadotAbi[polkadotAbiKey] as PolkadotAbiElement[]
+        ctx.polkadotAbi[polkadotAbiKey] as PolkadotAbiElement[]
       ).find((am) => am.identifier === rawElement.__kind);
 
       return this.toDecodedElement(polkadotElement, rawElement);
@@ -78,21 +64,42 @@ class AbiDecoder {
   }
 
   private async decode(
-    {
-      codeHash,
-      data,
-    }: {
-      codeHash: Uint8Array;
-      data: string | Buffer | Uint8Array | BigInt | undefined;
-    },
-    cb: (metadata: ContractMetadata) => DecodedElement | undefined
+    codeHash: Uint8Array,
+    decodeElement: (ctx: DecodingContext) => DecodedElement | undefined
   ): Promise<DecodedElement | undefined> {
-    if (data) {
-      const metadata = await abiDecoder.getMetadata(codeHash);
-      if (metadata) {
-        return cb(metadata);
-      }
+    const ctx = await this.resolveDecodingContext(codeHash);
+    if (ctx) {
+      return decodeElement(ctx);
     }
+
+    return undefined;
+  }
+
+  private async resolveDecodingContext(
+    codeHash: Uint8Array
+  ): Promise<DecodingContext | undefined> {
+    if (this.cache.has(codeHash)) {
+      return this.cache.get(codeHash);
+    }
+
+    const metadata = await this.fetchMetadata(codeHash);
+    if (metadata) {
+      // We use PolkadotJS ABI class for proper type decoding
+      // But still use SubsquidDecoder to decode instead of PolkadotJS
+      // since PolkadotJS decoder API is still unstable
+      // and seems to have trouble resolving the selector.
+      const decoder = new SubsquidDecoder(metadata);
+      const polkadotAbi = new Abi(JSON.stringify(metadata));
+      const ctx: DecodingContext = {
+        decoder,
+        polkadotAbi,
+      };
+
+      this.cache.set(codeHash, ctx);
+
+      return ctx;
+    }
+
     return undefined;
   }
 

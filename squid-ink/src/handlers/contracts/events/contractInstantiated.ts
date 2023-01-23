@@ -4,7 +4,7 @@ import {
 } from "@chain/normalised-types";
 import { SubstrateBlock } from "@subsquid/substrate-processor";
 import { toHex } from "@subsquid/util-internal-hex";
-import abiDecoder from "../../../abi/abi-decoder";
+import abiDecoder from "../../../abi/decoder";
 import {
   getOrCreateAccount,
   createExtrinsic,
@@ -121,16 +121,19 @@ export const contractsInstantiatedHandler: EventHandler = {
 
       // Toggle decode
       const { data } = <ExtrinsicArg>extrinsicEntity.args;
-      const decodedElement = await abiDecoder.decodeConstructor({
-        codeHash,
-        data,
-      });
 
-      addDecodedActivityEntities({
-        entities,
-        decodedElement,
-        activityEntity,
-      });
+      if (data) {
+        const decodedElement = await abiDecoder.decodeConstructor({
+          codeHash,
+          data,
+        });
+
+        addDecodedActivityEntities({
+          entities,
+          decodedElement,
+          activityEntity,
+        });
+      }
 
       await saveAll(store, entities);
     } else {

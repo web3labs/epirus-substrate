@@ -1,5 +1,10 @@
 import { AbiParam } from "@polkadot/api-contract/types";
 
+export type CodeParams = {
+  codeHash: Uint8Array;
+  data: string | Buffer | Uint8Array | BigInt;
+};
+
 export interface ContractMetadata {
   source: JSON;
   contract: JSON;

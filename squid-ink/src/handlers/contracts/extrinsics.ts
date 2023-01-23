@@ -16,7 +16,7 @@ import {
 } from "../utils";
 import { ActivityType } from "../../model";
 import { addDecodedActivityEntities } from "./metadata";
-import abiDecoder from "../../abi/abi-decoder";
+import abiDecoder from "../../abi/decoder";
 
 const contractsCallHandler: ExtrinsicHandler = {
   name: "Contracts.call",
@@ -49,21 +49,23 @@ const contractsCallHandler: ExtrinsicHandler = {
     entities.push(to, from, extrinsicEntity, activityEntity);
 
     // TODO this can be toggled
-    const { codeHash } = await new NormalisedContractInfoOfStorage(
-      ctx,
-      block
-    ).get(contractAddress);
+    if (data) {
+      const { codeHash } = await new NormalisedContractInfoOfStorage(
+        ctx,
+        block
+      ).get(contractAddress);
 
-    const decodedElement = await abiDecoder.decodeMessage({
-      codeHash,
-      data,
-    });
+      const decodedElement = await abiDecoder.decodeMessage({
+        codeHash,
+        data,
+      });
 
-    addDecodedActivityEntities({
-      entities,
-      decodedElement,
-      activityEntity,
-    });
+      addDecodedActivityEntities({
+        entities,
+        decodedElement,
+        activityEntity,
+      });
+    }
 
     await saveAll(store, entities);
   },
