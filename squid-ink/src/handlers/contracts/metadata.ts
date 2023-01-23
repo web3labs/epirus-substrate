@@ -7,7 +7,7 @@ import {
   DecodedContractEvent,
   DecodedEventArg,
 } from "../../model";
-import { DecodedElement } from "../../abi-decoder";
+import { DecodedElement } from "../../abi/types";
 
 /**
  *

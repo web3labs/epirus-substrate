@@ -16,7 +16,7 @@ import {
 } from "../utils";
 import { ActivityType } from "../../model";
 import { addDecodedActivityEntities } from "./metadata";
-import abiDecoder from "../../abi-decoder";
+import abiDecoder from "../../abi/abi-decoder";
 
 const contractsCallHandler: ExtrinsicHandler = {
   name: "Contracts.call",

@@ -2,41 +2,14 @@ import { Abi as SubsquidDecoder } from "@subsquid/ink-abi";
 import fetch from "node-fetch";
 import { Abi } from "@polkadot/api-contract";
 import { toHex } from "@subsquid/util-internal-hex";
-import { AbiParam } from "@polkadot/api-contract/types";
-import { dataToString } from "./handlers/utils";
-import { config } from "./config";
-
-// TODO: extract interfaces to types file
-interface ContractMetadata {
-  source: JSON;
-  contract: JSON;
-  spec: JSON;
-  storage: JSON;
-  types: JSON;
-  version: string;
-}
-
-export interface DecodedElement {
-  name: string;
-  args: DecodedElementArg[];
-}
-
-interface DecodedElementArg {
-  name: string;
-  value: string;
-  type: string;
-  displayName?: string;
-}
-
-interface SubsquidDecodedAction {
-  __kind: string;
-  [k: string]: unknown;
-}
-
-type PolkaDotAbiElement = {
-  identifier: string;
-  args: AbiParam[];
-};
+import { dataToString } from "../handlers/utils";
+import { config } from "../config";
+import {
+  ContractMetadata,
+  DecodedElement,
+  PolkadotAbiElement,
+  RawDecodedElement,
+} from "./types";
 
 class AbiDecoder {
   private verifier: string;
@@ -85,20 +58,22 @@ class AbiDecoder {
     }
   ): Promise<DecodedElement | undefined> {
     return this.decode(params, (metadata) => {
-      // Subsquid Abi class that exposes decode methods for each element type
+      // Subsquid ABI class
       // We use this to decode instead of PolkadotJS since PolkadotJS decoder API is still unstable
       // and seems to have trouble resolving the selector
-      const subsquidDecoder = new SubsquidDecoder(metadata);
-      const subsquidDecodedAction = subsquidDecoder[decoderMethodName](
+      const decoder = new SubsquidDecoder(metadata);
+      const rawElement = decoder[decoderMethodName](
         dataToString(params.data)
-      ) as SubsquidDecodedAction;
-      // PolkadotJS Abi class
+      ) as RawDecodedElement;
+
+      // PolkadotJS ABI class
       // contains decoded Substrate types and display types for each arg that are easy to consume
       const polkadotAbi = new Abi(JSON.stringify(metadata));
-      const message = (
-        polkadotAbi[polkadotAbiKey] as PolkaDotAbiElement[]
-      ).find((am) => am.identifier === subsquidDecodedAction.__kind);
-      return this.toDecodeAction(message, subsquidDecodedAction);
+      const polkadotElement = (
+        polkadotAbi[polkadotAbiKey] as PolkadotAbiElement[]
+      ).find((am) => am.identifier === rawElement.__kind);
+
+      return this.toDecodedElement(polkadotElement, rawElement);
     });
   }
 
@@ -121,31 +96,29 @@ class AbiDecoder {
     return undefined;
   }
 
-  private toDecodeAction(
-    typeAnnotation: PolkaDotAbiElement | undefined,
-    subsquidDecodedAction: SubsquidDecodedAction
+  private toDecodedElement(
+    polkadotElement: PolkadotAbiElement | undefined,
+    rawElement: RawDecodedElement
   ): DecodedElement | undefined {
-    const actionName = subsquidDecodedAction.__kind;
-    if (typeAnnotation === undefined) {
-      throw new Error(
-        `Type annotation by polkadotjs [${actionName}] is not found`
-      );
+    const name = rawElement.__kind;
+    if (polkadotElement === undefined) {
+      throw new Error(`Element "${name}" is not found in polkadot.js ABI`);
     }
 
     const decoded: DecodedElement = {
-      name: actionName,
+      name,
       args: [],
     };
-    for (const key in subsquidDecodedAction) {
+    for (const key in rawElement) {
       if (key !== "__kind") {
         const { type: annotatedArgType } = this.findAnnotatedArg(
-          typeAnnotation,
           key,
-          subsquidDecodedAction
+          polkadotElement,
+          rawElement
         );
         decoded.args.push({
           name: key,
-          value: dataToString(subsquidDecodedAction[key]),
+          value: dataToString(rawElement[key]),
           type: annotatedArgType.type,
           displayName: annotatedArgType.displayName,
         });
@@ -155,14 +128,14 @@ class AbiDecoder {
   }
 
   private findAnnotatedArg(
-    annotatedData: PolkaDotAbiElement,
     key: string,
-    msg: SubsquidDecodedAction
+    polkadotElement: PolkadotAbiElement,
+    rawElement: RawDecodedElement
   ) {
-    const annotatedArg = annotatedData.args.find((arg) => arg.name === key);
+    const annotatedArg = polkadotElement.args.find((arg) => arg.name === key);
     if (annotatedArg === undefined) {
       throw new Error(
-        `Annotation by polkadotjs for argument [${key}] in message [${msg.__kind}] is not found`
+        `Annotation by polkadot.js for argument "${key}" in message "${rawElement.__kind}" is not found`
       );
     }
     return annotatedArg;

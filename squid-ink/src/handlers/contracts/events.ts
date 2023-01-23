@@ -11,7 +11,7 @@ import {
 } from "@chain/normalised-types";
 import { toHex } from "@subsquid/util-internal-hex";
 import { SubstrateBlock } from "@subsquid/substrate-processor";
-import abiDecoder from "../../abi-decoder";
+import abiDecoder from "../../abi/abi-decoder";
 import {
   StorageInfo,
   Account,
