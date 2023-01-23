@@ -131,3 +131,9 @@ export interface Weight {
   refTime?: BigInt;
   proofSize?: BigInt;
 }
+
+export type ExtrinsicArg =
+  | Record<string, string>
+  | Record<string, Buffer>
+  | Record<string, Uint8Array>
+  | Record<string, undefined>;
