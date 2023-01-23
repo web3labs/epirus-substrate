@@ -1,4 +1,4 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_, OneToMany as OneToMany_} from "typeorm"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, OneToOne as OneToOne_, Index as Index_, JoinColumn as JoinColumn_, OneToMany as OneToMany_} from "typeorm"
 import {ContractEvent} from "./contractEvent.model"
 import {DecodedEventArg} from "./decodedEventArg.model"
 
@@ -14,8 +14,9 @@ export class DecodedContractEvent {
   @Column_("text", {nullable: false})
   name!: string
 
-  @Index_()
-  @ManyToOne_(() => ContractEvent, {nullable: false})
+  @Index_({unique: true})
+  @OneToOne_(() => ContractEvent, {nullable: false})
+  @JoinColumn_()
   contractEvent!: ContractEvent
 
   @OneToMany_(() => DecodedEventArg, e => e.decodedEvent)

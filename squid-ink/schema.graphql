@@ -84,12 +84,13 @@ type ContractEvent @entity {
   data: Bytes!
   createdAt: DateTime!
   extrinsic: Extrinsic!
+  decodedEvent: DecodedContractEvent @derivedFrom(field: "contractEvent")
 }
 
 type DecodedContractActivity @entity {
   id: ID!
   name: String!
-  activity: Activity!
+  activity: Activity! @unique
   args: [DecodedActivityArg!] @derivedFrom(field: "decodedActivity")
 }
 
@@ -105,7 +106,7 @@ type DecodedActivityArg @entity {
 type DecodedContractEvent @entity {
   id: ID!
   name: String!
-  contractEvent: ContractEvent!
+  contractEvent: ContractEvent! @unique
   args: [DecodedEventArg!] @derivedFrom(field: "decodedEvent")
 }
 
@@ -145,6 +146,7 @@ type Activity @entity{
   createdAt: DateTime! @index
   args: JSON
   extrinsic: Extrinsic!
+  decodedActivity: DecodedContractActivity @derivedFrom(field: "activity")
 }
 
 enum ActivityType {

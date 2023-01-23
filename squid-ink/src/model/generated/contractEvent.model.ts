@@ -1,5 +1,6 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_} from "typeorm"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_, OneToOne as OneToOne_} from "typeorm"
 import {Extrinsic} from "./extrinsic.model"
+import {DecodedContractEvent} from "./decodedContractEvent.model"
 
 @Entity_()
 export class ContractEvent {
@@ -31,4 +32,7 @@ export class ContractEvent {
   @Index_()
   @ManyToOne_(() => Extrinsic, {nullable: false})
   extrinsic!: Extrinsic
+
+  @OneToOne_(() => DecodedContractEvent)
+  decodedEvent!: DecodedContractEvent | undefined | null
 }

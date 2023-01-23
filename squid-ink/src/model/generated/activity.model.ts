@@ -1,7 +1,8 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, Index as Index_, ManyToOne as ManyToOne_} from "typeorm"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, Index as Index_, ManyToOne as ManyToOne_, OneToOne as OneToOne_} from "typeorm"
 import {ActivityType} from "./_activityType"
 import {Account} from "./account.model"
 import {Extrinsic} from "./extrinsic.model"
+import {DecodedContractActivity} from "./decodedContractActivity.model"
 
 @Entity_()
 export class Activity {
@@ -37,4 +38,7 @@ export class Activity {
   @Index_()
   @ManyToOne_(() => Extrinsic, {nullable: false})
   extrinsic!: Extrinsic
+
+  @OneToOne_(() => DecodedContractActivity)
+  decodedActivity!: DecodedContractActivity | undefined | null
 }

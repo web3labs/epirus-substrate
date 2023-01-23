@@ -1,4 +1,3 @@
-import { DecodedElement } from "abi-decoder";
 import { OptEntity } from "handlers/types";
 import {
   Activity,
@@ -7,7 +6,8 @@ import {
   DecodedContractActivity,
   DecodedContractEvent,
   DecodedEventArg,
-} from "model";
+} from "../../model";
+import { DecodedElement } from "../../abi-decoder";
 
 /**
  *
