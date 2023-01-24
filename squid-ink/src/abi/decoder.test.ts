@@ -39,7 +39,7 @@ describe("ABI Decoder", () => {
         (
           await abiDecoder.decodeMessage({
             codeHash,
-            data: "0x0b396f188eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a4890b5ab205c6974c9ea841be688864633dc9ca8a357843eeacf2314649965fe22005039278c0400000000000000000000",
+            data,
           })
         )?.name
       ).toBe("transfer_from");
