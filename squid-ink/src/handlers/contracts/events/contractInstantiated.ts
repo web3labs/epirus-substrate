@@ -124,7 +124,7 @@ export const contractsInstantiatedHandler: EventHandler = {
 
       if (data) {
         const decodedElement = await abiDecoder.decodeConstructor({
-          codeHash,
+          codeHash: toHex(codeHash),
           data,
         });
 

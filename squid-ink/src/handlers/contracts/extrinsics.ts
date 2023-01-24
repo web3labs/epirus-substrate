@@ -6,6 +6,7 @@ import {
   SubstrateBlock,
   SubstrateCall,
   SubstrateExtrinsic,
+  toHex,
 } from "@subsquid/substrate-processor";
 import { Ctx, ExtrinsicHandler, OptEntity } from "../types";
 import {
@@ -56,7 +57,7 @@ const contractsCallHandler: ExtrinsicHandler = {
       ).get(contractAddress);
 
       const decodedElement = await abiDecoder.decodeMessage({
-        codeHash,
+        codeHash: toHex(codeHash),
         data,
       });
 

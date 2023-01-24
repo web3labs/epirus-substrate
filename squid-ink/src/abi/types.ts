@@ -1,7 +1,7 @@
 import { AbiParam } from "@polkadot/api-contract/types";
 
 export type CodeParams = {
-  codeHash: Uint8Array;
+  codeHash: string;
   data: string | Buffer | Uint8Array | BigInt;
 };
 

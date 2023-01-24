@@ -1,7 +1,6 @@
 import { Abi as SubsquidDecoder } from "@subsquid/ink-abi";
 import fetch from "node-fetch";
 import { Abi } from "@polkadot/api-contract";
-import { toHex } from "@subsquid/util-internal-hex";
 import LRUCache from "lru-cache";
 import { dataToString } from "../handlers/utils";
 import { config } from "../config";
@@ -21,12 +20,12 @@ type DecodingContext = {
 class AbiDecoder {
   private verifier: string;
 
-  private cache: LRUCache<Uint8Array, DecodingContext>;
+  private cache: LRUCache<string, DecodingContext>;
 
   constructor() {
     this.verifier = config.verifierEndpoint;
     // TODO configurable
-    this.cache = new LRUCache<Uint8Array, DecodingContext>({
+    this.cache = new LRUCache<string, DecodingContext>({
       ttl: 8.64e7, // 1 day
       max: 5000,
       maxSize: 20000000, // 20 MB
@@ -67,7 +66,7 @@ class AbiDecoder {
   }
 
   private async decode(
-    codeHash: Uint8Array,
+    codeHash: string,
     decodeElement: (ctx: DecodingContext) => DecodedElement | undefined
   ): Promise<DecodedElement | undefined> {
     const ctx = await this.resolveDecodingContext(codeHash);
@@ -79,7 +78,7 @@ class AbiDecoder {
   }
 
   private async resolveDecodingContext(
-    codeHash: Uint8Array
+    codeHash: string
   ): Promise<DecodingContext | undefined> {
     if (this.cache.has(codeHash)) {
       return this.cache.get(codeHash);
@@ -151,10 +150,10 @@ class AbiDecoder {
     return annotatedArg;
   }
 
-  private async fetchMetadata(codeHash: Uint8Array) {
+  private async fetchMetadata(codeHash: string) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
     const res = await fetch(
-      `${this.verifier}/contracts/${toHex(codeHash)}/metadata.json`
+      `${this.verifier}/contracts/${codeHash}/metadata.json`
     );
 
     if (res.status === 404) {

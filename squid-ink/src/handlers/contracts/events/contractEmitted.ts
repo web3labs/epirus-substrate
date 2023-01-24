@@ -2,7 +2,7 @@ import {
   NormalisedContractEmittedEvent,
   NormalisedContractInfoOfStorage,
 } from "@chain/normalised-types";
-import { SubstrateBlock } from "@subsquid/substrate-processor";
+import { SubstrateBlock, toHex } from "@subsquid/substrate-processor";
 import { ContractEvent } from "../../../model";
 import { createExtrinsic, createEvent, saveAll } from "../../utils";
 import abiDecoder from "../../../abi/decoder";
@@ -46,7 +46,7 @@ export const contractsEmittedHandler: EventHandler = {
         ).get(contract);
 
         const decodedElement = await abiDecoder.decodeEvent({
-          codeHash,
+          codeHash: toHex(codeHash),
           data,
         });
 
