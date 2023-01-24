@@ -14,8 +14,8 @@ import {
   defaultGetStorageMock,
 } from "../../../_mocks";
 
-jest.mock("../utils", () => {
-  const originalModule = jest.requireActual("../utils");
+jest.mock("../../utils", () => {
+  const originalModule = jest.requireActual("../../utils");
   return {
     __esModule: true,
     ...originalModule,

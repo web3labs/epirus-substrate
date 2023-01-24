@@ -26,5 +26,6 @@ module.exports = {
     "<rootDir>/src/model/",
     "<rootDir>/src/chains/rococo/",
     "<rootDir>/src/chains/shibuya/",
+    "<rootDir>/src/chains/watr/",
   ],
 };

@@ -14,8 +14,8 @@ import {
 } from "../../../_mocks";
 import { ContractCode } from "../../../model";
 
-jest.mock("../utils", () => {
-  const originalModule = jest.requireActual("../utils");
+jest.mock("../../utils", () => {
+  const originalModule = jest.requireActual("../../utils");
   return {
     __esModule: true,
     ...originalModule,
