@@ -35,7 +35,9 @@ class AbiDecoder {
     });
   }
 
-  decodeConstructor(params: CodeParams): Promise<DecodedElement | undefined> {
+  async decodeConstructor(
+    params: CodeParams
+  ): Promise<DecodedElement | undefined> {
     return this.decodeBy("decodeConstructor", "constructors", params);
   }
 
@@ -45,6 +47,10 @@ class AbiDecoder {
 
   async decodeEvent(params: CodeParams): Promise<DecodedElement | undefined> {
     return this.decodeBy("decodeEvent", "events", params);
+  }
+
+  _cacheClear() {
+    this.cache.clear();
   }
 
   private async decodeBy(
