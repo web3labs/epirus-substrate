@@ -30,6 +30,9 @@ class AbiDecoder {
       ttl: 8.64e7, // 1 day
       max: 5000,
       maxSize: 20000000, // 20 MB
+      sizeCalculation: (value) => {
+        return Buffer.byteLength(JSON.stringify(value));
+      },
     });
   }
 
