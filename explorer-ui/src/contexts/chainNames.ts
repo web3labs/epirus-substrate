@@ -23,7 +23,6 @@ const names = [
 
 export default function resolveInfoFromName (chain : string) : string {
   const lc = chain.toLocaleLowerCase()
-  console.log(names)
   const found = names.find(n => n.chain === lc)
   if (found) {
     return found.endpoint

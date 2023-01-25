@@ -42,7 +42,6 @@ export default function ChainContextProvider ({ children }: React.PropsWithChild
           .query(QUERY, {
             /* vars */
           }).toPromise()
-        console.log("Chain props: ", data)
         if (data?.chainProperties?.length > 0) {
           const chainProps = data.chainProperties[0]
           setChainProps({
