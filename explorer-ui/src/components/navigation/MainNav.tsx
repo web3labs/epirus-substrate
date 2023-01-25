@@ -38,7 +38,7 @@ const menuContracts = [
 const menuBlockchain = [
   {
     name: "Accounts",
-    description: "Accounts in the chain",
+    description: "Accounts on the chain",
     to: "/accounts",
     icon: UsersIcon
   }
