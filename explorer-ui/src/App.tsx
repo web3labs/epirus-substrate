@@ -1,4 +1,4 @@
-import Nav from "./components/navigation/Nav"
+import MainNav from "./components/navigation/MainNav"
 import React from "react"
 import {
   BrowserRouter as Router,
@@ -48,7 +48,7 @@ function App () {
             <div className="min-h-screen bg-page overflow-hidden">
               <div className="relative header pt-3 md:pb-3 md:pt-6">
                 <div className="max-w-7xl mx-auto md:px-2">
-                  <Nav />
+                  <MainNav />
                 </div>
               </div>
               <main className="max-w-7xl mx-auto z-10">
