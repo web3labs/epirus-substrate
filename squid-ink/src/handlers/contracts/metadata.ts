@@ -10,8 +10,14 @@ import {
 import { DecodedElement } from "../../abi/types";
 
 /**
+ * Creates decoded contracts events with its corresponding
+ * arguments from a given decoded element and adds it
+ * to the entities array.
  *
- * @param param0
+ * @param {Object} opts - The options object.
+ * @param {OptEntity[]} opts.entities - The entities array.
+ * @param {DecodeElement=} opts.decodedElement - The decoded element.
+ * @param {ContractEvent} opts.contractEventEntity - The contract event.
  */
 export function addDecodedEventEntities({
   entities,
@@ -44,8 +50,14 @@ export function addDecodedEventEntities({
 }
 
 /**
+ * Creates decoded activities with its corresponding
+ * arguments from a given decoded element and adds it
+ * to the entities array.
  *
- * @param param0
+ * @param {Object} opts - The options object.
+ * @param {OptEntity[]} opts.entities - The entities array.
+ * @param {DecodeElement=} opts.decodedElement - The decoded element.
+ * @param {Activity} opts.activityEntity - The activity.
  */
 export function addDecodedActivityEntities({
   entities,
