@@ -1,6 +1,6 @@
-import { Abi as SubsquidDecoder } from "@subsquid/ink-abi";
+import { Abi as SubsquidAbi } from "@subsquid/ink-abi";
 import fetch from "node-fetch";
-import { Abi } from "@polkadot/api-contract";
+import { Abi as PolkadotAbi } from "@polkadot/api-contract";
 import LRUCache from "lru-cache";
 import { dataToString } from "../handlers/utils";
 import { config } from "../config";
@@ -13,8 +13,8 @@ import {
 } from "./types";
 
 type DecodingContext = {
-  decoder: SubsquidDecoder;
-  polkadotAbi: Abi;
+  subsquidAbi: SubsquidAbi;
+  polkadotAbi: PolkadotAbi;
 };
 
 class AbiDecoder {
@@ -54,12 +54,12 @@ class AbiDecoder {
   }
 
   private async decodeBy(
-    decoderMethodName: "decodeMessage" | "decodeEvent" | "decodeConstructor",
+    subsquidMethodName: "decodeMessage" | "decodeEvent" | "decodeConstructor",
     polkadotAbiKey: "messages" | "events" | "constructors",
     { codeHash, data }: CodeParams
   ): Promise<DecodedElement | undefined> {
     return this.decode(codeHash, (ctx) => {
-      const rawElement = ctx.decoder[decoderMethodName](
+      const rawElement = ctx.subsquidAbi[subsquidMethodName](
         dataToString(data)
       ) as RawDecodedElement;
 
@@ -96,10 +96,10 @@ class AbiDecoder {
       // But still use SubsquidDecoder to decode instead of PolkadotJS
       // since PolkadotJS decoder API is still unstable
       // and seems to have trouble resolving the selector.
-      const decoder = new SubsquidDecoder(metadata);
-      const polkadotAbi = new Abi(JSON.stringify(metadata));
+      const subsquidAbi = new SubsquidAbi(metadata);
+      const polkadotAbi = new PolkadotAbi(JSON.stringify(metadata));
       const ctx: DecodingContext = {
-        decoder,
+        subsquidAbi,
         polkadotAbi,
       };
 
