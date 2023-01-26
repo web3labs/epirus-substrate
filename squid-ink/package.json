@@ -13,7 +13,8 @@
     "lint": "npm run lint:prod -- --fix",
     "lint:prod": "eslint . --ext .ts --ignore-path .gitignore --max-warnings 0",
     "test": "jest --verbose --maxWorkers=1",
-    "test:coverage": "npm test -- --coverage --collectCoverageFrom='src/**/*.{ts,jxs}'"
+    "test:coverage": "npm test -- --coverage --collectCoverageFrom='src/**/*.{ts,jxs}'",
+    "docs": "npx typedoc"
   },
   "dependencies": {
     "@polkadot/api-contract": "^9.11.3",
