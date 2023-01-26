@@ -103,7 +103,7 @@ export default function ActivityRow ({
     <div className="flex flex-col gap-y-2 border-t border-gray-200 bg-gray-50 py-4 px-6 mt-2 -mx-6 -mb-2">
       <DefinitionList>
         <Definition label="Block" term={
-          <span className="font-mono">#{extrinsic.blockNumber}</span>
+          <span className="font-mono">{extrinsic.blockNumber}</span>
         }/>
         <Definition label="Extrinsic" term={
           <span className="font-mono">{extrinsic.blockNumber}-{extrinsic.indexInBlock}</span>
