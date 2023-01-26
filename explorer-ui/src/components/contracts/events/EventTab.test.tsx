@@ -2,10 +2,10 @@ import React from "react"
 import { render } from "@testing-library/react"
 import { MemoryRouter, Route, Routes } from "react-router"
 import { Provider } from "urql"
-import { createMockClient } from "../../_mocks/mockClient"
+import { createMockClient } from "../../../_mocks/mockClient"
 import EventTab from "./EventTab"
-import { emptyMockPage, mockPageOf, randomId } from "../../_mocks/utils"
-import { mockEventEdges } from "../../_mocks/data"
+import { emptyMockPage, mockPageOf, randomId } from "../../../_mocks/utils"
+import { mockEventEdges } from "../../../_mocks/data"
 
 test("Events empty tab", () => {
   const mockClient = createMockClient({

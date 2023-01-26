@@ -1,8 +1,8 @@
 import React from "react"
-import { shortDate } from "../../formats/time"
-import { Event } from "../../types/contracts"
-import { Definition, DefinitionList } from "../commons/Definitions"
-import { Row, TypedRow } from "../commons/List"
+import { shortDate } from "../../../formats/time"
+import { Event } from "../../../types/contracts"
+import { Definition, DefinitionList } from "../../commons/Definitions"
+import { Row, TypedRow } from "../../commons/List"
 
 export default function EventRow ({
   obj,
