@@ -30,7 +30,7 @@ test("Events empty tab", () => {
 
 test("Events tab", () => {
   const mockClient = createMockClient({
-    contractEmittedEventsConnection: mockPageOf(mockEventEdges)
+    contractEventsConnection: mockPageOf(mockEventEdges)
   })
 
   const { container } = render(
