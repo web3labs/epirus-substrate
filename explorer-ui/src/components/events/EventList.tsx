@@ -8,8 +8,8 @@ import SortBy from "../query/SortBy"
 import EventRow from "./EventRow"
 
 const QUERY = `
-query($where: ContractEmittedEventWhereInput = {} ,$first: Int = 5, $after: String = null, $orderBy: [ContractEmittedEventOrderByInput!]! = [createdAt_DESC]) {
-  contractEmittedEventsConnection(where: $where, orderBy: $orderBy, after: $after, first: $first) {
+query($where: ContractEventWhereInput = {} ,$first: Int = 5, $after: String = null, $orderBy: [ContractEventOrderByInput!]! = [createdAt_DESC]) {
+  contractEventsConnection(where: $where, orderBy: $orderBy, after: $after, first: $first) {
     totalCount
     edges {
       node {
@@ -57,7 +57,7 @@ export default function EventList ({
   return <ListQuery
     pageQuery={pageQuery}
     query={QUERY}
-    dataSelector="contractEmittedEventsConnection"
+    dataSelector="contractEventsConnection"
     render={
       ({ data, setQueryInState, queryInState }) => {
         const page : Page<Event> = data
