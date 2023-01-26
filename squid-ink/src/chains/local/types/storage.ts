@@ -19,7 +19,7 @@ export class BalancesAccountStorage {
    * 
    *  # Example
    * 
-   *  ```nocompile
+   *  ```rust
    *   impl pallet_balances::Config for Runtime {
    *     type AccountStore = StorageMapShim<Self::Account<Runtime>, frame_system::Provider<Runtime>, AccountId, Self::AccountData<Balance>>
    *   }
@@ -29,7 +29,7 @@ export class BalancesAccountStorage {
    * 
    *  # Example
    * 
-   *  ```nocompile
+   *  ```rust
    *   impl pallet_balances::Config for Runtime {
    *    type AccountStore = System
    *   }
@@ -49,7 +49,7 @@ export class BalancesAccountStorage {
    * 
    *  # Example
    * 
-   *  ```nocompile
+   *  ```rust
    *   impl pallet_balances::Config for Runtime {
    *     type AccountStore = StorageMapShim<Self::Account<Runtime>, frame_system::Provider<Runtime>, AccountId, Self::AccountData<Balance>>
    *   }
@@ -59,7 +59,7 @@ export class BalancesAccountStorage {
    * 
    *  # Example
    * 
-   *  ```nocompile
+   *  ```rust
    *   impl pallet_balances::Config for Runtime {
    *    type AccountStore = System
    *   }

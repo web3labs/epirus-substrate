@@ -1,3 +1,8 @@
+/**
+ * Subsquid handlers.
+ *
+ * @module handlers
+ */
 import { balancesEventHandlers } from "./balances";
 import {
   contractsEventHandlers,
@@ -16,6 +21,11 @@ const eventHandlers: Record<string, EventHandler> = {
 const extrinsicHandlers: Record<string, ExtrinsicHandler> =
   contractsExtrinsicHandlers;
 
+/**
+ * The handlers registry.
+ *
+ * Holds extrinsic and event handlers.
+ */
 export const registry = new HandlerRegistry({
   extrinsicHandlers,
   eventHandlers,

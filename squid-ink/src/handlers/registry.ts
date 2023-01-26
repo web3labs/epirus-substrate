@@ -14,6 +14,11 @@ import {
   Event,
 } from "./types";
 
+/**
+ * The handlers registry implementation.
+ *
+ * @class
+ */
 export class HandlerRegistry {
   private eventHandlers: Map<string, EventHandlerCallback>;
 

@@ -22,5 +22,11 @@
   "include": ["src"],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "typedocOptions": {
+    "entryPoints": ["src/"],
+    "exclude": ["**/_mocks/**", "**/chains/!(local)/**", "**/*.test.ts"],
+    "out": "docs",
+    "entryPointStrategy": "expand"
+  }
 }

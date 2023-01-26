@@ -12,12 +12,27 @@ import {
   RawDecodedElement,
 } from "./types";
 
-type DecodingContext = {
+/**
+ * The decoding context.
+ *
+ * Holds both Subsquid and Polkadot.js ABIs.
+ */
+export type DecodingContext = {
   subsquidAbi: SubsquidAbi;
   polkadotAbi: PolkadotAbi;
 };
 
-class AbiDecoder {
+/**
+ * Squid ink! ABI decoder implementation.
+ *
+ * Features:
+ * - LRU caching of ABI apis.
+ * - Comprehensive decoding using Subsquid ABI and Pollkadot ABI.
+ * - Integration with ink! verifier server.
+ *
+ * @class
+ */
+export class AbiDecoder {
   private verifier: string;
 
   private cache: LRUCache<string, DecodingContext>;
@@ -49,7 +64,7 @@ class AbiDecoder {
     return this.decodeBy("decodeEvent", "events", params);
   }
 
-  _cacheClear() {
+  _cacheClear(): void {
     this.cache.clear();
   }
 
@@ -61,7 +76,7 @@ class AbiDecoder {
     return this.decode(codeHash, (ctx) => {
       const rawElement = ctx.subsquidAbi[subsquidMethodName](
         dataToString(data)
-      ) as RawDecodedElement;
+      );
 
       const polkadotElement = (
         ctx.polkadotAbi[polkadotAbiKey] as PolkadotAbiElement[]
@@ -188,6 +203,9 @@ class AbiDecoder {
   }
 }
 
+/**
+ * ABI decoder singleton.
+ */
 const abiDecoder = new AbiDecoder();
 
 export default abiDecoder;

@@ -1,3 +1,8 @@
+/**
+ * Helper functions to populate decoded metadata entities.
+ *
+ * @module handlers/metadata
+ */
 import { OptEntity } from "handlers/types";
 import {
   Activity,
