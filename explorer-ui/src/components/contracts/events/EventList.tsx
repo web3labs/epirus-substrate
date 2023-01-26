@@ -23,6 +23,17 @@ query($where: ContractEventWhereInput = {} ,$first: Int = 5, $after: String = nu
           indexInBlock
           name
         }
+        decodedEvent {
+          id
+          name
+          args {
+            id
+            name
+            type
+            value
+            displayName
+          }
+        }
       }
     }
     pageInfo {

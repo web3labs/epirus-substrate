@@ -13,6 +13,7 @@ import { AccountUnit } from "../commons/Text"
 import { Definition, DefinitionList } from "../commons/Definitions"
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline"
 import CodeLink from "../codes/CodeLink"
+import DataView from "../contracts/DataView"
 
 interface ActivityDisplay {
   alias: string,
@@ -93,13 +94,13 @@ export default function ActivityRow ({
   short = true
 }: TypedRow<Activity>) {
   const { token } = useChainProperties()
-  const { id, createdAt, args, extrinsic } = obj
+  const { id, createdAt, args, extrinsic, decodedActivity } = obj
   const displaySpec = resolveActivityDisplay({ obj, currentId, short })
   const { alias, left, right } = displaySpec
   const status = extrinsic.success ? "success" : "error"
 
   const extrinsicDetails = (
-    <div className="flex flex-col md:flex-row border-t border-gray-200 bg-gray-50 py-4 px-6 mt-2 -mx-6 -mb-2">
+    <div className="flex flex-col gap-y-2 border-t border-gray-200 bg-gray-50 py-4 px-6 mt-2 -mx-6 -mb-2">
       <DefinitionList>
         <Definition label="Block" term={
           <span className="font-mono">#{extrinsic.blockNumber}</span>
@@ -107,10 +108,6 @@ export default function ActivityRow ({
         <Definition label="Extrinsic" term={
           <span className="font-mono">{extrinsic.blockNumber}-{extrinsic.indexInBlock}</span>
         }/>
-        {args.data &&
-        <Definition label="Data" term={
-          <div className="max-h-32 overflow-y-auto font-mono break-all">{args.data}</div>
-        }/>}
         <Definition label="Status" term={
           <div className={classNames(
             extrinsic.success ? "text-green-600" : "text-red-600",
@@ -123,6 +120,7 @@ export default function ActivityRow ({
           <pre id="json">{JSON.stringify(extrinsic.error, undefined, 2)}</pre>
         }/>}
       </DefinitionList>
+      <DataView rawData={args.data} decodedData={decodedActivity}/>
     </div>
   )
 

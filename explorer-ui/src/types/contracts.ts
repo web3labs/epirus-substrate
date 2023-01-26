@@ -10,6 +10,20 @@ export enum ActivityType {
   CONTRACTTERMINATE = "CONTRACTTERMINATE",
 }
 
+export interface DecodedArg {
+  id: string
+  name: string
+  type: string
+  value: string
+  displayName?: string
+}
+
+export interface DecodedElement {
+  id: string
+  name: string
+  args: DecodedArg[]
+}
+
 export interface Activity {
   id: string,
   type: string,
@@ -19,6 +33,7 @@ export interface Activity {
   createdAt: Date,
   args: Args,
   extrinsic: Extrinsic
+  decodedActivity?: DecodedElement
 }
 
 export interface Event {
@@ -29,6 +44,7 @@ export interface Event {
   createdAt: Date,
   data: string,
   extrinsic: Extrinsic
+  decodedEvent?: DecodedElement
 }
 
 export interface CodeHashChange {

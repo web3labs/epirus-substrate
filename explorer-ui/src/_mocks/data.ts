@@ -1,9 +1,23 @@
 import { Account } from "../types/accounts"
 import { ContractCode } from "../types/codes"
-import { Activity, ActivityType, Contract, Event } from "../types/contracts"
+import { Activity, ActivityType, Contract, DecodedElement, Event } from "../types/contracts"
 import { Edge } from "../types/pagination"
 
 import { buildArrayOf, randomAccountId, randomCodeHash, randomHex, randomId } from "./utils"
+
+const mockDecodedActivity: DecodedElement = {
+  id: "0000000001-000001-54600-CONTRACT",
+  name: "new",
+  args: [
+    {
+      id: "0000000001-000001-54600-CONTRACT-totalSupply",
+      name: "totalSupply",
+      type: "Balance",
+      value: "888888888000000000000",
+      displayName: undefined
+    }
+  ]
+}
 
 export const mockExtrinsic = {
   id: randomId(),
@@ -26,6 +40,7 @@ export const mockActivityEdges : Edge<Activity>[] = [
       id: randomId() + "CONTRACTCALL",
       createdAt: new Date(),
       extrinsic: mockExtrinsic,
+      decodedActivity: mockDecodedActivity,
       args: {
         data: randomHex()
       },

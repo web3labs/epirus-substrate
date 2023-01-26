@@ -38,6 +38,17 @@ query($where: ActivityWhereInput = {} ,$first: Int = 5, $after: String = null, $
           success
           error
         }
+        decodedActivity {
+          id
+          name
+          args {
+            id
+            name
+            type
+            value
+            displayName
+          }
+        }
       }
     }
     pageInfo {

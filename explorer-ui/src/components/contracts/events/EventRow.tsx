@@ -3,22 +3,24 @@ import { shortDate } from "../../../formats/time"
 import { Event } from "../../../types/contracts"
 import { Definition, DefinitionList } from "../../commons/Definitions"
 import { Row, TypedRow } from "../../commons/List"
+import DataView from "../DataView"
 
 export default function EventRow ({
   obj,
   currentId,
   short
 }: TypedRow<Event>) {
-  const { id, blockNumber, indexInBlock, createdAt, data, extrinsic } = obj
+  const { id, blockNumber, indexInBlock, createdAt, data, extrinsic, decodedEvent } = obj
 
   return (
     <Row key={id}>
       <DefinitionList>
         <Definition label="ID" term={<span className="font-mono">{blockNumber}-{indexInBlock}</span>} />
         <Definition label="Extrinsic" term={
-          <div className="flex flex-col">
-            <span>{extrinsic.name}</span>
+          <div className="flex gap-2">
+
             <span className="font-mono">{extrinsic.blockNumber}-{extrinsic.indexInBlock}</span>
+            <span>{extrinsic.name}</span>
           </div>
         } />
 
@@ -26,13 +28,8 @@ export default function EventRow ({
           shortDate(createdAt)
         }
         />
-        <Definition label="Data" term={
-          <span className="font-mono break-all">
-            {data}
-          </span>
-        }
-        />
       </DefinitionList>
+      <DataView rawData={data} decodedData={decodedEvent}/>
     </Row>
   )
 }
