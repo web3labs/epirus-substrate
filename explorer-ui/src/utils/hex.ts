@@ -44,3 +44,14 @@ export function bytestoAscii (bytes: Uint8Array): string {
     ""
   )
 }
+
+const utf8TextDecoder = new TextDecoder("UTF-8")
+
+/**
+ * Converts hex string to UTF-8
+ * @param str Hex string
+ * @returns UTF-8 tring
+ */
+export function hexStringToUTF8 (str: string): string {
+  return utf8TextDecoder.decode(hexToBytes(str.substring(2)))
+}

@@ -6,7 +6,6 @@ import resolveInfoFromName from "./chainNames"
 const NULL_CHAIN_PROPERTIES : ChainProperties = {
   name: null,
   version: null,
-  ss58Format: null,
   token: {
     tokenDecimals: 12,
     tokenSymbol: "UNK"

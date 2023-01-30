@@ -1,6 +1,11 @@
 import React, { useState } from "react"
+import { NavLink } from "react-router-dom"
+import { encodeAddress } from "@polkadot/keyring"
+import { useChainProperties } from "../../contexts/ChainContext"
 import { DecodedArg, DecodedElement } from "../../types/contracts"
+import { hexStringToUTF8 } from "../../utils/hex"
 import { classNames } from "../../utils/strings"
+import AccountAddress from "../accounts/AccountAddress"
 
 export default function DataView ({
   rawData,
@@ -84,6 +89,28 @@ function RawDataView ({ rawData }: {rawData: string | number }) {
   return (<div className="py-2 px-4 text-sm font-mono break-all border border-slate-300">{rawData}</div>)
 }
 
+function toDisplayValue (arg: DecodedArg) {
+  const { ss58Format } = useChainProperties()
+  if (arg.value) {
+    switch (arg.type) {
+    case "AccountId":
+    case "Option<AccountId>": {
+      const address = encodeAddress(arg.value, ss58Format)
+      return (
+        <NavLink to={`/accounts/${address}`} className="link">
+          <AccountAddress address={address} size={21} />
+        </NavLink>
+      )
+    }
+    case "Bytes":
+      return arg.displayName === "String" ? hexStringToUTF8(arg.value) : arg.value
+    default:
+      return arg.value
+    }
+  }
+  return "-"
+}
+
 function DecodedDataView ({ decodedData }: {decodedData: DecodedElement}) {
   return (
     <table className="table-auto border-collapse border border-slate-300 text-sm w-full">
@@ -110,7 +137,7 @@ function DecodedDataView ({ decodedData }: {decodedData: DecodedElement}) {
                     <tr key={arg.id} className="p-2">
                       <td className="border-t border-slate-300 py-2 px-4 font-mono">{arg.name}</td>
                       <td className="border-t border-slate-300 py-2 px-4 font-mono">{arg.type}</td>
-                      <td className="border-t border-slate-300 py-2 px-4 font-mono">{arg.value || "-"}</td>
+                      <td className="border-t border-slate-300 py-2 px-4 font-mono">{toDisplayValue(arg)}</td>
                     </tr>
                   )
                 })}
