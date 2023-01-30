@@ -14,7 +14,7 @@ export default function DataView ({
   }
   if (!decodedData) {
     return (
-      <div className="flex flex-col gap-y-2 py-2 w-full">
+      <div className="flex flex-col gap-y-2 w-full">
         <div className="text-sm text-gray-400">Data</div>
         <RawDataView rawData={rawData}/>
       </div>

@@ -101,25 +101,25 @@ export default function ActivityRow ({
 
   const extrinsicDetails = (
     <div className="flex flex-col gap-y-2 border-t border-gray-200 bg-gray-50 py-4 px-6 mt-2 -mx-6 -mb-2">
-      <DefinitionList>
-        <Definition label="Block" term={
-          <span className="font-mono">{extrinsic.blockNumber}</span>
-        }/>
-        <Definition label="Extrinsic" term={
-          <span className="font-mono">{extrinsic.blockNumber}-{extrinsic.indexInBlock}</span>
-        }/>
-        <Definition label="Status" term={
-          <div className={classNames(
-            extrinsic.success ? "text-green-600" : "text-red-600",
-            "text-xs font-semibold uppercase py-0.5 text-center"
-          )}>
-            {`${status}`}
-          </div>
-        }/>
-        {extrinsic.error && <Definition label="Error" term={
-          <pre id="json">{JSON.stringify(extrinsic.error, undefined, 2)}</pre>
-        }/>}
-      </DefinitionList>
+      <div className="flex justify-between">
+        <DefinitionList>
+          <Definition label="Block" term={
+            <span className="font-mono">{extrinsic.blockNumber}</span>
+          }/>
+          <Definition label="Extrinsic" term={
+            <span className="font-mono">{extrinsic.blockNumber}-{extrinsic.indexInBlock}</span>
+          }/>
+          {extrinsic.error && <Definition label="Error" term={
+            <pre id="json">{JSON.stringify(extrinsic.error, undefined, 2)}</pre>
+          }/>}
+        </DefinitionList>
+        <div className={classNames(
+          extrinsic.success ? "text-green-600" : "text-red-600",
+          "text-xs font-semibold uppercase py-0.5 text-center"
+        )}>
+          {`${status}`}
+        </div>
+      </div>
       <DataView rawData={args.data} decodedData={decodedActivity}/>
     </div>
   )
