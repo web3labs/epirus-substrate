@@ -102,16 +102,14 @@ describe("UnverifiedView component", () => {
   })
 
   it("should submit signed metdata", async () => {
-    const metadataJson = new File([new Blob([
-      JSON.stringify({
-        version: 1
-      })
+    const metaText : string = JSON.stringify({
+      version: 1
+    })
+    const metadataJson = new File([new Blob([metaText
     ])], "metadata.json", {
       type: "application/json"
     })
-    metadataJson.text = () => Promise.resolve(JSON.stringify({
-      version: 1
-    }))
+    metadataJson.text = () => Promise.resolve(metaText)
 
     const { container } = await act(async () => render(
       <UnverifiedView

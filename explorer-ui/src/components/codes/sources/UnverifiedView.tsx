@@ -173,6 +173,13 @@ function UploadSignedMetadata (
     }
   }
 
+  async function msgToSignFromFile (file: File) {
+    const text = await file.text()
+    const arr = sha256AsU8a(text)
+    const sha256sum = toHex(arr)
+    setMsgToSign(sha256sum + codeHashNoPrefix)
+  }
+
   return (<div className="flex flex-col p-2 m-4">
     <div className="text-gray-900 font-semibold">Upload Signed Metadata</div>
 
@@ -206,10 +213,7 @@ function UploadSignedMetadata (
         : <UploadForm
           actionName="Upload Metadata"
           onSubmit={onSubmit}
-          onSetFile={async file => {
-            const sha256sum = toHex(sha256AsU8a(await file.text()))
-            setMsgToSign(sha256sum + codeHashNoPrefix)
-          }}
+          onSetFile={msgToSignFromFile}
           accept={{
             "application/json": [],
             "text/plain": []
