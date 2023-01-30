@@ -32,7 +32,7 @@ export function CollapsibleRow ({
 
   return (
     <li className="group flex flex-col pb-2 pt-4 px-6 hover:bg-over-hover">
-      <div className="flex flex-row justify-between items-center cursor-pointer"
+      <div className="flex flex-row justify-between cursor-pointer"
         onClick={() => setOpen(!open)}>
         {children}
         <div className="pl-5">

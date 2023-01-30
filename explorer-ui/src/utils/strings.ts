@@ -23,3 +23,13 @@ const PC =
 export function stripNonPrintable (str: string) {
   return str.length > 0 ? str.trim().replace(PC, "") : str
 }
+
+/**
+ * Transforms a given input string in kebab or snake case to title case.
+ * @param str Input string
+ * @returns Input string in title case
+ */
+export function toTitleCase (str: string) {
+  return str.replace(/^[-_]*(.)/, (_, c) => c.toUpperCase()) // Initial char (after -/_)
+    .replace(/[-_]+(.)/g, (_, c) => " " + c.toUpperCase()) // First char after each -/_
+}

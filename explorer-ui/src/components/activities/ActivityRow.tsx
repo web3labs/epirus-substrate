@@ -4,7 +4,7 @@ import { Activity, ActivityType } from "../../types/contracts"
 import { CollapsibleRow, TypedRow } from "../commons/List"
 import { shortDate } from "../../formats/time"
 import AccountLink from "../accounts/AccountLink"
-import { classNames } from "../../utils/strings"
+import { classNames, toTitleCase } from "../../utils/strings"
 import Lane from "../commons/Lane"
 import { Label } from "../commons/Label"
 import { getArgValue } from "../../utils/args"
@@ -149,6 +149,12 @@ export default function ActivityRow ({
           />
         }
       >
+        { decodedActivity &&
+          <div className="flex gap-2 text-sm">
+            <Label>Method</Label>
+            {toTitleCase(decodedActivity.name)}
+          </div>
+        }
         {left}
         {right}
       </Lane>
