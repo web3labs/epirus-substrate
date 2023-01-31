@@ -1,6 +1,7 @@
 import React from "react"
 import { TabQuery } from "../navigation/Tabs"
 import DateRangeFilter from "../query/filters/DateRangeFilter"
+import { activityMethodFilter } from "../query/filters/TextFilter"
 import ActivityList, { ACTIVITY_SORT_OPTIONS } from "./ActivityList"
 
 export function activityByAccount (id: string) {
@@ -30,7 +31,8 @@ export default function ActivityTab ({ currentId, where }: TabQuery) {
       }}
       sortOptions={ACTIVITY_SORT_OPTIONS}
       filterTypes={[
-        DateRangeFilter
+        DateRangeFilter,
+        activityMethodFilter
       ]}
     />
   )

@@ -6,6 +6,7 @@ import ListQuery from "../../query/ListQuery"
 import Pagination from "../../navigation/Pagination"
 import SortBy from "../../query/SortBy"
 import EventRow from "./EventRow"
+import Filters from "../../query/Filters"
 
 const QUERY = `
 query($where: ContractEventWhereInput = {} ,$first: Int = 5, $after: String = null, $orderBy: [ContractEventOrderByInput!]! = [createdAt_DESC]) {
@@ -78,12 +79,20 @@ export default function EventList ({
             pageQuery={queryInState}
           />
           : undefined
+        const filter = filterTypes
+          ? <Filters
+            filterTypes={filterTypes}
+            setQuery={setQueryInState}
+            pageQuery={queryInState}
+          />
+          : undefined
 
         return (
           <List
             title={title}
             description={description}
             sort={sort}
+            filter={filter}
             footer={
               <Pagination
                 page={page}

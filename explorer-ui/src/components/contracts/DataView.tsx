@@ -116,7 +116,7 @@ function DecodedDataView ({ decodedData }: {decodedData: DecodedElement}) {
     <table className="table-auto border-collapse border border-slate-300 text-sm w-full">
       <tbody>
         <tr className="p-2">
-          <td className="border border-slate-300 text-gray-400 py-2 px-4 w-28">Method</td>
+          <td className="border border-slate-300 text-gray-400 py-2 px-4 w-28">Kind</td>
           <td className="border border-slate-300 py-2 px-4 font-mono">{decodedData.name}</td>
         </tr>
         { decodedData.args && decodedData.args.length > 0 &&

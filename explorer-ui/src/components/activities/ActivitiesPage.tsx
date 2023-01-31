@@ -4,7 +4,7 @@ import Box from "../commons/Box"
 import Breadcrumbs from "../navigation/Breadcrumbs"
 import DateRangeFilter from "../query/filters/DateRangeFilter"
 import { enumTypeFilterOf, SelectionInput } from "../query/filters/EnumTypeFilter"
-import { textFilterOf } from "../query/filters/TextFilter"
+import { activityMethodFilter, textFilterOf } from "../query/filters/TextFilter"
 import ActivityList, { ACTIVITY_SORT_OPTIONS } from "./ActivityList"
 
 export default function ActivitiesPage () {
@@ -58,7 +58,8 @@ export default function ActivitiesPage () {
                 ),
                 inputValues: activityTypes
               }
-            )
+            ),
+            activityMethodFilter
           ]}
           title="Activities"
         />
