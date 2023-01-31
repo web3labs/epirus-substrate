@@ -29,7 +29,7 @@ export default function EventRow ({
         }
         />
       </DefinitionList>
-      <DataView rawData={data} decodedData={decodedEvent}/>
+      <DataView rawData={data} decodedData={decodedEvent} label={"Event"}/>
     </Row>
   )
 }

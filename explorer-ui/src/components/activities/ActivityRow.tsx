@@ -120,7 +120,7 @@ export default function ActivityRow ({
           {`${status}`}
         </div>
       </div>
-      <DataView rawData={args.data} decodedData={decodedActivity}/>
+      <DataView rawData={args.data} decodedData={decodedActivity} label={"Method"}/>
     </div>
   )
 

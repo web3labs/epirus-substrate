@@ -9,10 +9,12 @@ import AccountAddress from "../accounts/AccountAddress"
 
 export default function DataView ({
   rawData,
-  decodedData
+  decodedData,
+  label
 } : {
   rawData: string | number | undefined
   decodedData?: DecodedElement
+  label?: string
 }) {
   if (!rawData) {
     return null
@@ -29,23 +31,29 @@ export default function DataView ({
 
   const [displayDecoded, setDisplayDecoded] = useState(true)
 
-  function setDecodedToggle (toggle: boolean) {
-    setDisplayDecoded(toggle)
-  }
-
   return (
     <>
       <div className="flex flex-col gap-y-2 w-full">
         <div className="flex gap-2 text-sm justify-between items-start">
           <div className="text-gray-400 md:basis-20">Data</div>
           <div className="inline-flex rounded-md">
-            <ToggleButton title={"Decoded"} isSelected={displayDecoded} placement={"left"} onClick={() => setDecodedToggle(true)}/>
-            <ToggleButton title={"Raw"} isSelected={!displayDecoded} placement={"right"} onClick={() => setDecodedToggle(false)}/>
+            <ToggleButton
+              title={"Decoded"}
+              isSelected={displayDecoded}
+              placement={"left"}
+              onClick={() => setDisplayDecoded(true)}
+            />
+            <ToggleButton
+              title={"Raw"}
+              isSelected={!displayDecoded}
+              placement={"right"}
+              onClick={() => setDisplayDecoded(false)}
+            />
           </div>
         </div>
         <div className="overflow-auto w-full">
           {displayDecoded
-            ? <DecodedDataView decodedData={decodedData}/>
+            ? <DecodedDataView decodedData={decodedData} label={label}/>
             : <RawDataView rawData={rawData}/>}
         </div>
       </div>
@@ -111,12 +119,18 @@ function toDisplayValue (arg: DecodedArg) {
   return "-"
 }
 
-function DecodedDataView ({ decodedData }: {decodedData: DecodedElement}) {
+function DecodedDataView ({
+  decodedData,
+  label
+} : {
+  decodedData: DecodedElement,
+  label?: string
+}) {
   return (
     <table className="table-auto border-collapse border border-slate-300 text-sm w-full">
       <tbody>
         <tr className="p-2">
-          <td className="border border-slate-300 text-gray-400 py-2 px-4 w-28">Kind</td>
+          <td className="border border-slate-300 text-gray-400 py-2 px-4 w-28">{label || "Kind"}</td>
           <td className="border border-slate-300 py-2 px-4 font-mono">{decodedData.name}</td>
         </tr>
         { decodedData.args && decodedData.args.length > 0 &&
