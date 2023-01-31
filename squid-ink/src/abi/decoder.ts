@@ -130,7 +130,7 @@ export class AbiDecoder {
     polkadotElement: PolkadotAbiElement | undefined,
     rawElement: RawDecodedElement
   ): DecodedElement | undefined {
-    const name = rawElement.__kind;
+    const name = rawElement.__kind.toLowerCase();
     if (polkadotElement === undefined) {
       throw new Error(`Element "${name}" is not found in polkadot.js ABI`);
     }
@@ -147,7 +147,7 @@ export class AbiDecoder {
           rawElement
         );
         decoded.args.push({
-          name: key,
+          name: key.toLowerCase(),
           value: dataToString(rawElement[key]),
           type: annotatedArgType.type,
           displayName: annotatedArgType.displayName,
