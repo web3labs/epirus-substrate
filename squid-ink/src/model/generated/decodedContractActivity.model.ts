@@ -1,4 +1,4 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, OneToOne as OneToOne_, Index as Index_, JoinColumn as JoinColumn_, OneToMany as OneToMany_} from "typeorm"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, Index as Index_, OneToOne as OneToOne_, JoinColumn as JoinColumn_, OneToMany as OneToMany_} from "typeorm"
 import {Activity} from "./activity.model"
 import {DecodedActivityArg} from "./decodedActivityArg.model"
 
@@ -11,6 +11,7 @@ export class DecodedContractActivity {
   @PrimaryColumn_()
   id!: string
 
+  @Index_()
   @Column_("text", {nullable: false})
   name!: string
 

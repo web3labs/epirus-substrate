@@ -89,7 +89,7 @@ type ContractEvent @entity {
 
 type DecodedContractActivity @entity {
   id: ID!
-  name: String!
+  name: String! @index
   activity: Activity! @unique
   args: [DecodedActivityArg!] @derivedFrom(field: "decodedActivity")
 }
@@ -105,7 +105,7 @@ type DecodedActivityArg @entity {
 
 type DecodedContractEvent @entity {
   id: ID!
-  name: String!
+  name: String! @index
   contractEvent: ContractEvent! @unique
   args: [DecodedEventArg!] @derivedFrom(field: "decodedEvent")
 }
