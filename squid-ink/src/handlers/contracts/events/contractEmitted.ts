@@ -3,6 +3,7 @@ import {
   NormalisedContractInfoOfStorage,
 } from "@chain/normalised-types";
 import { SubstrateBlock, toHex } from "@subsquid/substrate-processor";
+import { config } from "../../../config";
 import { ContractEvent } from "../../../model";
 import { createExtrinsic, createEvent, saveAll } from "../../utils";
 import abiDecoder from "../../../abi/decoder";
@@ -38,8 +39,7 @@ export const contractsEmittedHandler: EventHandler = {
 
       entities.push(extrinsicEntity, eventEntity, contractEventEntity);
 
-      // TODO: Toggle decode
-      if (data) {
+      if (data && config.sourceCodeEnabled) {
         const { codeHash } = await new NormalisedContractInfoOfStorage(
           ctx,
           block

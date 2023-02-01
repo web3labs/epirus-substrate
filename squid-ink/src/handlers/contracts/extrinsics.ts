@@ -8,6 +8,7 @@ import {
   SubstrateExtrinsic,
   toHex,
 } from "@subsquid/substrate-processor";
+import { config } from "../../config";
 import { Ctx, ExtrinsicHandler, OptEntity } from "../types";
 import {
   createActivity,
@@ -49,8 +50,7 @@ const contractsCallHandler: ExtrinsicHandler = {
 
     entities.push(to, from, extrinsicEntity, activityEntity);
 
-    // TODO this can be toggled
-    if (data) {
+    if (data && config.sourceCodeEnabled) {
       const { codeHash } = await new NormalisedContractInfoOfStorage(
         ctx,
         block
