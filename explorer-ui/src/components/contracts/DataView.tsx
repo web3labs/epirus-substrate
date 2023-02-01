@@ -82,7 +82,7 @@ function ToggleButton ({
     <button type="button"
       className={
         classNames(
-          "px-2 py-1 border border-blue-200 text-gray-800",
+          "px-2 py-1 border border-blue-200 text-gray-800 text-xs",
           roundedBorder,
           isSelected
             ? "bg-blue-200 cursor-default"
