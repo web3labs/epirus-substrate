@@ -1,5 +1,6 @@
 import { NormalisedContractsCodeUpdatedEvent } from "@chain/normalised-types";
 import { SubstrateBlock } from "@subsquid/substrate-processor";
+import abiDecoder from "../../../abi/decoder";
 import {
   createExtrinsic,
   createEvent,
@@ -10,6 +11,8 @@ import {
 import { CodeHashChange, ActivityType, Contract } from "../../../model";
 import { ContractCodeUpdatedArgs, Ctx, Event, EventHandler } from "../../types";
 import { createContractCodeEntities } from "./utils";
+import { config } from "../../../config";
+import { addDecodedActivityEntities } from "../metadata";
 
 export const contractsCodeUpdatedHandler: EventHandler = {
   name: "Contracts.ContractCodeUpdated",
@@ -22,6 +25,7 @@ export const contractsCodeUpdatedHandler: EventHandler = {
     const { extrinsic, call } = event;
     const { contract, newCodeHash, oldCodeHash } =
       new NormalisedContractsCodeUpdatedEvent(ctx, event).resolve();
+    const entities = [];
 
     log.info(
       {
@@ -83,8 +87,7 @@ export const contractsCodeUpdatedHandler: EventHandler = {
         signerAccount,
         args
       );
-
-      await saveAll(store, [
+      entities.push(
         codeOwnerEntity,
         signerAccount,
         extrinsicEntity,
@@ -92,8 +95,23 @@ export const contractsCodeUpdatedHandler: EventHandler = {
         contractCodeEntity,
         contractEntity,
         codeHashChangeEntity,
-        activityEntity,
-      ]);
+        activityEntity
+      );
+
+      if (args.data && config.sourceCodeEnabled) {
+        const decodedElement = await abiDecoder.decodeMessage({
+          codeHash: newCodeHash,
+          data: args.data,
+        });
+
+        addDecodedActivityEntities({
+          entities,
+          decodedElement,
+          activityEntity,
+        });
+      }
+
+      await saveAll(store, entities);
     } else {
       log.warn(
         { block: block.height, name: event.name, id: event.id },

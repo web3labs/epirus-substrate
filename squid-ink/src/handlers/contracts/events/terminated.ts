@@ -8,8 +8,11 @@ import {
   createActivity,
   saveAll,
 } from "../../utils";
-import { ActivityType, Contract } from "../../../model";
-import { Ctx, Event, EventHandler } from "../../types";
+import { ActivityType, Contract, ContractCode } from "../../../model";
+import { Ctx, Event, EventHandler, ExtrinsicArg } from "../../types";
+import { config } from "../../../config";
+import abiDecoder from "../../../abi/decoder";
+import { addDecodedActivityEntities } from "../metadata";
 
 export const contractsTerminatedHandler: EventHandler = {
   name: "Contracts.Terminated",
@@ -51,6 +54,7 @@ export const contractsTerminatedHandler: EventHandler = {
     }
 
     if (extrinsic && call) {
+      const entities = [];
       const extrinsicEntity = createExtrinsic(extrinsic, call, block);
       const eventEntity = createEvent(extrinsicEntity, event);
       const extrinsicSigner = extrinsicEntity.signer
@@ -65,15 +69,43 @@ export const contractsTerminatedHandler: EventHandler = {
         contractAccount,
         extrinsicSigner
       );
-      await saveAll(store, [
+      entities.push(
         contractAccount,
         beneficiaryAccount,
         extrinsicSigner,
         extrinsicEntity,
         eventEntity,
         contractEntity,
-        activityEntity,
-      ]);
+        activityEntity
+      );
+
+      const { data } = <ExtrinsicArg>extrinsicEntity.args;
+      if (data && config.sourceCodeEnabled) {
+        // We get the contract code entity from DB instead of on-chain storage
+        // since contract doesn't exist anymore
+        const contractCodeEntity = await store.get(ContractCode, {
+          where: {
+            contractsDeployed: {
+              id: contract,
+            },
+          },
+        });
+
+        if (contractCodeEntity) {
+          const decodedElement = await abiDecoder.decodeMessage({
+            codeHash: contractCodeEntity.id,
+            data,
+          });
+
+          addDecodedActivityEntities({
+            entities,
+            decodedElement,
+            activityEntity,
+          });
+        }
+      }
+
+      await saveAll(store, entities);
     } else {
       log.warn(
         {

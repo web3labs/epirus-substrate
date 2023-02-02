@@ -27,6 +27,7 @@ import {
 } from "../../types";
 import { addDecodedActivityEntities } from "../metadata";
 import { createContractCodeEntities } from "./utils";
+import { config } from "../../../config";
 
 export const contractsInstantiatedHandler: EventHandler = {
   name: "Contracts.Instantiated",
@@ -119,10 +120,9 @@ export const contractsInstantiatedHandler: EventHandler = {
         activityEntity
       );
 
-      // Toggle decode
       const { data } = <ExtrinsicArg>extrinsicEntity.args;
 
-      if (data) {
+      if (data && config.sourceCodeEnabled) {
         const decodedElement = await abiDecoder.decodeConstructor({
           codeHash: toHex(codeHash),
           data,

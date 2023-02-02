@@ -4,7 +4,11 @@ export function dataToString(data: unknown): string {
   if (typeof data === "string") {
     return data;
   }
-  if (typeof data === "bigint" || typeof data === "boolean") {
+  if (
+    typeof data === "bigint" ||
+    typeof data === "boolean" ||
+    typeof data === "number"
+  ) {
     return data.toString();
   }
   if (Buffer.isBuffer(data)) {

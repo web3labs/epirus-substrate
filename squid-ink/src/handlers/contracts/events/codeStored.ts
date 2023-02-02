@@ -9,6 +9,9 @@ import {
 } from "../../utils";
 import { ContractCodeStoredArgs, Ctx, Event, EventHandler } from "../../types";
 import { createContractCodeEntities } from "./utils";
+import { config } from "../../../config";
+import abiDecoder from "../../../abi/decoder";
+import { addDecodedActivityEntities } from "../metadata";
 
 export const contractsCodeStoredHandler: EventHandler = {
   name: "Contracts.CodeStored",
@@ -20,6 +23,7 @@ export const contractsCodeStoredHandler: EventHandler = {
     const { store, log } = ctx;
     const { extrinsic, call } = event;
     if (extrinsic && call) {
+      const entities = [];
       const extrinsicEntity = createExtrinsic(extrinsic, call, block);
       const eventEntity = createEvent(extrinsicEntity, event);
       const { codeHash } = new NormalisedContractsCodeStoredEvent(
@@ -45,13 +49,28 @@ export const contractsCodeStoredHandler: EventHandler = {
         args
       );
 
-      await saveAll(store, [
+      entities.push(
         extrinsicEntity,
         eventEntity,
         codeOwnerEntity,
         contractCodeEntity,
-        activityEntity,
-      ]);
+        activityEntity
+      );
+
+      if (args.data && config.sourceCodeEnabled) {
+        const decodedElement = await abiDecoder.decodeConstructor({
+          codeHash,
+          data: args.data,
+        });
+
+        addDecodedActivityEntities({
+          entities,
+          decodedElement,
+          activityEntity,
+        });
+      }
+
+      await saveAll(store, entities);
     } else {
       log.warn(
         { block: block.height, name: event.name, id: event.id },
