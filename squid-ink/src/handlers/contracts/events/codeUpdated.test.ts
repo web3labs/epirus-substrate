@@ -13,6 +13,8 @@ import {
   defaultGetStorageMock,
 } from "../../../_mocks";
 import { Contract } from "../../../model";
+import { config } from "../../../config";
+import abiDecoder from "../../../abi/decoder";
 
 jest.mock("../../utils", () => {
   const originalModule = jest.requireActual("../../utils");
@@ -24,9 +26,19 @@ jest.mock("../../utils", () => {
   };
 });
 
+jest.mock("../../../config", () => {
+  return {
+    __esModule: true,
+    config: {},
+  };
+});
+
+jest.mock("../../../abi/decoder");
+
 describe("contractsCodeUpdatedHandler", () => {
   const event = getMockEvent({ name: "Contracts.ContractCodeUpdated" });
   beforeEach(() => {
+    jest.clearAllMocks();
     ctx._chain.getStorage.mockImplementation(defaultGetStorageMock());
   });
 
@@ -41,6 +53,20 @@ describe("contractsCodeUpdatedHandler", () => {
     });
     await contractsCodeUpdatedHandler.handle(ctx, event, block);
     expect(saveAll).toBeCalled();
+  });
+
+  it("should decode events if source code feature is enabled", async () => {
+    config.sourceCodeEnabled = true;
+    const decodeMessageSpy = jest.spyOn(abiDecoder, "decodeMessage");
+    await contractsCodeUpdatedHandler.handle(ctx, event, block);
+    expect(decodeMessageSpy).toBeCalled();
+  });
+
+  it("should not decode events if source code feature is not enabled", async () => {
+    config.sourceCodeEnabled = false;
+    const decodeMessageSpy = jest.spyOn(abiDecoder, "decodeMessage");
+    await contractsCodeUpdatedHandler.handle(ctx, event, block);
+    expect(decodeMessageSpy).toBeCalledTimes(0);
   });
 
   it("should throw error if contract entity is not found in database", async () => {

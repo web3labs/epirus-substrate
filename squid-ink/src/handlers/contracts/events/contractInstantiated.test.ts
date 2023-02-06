@@ -7,6 +7,8 @@
 import { ContractCode } from "../../../model";
 import { contractsInstantiatedHandler } from "./index";
 import { saveAll } from "../../utils";
+import { config } from "../../../config";
+import abiDecoder from "../../../abi/decoder";
 import {
   block,
   getMockEvent,
@@ -24,10 +26,20 @@ jest.mock("../../utils", () => {
   };
 });
 
+jest.mock("../../../config", () => {
+  return {
+    __esModule: true,
+    config: {},
+  };
+});
+
+jest.mock("../../../abi/decoder");
+
 describe("contractsInstantiatedHandler", () => {
   const event = getMockEvent({ name: "Contracts.Instantiated" });
 
   beforeEach(() => {
+    jest.clearAllMocks();
     ctx._chain.getStorage.mockImplementation(defaultGetStorageMock());
   });
 
@@ -43,6 +55,20 @@ describe("contractsInstantiatedHandler", () => {
 
     await contractsInstantiatedHandler.handle(ctx, event, block);
     expect(saveAll).toBeCalled();
+  });
+
+  it("should decode events if source code feature is enabled", async () => {
+    config.sourceCodeEnabled = true;
+    const decodeConstructorSpy = jest.spyOn(abiDecoder, "decodeConstructor");
+    await contractsInstantiatedHandler.handle(ctx, event, block);
+    expect(decodeConstructorSpy).toBeCalled();
+  });
+
+  it("should not decode events if source code feature is not enabled", async () => {
+    config.sourceCodeEnabled = false;
+    const decodeConstructorSpy = jest.spyOn(abiDecoder, "decodeConstructor");
+    await contractsInstantiatedHandler.handle(ctx, event, block);
+    expect(decodeConstructorSpy).toBeCalledTimes(0);
   });
 
   it("should throw error if contract info is not found in storage", async () => {
@@ -75,5 +101,16 @@ describe("contractsInstantiatedHandler", () => {
         )
       );
     }
+  });
+
+  it("should log warning if there's no extrinsic and call", async () => {
+    const mockEvent = getMockEvent({
+      name: "Contracts.Instantiated",
+      withCall: false,
+      withExtrinsic: false,
+    });
+    await contractsInstantiatedHandler.handle(ctx, mockEvent, block);
+    expect(ctx.log.warn).toBeCalled();
+    expect(ctx.log.debug).toBeCalled();
   });
 });

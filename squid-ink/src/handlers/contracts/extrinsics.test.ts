@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
+import abiDecoder from "../../abi/decoder";
 import { contractsExtrinsicHandlers } from "./index";
 import { saveAll } from "../utils";
 import {
@@ -12,6 +13,7 @@ import {
   getMockCall,
   getMockExtrinsic,
 } from "../../_mocks";
+import { config } from "../../config";
 
 jest.mock("../utils", () => {
   const originalModule = jest.requireActual("../utils");
@@ -23,6 +25,15 @@ jest.mock("../utils", () => {
   };
 });
 
+jest.mock("../../config", () => {
+  return {
+    __esModule: true,
+    config: {},
+  };
+});
+
+jest.mock("../../abi/decoder");
+
 describe("contracts extrinsic handlers", () => {
   const call = getMockCall({ name: "Contracts.call" });
   const extrinsic = getMockExtrinsic({ withSignature: false });
@@ -30,12 +41,27 @@ describe("contracts extrinsic handlers", () => {
   describe("contractsCallHandler", () => {
     const { contractsCallHandler } = contractsExtrinsicHandlers;
     beforeEach(() => {
+      jest.clearAllMocks();
       ctx._chain.getStorage.mockImplementation(defaultGetStorageMock());
     });
 
     it("should handle extrinsic", async () => {
       await contractsCallHandler.handle(ctx, call, extrinsic, block);
       expect(saveAll).toBeCalled();
+    });
+
+    it("should decode events if source code feature is enabled", async () => {
+      config.sourceCodeEnabled = true;
+      const decodeMessageSpy = jest.spyOn(abiDecoder, "decodeMessage");
+      await contractsCallHandler.handle(ctx, call, extrinsic, block);
+      expect(decodeMessageSpy).toBeCalled();
+    });
+
+    it("should not decode events if source code feature is not enabled", async () => {
+      config.sourceCodeEnabled = false;
+      const decodeMessageSpy = jest.spyOn(abiDecoder, "decodeMessage");
+      await contractsCallHandler.handle(ctx, call, extrinsic, block);
+      expect(decodeMessageSpy).toBeCalledTimes(0);
     });
 
     it("should throw error if call destination is of type Index", async () => {
