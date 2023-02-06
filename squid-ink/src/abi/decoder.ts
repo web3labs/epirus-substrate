@@ -73,8 +73,9 @@ export class AbiDecoder {
     polkadotAbiKey: "messages" | "events" | "constructors",
     { codeHash, data }: CodeParams
   ): Promise<DecodedElement | undefined> {
-    return this.decode(codeHash, (ctx) => {
-      const rawElement = ctx.subsquidAbi[subsquidMethodName](
+    const ctx = await this.resolveDecodingContext(codeHash);
+    if (ctx) {
+      const rawElement = ctx.subsquidAbi[subsquidMethodName]<RawDecodedElement>(
         dataToString(data)
       );
 
@@ -83,21 +84,19 @@ export class AbiDecoder {
       ).find((am) => am.identifier === rawElement.__kind);
 
       return this.toDecodedElement(polkadotElement, rawElement);
-    });
-  }
-
-  private async decode(
-    codeHash: string,
-    decodeElement: (ctx: DecodingContext) => DecodedElement | undefined
-  ): Promise<DecodedElement | undefined> {
-    const ctx = await this.resolveDecodingContext(codeHash);
-    if (ctx) {
-      return decodeElement(ctx);
     }
-
     return undefined;
   }
 
+  /**
+   * Resolves the decoding context which contains the Subsquid and PolkadotJS ABIs needed for decoding.
+   * First looks into cache and retrieves from cache if exists.
+   * If not in cache, fetch the metadata from Ink Verifier Server and
+   * generate the Subsquid and PolkadotJS ABI classes to put in cache.
+   *
+   * @param codeHash Code hash of the contract to be decoded
+   * @returns Decoding context
+   */
   private async resolveDecodingContext(
     codeHash: string
   ): Promise<DecodingContext | undefined> {
@@ -172,7 +171,6 @@ export class AbiDecoder {
   }
 
   private async fetchMetadata(codeHash: string) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
     const res = await fetch(
       `${this.verifier}/contracts/${codeHash}/metadata.json`
     );
