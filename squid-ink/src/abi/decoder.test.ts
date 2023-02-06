@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import abiDecoder from "./decoder";
+import { DecodedElement } from "./types";
 
 const mockFetch = jest.fn();
 
@@ -22,11 +23,48 @@ const codeHash =
 // Transfer From
 const data =
   "0x0b396f188eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a4890b5ab205c6974c9ea841be688864633dc9ca8a357843eeacf2314649965fe22005039278c0400000000000000000000";
+const expectedDecodedData: DecodedElement = {
+  name: "transfer_from",
+  args: [
+    {
+      name: "from",
+      value:
+        "0x8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48",
+      type: "AccountId",
+      displayName: undefined,
+    },
+    {
+      name: "to",
+      value:
+        "0x90b5ab205c6974c9ea841be688864633dc9ca8a357843eeacf2314649965fe22",
+      type: "AccountId",
+      displayName: undefined,
+    },
+    {
+      name: "value",
+      value: "5000000000000",
+      type: "Balance",
+      displayName: undefined,
+    },
+  ],
+};
 
 describe("ABI Decoder", () => {
   beforeEach(() => {
     mockFetch.mockClear();
     abiDecoder._cacheClear();
+  });
+
+  it("should decode message correctly", async () => {
+    mockFetch.mockReturnValueOnce(okRes);
+
+    const decoded = await abiDecoder.decodeMessage({
+      codeHash,
+      data,
+    });
+
+    expect(decoded).toBeDefined();
+    expect(decoded).toEqual(expectedDecodedData);
   });
 
   it("should handle metadata not found", async () => {
