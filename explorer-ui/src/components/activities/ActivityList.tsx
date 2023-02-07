@@ -2,7 +2,7 @@ import React from "react"
 import { Activity } from "../../types/contracts"
 import { Edge, Page } from "../../types/pagination"
 import List, { ListProps } from "../commons/List"
-import ListQuery from "../query/ListQuery"
+import ListQuery, { UpdateMode } from "../query/ListQuery"
 import Pagination from "../navigation/Pagination"
 import SortBy from "../query/SortBy"
 import ActivityRow from "./ActivityRow"
@@ -81,11 +81,12 @@ export default function ActivityList ({
   currentId
 } : ListProps) {
   return <ListQuery
+    updateMode={UpdateMode.BEEPER}
     pageQuery={pageQuery}
     query={QUERY}
     dataSelector="activitiesConnection"
     render={
-      ({ data, setQueryInState, queryInState }) => {
+      ({ data, setQueryInState, queryInState, beeper }) => {
         const page : Page<Activity> = data
         const sort = sortOptions
           ? <SortBy options={sortOptions}
@@ -114,6 +115,7 @@ export default function ActivityList ({
                 setQuery={setQueryInState}
               />
             }
+            drawer={beeper}
             emptyMessage="No activities to show"
           >
             {page?.edges.map(({ node } : Edge<Activity>) => (
