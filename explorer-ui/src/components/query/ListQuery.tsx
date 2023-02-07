@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import useSquid, { SquidRefreshProps } from "../../hooks/useSquid"
 import { PageQuery } from "../../types/pagination"
 import objectHash from "../../utils/hashcode"
@@ -45,7 +45,7 @@ export function Beeper ({
 
   return <div className={classNames(
     "w-full overflow-hidden transition-all ease-in-out duration-250",
-    loadMore ? "max-h-14" : "max-h-0"
+    loadMore ? "max-h-14 border-b" : "max-h-0 border-b-0"
   )}>
     {loadMore &&
     <button
@@ -105,14 +105,11 @@ export default function ListQuery (props: Props) {
     hash.current = objectHash(data[dataSelector])
   }
 
-  // In Beeper mode we want to update the beeper accumulator
-  // on new content, this happens in the data display logic
-  const displayDeps = updateMode === UpdateMode.BEEPER
-    ? [dataInDisplay, hash.current]
-    : [dataInDisplay]
-
   useEffect(() => {
-    if (updateMode === UpdateMode.AUTOMATIC) {
+    // We want to update always on automatic or
+    // on mount on other modes
+    if (updateMode === UpdateMode.AUTOMATIC ||
+      hash.current === EMPTY_HASH) {
       // Update state on new content
       setQueryInState({
         ...queryInState,
@@ -125,31 +122,33 @@ export default function ListQuery (props: Props) {
     if (data && data[dataSelector]) {
       setDataInDisplay(data[dataSelector])
     }
+    // Clean up current hash
+    return () => {
+      hash.current = EMPTY_HASH
+    }
   }, [fetching, queryInState])
 
-  return useMemo(() => {
-    if (dataInDisplay.edges === undefined) {
-      return <PageLoading
-        loading={fetching}
-      />
-    }
+  if (dataInDisplay.edges === undefined) {
+    return <PageLoading
+      loading={fetching}
+    />
+  }
 
-    const beeper = updateMode === UpdateMode.BEEPER
-      ? <Beeper
-        data={dataInDisplay}
-        dataUpdate={data[dataSelector]}
-        queryInState={queryInState}
-        setQueryInState={setQueryInState}
-      />
-      : null
+  const beeper = updateMode === UpdateMode.BEEPER
+    ? <Beeper
+      data={dataInDisplay}
+      dataUpdate={data[dataSelector]}
+      queryInState={queryInState}
+      setQueryInState={setQueryInState}
+    />
+    : null
 
-    return <div className="w-full">
-      {render({
-        beeper,
-        data: dataInDisplay,
-        queryInState: queryInState as PageQuery,
-        setQueryInState
-      })}
-    </div>
-  }, displayDeps)
+  return <div className="w-full">
+    {render({
+      beeper,
+      data: dataInDisplay,
+      queryInState: queryInState as PageQuery,
+      setQueryInState
+    })}
+  </div>
 }
