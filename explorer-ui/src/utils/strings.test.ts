@@ -1,6 +1,6 @@
 /* eslint-disable no-tabs */
 
-import { classNames, stripNonPrintable } from "./strings"
+import { classNames, stripNonPrintable, toTitleCase } from "./strings"
 
 test("strip non-printable empty string", () => {
   expect(stripNonPrintable("")).toBe("")
@@ -33,4 +33,10 @@ test("four strings concat", () => {
 
 test("free strings concat", () => {
   expect(classNames("ab c", "", "b")).toBe("ab c b")
+})
+
+test("to title case", () => {
+  expect(toTitleCase("kebab-style-title 123")).toBe("Kebab Style Title 123")
+  expect(toTitleCase("snake_style_title 123")).toBe("Snake Style Title 123")
+  expect(toTitleCase("mixed-style_title--123")).toBe("Mixed Style Title 123")
 })
