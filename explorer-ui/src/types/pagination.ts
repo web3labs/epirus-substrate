@@ -3,7 +3,8 @@ export interface PageQuery {
   first: number
   after?: string
   orderBy?: string
-  where?: any
+  where?: any,
+  timestamp?: number
 }
 
 export interface Edge<T> {
