@@ -81,10 +81,10 @@ export default function ActivityList ({
   currentId
 } : ListProps) {
   return <ListQuery
-    updateMode={UpdateMode.BEEPER}
     pageQuery={pageQuery}
     query={QUERY}
     dataSelector="activitiesConnection"
+    updateMode={UpdateMode.BEEPER}
     render={
       ({ data, setQueryInState, queryInState, beeper }) => {
         const page : Page<Activity> = data
@@ -108,6 +108,7 @@ export default function ActivityList ({
             description={description}
             sort={sort}
             filter={filter}
+            drawer={beeper}
             footer={
               <Pagination
                 page={page}
@@ -115,7 +116,6 @@ export default function ActivityList ({
                 setQuery={setQueryInState}
               />
             }
-            drawer={beeper}
             emptyMessage="No activities to show"
           >
             {page?.edges.map(({ node } : Edge<Activity>) => (

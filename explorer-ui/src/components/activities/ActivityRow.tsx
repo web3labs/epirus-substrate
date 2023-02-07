@@ -100,7 +100,7 @@ export default function ActivityRow ({
   const status = extrinsic.success ? "success" : "error"
 
   const extrinsicDetails = (
-    <div className="flex flex-col gap-y-2 border-t border-gray-200 bg-gray-50 py-4 px-6 mt-2 -mx-6 -mb-2">
+    <div className="flex flex-col gap-y-2 border-t border-gray-200 shadow-inner py-4 px-6 mt-2 -mx-6 -mb-2">
       <div className="flex justify-between">
         <DefinitionList>
           <Definition label="Block" term={

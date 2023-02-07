@@ -2,7 +2,7 @@ import React from "react"
 import { Event } from "../../../types/contracts"
 import { Edge, Page } from "../../../types/pagination"
 import List, { ListProps } from "../../commons/List"
-import ListQuery from "../../query/ListQuery"
+import ListQuery, { UpdateMode } from "../../query/ListQuery"
 import Pagination from "../../navigation/Pagination"
 import SortBy from "../../query/SortBy"
 import EventRow from "./EventRow"
@@ -70,8 +70,9 @@ export default function EventList ({
     pageQuery={pageQuery}
     query={QUERY}
     dataSelector="contractEventsConnection"
+    updateMode={UpdateMode.BEEPER}
     render={
-      ({ data, setQueryInState, queryInState }) => {
+      ({ data, setQueryInState, queryInState, beeper }) => {
         const page : Page<Event> = data
         const sort = sortOptions
           ? <SortBy options={sortOptions}
@@ -93,6 +94,7 @@ export default function EventList ({
             description={description}
             sort={sort}
             filter={filter}
+            drawer={beeper}
             footer={
               <Pagination
                 page={page}

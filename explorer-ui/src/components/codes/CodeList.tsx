@@ -2,7 +2,7 @@ import React from "react"
 import { ContractCode } from "../../types/codes"
 import { Edge, Page } from "../../types/pagination"
 import List, { ListProps } from "../commons/List"
-import ListQuery from "../query/ListQuery"
+import ListQuery, { UpdateMode } from "../query/ListQuery"
 import Pagination from "../navigation/Pagination"
 import SortBy from "../query/SortBy"
 import CodeRow from "./CodeRow"
@@ -64,8 +64,9 @@ export default function CodeList ({
     pageQuery={pageQuery}
     query={QUERY}
     dataSelector="contractCodesConnection"
+    updateMode={UpdateMode.BEEPER}
     render={
-      ({ data, setQueryInState, queryInState }) => {
+      ({ data, setQueryInState, queryInState, beeper }) => {
         const page : Page<ContractCode> = data
         const sort = sortOptions
           ? <SortBy options={sortOptions}
@@ -87,6 +88,7 @@ export default function CodeList ({
             description={description}
             sort={sort}
             filter={filter}
+            drawer={beeper}
             footer={
               <Pagination
                 page={page}

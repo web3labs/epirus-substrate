@@ -5,7 +5,7 @@ import ContractRow from "./ContractRow"
 import List, { ListProps } from "../commons/List"
 import Pagination from "../navigation/Pagination"
 import SortBy from "../query/SortBy"
-import ListQuery from "../query/ListQuery"
+import ListQuery, { UpdateMode } from "../query/ListQuery"
 import Filters from "../query/Filters"
 
 const QUERY = `
@@ -72,8 +72,9 @@ export default function ContractList ({
     pageQuery={pageQuery}
     query={QUERY}
     dataSelector="contractsConnection"
+    updateMode={UpdateMode.BEEPER}
     render={
-      ({ data, setQueryInState, queryInState }) => {
+      ({ data, setQueryInState, queryInState, beeper }) => {
         const page : Page<LightContract> = data
         const sort = sortOptions
           ? <SortBy options={sortOptions}
@@ -95,6 +96,7 @@ export default function ContractList ({
             description={description}
             sort={sort}
             filter={filter}
+            drawer={beeper}
             footer={
               <Pagination
                 page={page}

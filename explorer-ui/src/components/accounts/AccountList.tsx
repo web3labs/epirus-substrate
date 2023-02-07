@@ -5,7 +5,7 @@ import List, { ListProps } from "../commons/List"
 import Pagination from "../navigation/Pagination"
 import AccountRow from "./AccountRow"
 import SortBy from "../query/SortBy"
-import ListQuery from "../query/ListQuery"
+import ListQuery, { UpdateMode } from "../query/ListQuery"
 import Filters from "../query/Filters"
 
 const QUERY = `
@@ -74,8 +74,9 @@ export default function AccountList ({
     pageQuery={pageQuery}
     query={QUERY}
     dataSelector="accountsConnection"
+    updateMode={UpdateMode.BEEPER}
     render={
-      ({ data, setQueryInState, queryInState }) => {
+      ({ data, setQueryInState, queryInState, beeper }) => {
         const page : Page<Account> = data
         const sort = sortOptions
           ? <SortBy options={sortOptions}
@@ -97,6 +98,7 @@ export default function AccountList ({
             description={description}
             sort={sort}
             filter={filter}
+            drawer={beeper}
             footer={
               <Pagination
                 page={page}
