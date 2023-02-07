@@ -8,6 +8,7 @@ import { Option } from "../commons/Select"
 interface Props {
     title?: JSX.Element | string
     description?: JSX.Element | string
+    drawer?: ReactNode
     footer?: JSX.Element
     sort?: JSX.Element
     filter?: JSX.Element
@@ -75,7 +76,8 @@ export default function List ({
   footer,
   filter,
   sort,
-  children
+  children,
+  drawer
 }: Props) {
   return (
     <div className="relative flex flex-col grow w-full items-center justify-start">
@@ -100,6 +102,9 @@ export default function List ({
           {filter}
           {sort}
         </div>
+      }
+      {drawer &&
+        <div className="w-full">{drawer}</div>
       }
       <ul className="flex flex-col divide-y divide-opacity-70 w-full">
         {isEmpty(children)
