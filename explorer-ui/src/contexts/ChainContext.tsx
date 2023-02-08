@@ -50,7 +50,7 @@ export default function ChainContextProvider ({ children }: React.PropsWithChild
         }
       } catch (e) {
         // just keep the NULL_CONFIG
-        console.log(e)
+        // console.log(e)
       }
     }
 
