@@ -13,6 +13,7 @@ import SearchBox from "../query/search/SearchBox"
 import { Link, NavLink } from "react-router-dom"
 import { useChainProperties } from "../../contexts/ChainContext"
 import { classNames } from "../../utils/strings"
+import { Default, Mobile } from "../responsive/Media"
 
 const menuContracts = [
   {
@@ -50,9 +51,15 @@ type SubNavProps = {
 }
 
 function CollapsibleNavItem ({
-  children, uncollapsedItem, isOpen = false
+  children,
+  uncollapsedItem,
+  title,
+  isOpen = false
 }: {
-  children: ReactNode, uncollapsedItem: ReactNode, isOpen?: boolean
+  children: ReactNode,
+  uncollapsedItem: ReactNode,
+  title: string,
+  isOpen?: boolean
 }) {
   const [open, setOpen] = useState(isOpen)
 
@@ -61,6 +68,7 @@ function CollapsibleNavItem ({
       <div
         className="flex flex-row justify-between items-center cursor-pointer"
         role="button" aria-expanded={open}
+        data-testid={`cni-${title}`}
         onClick={() => setOpen(!open)}>
         {uncollapsedItem}
         <div className="pl-5">
@@ -91,11 +99,13 @@ function SubNavMobile ({
   close: () => void
 }) {
   return (<div className="my-3">
-    <CollapsibleNavItem uncollapsedItem={
-      <div className="block text-base font-medium">
-        {title}
-      </div>
-    }>
+    <CollapsibleNavItem
+      title={title}
+      uncollapsedItem={
+        <div className="block text-base font-medium">
+          {title}
+        </div>
+      }>
       <nav className="grid gap-y-5 my-4">
         {entries.map((item) => (
           <NavLink
@@ -123,6 +133,7 @@ function SubNavPopover ({
       <>
         <Popover.Button
           className="group nav-link inline-flex items-center focus:outline-none"
+          data-testid={`sn-${title}`}
         >
           <span>{title}</span>
           {open
@@ -196,83 +207,96 @@ export default function MainNav () {
                   </span>
                 </div>
               </Link>
-              <div className="-mr-2 -my-2 md:hidden ml-auto">
-                <Popover.Button className="bg-white p-2 inline-flex items-center justify-center text-gray-600 focus:outline-none">
-                  <span className="sr-only">Open menu</span>
-                  <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-                </Popover.Button>
-              </div>
+              <Mobile>
+                <div className="-mr-2 -my-2 md:hidden ml-auto">
+                  <Popover.Button
+                    data-testid="btn-mob-menu_open"
+                    className="mt-2 inline-flex items-center justify-center text-gray-600 focus:outline-none"
+                  >
+                    <span className="sr-only">Open menu</span>
+                    <Bars3Icon className="h-8 w-8" aria-hidden="true" />
+                  </Popover.Button>
+                </div>
+              </Mobile>
             </div>
             <div className="w-full mt-4 md:w-[40em] md:ml-auto md:mt-0">
               <SearchBox />
             </div>
           </div>
-          <div className="hidden md:flex space-x-10 items-center justify-end w-full">
-            <div className="mr-auto">
-              <span className="tag chain text-xs mr-2 px-1.5 py-1 rounded">
-                {name}
-              </span>
-            </div>
 
-            <NavLink to="/" className={({ isActive }) =>
-              isActive ? "nav-link active" : "nav-link"
-            }>
+          <Default>
+            <div className="hidden md:flex space-x-10 items-center justify-end w-full">
+              <div className="mr-auto">
+                <span className="tag chain text-xs mr-2 px-1.5 py-1 rounded">
+                  {name}
+                </span>
+              </div>
+
+              <NavLink to="/" className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }>
               Home
-            </NavLink>
+              </NavLink>
 
-            <SubNavPopover title="Blockchain" entries={menuBlockchain} />
+              <SubNavPopover title="Blockchain" entries={menuBlockchain} />
 
-            <SubNavPopover title="Contracts" entries={menuContracts} />
+              <SubNavPopover title="Contracts" entries={menuContracts} />
 
-            {/*
+              {/*
             <a href="#" className="nav-link">
               Tokens
             </a>
              */}
-          </div>
+            </div>
+          </Default>
+
         </Popover.Group>
       </div>
 
-      <Transition
-        as={Fragment}
-        enter="duration-200 ease-out"
-        enterFrom="opacity-0 scale-95"
-        enterTo="opacity-100 scale-100"
-        leave="duration-100 ease-in"
-        leaveFrom="opacity-100 scale-100"
-        leaveTo="opacity-0 scale-95"
-      >
-        <Popover.Panel focus className="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden">
-          {({ close }) => (
-            <div className="shadow-lg ring-1 ring-black ring-opacity-5 bg-white divide-y-2 divide-gray-50">
-              <div className="pt-5 pb-4 px-5">
-                <div className="flex items-center justify-between mb-5">
-                  <div>
-                    <img
-                      className="h-8 w-auto sm:h-10"
-                      src={Logo}
-                      alt=""
-                    />
+      <Mobile>
+        <Transition
+          as={Fragment}
+          enter="duration-200 ease-out"
+          enterFrom="opacity-0 scale-95"
+          enterTo="opacity-100 scale-100"
+          leave="duration-100 ease-in"
+          leaveFrom="opacity-100 scale-100"
+          leaveTo="opacity-0 scale-95"
+        >
+          <Popover.Panel focus className="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden">
+            {({ close }) => (
+              <div className="shadow-lg ring-1 ring-black ring-opacity-5 bg-white divide-y-2 divide-gray-50">
+                <div className="pt-5 pb-4 px-5">
+                  <div className="flex items-center justify-between mb-5">
+                    <div>
+                      <img
+                        className="h-8 w-auto sm:h-10"
+                        src={Logo}
+                        alt=""
+                      />
+                    </div>
+                    <div className="-mr-2">
+                      <button
+                        className="bg-white px-2 inline-flex items-center justify-center text-gray-600 focus:outline-none"
+                        data-testid="btn-mob-menu_close"
+                        onClick={() => close()}
+                      >
+                        <span className="sr-only">Close menu</span>
+                        <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                      </button>
+                    </div>
                   </div>
-                  <div className="-mr-2">
-                    <Popover.Button
-                      className="bg-white p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
-                    >
-                      <span className="sr-only">Close menu</span>
-                      <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-                    </Popover.Button>
-                  </div>
+
+                  <SubNavMobile title="Blockchain" entries={menuBlockchain} close={close} />
+
+                  <SubNavMobile title="Contracts" entries={menuContracts} close={close} />
+
                 </div>
-
-                <SubNavMobile title="Blockchain" entries={menuBlockchain} close={close} />
-
-                <SubNavMobile title="Contracts" entries={menuContracts} close={close} />
-
               </div>
-            </div>
-          )}
-        </Popover.Panel>
-      </Transition>
+            )}
+          </Popover.Panel>
+        </Transition>
+      </Mobile>
 
     </Popover>
   )
