@@ -79,7 +79,9 @@ function ToggleButton ({
     roundedBorder = "rounded-r"
   }
   return (
-    <button type="button"
+    <button
+      type="button"
+      data-testid={`btn-${title.toLowerCase()}`}
       className={
         classNames(
           "px-2 py-1 border border-blue-200 text-gray-800 text-xs",
