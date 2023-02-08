@@ -23,41 +23,9 @@ describe("Activity List component", () => {
       </Provider>
     )
 
-    console.log(document.body.innerHTML)
-
     const title = screen.getByText(/Test List/i)
     expect(title).toBeInTheDocument()
     const emptyList = screen.getByText(/No activities to show/i)
     expect(emptyList).toBeInTheDocument()
   })
-
-  /*
-  it("should display the first page of a paginated response data", () => {
-    const mockClient = createMockClient({
-      accountsConnection: mockPageOf(mockAccountEdges)
-    })
-
-    const { container } = render(
-      <Provider value={mockClient}>
-        <MemoryRouter initialEntries={["/accounts"]}>
-          <AccountList
-            key="0"
-            title="Test List"
-            pageQuery={{
-              first: 5,
-              where: contractByDeployer(
-                "5HdKDnfR2X8y4fkgQUxXJuBxu638PuKQGUy5G16cyTjT5RzL"
-              )
-            }}
-            short={false}
-          />
-        </MemoryRouter>
-      </Provider>
-    )
-
-    const title = screen.getByText(/Test List/i)
-    expect(title).toBeInTheDocument()
-    const listItems = container.getElementsByTagName("li")
-    expect(listItems.length).toBe(5)
-  }) */
 })
