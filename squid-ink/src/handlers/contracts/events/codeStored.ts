@@ -7,11 +7,16 @@ import {
   createActivity,
   saveAll,
 } from "../../utils";
-import { ContractCodeStoredArgs, Ctx, Event, EventHandler } from "../../types";
+import {
+  ContractCodeStoredArgs,
+  Ctx,
+  Event,
+  EventHandler,
+  OptEntity,
+} from "../../types";
 import { createContractCodeEntities } from "./utils";
-import { config } from "../../../config";
 import abiDecoder from "../../../abi/decoder";
-import { addDecodedActivityEntities } from "../metadata";
+import { addDecodedActivityEntities, decodeData } from "../metadata";
 
 export const contractsCodeStoredHandler: EventHandler = {
   name: "Contracts.CodeStored",
@@ -23,7 +28,7 @@ export const contractsCodeStoredHandler: EventHandler = {
     const { store, log } = ctx;
     const { extrinsic, call } = event;
     if (extrinsic && call) {
-      const entities = [];
+      const entities: OptEntity[] = [];
       const extrinsicEntity = createExtrinsic(extrinsic, call, block);
       const eventEntity = createEvent(extrinsicEntity, event);
       const { codeHash } = new NormalisedContractsCodeStoredEvent(
@@ -57,19 +62,28 @@ export const contractsCodeStoredHandler: EventHandler = {
         activityEntity
       );
 
+      const { data } = args;
       // Decode data with ABI
-      if (args.data && config.sourceCodeEnabled) {
-        const decodedElement = await abiDecoder.decodeConstructor({
-          codeHash,
-          data: args.data,
-        });
+      await decodeData(
+        args.data,
+        async (rawData: string | Uint8Array | Buffer) => {
+          const decodedElement = await abiDecoder.decodeConstructor({
+            codeHash,
+            data: rawData,
+          });
 
-        addDecodedActivityEntities({
-          entities,
-          decodedElement,
-          activityEntity,
-        });
-      }
+          addDecodedActivityEntities({
+            entities,
+            decodedElement,
+            activityEntity,
+          });
+        },
+        (errorMessage) =>
+          log.error(
+            { codeHash, block: block.height, data, error: errorMessage },
+            "Error while decoding data at code stored event."
+          )
+      );
 
       await saveAll(store, entities);
     } else {

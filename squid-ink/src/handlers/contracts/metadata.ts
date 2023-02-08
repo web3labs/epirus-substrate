@@ -13,6 +13,31 @@ import {
   DecodedEventArg,
 } from "../../model";
 import { DecodedElement } from "../../abi/types";
+import { config } from "../../config";
+
+/**
+ * Wrapper around ABI decoding logic to abstract
+ * toggling of decoding functionality based on config
+ * and error handling
+ *
+ * @param data Data to decode
+ * @param log Subsquid logger
+ * @param cb Callback containing actual decoding logic
+ */
+export async function decodeData(
+  data: string | Uint8Array | Buffer | undefined,
+  cb: (data: string | Uint8Array | Buffer) => Promise<void>,
+  log: (errorMessage: string) => void
+): Promise<void> {
+  if (config.sourceCodeEnabled && data) {
+    try {
+      await cb(data);
+    } catch (error) {
+      const { message } = <Error>error;
+      log(message);
+    }
+  }
+}
 
 /**
  * Creates decoded contracts events with its corresponding

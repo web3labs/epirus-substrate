@@ -3,12 +3,11 @@ import {
   NormalisedContractInfoOfStorage,
 } from "@chain/normalised-types";
 import { SubstrateBlock, toHex } from "@subsquid/substrate-processor";
-import { config } from "../../../config";
 import { ContractEvent } from "../../../model";
 import { createExtrinsic, createEvent, saveAll } from "../../utils";
 import abiDecoder from "../../../abi/decoder";
-import { Ctx, Event, EventHandler } from "../../types";
-import { addDecodedEventEntities } from "../metadata";
+import { Ctx, Event, EventHandler, OptEntity } from "../../types";
+import { addDecodedEventEntities, decodeData } from "../metadata";
 
 export const contractsEmittedHandler: EventHandler = {
   name: "Contracts.ContractEmitted",
@@ -20,7 +19,7 @@ export const contractsEmittedHandler: EventHandler = {
     const { store, log } = ctx;
     const { extrinsic, call } = event;
     if (extrinsic && call) {
-      const entities = [];
+      const entities: OptEntity[] = [];
       const extrinsicEntity = createExtrinsic(extrinsic, call, block);
       const eventEntity = createEvent(extrinsicEntity, event);
       const { contract, data } = new NormalisedContractEmittedEvent(
@@ -40,23 +39,31 @@ export const contractsEmittedHandler: EventHandler = {
       entities.push(extrinsicEntity, eventEntity, contractEventEntity);
 
       // Decode data with ABI
-      if (data && config.sourceCodeEnabled) {
-        const { codeHash } = await new NormalisedContractInfoOfStorage(
-          ctx,
-          block
-        ).get(contract);
+      await decodeData(
+        data,
+        async (rawData: string | Uint8Array | Buffer) => {
+          const { codeHash } = await new NormalisedContractInfoOfStorage(
+            ctx,
+            block
+          ).get(contract);
 
-        const decodedElement = await abiDecoder.decodeEvent({
-          codeHash: toHex(codeHash),
-          data,
-        });
+          const decodedElement = await abiDecoder.decodeEvent({
+            codeHash: toHex(codeHash),
+            data: rawData,
+          });
 
-        addDecodedEventEntities({
-          entities,
-          decodedElement,
-          contractEventEntity,
-        });
-      }
+          addDecodedEventEntities({
+            entities,
+            decodedElement,
+            contractEventEntity,
+          });
+        },
+        (errorMessage) =>
+          log.error(
+            { contract, block: block.height, data, error: errorMessage },
+            "Error while decoding data at contract emitted event."
+          )
+      );
 
       await saveAll(store, entities);
     } else {

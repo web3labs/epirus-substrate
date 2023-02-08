@@ -9,10 +9,9 @@ import {
   saveAll,
 } from "../../utils";
 import { ActivityType, Contract, ContractCode } from "../../../model";
-import { Ctx, Event, EventHandler, ExtrinsicArg } from "../../types";
-import { config } from "../../../config";
+import { Ctx, Event, EventHandler, ExtrinsicArg, OptEntity } from "../../types";
 import abiDecoder from "../../../abi/decoder";
-import { addDecodedActivityEntities } from "../metadata";
+import { addDecodedActivityEntities, decodeData } from "../metadata";
 
 export const contractsTerminatedHandler: EventHandler = {
   name: "Contracts.Terminated",
@@ -54,7 +53,7 @@ export const contractsTerminatedHandler: EventHandler = {
     }
 
     if (extrinsic && call) {
-      const entities = [];
+      const entities: OptEntity[] = [];
       const extrinsicEntity = createExtrinsic(extrinsic, call, block);
       const eventEntity = createEvent(extrinsicEntity, event);
       const extrinsicSigner = extrinsicEntity.signer
@@ -82,30 +81,38 @@ export const contractsTerminatedHandler: EventHandler = {
       const { data } = <ExtrinsicArg>extrinsicEntity.args;
 
       // Decode data with ABI
-      if (data && config.sourceCodeEnabled) {
-        // We get the contract code entity from DB instead of on-chain storage
-        // since contract doesn't exist anymore
-        const contractCodeEntity = await store.get(ContractCode, {
-          where: {
-            contractsDeployed: {
-              id: contract,
+      await decodeData(
+        data,
+        async (rawData: string | Uint8Array | Buffer) => {
+          // We get the contract code entity from DB instead of on-chain storage
+          // since contract doesn't exist anymore
+          const contractCodeEntity = await store.get(ContractCode, {
+            where: {
+              contractsDeployed: {
+                id: contract,
+              },
             },
-          },
-        });
-
-        if (contractCodeEntity) {
-          const decodedElement = await abiDecoder.decodeMessage({
-            codeHash: contractCodeEntity.id,
-            data,
           });
 
-          addDecodedActivityEntities({
-            entities,
-            decodedElement,
-            activityEntity,
-          });
-        }
-      }
+          if (contractCodeEntity) {
+            const decodedElement = await abiDecoder.decodeMessage({
+              codeHash: contractCodeEntity.id,
+              data: rawData,
+            });
+
+            addDecodedActivityEntities({
+              entities,
+              decodedElement,
+              activityEntity,
+            });
+          }
+        },
+        (errorMessage) =>
+          log.error(
+            { contract, block: block.height, data, error: errorMessage },
+            "Error while decoding data at contract terminated event."
+          )
+      );
 
       await saveAll(store, entities);
     } else {

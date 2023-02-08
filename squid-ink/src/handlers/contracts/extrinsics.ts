@@ -8,7 +8,6 @@ import {
   SubstrateExtrinsic,
   toHex,
 } from "@subsquid/substrate-processor";
-import { config } from "../../config";
 import { Ctx, ExtrinsicHandler, OptEntity } from "../types";
 import {
   createActivity,
@@ -17,7 +16,7 @@ import {
   saveAll,
 } from "../utils";
 import { ActivityType, ContractCode } from "../../model";
-import { addDecodedActivityEntities } from "./metadata";
+import { addDecodedActivityEntities, decodeData } from "./metadata";
 import abiDecoder from "../../abi/decoder";
 
 const contractsCallHandler: ExtrinsicHandler = {
@@ -28,7 +27,7 @@ const contractsCallHandler: ExtrinsicHandler = {
     extrinsic: SubstrateExtrinsic,
     block: SubstrateBlock
   ): Promise<void> => {
-    const { store } = ctx;
+    const { store, log } = ctx;
     const { contractAddress, data } = new NormalisedContractsCallCall(
       ctx,
       call
@@ -51,26 +50,39 @@ const contractsCallHandler: ExtrinsicHandler = {
     entities.push(to, from, extrinsicEntity, activityEntity);
 
     // Decode data with ABI
-    if (data && config.sourceCodeEnabled) {
-      const codeHash = await getCodeHashForContract(
-        ctx,
-        block,
-        contractAddress
-      );
+    await decodeData(
+      data,
+      async (rawData: string | Uint8Array | Buffer) => {
+        const codeHash = await getCodeHashForContract(
+          ctx,
+          block,
+          contractAddress
+        );
 
-      if (codeHash) {
-        const decodedElement = await abiDecoder.decodeMessage({
-          codeHash,
-          data,
-        });
+        if (codeHash) {
+          const decodedElement = await abiDecoder.decodeMessage({
+            codeHash,
+            data: rawData,
+          });
 
-        addDecodedActivityEntities({
-          entities,
-          decodedElement,
-          activityEntity,
-        });
-      }
-    }
+          addDecodedActivityEntities({
+            entities,
+            decodedElement,
+            activityEntity,
+          });
+        }
+      },
+      (errorMessage) =>
+        log.error(
+          {
+            contract: contractAddress,
+            block: block.height,
+            data,
+            error: errorMessage,
+          },
+          "Error while decoding data at contract call extrinsic."
+        )
+    );
 
     await saveAll(store, entities);
   },

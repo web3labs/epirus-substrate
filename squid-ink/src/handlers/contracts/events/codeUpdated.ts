@@ -9,10 +9,15 @@ import {
   saveAll,
 } from "../../utils";
 import { CodeHashChange, ActivityType, Contract } from "../../../model";
-import { ContractCodeUpdatedArgs, Ctx, Event, EventHandler } from "../../types";
+import {
+  ContractCodeUpdatedArgs,
+  Ctx,
+  Event,
+  EventHandler,
+  OptEntity,
+} from "../../types";
 import { createContractCodeEntities } from "./utils";
-import { config } from "../../../config";
-import { addDecodedActivityEntities } from "../metadata";
+import { addDecodedActivityEntities, decodeData } from "../metadata";
 
 export const contractsCodeUpdatedHandler: EventHandler = {
   name: "Contracts.ContractCodeUpdated",
@@ -25,7 +30,7 @@ export const contractsCodeUpdatedHandler: EventHandler = {
     const { extrinsic, call } = event;
     const { contract, newCodeHash, oldCodeHash } =
       new NormalisedContractsCodeUpdatedEvent(ctx, event).resolve();
-    const entities = [];
+    const entities: OptEntity[] = [];
 
     log.info(
       {
@@ -98,19 +103,28 @@ export const contractsCodeUpdatedHandler: EventHandler = {
         activityEntity
       );
 
+      const { data } = args;
       // Decode data with ABI
-      if (args.data && config.sourceCodeEnabled) {
-        const decodedElement = await abiDecoder.decodeMessage({
-          codeHash: newCodeHash,
-          data: args.data,
-        });
+      await decodeData(
+        data,
+        async (rawData: string | Uint8Array | Buffer) => {
+          const decodedElement = await abiDecoder.decodeMessage({
+            codeHash: newCodeHash,
+            data: rawData,
+          });
 
-        addDecodedActivityEntities({
-          entities,
-          decodedElement,
-          activityEntity,
-        });
-      }
+          addDecodedActivityEntities({
+            entities,
+            decodedElement,
+            activityEntity,
+          });
+        },
+        (errorMessage) =>
+          log.error(
+            { contract, block: block.height, data, error: errorMessage },
+            "Error while decoding data at contract instantiated event."
+          )
+      );
 
       await saveAll(store, entities);
     } else {

@@ -24,10 +24,10 @@ import {
   Event,
   EventHandler,
   ExtrinsicArg,
+  OptEntity,
 } from "../../types";
-import { addDecodedActivityEntities } from "../metadata";
+import { addDecodedActivityEntities, decodeData } from "../metadata";
 import { createContractCodeEntities } from "./utils";
-import { config } from "../../../config";
 
 export const contractsInstantiatedHandler: EventHandler = {
   name: "Contracts.Instantiated",
@@ -40,7 +40,7 @@ export const contractsInstantiatedHandler: EventHandler = {
     const { extrinsic, call } = event;
 
     if (extrinsic && call) {
-      const entities = [];
+      const entities: OptEntity[] = [];
       const { deployer, contract } = new NormalisedContractsInstantiatedEvent(
         ctx,
         event
@@ -123,18 +123,26 @@ export const contractsInstantiatedHandler: EventHandler = {
       const { data } = <ExtrinsicArg>extrinsicEntity.args;
 
       // Decode data with ABI
-      if (data && config.sourceCodeEnabled) {
-        const decodedElement = await abiDecoder.decodeConstructor({
-          codeHash: toHex(codeHash),
-          data,
-        });
+      await decodeData(
+        data,
+        async (rawData: string | Uint8Array | Buffer) => {
+          const decodedElement = await abiDecoder.decodeConstructor({
+            codeHash: toHex(codeHash),
+            data: rawData,
+          });
 
-        addDecodedActivityEntities({
-          entities,
-          decodedElement,
-          activityEntity,
-        });
-      }
+          addDecodedActivityEntities({
+            entities,
+            decodedElement,
+            activityEntity,
+          });
+        },
+        (errorMessage) =>
+          log.error(
+            { contract, block: block.height, data, error: errorMessage },
+            "Error while decoding data at contract instantiated event."
+          )
+      );
 
       await saveAll(store, entities);
     } else {
