@@ -12,7 +12,8 @@ x-environment: &envs
   ARCHIVE_ENDPOINT: http://archive:8000/graphql
   WS_ENDPOINT: ws://contracts:9944
   BALANCES_STORE: system
-
+  SOURCE_CODE_ENABLED: "true"
+  VERIFIER_ENDPOINT: http://127.0.0.1:3001
 services:
   squid-db:
     image: postgres:15
