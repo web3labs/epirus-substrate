@@ -193,7 +193,7 @@ export default function MainNav () {
       <div className="w-full md:flex justify-start items-center md:mb-2">
         <Popover.Group as="nav" className="flex w-full flex-wrap">
           <div className="flex flex-col md:flex-row md:justify-between items-center md:space-x-10 w-full md:mb-2">
-            <div className="flex flex-row justify-start w-full px-4 md:px-0">
+            <div className="flex flex-row w-full px-4 gap-2 md:px-0 md:justify-start">
               <Link to="/">
                 <div className="flex flow-col flow-wrap justify-start gap-x-1.5">
                   <img
@@ -208,14 +208,23 @@ export default function MainNav () {
                 </div>
               </Link>
               <Mobile>
-                <div className="-mr-2 -my-2 md:hidden ml-auto">
-                  <Popover.Button
-                    data-testid="btn-mob-menu_open"
-                    className="mt-2 inline-flex items-center justify-center text-gray-600 focus:outline-none"
-                  >
-                    <span className="sr-only">Open menu</span>
-                    <Bars3Icon className="h-8 w-8" aria-hidden="true" />
-                  </Popover.Button>
+                <div className="flex flex-row w-full justify-between">
+                  { name &&
+                    <div className="mr-auto">
+                      <span className="tag chain text-xs mr-2 px-1.5 py-1 rounded">
+                        {name}
+                      </span>
+                    </div>
+                  }
+                  <div className="-mr-2 -my-2 md:hidden ml-auto">
+                    <Popover.Button
+                      data-testid="btn-mob-menu_open"
+                      className="mt-2 inline-flex items-center justify-center text-gray-600 focus:outline-none"
+                    >
+                      <span className="sr-only">Open menu</span>
+                      <Bars3Icon className="h-8 w-8" aria-hidden="true" />
+                    </Popover.Button>
+                  </div>
                 </div>
               </Mobile>
             </div>
@@ -226,11 +235,13 @@ export default function MainNav () {
 
           <Default>
             <div className="hidden md:flex space-x-10 items-center justify-end w-full">
-              <div className="mr-auto">
-                <span className="tag chain text-xs mr-2 px-1.5 py-1 rounded">
-                  {name}
-                </span>
-              </div>
+              { name &&
+                <div className="mr-auto">
+                  <span className="tag chain text-xs mr-2 px-1.5 py-1 rounded">
+                    {name}
+                  </span>
+                </div>
+              }
 
               <NavLink to="/" className={({ isActive }) =>
                 isActive ? "nav-link active" : "nav-link"
