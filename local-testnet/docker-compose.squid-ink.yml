@@ -13,7 +13,8 @@ x-environment: &envs
   WS_ENDPOINT: ws://contracts:9944
   BALANCES_STORE: system
   SOURCE_CODE_ENABLED: "true"
-  VERIFIER_ENDPOINT: http://127.0.0.1:3001
+  VERIFIER_ENDPOINT: http://host.docker.internal:3001
+
 services:
   squid-db:
     image: postgres:15
@@ -33,6 +34,8 @@ services:
     command: sh -c "(npx sqd db create-migration Init && npx sqd db migrate); sleep 5 && npm run processor:start"
     depends_on:
       - squid-db
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   query:
     container_name: query-node
