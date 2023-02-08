@@ -39,6 +39,7 @@ export const contractsEmittedHandler: EventHandler = {
 
       entities.push(extrinsicEntity, eventEntity, contractEventEntity);
 
+      // Decode data with ABI
       if (data && config.sourceCodeEnabled) {
         const { codeHash } = await new NormalisedContractInfoOfStorage(
           ctx,

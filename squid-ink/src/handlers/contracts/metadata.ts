@@ -21,7 +21,7 @@ import { DecodedElement } from "../../abi/types";
  *
  * @param {Object} opts - The options object.
  * @param {OptEntity[]} opts.entities - The entities array.
- * @param {DecodeElement=} opts.decodedElement - The decoded element.
+ * @param {DecodedElement} opts.decodedElement - The decoded element.
  * @param {ContractEvent} opts.contractEventEntity - The contract event.
  */
 export function addDecodedEventEntities({
@@ -61,7 +61,7 @@ export function addDecodedEventEntities({
  *
  * @param {Object} opts - The options object.
  * @param {OptEntity[]} opts.entities - The entities array.
- * @param {DecodeElement=} opts.decodedElement - The decoded element.
+ * @param {DecodedElement} opts.decodedElement - The decoded element.
  * @param {Activity} opts.activityEntity - The activity.
  */
 export function addDecodedActivityEntities({

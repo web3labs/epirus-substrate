@@ -57,6 +57,7 @@ export const contractsCodeStoredHandler: EventHandler = {
         activityEntity
       );
 
+      // Decode data with ABI
       if (args.data && config.sourceCodeEnabled) {
         const decodedElement = await abiDecoder.decodeConstructor({
           codeHash,

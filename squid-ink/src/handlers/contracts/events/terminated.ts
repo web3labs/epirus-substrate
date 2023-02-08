@@ -80,6 +80,8 @@ export const contractsTerminatedHandler: EventHandler = {
       );
 
       const { data } = <ExtrinsicArg>extrinsicEntity.args;
+
+      // Decode data with ABI
       if (data && config.sourceCodeEnabled) {
         // We get the contract code entity from DB instead of on-chain storage
         // since contract doesn't exist anymore

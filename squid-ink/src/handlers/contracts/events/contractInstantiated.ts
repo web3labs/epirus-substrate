@@ -122,6 +122,7 @@ export const contractsInstantiatedHandler: EventHandler = {
 
       const { data } = <ExtrinsicArg>extrinsicEntity.args;
 
+      // Decode data with ABI
       if (data && config.sourceCodeEnabled) {
         const decodedElement = await abiDecoder.decodeConstructor({
           codeHash: toHex(codeHash),

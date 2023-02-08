@@ -68,6 +68,17 @@ export class AbiDecoder {
     this.cache.clear();
   }
 
+  /**
+   * Decodes an element by its type: message, event or constrcutor
+   * First uses the Subsquid ABI to decode the raw data,
+   * then searches in the PolkadotJS ABI to find the matching item to get type information of the decoded values.
+   * Finally calls this.toDecodedElement() to construct the decoded element object.
+   *
+   * @param subsquidMethodName Method name to be called in Subsquid ABI for decoding by type
+   * @param polkadotAbiKey Key to get list of elements by type in PolkadotJS ABI
+   * @param {CodeParams} params Code hash of the contract and raw data to be decoded
+   * @returns Promise<DecodedElement | undefined>
+   */
   private async decodeBy(
     subsquidMethodName: "decodeMessage" | "decodeEvent" | "decodeConstructor",
     polkadotAbiKey: "messages" | "events" | "constructors",
@@ -125,6 +136,14 @@ export class AbiDecoder {
     return undefined;
   }
 
+  /**
+   * Constructs the decoded element using the Subsquid decoded raw element as base
+   * and adding the corresponding types found in the PolkadotJS ABI element
+   *
+   * @param polkadotElement Element in PolkadotJS ABI
+   * @param rawElement Element decoded using Subsquid ABI
+   * @returns DecodedElement or undefined
+   */
   private toDecodedElement(
     polkadotElement: PolkadotAbiElement | undefined,
     rawElement: RawDecodedElement

@@ -50,6 +50,7 @@ const contractsCallHandler: ExtrinsicHandler = {
 
     entities.push(to, from, extrinsicEntity, activityEntity);
 
+    // Decode data with ABI
     if (data && config.sourceCodeEnabled) {
       const codeHash = await getCodeHashForContract(
         ctx,
