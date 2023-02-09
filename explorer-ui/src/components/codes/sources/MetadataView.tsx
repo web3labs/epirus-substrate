@@ -120,14 +120,16 @@ export default function MetadataView (
             <Definition label="Verification" term={
               <div className="flex flex-wrap gap-1 justify-start">
                 {SourceTypes[sourceType]}
-                <button
-                  data-testid="btn-reup"
-                  type="button"
-                  className="link text-xs"
-                  onClick={dispatchReUpload}
-                >
-                  Verify Source Code
-                </button>
+                { sourceType === "signed-metadata" &&
+                  <button
+                    data-testid="btn-reup"
+                    type="button"
+                    className="link text-xs"
+                    onClick={dispatchReUpload}
+                  >
+                    Verify Source Code
+                  </button>
+                }
               </div>
             }/>
           </div>
