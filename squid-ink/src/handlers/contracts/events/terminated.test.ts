@@ -13,6 +13,8 @@ import {
   ctx,
   defaultGetStorageMock,
 } from "../../../_mocks";
+import { config } from "../../../config";
+import abiDecoder from "../../../abi/decoder";
 
 jest.mock("../../utils", () => {
   const originalModule = jest.requireActual("../../utils");
@@ -24,8 +26,18 @@ jest.mock("../../utils", () => {
   };
 });
 
+jest.mock("../../../config", () => {
+  return {
+    __esModule: true,
+    config: {},
+  };
+});
+
+jest.mock("../../../abi/decoder");
+
 describe("contractsTerminatedHandler", () => {
   beforeEach(() => {
+    jest.clearAllMocks();
     ctx._chain.getStorage.mockImplementation(defaultGetStorageMock());
   });
 
@@ -41,6 +53,30 @@ describe("contractsTerminatedHandler", () => {
     });
     await contractsTerminatedHandler.handle(ctx, event, block);
     expect(saveAll).toBeCalled();
+  });
+
+  it("should decode events if source code feature is enabled", async () => {
+    config.sourceCodeEnabled = true;
+    const event = getMockEvent({ name: "Contracts.Terminated" });
+    const decodeMessageSpy = jest.spyOn(abiDecoder, "decodeMessage");
+    await contractsTerminatedHandler.handle(ctx, event, block);
+    expect(decodeMessageSpy).toBeCalled();
+  });
+
+  it("should still process other entities if error occurs during decoding", async () => {
+    config.sourceCodeEnabled = true;
+    const event = getMockEvent({ name: "Contracts.Terminated" });
+    const decodeMessageSpy = jest
+      .spyOn(abiDecoder, "decodeMessage")
+      .mockImplementation(() => {
+        throw new Error();
+      });
+
+    ctx.store.save = jest.fn();
+    await contractsTerminatedHandler.handle(ctx, event, block);
+    expect(decodeMessageSpy).toBeCalled();
+    expect(saveAll).toBeCalled();
+    expect(ctx.log.error).toBeCalled();
   });
 
   it("should throw error if contract entity is not found in database", async () => {

@@ -12,6 +12,8 @@ import {
   ctx,
   defaultGetStorageMock,
 } from "../../../_mocks";
+import { config } from "../../../config";
+import abiDecoder from "../../../abi/decoder";
 
 jest.mock("../../utils", () => {
   const originalModule = jest.requireActual("../../utils");
@@ -22,6 +24,15 @@ jest.mock("../../utils", () => {
     updateAccountBalance: jest.fn(),
   };
 });
+
+jest.mock("../../../config", () => {
+  return {
+    __esModule: true,
+    config: {},
+  };
+});
+
+jest.mock("../../../abi/decoder");
 
 describe("contractsCodeStoredHandler", () => {
   beforeEach(() => {
@@ -43,5 +54,29 @@ describe("contractsCodeStoredHandler", () => {
     await contractsCodeStoredHandler.handle(ctx, event, block);
     expect(ctx.log.warn).toBeCalled();
     expect(ctx.log.debug).toBeCalled();
+  });
+
+  it("should decode events if source code feature is enabled", async () => {
+    config.sourceCodeEnabled = true;
+    const event = getMockEvent({ name: "Contracts.CodeStored" });
+    const decodeConstructorSpy = jest.spyOn(abiDecoder, "decodeConstructor");
+    await contractsCodeStoredHandler.handle(ctx, event, block);
+    expect(decodeConstructorSpy).toBeCalled();
+  });
+
+  it("should still process other entities if error occurs during decoding", async () => {
+    config.sourceCodeEnabled = true;
+    const event = getMockEvent({ name: "Contracts.CodeStored" });
+    const decodeConstructorSpy = jest
+      .spyOn(abiDecoder, "decodeConstructor")
+      .mockImplementation(() => {
+        throw new Error();
+      });
+
+    ctx.store.save = jest.fn();
+    await contractsCodeStoredHandler.handle(ctx, event, block);
+    expect(decodeConstructorSpy).toBeCalled();
+    expect(saveAll).toBeCalled();
+    expect(ctx.log.error).toBeCalled();
   });
 });

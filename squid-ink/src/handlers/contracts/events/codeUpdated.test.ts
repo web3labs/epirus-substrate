@@ -69,6 +69,32 @@ describe("contractsCodeUpdatedHandler", () => {
     expect(decodeMessageSpy).toBeCalledTimes(0);
   });
 
+  it("should still process other entities if error occurs during decoding", async () => {
+    config.sourceCodeEnabled = true;
+    const decodeMessageSpy = jest
+      .spyOn(abiDecoder, "decodeMessage")
+      .mockImplementation(() => {
+        throw new Error();
+      });
+
+    ctx.store.save = jest.fn();
+    await contractsCodeUpdatedHandler.handle(ctx, event, block);
+    expect(decodeMessageSpy).toBeCalled();
+    expect(saveAll).toBeCalled();
+    expect(ctx.log.error).toBeCalled();
+  });
+
+  it("should log warning if there's no extrinsic or call", async () => {
+    const mockEvent = getMockEvent({
+      name: "Contracts.ContractCodeUpdated",
+      withCall: false,
+      withExtrinsic: false,
+    });
+    await contractsCodeUpdatedHandler.handle(ctx, mockEvent, block);
+    expect(ctx.log.warn).toBeCalled();
+    expect(ctx.log.debug).toBeCalled();
+  });
+
   it("should throw error if contract entity is not found in database", async () => {
     // Mock store get function to return undefined
     ctx.store.get = jest.fn(async () => {

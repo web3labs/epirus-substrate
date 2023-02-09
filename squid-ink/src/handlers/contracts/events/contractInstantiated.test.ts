@@ -71,6 +71,21 @@ describe("contractsInstantiatedHandler", () => {
     expect(decodeConstructorSpy).toBeCalledTimes(0);
   });
 
+  it("should still process other entities if error occurs during decoding", async () => {
+    config.sourceCodeEnabled = true;
+    const decodeConstructorSpy = jest
+      .spyOn(abiDecoder, "decodeConstructor")
+      .mockImplementation(() => {
+        throw new Error();
+      });
+
+    ctx.store.save = jest.fn();
+    await contractsInstantiatedHandler.handle(ctx, event, block);
+    expect(decodeConstructorSpy).toBeCalled();
+    expect(saveAll).toBeCalled();
+    expect(ctx.log.error).toBeCalled();
+  });
+
   it("should throw error if contract info is not found in storage", async () => {
     // Override mock chain storage to return undefined
     ctx._chain.getStorage.mockImplementation(() => {
