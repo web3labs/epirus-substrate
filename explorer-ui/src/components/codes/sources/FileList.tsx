@@ -40,7 +40,7 @@ function CollapsedFileView (
     setOpen(prev => !prev)
   }
 
-  return (<div className="flex flex-col gap-2">
+  return (<div data-testid="collapsed-file" className="flex flex-col gap-2">
     <div className="flex gap-1 cursor-pointer items-center text-sm text-gray-500 hover:text-gray-900"
       onClick={toggleOpen}>
       {open

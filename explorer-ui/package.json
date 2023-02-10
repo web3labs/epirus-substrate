@@ -93,7 +93,8 @@
       "src/index.tsx",
       "src/reportWebVitals.ts",
       "src/_mocks",
-      "src/types"
+      "src/types",
+      "src/apis/verifierApi.ts"
     ],
     "transformIgnorePatterns": [
       "node_modules/(?!@polkadot)"

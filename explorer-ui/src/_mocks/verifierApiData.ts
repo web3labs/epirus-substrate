@@ -193,3 +193,141 @@ export const mockMetadata = {
   ],
   version: "4"
 }
+
+export const mockSourceList = [{
+  type: "file",
+  url: "lib.rs",
+  name: "lib.rs",
+  size: 1000,
+  utf8: true
+},
+{
+  type: "file",
+  url: "bin",
+  name: "bin",
+  size: 10,
+  utf8: false
+},
+{
+  type: "file",
+  url: "toobig",
+  name: "toobig",
+  size: 500001,
+  utf8: false
+},
+{
+  type: "file",
+  url: "empty",
+  name: "empty",
+  size: 0,
+  utf8: true
+},
+{
+  type: "file",
+  url: "fail",
+  name: "fail",
+  size: 10,
+  utf8: true
+},
+{
+  type: "dir",
+  url: "dir0",
+  name: "dir0",
+  size: 0,
+  utf8: false,
+  ents: []
+},
+{
+  type: "dir",
+  url: "dir1",
+  name: "dir1",
+  size: 0,
+  utf8: false,
+  ents: [{
+    type: "dir",
+    url: "dir1/dir2",
+    name: "dir12",
+    size: 0,
+    utf8: false
+  }]
+}
+]
+
+export const mockLongSourceList = [{
+  type: "file",
+  url: "lib.rs",
+  name: "lib.rs",
+  size: 1000,
+  utf8: true
+},
+{
+  type: "file",
+  url: "bin",
+  name: "bin",
+  size: 10,
+  utf8: false
+},
+{
+  type: "file",
+  url: "toobig",
+  name: "toobig",
+  size: 500001,
+  utf8: false
+},
+{
+  type: "file",
+  url: "empty",
+  name: "empty",
+  size: 0,
+  utf8: true
+},
+{
+  type: "file",
+  url: "fail",
+  name: "fail",
+  size: 10,
+  utf8: true
+},
+{
+  type: "file",
+  url: "file0",
+  name: "file0",
+  size: 0,
+  utf8: false
+},
+{
+  type: "file",
+  url: "file1",
+  name: "file1",
+  size: 0,
+  utf8: false
+},
+{
+  type: "file",
+  url: "file2",
+  name: "file2",
+  size: 0,
+  utf8: false
+},
+{
+  type: "file",
+  url: "file3",
+  name: "file3",
+  size: 0,
+  utf8: false
+},
+{
+  type: "file",
+  url: "file4",
+  name: "file4",
+  size: 0,
+  utf8: false
+},
+{
+  type: "file",
+  url: "file5",
+  name: "file5",
+  size: 0,
+  utf8: false
+}
+]
