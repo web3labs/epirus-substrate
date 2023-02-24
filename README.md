@@ -1,6 +1,8 @@
-# Epirus Substrate Explorer
+# Sirato Substrate Explorer
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/web3labs/epirus-substrate) ![GitHub repo size](https://img.shields.io/github/repo-size/web3labs/epirus-substrate)
+
+> We recently rebranded from Epirus to Sirato
 
 Blockchain explorer for Substrate chains with a focus on the [contracts pallet](https://github.com/paritytech/substrate/tree/master/frame/contracts) and [ink!](https://ink.substrate.io/)
 
