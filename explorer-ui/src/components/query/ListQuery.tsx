@@ -134,7 +134,7 @@ export default function ListQuery (props: Props) {
     />
   }
 
-  const beeper = updateMode === UpdateMode.BEEPER
+  const beeper = updateMode === UpdateMode.BEEPER && data
     ? <Beeper
       data={dataInDisplay}
       dataUpdate={data[dataSelector]}
