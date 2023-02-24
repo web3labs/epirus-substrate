@@ -47,7 +47,7 @@ export default function useSquid ({
         message
       }))
     }
-    if (!error && toastId) {
+    if (!stale && !error && toastId) {
       toast.remove(toastId)
       setToastId(undefined)
     }
