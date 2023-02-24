@@ -1,4 +1,5 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import { toast } from "react-hot-toast"
 import { useQuery, UseQueryState } from "urql"
 import { warn } from "../components/commons/Toast"
 import { PageQuery } from "../types/pagination"
@@ -24,6 +25,8 @@ export default function useSquid ({
     variables,
     pause
   })
+  // Used to store the error toast ID to later be removed.
+  const [toastId, setToastId] = useState<string | undefined>(undefined)
 
   // With cache-and-network policy, urql will fetch the cached result first
   // If network was up and is now down, cached result will return [error=undefined, data={...}]
@@ -38,11 +41,15 @@ export default function useSquid ({
       const message = error.networkError
         ? `${error.message} Retrying...`
         : error.message
-      warn({
+      setToastId(warn({
         id: "squid-error",
         title: "Squid Error",
         message
-      })
+      }))
+    }
+    if (!error && toastId) {
+      toast.remove(toastId)
+      setToastId(undefined)
     }
   }, [error, stale])
 

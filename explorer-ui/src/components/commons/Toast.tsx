@@ -4,7 +4,7 @@ import toast from "react-hot-toast"
 export function warn ({
   id, title, message
 }: {id: string, title: string, message: string}) {
-  toast.custom(
+  return toast.custom(
     WarningToast({
       title,
       message
