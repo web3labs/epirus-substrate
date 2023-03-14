@@ -1,16 +1,16 @@
-import type {Result} from './support'
+import type {Result, Option} from './support'
 
 export interface AccountData {
-  free: bigint
-  reserved: bigint
-  miscFrozen: bigint
-  feeFrozen: bigint
+    free: bigint
+    reserved: bigint
+    miscFrozen: bigint
+    feeFrozen: bigint
 }
 
 export interface AccountInfo {
-  nonce: number
-  consumers: number
-  providers: number
-  sufficients: number
-  data: AccountData
+    nonce: number
+    consumers: number
+    providers: number
+    sufficients: number
+    data: AccountData
 }

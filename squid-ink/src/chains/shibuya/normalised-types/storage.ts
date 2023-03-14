@@ -37,8 +37,11 @@ export class NormalisedContractInfoOfStorage extends ContractsContractInfoOfStor
   async get(accountId: string): Promise<ResolvedContractInfoOfStorage> {
     assert(this.isExists);
     let info: ResolvedContractInfoOfStorage | undefined;
+    const contractAccount = ss58.codec(ss58Format).decode(accountId);
     if (this.isV31) {
-      info = await this.getAsV31(ss58.codec(ss58Format).decode(accountId));
+      info = await this.getAsV31(contractAccount);
+    } else if (this.isV74) {
+      info = await this.getAsV74(contractAccount);
     } else {
       throw new Error("No Runtime version found");
     }
@@ -55,8 +58,11 @@ export class NormalisedCodeStorageStorage extends ContractsCodeStorageStorage {
   async get(key: string): Promise<PrefabWasmModule> {
     assert(this.isExists);
     let info: PrefabWasmModule | undefined;
+    const codeHash = decodeHex(key);
     if (this.isV31) {
-      info = await this.getAsV31(decodeHex(key));
+      info = await this.getAsV31(codeHash);
+    } else if (this.isV83) {
+      info = await this.getAsV83(codeHash);
     } else {
       throw new Error("No Runtime version found");
     }
@@ -71,8 +77,9 @@ export class NormalisedOwnerInfoOfStorage extends ContractsOwnerInfoOfStorage {
   async get(key: string): Promise<OwnerInfo> {
     assert(this.isExists);
     let info: OwnerInfo | undefined;
+    const codeHash = decodeHex(key);
     if (this.isV31) {
-      info = await this.getAsV31(decodeHex(key));
+      info = await this.getAsV31(codeHash);
     } else {
       throw new Error("No Runtime version found");
     }
