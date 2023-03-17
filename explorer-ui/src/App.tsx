@@ -19,6 +19,8 @@ import { Toaster } from "react-hot-toast"
 import CodePage from "./components/codes/CodePage"
 import CodesPage from "./components/codes/CodesPage"
 import ActivitiesPage from "./components/activities/ActivitiesPage"
+import BlocksPage from "./components/blocks/BlocksPage"
+import ExtrinsicPage from "./components/extrinsics/ExtrinsicPage"
 
 const client = createClient({
   url: window.__RUNTIME_CONFIG__?.REACT_APP_SQUID_ENDPOINT ||
@@ -61,6 +63,8 @@ function App () {
                   <Route path="codes" element={<CodesPage/>} />
                   <Route path="codes/:id/*" element={<CodePage/>} />
                   <Route path="activities" element={<ActivitiesPage/>} />
+                  <Route path="extrinsicdata" element={<ExtrinsicPage/>} />
+                  <Route path="blocks" element={<BlocksPage/>} />
                 </Routes>
               </main>
             </div>

@@ -1,4 +1,5 @@
 import { Account } from "../types/accounts"
+import { LightBlock } from "../types/blocks"
 import { ContractCode } from "../types/codes"
 import { Activity, ActivityType, Contract, DecodedElement, Event } from "../types/contracts"
 import { Edge } from "../types/pagination"
@@ -207,3 +208,11 @@ export const mockEventEdges = buildArrayOf(5, () => ({
     extrinsic: mockExtrinsic
   }
 })) as Edge<Event>[]
+
+export const mockBlockEdges = buildArrayOf(5, (i) => ({
+  node: {
+    block: { id: i },
+    trieId: "some trie id",
+    createdAt: new Date()
+  }
+})) as Edge<LightBlock>[]

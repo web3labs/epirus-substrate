@@ -1,12 +1,12 @@
 import React from "react"
-import { LightContract } from "../../types/contracts"
 import { Edge, Page } from "../../types/pagination"
-import ContractRow from "./ContractRow"
+import BlockRow from "./BlockRow"
 import List, { ListProps } from "../commons/List"
 import Pagination from "../navigation/Pagination"
 import SortBy from "../query/SortBy"
 import ListQuery, { UpdateMode } from "../query/ListQuery"
 import Filters from "../query/Filters"
+import { LightBlock } from "../../types/blocks"
 
 const QUERY = `
 query($where: ContractWhereInput = {}, $first: Int!, $after: String = null, $orderBy: [ContractOrderByInput!]! = [createdAt_DESC]) {
@@ -48,7 +48,7 @@ query($where: ContractWhereInput = {}, $first: Int!, $after: String = null, $ord
 }
 `
 
-export const CONTRACT_SORT_OPTIONS = [
+export const BLOCK_SORT_OPTIONS = [
   {
     name: "newest",
     value: "createdAt_DESC"
@@ -59,7 +59,7 @@ export const CONTRACT_SORT_OPTIONS = [
   }
 ]
 
-export default function ContractList ({
+export default function BlockList ({
   pageQuery = { first: 5 },
   title,
   description,
@@ -75,7 +75,7 @@ export default function ContractList ({
     updateMode={UpdateMode.BEEPER}
     render={
       ({ data, setQueryInState, queryInState, beeper }) => {
-        const page : Page<LightContract> = data
+        const page : Page<LightBlock> = data
         const sort = sortOptions
           ? <SortBy options={sortOptions}
             setQuery={setQueryInState}
@@ -104,11 +104,11 @@ export default function ContractList ({
                 setQuery={setQueryInState}
               />
             }
-            emptyMessage="No blocks to show"
+            emptyMessage="No contracts to show"
           >
-            {page?.edges.map(({ node } : Edge<LightContract>) => (
-              <ContractRow
-                key={node.id}
+            {page?.edges.map(({ node } : Edge<LightBlock>) => (
+              <BlockRow
+                key={node.block.id}
                 obj={node}
                 currentId={currentId}
                 short={short}
