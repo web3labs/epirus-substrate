@@ -71,7 +71,7 @@ export default function BlockList ({
   return <ListQuery
     pageQuery={pageQuery}
     query={QUERY}
-    dataSelector="contractsConnection"
+    dataSelector="someblocksdataselectortobedecided"
     updateMode={UpdateMode.BEEPER}
     render={
       ({ data, setQueryInState, queryInState, beeper }) => {
@@ -108,7 +108,7 @@ export default function BlockList ({
           >
             {page?.edges.map(({ node } : Edge<LightBlock>) => (
               <BlockRow
-                key={node.block.id}
+                key={String(node.id)}
                 obj={node}
                 currentId={currentId}
                 short={short}

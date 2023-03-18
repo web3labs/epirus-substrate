@@ -5,11 +5,11 @@ import { Provider } from "urql"
 import { createMockClient } from "../../_mocks/mockClient"
 import BlocksPage from "./BlocksPage"
 import { mockPageOf } from "../../_mocks/utils"
-import { mockContractEdges } from "../../_mocks/data"
+import { mockBlockEdges, mockContractEdges } from "../../_mocks/data"
 
-test("Contracts page", () => {
+test("Blocks page", () => {
   const mockClient = createMockClient({
-    contractsConnection: mockPageOf(mockContractEdges)
+    blocksConnection: mockPageOf(mockBlockEdges)
   })
 
   const { container } = render(

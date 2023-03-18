@@ -12,15 +12,13 @@ export default function BlockRow ({
   currentId,
   short = true
 }: TypedRow<LightBlock>) {
-  const { block, createdAt } = obj
-
   return (
-    <Row key={block.id}>
+    <Row key={String(obj.id)}>
       <Lane
         head={
           <div className="flex flex-col gap-1">
-            <BlockLink block={block} currentId={currentId} short={short} />
-            <Label className="text-xs">{shortDate(createdAt)}</Label>
+            <BlockLink block={obj} currentId={currentId} short={short} />
+            <Label className="text-xs">{shortDate(obj.timeStamp)}</Label>
           </div>
         }
       />

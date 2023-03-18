@@ -1,5 +1,5 @@
 import { Account } from "../types/accounts"
-import { LightBlock } from "../types/blocks"
+import { LightBlock, Block } from "../types/blocks"
 import { ContractCode } from "../types/codes"
 import { Activity, ActivityType, Contract, DecodedElement, Event } from "../types/contracts"
 import { Edge } from "../types/pagination"
@@ -209,10 +209,30 @@ export const mockEventEdges = buildArrayOf(5, () => ({
   }
 })) as Edge<Event>[]
 
+export function mockBlock (i: number) {
+  return {
+    id: i,
+    extrinsicsCount: 10,
+    eventsCount: 10,
+    timeStamp: new Date(),
+    // this changes as time goes by - e.g., 22 hrs 23 mins ago
+    blockTime: new Date(),
+    // TODO: abhi - this should be an ... enum type with variants like Finalized, NotFinalized, etc.
+    status : "Finalized",
+    // TODO: abhi - should be a hash type?
+    hash: "0x123",
+    // TODO: abhi - should be a hash type?
+    parentHash: "0x123",
+    // TODO: abhi - should be a hash type?
+    stateRoot: "0x123",
+    // TODO: abhi - should be a hash type?
+    extrinsicsRoot: "0x123",
+    // TODO: abhi - should be an account type?
+    collator: "n123p3455",
+    specVersion: 53
+  } as unknown as Block
+}
+
 export const mockBlockEdges = buildArrayOf(5, (i) => ({
-  node: {
-    block: { id: i },
-    trieId: "some trie id",
-    createdAt: new Date()
-  }
+  node: mockBlock(i)
 })) as Edge<LightBlock>[]

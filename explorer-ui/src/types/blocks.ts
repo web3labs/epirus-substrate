@@ -1,15 +1,15 @@
-export interface BlockRef {
-  id: string,
-}
-
+// this type is for displaying the block data on the main page
+// where we show the blocks list
 export type LightBlock = {
-  block: BlockRef,
-  trieId: string,
-  createdAt: Date,
+  id: String,
+  extrinsicsCount: number,
+  eventsCount: number,
+  // is this the block creation time
+  timeStamp: Date
 }
 
+// this type is to display an individual block data on its own page
 export interface Block extends LightBlock {
-  timeStamp: Date
   // this changes as time goes by - e.g., 22 hrs 23 mins ago
   blockTime: Date
   // TODO: abhi - this should be an ... enum type with variants like Finalized, NotFinalized, etc.
