@@ -218,7 +218,7 @@ export function mockBlock (i: number) {
     // this changes as time goes by - e.g., 22 hrs 23 mins ago
     blockTime: new Date(),
     // TODO: abhi - this should be an ... enum type with variants like Finalized, NotFinalized, etc.
-    status : "Finalized",
+    status: "Finalized",
     // TODO: abhi - should be a hash type?
     hash: "0x123",
     // TODO: abhi - should be a hash type?
