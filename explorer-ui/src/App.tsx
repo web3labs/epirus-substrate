@@ -20,6 +20,7 @@ import CodePage from "./components/codes/CodePage"
 import CodesPage from "./components/codes/CodesPage"
 import ActivitiesPage from "./components/activities/ActivitiesPage"
 import BlocksPage from "./components/blocks/BlocksPage"
+import BlockPage from "./components/blocks/BlockPage"
 import ExtrinsicPage from "./components/extrinsics/ExtrinsicPage"
 
 const client = createClient({
@@ -65,6 +66,7 @@ function App () {
                   <Route path="activities" element={<ActivitiesPage/>} />
                   <Route path="extrinsicdata" element={<ExtrinsicPage/>} />
                   <Route path="blocks" element={<BlocksPage/>} />
+                  <Route path="blocks/:id/*" element={<BlockPage/>} />
                 </Routes>
               </main>
             </div>
