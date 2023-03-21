@@ -102,7 +102,7 @@ export function getMockExtrinsic({
     tip: BigInt(0),
     success: true,
     error: null,
-    hash: "0xd67448c72dabbb64e06793c954727b06ad02a59be0ed2c5b82aa2cc3232a38c4",
+    hash: "9b1b707b0f5c537afca26d44d0081d29092614e330ff3810d328d0342d6a1845",
     pos: 19,
   };
 }

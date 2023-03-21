@@ -24,7 +24,7 @@ describe("entities utils", () => {
       name: "Contracts.call",
       indexInBlock: 2,
       versionInfo: 4,
-      hash: "0xd67448c72dabbb64e06793c954727b06ad02a59be0ed2c5b82aa2cc3232a38c4",
+      hash: "9b1b707b0f5c537afca26d44d0081d29092614e330ff3810d328d0342d6a1845",
       createdAt: new Date("2022-07-21T09:16:54.000000Z"),
       signature:
         "0xa68f6e88a3b3bf5fcf0985d977825e9c1c2971154e16c7332f6441f253c50469c5ebf36682ecce611e45661fa7b12730f4c626fbe1e0f628598045e834e02c8b",

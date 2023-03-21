@@ -14,9 +14,7 @@ export class NormalisedContractsCallCall extends ContractsCallCall {
       return {
         contractAddress: ss58.codec(ss58Format).encode(dest.value),
         value,
-        gasLimit: {
-          refTime: gasLimit,
-        },
+        gasLimit,
         storageDepositLimit,
         data,
       };
