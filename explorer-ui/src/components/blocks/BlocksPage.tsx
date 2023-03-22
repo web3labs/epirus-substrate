@@ -11,7 +11,7 @@ export default function BlocksPage () {
           short={true}
           title={
             <NavLink to="/blocks" className="hover:link">
-            Latest Blocks
+              Latest Blocks
             </NavLink>
           }
           description="Blocks"

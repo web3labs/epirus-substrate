@@ -18,10 +18,6 @@ export function eventsByExtrinsicId (id: string) {
   }
 }
 
-export default function EventTab ({ currentId, where }: TabQuery) {
-  return (
-    <div>
-      hello
-    </div>
-  )
+export default function EventsTab ({ currentId, where }: TabQuery) {
+  return <div>hello</div>
 }

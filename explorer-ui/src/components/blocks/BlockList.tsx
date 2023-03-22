@@ -102,7 +102,7 @@ export default function BlockList ({
   short = true,
   sortOptions,
   filterTypes
-} : ListProps) {
+}: ListProps) {
   const data = mockBlockEdges
   return (
     <List
@@ -110,7 +110,7 @@ export default function BlockList ({
       description={description}
       emptyMessage="No contracts to show"
     >
-      {data.map(({ node } : Edge<LightBlock>) => (
+      {data.map(({ node }: Edge<LightBlock>) => (
         <BlockRow
           key={String(node.id)}
           obj={node}

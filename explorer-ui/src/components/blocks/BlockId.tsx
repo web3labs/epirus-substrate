@@ -6,11 +6,11 @@ import { Default, Mobile } from "../responsive/Media"
 import { AddressText } from "../commons/Text"
 
 interface Props {
-  blockId: string,
-  short?: boolean,
-  children?: JSX.Element | null
-  className?: string,
-  size?: number
+  blockId: string;
+  short?: boolean;
+  children?: JSX.Element | null;
+  className?: string;
+  size?: number;
 }
 
 export default function BlockId ({
@@ -22,17 +22,11 @@ export default function BlockId ({
 }: Props) {
   if (blockId) {
     return (
-      <div className={
-        classNames(
-          "flex flex-wrap items-center gap-x-2",
-          className
-        )}>
+      <div
+        className={classNames("flex flex-wrap items-center gap-x-2", className)}
+      >
         <div className="relative">
-          <Identicon
-            value={blockId}
-            size={size}
-            theme="polkadot"
-          />
+          <Identicon value={blockId} size={size} theme="polkadot" />
           {children}
         </div>
         <Mobile>

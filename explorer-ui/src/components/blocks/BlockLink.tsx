@@ -4,19 +4,22 @@ import { LightBlock } from "../../types/blocks"
 import CodeBadge from "../badges/CodeBadge"
 import BlockId from "./BlockId"
 
-export default function BlockLink (
-  { block, currentId, className = "", short, size }
-  : {
-    block: LightBlock
-    currentId?: string,
-    className?: string
-    short?: boolean,
-    size?: number
-  }
-) {
+export default function BlockLink ({
+  block,
+  currentId,
+  className = "",
+  short,
+  size
+}: {
+  block: LightBlock;
+  currentId?: string;
+  className?: string;
+  short?: boolean;
+  size?: number;
+}) {
   // eslint-disable-next-line no-unused-vars
   const { id, ..._ } = block
-  const badgeSize = size ? (size / 3) + 2 : undefined
+  const badgeSize = size ? size / 3 + 2 : undefined
 
   if (id === currentId) {
     return (
@@ -26,7 +29,7 @@ export default function BlockLink (
         className={className}
         size={size}
       >
-        {<CodeBadge size={badgeSize}/>}
+        {<CodeBadge size={badgeSize} />}
       </BlockId>
     )
   }
@@ -39,7 +42,7 @@ export default function BlockLink (
         className={className}
         size={size}
       >
-        {<CodeBadge size={badgeSize}/>}
+        {<CodeBadge size={badgeSize} />}
       </BlockId>
     </NavLink>
   )

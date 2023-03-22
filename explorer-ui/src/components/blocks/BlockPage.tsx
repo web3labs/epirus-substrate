@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import Breadcrumbs from "../navigation/Breadcrumbs"
 import Box, { BoxHead } from "../commons/Box"
 import Segment from "../commons/Segment"
@@ -8,6 +8,12 @@ import { Block } from "../../types/blocks"
 import { Edge /* , Page */ } from "../../types/pagination"
 import { useParams } from "react-router-dom"
 import { longDateTime } from "../../formats/time"
+import Tabs, { TabItem } from "../navigation/Tabs"
+import EventsTab, { eventsByExtrinsicId } from "./EventsTab"
+import LogTab, { logByAccount } from "./LogTab"
+import ExtrinsicsTab, {
+  extrinsicsByBlockId
+} from "../extrinsics/ExtrinsicsTab"
 // import BlockList from "./BlockList"
 // import Box from "../commons/Box"
 // import { NavLink } from "react-router-dom"
@@ -45,14 +51,49 @@ export const mockBlockEdges = buildArrayOf(5, (i) => ({
 
 export default function BlockPage () {
   const params = useParams()
-  const result = mockBlockEdges.find(({ node }: Edge<Block>) => (String(node.id) === params.id))
-  const block = result === undefined ? { node: mockBlock(1) } as Edge<Block> : result
-
+  const result = mockBlockEdges.find(
+    ({ node }: Edge<Block>) => String(node.id) === params.id
+  )
+  const block =
+    result === undefined ? ({ node: mockBlock(1) } as Edge<Block>) : result
+  const tabs: TabItem[] = useMemo(() => {
+    if (params.id) {
+      return [
+        {
+          label: "Extrinsics",
+          to: "",
+          element: (
+            <ExtrinsicsTab
+              currentId={params.id}
+              where={extrinsicsByBlockId(params.id)}
+            />
+          )
+        },
+        {
+          label: "Events",
+          to: "contracts",
+          element: (
+            <EventsTab
+              currentId={params.id}
+              where={eventsByExtrinsicId(params.id)}
+            />
+          )
+        },
+        {
+          label: "Log",
+          to: "codes",
+          element: (
+            <LogTab currentId={params.id} where={logByAccount(params.id)} />
+          )
+        }
+      ]
+    }
+    return []
+  }, [params.id])
   return (
     <>
-      <Breadcrumbs/>
+      <Breadcrumbs />
       <div className="content">
-
         <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-2">
           <Box className="col-span-2 divide-y">
             <BoxHead
@@ -64,37 +105,49 @@ export default function BlockPage () {
             />
             <Segment>
               <DefinitionList>
-                <Definition label="Block Id" term={
-                  <span>{block.node.id}</span>
-                }/>
-                <Definition label="Created" term={
-                  <span>{longDateTime(block.node.timeStamp)}</span>
-                }/>
-                <Definition label="Status" term={
-                  <span>{block.node.status}</span>
-                } />
-                <Definition label="Hash" term={
-                  <span>{block.node.hash}</span>
-                }/>
-                <Definition label="Parent Hash" term={
-                  <span>{block.node.parentHash}</span>
-                }/>
-                <Definition label="State root" term={
-                  <span>{block.node.stateRoot}</span>
-                }/>
-                <Definition label="Extrinsics root" term={
-                  <span>{block.node.extrinsicsRoot}</span>
-                }/>
-                <Definition label="Collator" term={
-                  <span>{block.node.collator}</span>
-                }/>
-                <Definition label="specVersion" term={
-                  <span>{block.node.specVersion}</span>
-                }/>
+                <Definition
+                  label="Block Id"
+                  term={<span>{block.node.id}</span>}
+                />
+                <Definition
+                  label="Created"
+                  term={<span>{longDateTime(block.node.timeStamp)}</span>}
+                />
+                <Definition
+                  label="Status"
+                  term={<span>{block.node.status}</span>}
+                />
+                <Definition
+                  label="Hash"
+                  term={<span>{block.node.hash}</span>}
+                />
+                <Definition
+                  label="Parent Hash"
+                  term={<span>{block.node.parentHash}</span>}
+                />
+                <Definition
+                  label="State root"
+                  term={<span>{block.node.stateRoot}</span>}
+                />
+                <Definition
+                  label="Extrinsics root"
+                  term={<span>{block.node.extrinsicsRoot}</span>}
+                />
+                <Definition
+                  label="Collator"
+                  term={<span>{block.node.collator}</span>}
+                />
+                <Definition
+                  label="specVersion"
+                  term={<span>{block.node.specVersion}</span>}
+                />
               </DefinitionList>
             </Segment>
           </Box>
         </div>
+        <Box className="mt-2">
+          <Tabs items={tabs} />
+        </Box>
       </div>
     </>
   )

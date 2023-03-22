@@ -64,7 +64,7 @@ function App () {
                   <Route path="codes" element={<CodesPage/>} />
                   <Route path="codes/:id/*" element={<CodePage/>} />
                   <Route path="activities" element={<ActivitiesPage/>} />
-                  <Route path="extrinsicdata" element={<ExtrinsicPage/>} />
+                  <Route path="extrinsic/:id/*" element={<ExtrinsicPage/>} />
                   <Route path="blocks" element={<BlocksPage/>} />
                   <Route path="blocks/:id/*" element={<BlockPage/>} />
                 </Routes>
