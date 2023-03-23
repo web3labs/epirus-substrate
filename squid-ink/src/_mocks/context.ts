@@ -62,10 +62,10 @@ export function defaultGetStorageMock() {
 function getStorageHashByPrefixName(prefix: string, name: string): string {
   if (prefix === "Contracts") {
     if (name === "ContractInfoOf") {
-      return "ca1ad2ae4b550883411d45c2158af4f3e2a0bde306e44674a586527ce222bcf3";
+      return "b19f56551b6001070487b6e33ba3a88bf2e7a48df38a8c979b2d69856127de63";
     }
     if (name === "CodeStorage") {
-      return "1d41f869264eec7411828c1a845cdbad1a39455691f254f6bfead6b3102145ab";
+      return "d90967ccfb2cbaf184f7d41bb1a330beaf15a192d25803d6352047090a9e635e";
     }
     if (name === "OwnerInfoOf") {
       return "76689686c73821ee740f33d092a38a05de83a2833f6c8857baa886203c5bf939";
@@ -235,7 +235,7 @@ function getDecodeCallByName(name: string): any {
 function getCallHashByName(name: string): string {
   switch (name) {
     case "Contracts.call":
-      return "02511922863054b5c354386a9605ca660c51d4316bc5c8d224b533cb6036f669";
+      return "9b1b707b0f5c537afca26d44d0081d29092614e330ff3810d328d0342d6a1845";
     default:
       return "";
   }
