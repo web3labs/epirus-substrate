@@ -18,13 +18,13 @@ export default function BlockLink ({
   size?: number;
 }) {
   // eslint-disable-next-line no-unused-vars
-  const { id, ..._ } = block
+  const { id, height, ..._ } = block
   const badgeSize = size ? size / 3 + 2 : undefined
 
   if (id === currentId) {
     return (
       <BlockId
-        blockId={String(id)}
+        blockId={String(height)}
         short={short}
         className={className}
         size={size}
@@ -37,7 +37,7 @@ export default function BlockLink ({
   return (
     <NavLink to={`/blocks/${id}`} className="link">
       <BlockId
-        blockId={String(id)}
+        blockId={String(height)}
         short={short}
         className={className}
         size={size}

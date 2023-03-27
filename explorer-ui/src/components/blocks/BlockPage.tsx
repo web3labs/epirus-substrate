@@ -24,8 +24,6 @@ export function buildArrayOf (n: number, f: (index: number) => Object) {
 export function mockBlock (i: number) {
   return {
     id: i,
-    extrinsicsCount: 10,
-    eventsCount: 10,
     timeStamp: new Date(),
     // this changes as time goes by - e.g., 22 hrs 23 mins ago
     blockTime: new Date(),
@@ -111,7 +109,7 @@ export default function BlockPage () {
                 />
                 <Definition
                   label="Created"
-                  term={<span>{longDateTime(block.node.timeStamp)}</span>}
+                  term={<span>{longDateTime(block.node.timestamp)}</span>}
                 />
                 <Definition
                   label="Status"

@@ -1,13 +1,11 @@
 import React from "react"
-import { Edge /* , Page */ } from "../../types/pagination"
+import { Edge, Page } from "../../types/pagination"
 import BlockRow from "./BlockRow"
 import List, { ListProps } from "../commons/List"
-/*
 import Pagination from "../navigation/Pagination"
 import SortBy from "../query/SortBy"
 import ListQuery, { UpdateMode } from "../query/ListQuery"
 import Filters from "../query/Filters"
-*/
 import { LightBlock, Block } from "../../types/blocks"
 
 export function buildArrayOf (n: number, f: (index: number) => Object) {
@@ -17,8 +15,6 @@ export function buildArrayOf (n: number, f: (index: number) => Object) {
 export function mockBlock (i: number) {
   return {
     id: i,
-    extrinsicsCount: 10,
-    eventsCount: 10,
     timeStamp: new Date(),
     // this changes as time goes by - e.g., 22 hrs 23 mins ago
     blockTime: new Date(),
@@ -41,10 +37,10 @@ export function mockBlock (i: number) {
 export const mockBlockEdges = buildArrayOf(5, (i) => ({
   node: mockBlock(i)
 })) as Edge<LightBlock>[]
-/*
+
 const QUERY = `
-query($where: ContractWhereInput = {}, $first: Int!, $after: String = null, $orderBy: [ContractOrderByInput!]! = [createdAt_DESC]) {
-  contractsConnection(where: $where, orderBy: $orderBy, first: $first, after: $after) {
+query($where: BlockWhereInput = {}, $first: Int!, $after: String = null, $orderBy: [BlockOrderByInput!]! = [timestamp_DESC]) {
+  blocksConnection(where: $where, orderBy: $orderBy, first: $first, after: $after) {
     totalCount
     pageInfo {
       endCursor
@@ -54,43 +50,38 @@ query($where: ContractWhereInput = {}, $first: Int!, $after: String = null, $ord
     }
     edges {
       node {
-        salt
         id
-        createdAt
-        trieId
-        deployer {
-          id
-          contract {
-            id
-          }
-        }
-        createdFrom {
-          blockNumber
-        }
-        contractCode {
-          id
-        }
-        account {
-          id
-          contract {
-            id
-          }
-        }
+        height
+        timestamp
       }
     }
   }
 }
 `
+/*
+query MyQuery {
+  blocks {
+    id
+    parentHash
+    stateRoot
+    timestamp
+    spec {
+      specVersion
+      blockHash
+      id
+    }
+  }
+}
 */
 
 export const BLOCK_SORT_OPTIONS = [
   {
     name: "newest",
-    value: "createdAt_DESC"
+    value: "timestamp_DESC"
   },
   {
     name: "oldest",
-    value: "createdAt_ASC"
+    value: "timestamp_ASC"
   }
 ]
 
@@ -103,21 +94,53 @@ export default function BlockList ({
   sortOptions,
   filterTypes
 }: ListProps) {
-  const data = mockBlockEdges
-  return (
-    <List
-      title={title}
-      description={description}
-      emptyMessage="No contracts to show"
-    >
-      {data.map(({ node }: Edge<LightBlock>) => (
-        <BlockRow
-          key={String(node.id)}
-          obj={node}
-          currentId={currentId}
-          short={short}
-        />
-      ))}
-    </List>
-  )
+  return <ListQuery
+    pageQuery={pageQuery}
+    query={QUERY}
+    dataSelector="blocksConnection"
+    updateMode={UpdateMode.BEEPER}
+    render={
+      ({ data, setQueryInState, queryInState, beeper }) => {
+        const page : Page<LightBlock> = data
+        const sort = sortOptions
+          ? <SortBy options={sortOptions}
+            setQuery={setQueryInState}
+            pageQuery={queryInState}
+          />
+          : undefined
+        const filter = filterTypes
+          ? <Filters
+            filterTypes={filterTypes}
+            setQuery={setQueryInState}
+            pageQuery={queryInState}
+          />
+          : undefined
+        return (
+          <List
+            title={title}
+            description={description}
+            sort={sort}
+            filter={filter}
+            drawer={beeper}
+            footer={
+              <Pagination
+                page={page}
+                pageQuery={queryInState}
+                setQuery={setQueryInState}
+              />
+            }
+            emptyMessage="No blocks to show"
+          >
+            {page?.edges.map(({ node }: Edge<LightBlock>) => (
+              <BlockRow
+                key={String(node.id)}
+                obj={node}
+                currentId={currentId}
+                short={short}
+              />
+            ))}
+          </List>
+        )
+      }}
+  />
 }

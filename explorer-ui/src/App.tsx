@@ -29,6 +29,12 @@ const client = createClient({
     "http://localhost:4350/graphql"
 })
 
+const archiveClient = createClient({
+  url: window.__RUNTIME_CONFIG__?.REACT_APP_SQUID_ARCHIVE_ENDPOINT ||
+    process.env.REACT_APP_SQUID_ARCHIVE_ENDPOINT ||
+    "http://localhost:4444/graphql"
+})
+
 function App () {
   return (
     <ThemeProvider theme={{
@@ -64,6 +70,19 @@ function App () {
                   <Route path="codes" element={<CodesPage/>} />
                   <Route path="codes/:id/*" element={<CodePage/>} />
                   <Route path="activities" element={<ActivitiesPage/>} />
+                </Routes>
+              </main>
+            </div>
+          </ChainContextProvider>
+        </Router>
+      </Provider>
+      <Provider value={archiveClient}>
+        <Router>
+          <ChainContextProvider>
+            <Toaster position="bottom-right"/>
+            <div className="min-h-screen bg-page overflow-hidden">
+              <main className="max-w-7xl mx-auto z-10">
+                <Routes>
                   <Route path="extrinsic/:id/*" element={<ExtrinsicPage/>} />
                   <Route path="blocks" element={<BlocksPage/>} />
                   <Route path="blocks/:id/*" element={<BlockPage/>} />

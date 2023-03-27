@@ -15,8 +15,6 @@ export function buildArrayOf(n: number, f: (index: number) => Object) {
 export function mockBlock(i: number) {
   return {
     id: i,
-    extrinsicsCount: 10,
-    eventsCount: 10,
     timeStamp: new Date(),
     // this changes as time goes by - e.g., 22 hrs 23 mins ago
     blockTime: new Date(),

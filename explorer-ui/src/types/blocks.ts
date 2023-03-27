@@ -4,10 +4,9 @@ import { DecodedElement } from "../types/contracts"
 // where we show the blocks list
 export type LightBlock = {
   id: String;
-  extrinsicsCount: number;
-  eventsCount: number;
+  height: number;
   // is this the block creation time
-  timeStamp: Date;
+  timestamp: Date;
 };
 
 // this type is to display an individual block data on its own page
