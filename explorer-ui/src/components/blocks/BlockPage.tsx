@@ -1,4 +1,6 @@
 import React, { useMemo } from "react"
+import useSquid from "../../hooks/useSquid"
+import { PageLoading } from "../loading/Loading"
 import Breadcrumbs from "../navigation/Breadcrumbs"
 import Box, { BoxHead } from "../commons/Box"
 import Segment from "../commons/Segment"
@@ -47,13 +49,37 @@ export const mockBlockEdges = buildArrayOf(5, (i) => ({
   node: mockBlock(i)
 })) as Edge<Block>[]
 
+const QUERY = `
+query($id: String!) {
+  blocks(where: {id_eq: $id}) {
+    id
+    height
+    hash
+    extrinsicsRoot
+    parentHash
+    stateRoot
+    timestamp
+    spec {
+      specVersion
+    }
+    extrinsics {
+      id
+      success
+      hash
+    }
+  }
+}
+`
+
 export default function BlockPage () {
   const params = useParams()
+  /*
   const result = mockBlockEdges.find(
     ({ node }: Edge<Block>) => String(node.id) === params.id
   )
   const block =
     result === undefined ? ({ node: mockBlock(1) } as Edge<Block>) : result
+  */
   const tabs: TabItem[] = useMemo(() => {
     if (params.id) {
       return [
@@ -88,6 +114,33 @@ export default function BlockPage () {
     }
     return []
   }, [params.id])
+
+  const [result] = useSquid({
+    query: QUERY,
+    variables: { id: params.id }
+  })
+
+  const { data, fetching } = result
+
+  if (fetching) {
+    return <PageLoading loading={fetching} />
+  }
+
+  if (data?.blocks[0] === undefined) {
+    return <div className="m-3">Block not found.</div>
+  }
+
+  const {
+    id,
+    height,
+    timestamp,
+    hash,
+    parentHash,
+    stateRoot,
+    extrinsicsRoot,
+    spec
+  } = data?.blocks[0] as Block
+
   return (
     <>
       <Breadcrumbs />
@@ -97,7 +150,7 @@ export default function BlockPage () {
             <BoxHead
               title={
                 <>
-                  <Tag label={"Block#" + String(block.node.id)} />
+                  <Tag label={"Block#" + String(height)} />
                 </>
               }
             />
@@ -105,39 +158,31 @@ export default function BlockPage () {
               <DefinitionList>
                 <Definition
                   label="Block Id"
-                  term={<span>{block.node.id}</span>}
+                  term={<span>{id}</span>}
                 />
                 <Definition
                   label="Created"
-                  term={<span>{longDateTime(block.node.timestamp)}</span>}
-                />
-                <Definition
-                  label="Status"
-                  term={<span>{block.node.status}</span>}
+                  term={<span>{longDateTime(timestamp)}</span>}
                 />
                 <Definition
                   label="Hash"
-                  term={<span>{block.node.hash}</span>}
+                  term={<span>{hash}</span>}
                 />
                 <Definition
                   label="Parent Hash"
-                  term={<span>{block.node.parentHash}</span>}
+                  term={<span>{parentHash}</span>}
                 />
                 <Definition
                   label="State root"
-                  term={<span>{block.node.stateRoot}</span>}
+                  term={<span>{stateRoot}</span>}
                 />
                 <Definition
                   label="Extrinsics root"
-                  term={<span>{block.node.extrinsicsRoot}</span>}
-                />
-                <Definition
-                  label="Collator"
-                  term={<span>{block.node.collator}</span>}
+                  term={<span>{extrinsicsRoot}</span>}
                 />
                 <Definition
                   label="specVersion"
-                  term={<span>{block.node.specVersion}</span>}
+                  term={<span>{spec.specVersion}</span>}
                 />
               </DefinitionList>
             </Segment>

@@ -79,16 +79,11 @@ function App () {
       <Provider value={archiveClient}>
         <Router>
           <ChainContextProvider>
-            <Toaster position="bottom-right"/>
-            <div className="min-h-screen bg-page overflow-hidden">
-              <main className="max-w-7xl mx-auto z-10">
-                <Routes>
-                  <Route path="extrinsic/:id/*" element={<ExtrinsicPage/>} />
-                  <Route path="blocks" element={<BlocksPage/>} />
-                  <Route path="blocks/:id/*" element={<BlockPage/>} />
-                </Routes>
-              </main>
-            </div>
+            <Routes>
+              <Route path="extrinsic/:id/*" element={<ExtrinsicPage/>} />
+              <Route path="blocks" element={<BlocksPage/>} />
+              <Route path="blocks/:id/*" element={<BlockPage/>} />
+            </Routes>
           </ChainContextProvider>
         </Router>
       </Provider>
