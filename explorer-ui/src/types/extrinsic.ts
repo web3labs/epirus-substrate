@@ -24,3 +24,9 @@ export interface Extrinsic {
   versionInfo?:string
   error?: ExtrinsicError
 }
+
+export interface LightExtrinsic {
+  id: String,
+  success: boolean,
+  hash: String
+}

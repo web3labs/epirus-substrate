@@ -1,9 +1,12 @@
 import React from "react"
-import { Edge } from "../../types/pagination"
+import { Edge, Page } from "../../types/pagination"
+import ListQuery, { UpdateMode } from "../query/ListQuery"
 import List, { ListProps } from "../commons/List"
 import ExtrinsicRow from "./ExtrinsicRow"
-
-import { Extrinsic } from "../../types/extrinsic"
+import SortBy from "../query/SortBy"
+import { Extrinsic, LightExtrinsic } from "../../types/extrinsic"
+import Filters from "../query/Filters"
+import Pagination from "../navigation/Pagination"
 
 export function buildArrayOf (n: number, f: (index: number) => Object) {
   return [...Array(n)].map((_, i) => f(i))
@@ -29,6 +32,27 @@ export const mockExtrinsicEdges = buildArrayOf(5, (i) => ({
   node: mockExtrinsic(i)
 })) as Edge<Extrinsic>[]
 
+const QUERY = `
+query($where: ExtrinsicWhereInput = {} ,$first: Int = 5, $after: String = null, $orderBy: [ExtrinsicOrderByInput!]! = [id_ASC]) {
+  extrinsicsConnection(where: $where, orderBy: $orderBy, after: $after, first: $first) {
+    totalCount
+    edges {
+      node {
+        id
+        hash
+        success
+      }
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
+}
+`
+
 export default function ExtrinsicsList ({
   title,
   description,
@@ -38,21 +62,54 @@ export default function ExtrinsicsList ({
   filterTypes,
   currentId
 }: ListProps) {
-  const data = mockExtrinsicEdges
-  return (
-    <List
-      title={title}
-      description={description}
-      emptyMessage="No events to show"
-    >
-      {data.map(({ node }: Edge<Extrinsic>) => (
-        <ExtrinsicRow
-          key={node.id}
-          obj={node}
-          short={short}
-          currentId={currentId}
-        />
-      ))}
-    </List>
-  )
+  // const data = mockExtrinsicEdges
+  return <ListQuery
+    pageQuery={pageQuery}
+    query={QUERY}
+    dataSelector="extrinsicsConnection"
+    updateMode={UpdateMode.BEEPER}
+    render={
+      ({ data, setQueryInState, queryInState, beeper }) => {
+        const page : Page<LightExtrinsic> = data
+        const sort = sortOptions
+          ? <SortBy options={sortOptions}
+            setQuery={setQueryInState}
+            pageQuery={queryInState}
+          />
+          : undefined
+        const filter = filterTypes
+          ? <Filters
+            filterTypes={filterTypes}
+            setQuery={setQueryInState}
+            pageQuery={queryInState}
+          />
+          : undefined
+        return (
+          <List
+            title={title}
+            description={description}
+            sort={sort}
+            filter={filter}
+            drawer={beeper}
+            footer={
+              <Pagination
+                page={page}
+                pageQuery={queryInState}
+                setQuery={setQueryInState}
+              />
+            }
+            emptyMessage="No extrinsics to show"
+          >
+            {page?.edges.map(({ node }: Edge<LightExtrinsic>) => (
+              <ExtrinsicRow
+                key={String(node.id)}
+                obj={node}
+                short={short}
+                currentId={currentId}
+              />
+            ))}
+          </List>
+        )
+      }
+    }/>
 }
