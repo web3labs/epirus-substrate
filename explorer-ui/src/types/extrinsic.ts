@@ -30,3 +30,12 @@ export interface LightExtrinsic {
   success: boolean,
   hash: String
 }
+
+export interface CallRef {
+  name: string
+}
+
+export interface ExtrinsicForEvent {
+  id: string, 
+  call: CallRef
+}

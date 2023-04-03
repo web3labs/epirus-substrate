@@ -1,5 +1,4 @@
-import { Extrinsic } from "../types/extrinsic"
-import { DecodedElement } from "../types/contracts"
+import { ExtrinsicForEvent } from "../types/extrinsic"
 // this type is for displaying the block data on the main page
 // where we show the blocks list
 export type LightBlock = {
@@ -32,11 +31,6 @@ export interface Block extends LightBlock {
 
 export interface Event {
   id: string;
-  blockNumber: string;
-  indexInBlock: string;
-  contractAddress: string;
-  createdAt: Date;
-  data: string;
-  extrinsic: Extrinsic;
-  decodedEvent?: DecodedElement;
+  name: string;
+  extrinsic: ExtrinsicForEvent;
 }

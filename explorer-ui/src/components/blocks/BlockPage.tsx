@@ -11,7 +11,7 @@ import { Edge /* , Page */ } from "../../types/pagination"
 import { useParams } from "react-router-dom"
 import { longDateTime } from "../../formats/time"
 import Tabs, { TabItem } from "../navigation/Tabs"
-import EventsTab, { eventsByExtrinsicId } from "./EventsTab"
+import EventsTab, { eventsByBlockId } from "./EventsTab"
 import LogTab, { logByAccount } from "./LogTab"
 import ExtrinsicsTab, {
   extrinsicsByBlockId
@@ -99,7 +99,7 @@ export default function BlockPage () {
           element: (
             <EventsTab
               currentId={params.id}
-              where={eventsByExtrinsicId(params.id)}
+              where={eventsByBlockId(params.id)}
             />
           )
         },
