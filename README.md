@@ -16,7 +16,7 @@ The explorer UI provides a user-friendly application to interact with the Squid 
 
 **2. [Squid Ink](squid-ink/)**
 
-The Squid transforms data from a [Squid Archive](https://docs.subsquid.io/docs/archives/how-to-launch-a-squid-archive), stores it and exposes a GraphQL API for the UI.
+The Squid transforms data from a [Squid Archive](https://docs.subsquid.io/archives/substrate/self-hosted), stores it and exposes a GraphQL API for the UI.
 
 ## Deployment
 

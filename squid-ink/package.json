@@ -18,15 +18,17 @@
   },
   "dependencies": {
     "@polkadot/api-contract": "^9.11.3",
+
     "@subsquid/archive-registry": "^1.0.16",
     "@subsquid/cli": "^0.5.1",
     "@subsquid/graphql-server": "^3.2.3",
     "@subsquid/ink-typegen": "^0.1.0",
     "@subsquid/logger": "^0.2.0",
     "@subsquid/scale-codec": "^1.0.5",
-    "@subsquid/ss58": "^0.1.2",
-    "@subsquid/substrate-processor": "^1.10.1",
-    "@subsquid/typeorm-store": "^0.1.5",
+    "@subsquid/ss58": "^0.1.4",
+    "@subsquid/substrate-processor": "2.4.1",
+    "@subsquid/typeorm-store": "0.2.2",
+
     "@subsquid/util-internal-hex": "^0.0.1",
     "dotenv": "^16.0.3",
     "lru-cache": "^7.14.1",
@@ -46,8 +48,8 @@
     "http-cache-semantics": ">=4.1.1"
   },
   "devDependencies": {
-    "@subsquid/substrate-metadata-explorer": "^1.0.8",
-    "@subsquid/substrate-typegen": "^1.5.0",
+    "@subsquid/substrate-metadata-explorer": "1.1.2",
+    "@subsquid/substrate-typegen": "2.2.1",
     "@types/jest": "^28.1.8",
     "@types/module-alias": "^2.0.1",
     "@types/node": "^16.18.3",
