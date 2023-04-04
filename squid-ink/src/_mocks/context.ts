@@ -46,6 +46,7 @@ export const ctx: Ctx = {
   store,
   log: { info: jest.fn(), error: jest.fn(), warn: jest.fn(), debug: jest.fn() },
   blocks: jest.fn(),
+  isHead: false,
 };
 
 export function defaultGetStorageMock() {
