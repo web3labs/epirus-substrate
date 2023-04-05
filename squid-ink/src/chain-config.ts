@@ -44,6 +44,14 @@ const chainConfig: Record<string, ChainConfig> = {
       tokenSymbol: "WATRD",
     },
   },
+  alephzero: {
+    name: "Aleph Zero",
+    ss58Format: 5,
+    token: {
+      tokenDecimals: 9,
+      tokenSymbol: "AZERO",
+    },
+  },
 };
 
 function getChainConfig(): ChainConfig {
