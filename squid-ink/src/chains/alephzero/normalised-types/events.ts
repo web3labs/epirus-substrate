@@ -56,7 +56,7 @@ export class NormalisedBalancesEndowedEvent extends BalancesEndowedEvent {
       };
     }
     throw new Error(
-      "No runtime version found while decoding [BalancesWithdrawEvent]"
+      "No runtime version found while decoding [BalancesEndowedEvent]"
     );
   }
 }
