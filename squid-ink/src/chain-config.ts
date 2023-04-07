@@ -48,8 +48,16 @@ const chainConfig: Record<string, ChainConfig> = {
     name: "Aleph Zero",
     ss58Format: 5,
     token: {
-      tokenDecimals: 9,
+      tokenDecimals: 12,
       tokenSymbol: "AZERO",
+    },
+  },
+  alephzero_test: {
+    name: "Aleph Zero Testnet",
+    ss58Format: 5,
+    token: {
+      tokenDecimals: 12,
+      tokenSymbol: "TZERO",
     },
   },
 };
