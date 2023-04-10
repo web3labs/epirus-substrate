@@ -176,30 +176,23 @@ A `.env` file is required per chain. It is recommended to name it as `.env.<chai
 #### 5. Run the processor
 
 ```bash
-# 1. Compile typescript files
-npm run build
+# 1. Build the project
+npm ci
 
-# 2. Start target Postgres database (use -d to run in background)
-docker compose up
+#2 Build squid files
+sqd build
 
-# 3.1. If it's the first time running, create the database first
-npx sqd db create
-npx sqd db create-migration Init
-npx sqd db migrate
+#3 Start squid DB
+sqd up
 
-#3.2 For subsequent runs, if a clean db is needed, use the script
-npm run schema:reset
+#4 Generate DB schema (If it hasn't been created before)
+sqd migration:generate
 
-# 5. Now start the processor
-ENV=/path/to/.env npm run processor:start
+#5 Start squid process (should begin to ingest blocks)
+sqd process 
 
-# 6. The above command will block the terminal
-#    being busy with fetching the chain data, 
-#    transforming and storing it in the target database.
-#
-#    To start the graphql server open the separate terminal
-#    and run
-npx squid-graphql-server
+# 6. To start the graphql server open the separate terminal and run
+sqd serve
 ```
 
 ### Types bundle
