@@ -8,6 +8,9 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: squid-archive
+    ports:
+      - "5432:5432"
+
 
 
   #  Substrate-ingest fetches blocks from a substrate chain and dumps them into a Postgres-compatible

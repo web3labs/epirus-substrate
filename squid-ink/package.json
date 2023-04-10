@@ -18,14 +18,16 @@
   },
   "dependencies": {
     "@polkadot/api-contract": "^9.11.3",
-    "@subsquid/archive-registry": "^2.1.10",
-    "@subsquid/cli": "^2.2.1",
+    "@subsquid/archive-registry": "^2.1.11",
+    "@subsquid/cli": "^2.2.2",
     "@subsquid/graphql-server": "^3.3.2",
     "@subsquid/ink-typegen": "^0.2.1",
     "@subsquid/logger": "^0.3.1",
     "@subsquid/scale-codec": "^1.1.1",
+    "@subsquid/ink-abi": "^1.0.1",
     "@subsquid/ss58": "^0.1.4",
     "@subsquid/substrate-processor": "^2.4.1",
+    "@subsquid/typeorm-migration": "0.1.6",
     "@subsquid/typeorm-store": "^0.2.2",
     "@subsquid/util-internal-hex": "^0.0.1",
     "dotenv": "^16.0.3",
@@ -33,7 +35,7 @@
     "module-alias": "^2.2.2",
     "node-fetch": "^2.6.7",
     "pg": "^8.8.0",
-    "typeorm": "^0.3.10"
+    "typeorm": "^0.3.11"
   },
   "overrides": {
     "@subsquid/cli": {
@@ -48,6 +50,8 @@
   "devDependencies": {
     "@subsquid/substrate-metadata-explorer": "1.1.2",
     "@subsquid/substrate-typegen": "2.2.1",
+    "@subsquid/ink-typegen": "^0.2.1",
+    "@subsquid/typeorm-codegen": "^0.3.3",
     "@types/blake2b": "^2.1.0",
     "@types/jest": "^28.1.8",
     "@types/module-alias": "^2.0.1",

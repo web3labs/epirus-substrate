@@ -1,5 +1,5 @@
 import assert from 'assert'
-import {Block, Chain, ChainContext, BlockContext, Result, Option} from './support'
+import {Block, Chain, ChainContext, BlockContext} from './support'
 import * as v12 from './v12'
 import * as v20 from './v20'
 import * as v45 from './v45'
@@ -19,7 +19,7 @@ export class BalancesAccountStorage {
 
     /**
      *  The balance of an account.
-     * 
+     *
      *  NOTE: This is only used in the case that this pallet is used to store balances.
      */
     get isV12() {
@@ -28,7 +28,7 @@ export class BalancesAccountStorage {
 
     /**
      *  The balance of an account.
-     * 
+     *
      *  NOTE: This is only used in the case that this pallet is used to store balances.
      */
     async getAsV12(key: Uint8Array): Promise<v12.AccountData> {
@@ -138,7 +138,7 @@ export class ContractsContractInfoOfStorage {
 
     /**
      *  The code associated with a given account.
-     * 
+     *
      *  TWOX-NOTE: SAFE since `AccountId` is a secure hash.
      */
     get isV20() {
@@ -147,7 +147,7 @@ export class ContractsContractInfoOfStorage {
 
     /**
      *  The code associated with a given account.
-     * 
+     *
      *  TWOX-NOTE: SAFE since `AccountId` is a secure hash.
      */
     async getAsV20(key: Uint8Array): Promise<v20.RawContractInfo | undefined> {
@@ -167,7 +167,7 @@ export class ContractsContractInfoOfStorage {
 
     /**
      *  The code associated with a given account.
-     * 
+     *
      *  TWOX-NOTE: SAFE since `AccountId` is a secure hash.
      */
     get isV45() {
@@ -176,7 +176,7 @@ export class ContractsContractInfoOfStorage {
 
     /**
      *  The code associated with a given account.
-     * 
+     *
      *  TWOX-NOTE: SAFE since `AccountId` is a secure hash.
      */
     async getAsV45(key: Uint8Array): Promise<v45.ContractInfo | undefined> {
