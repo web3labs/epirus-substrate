@@ -77,11 +77,23 @@ services:
 Before you running the service you need to create the initial database model.
 At this moment the migrations are not pushed neither in the git repository nor the image.
 
-```sh
-docker-compose run processor /bin/sh
-npx sqd db create-migration Init
-npx sqd db migrate
+
+Start squid DB
+```bash
+sqd up
 ```
+
+Generate DB schema (If it hasn't been created before)
+```bash
+sqd migration:generate
+```
+
+Apply DB schema
+```bash
+sqd migration:apply
+```
+
+
 
 ## Testing
 To run the unit tests, use the command
@@ -100,13 +112,22 @@ npm run test:coverage
 
 ### Project Setup
 
-```bash
-# Install dependencies
-npm ci
+Install Squid CLI
 
-# Generate data models
-npx sqd codegen
+```bash
+npm i -g @subsquid/cli@latest
 ```
+or
+```bash
+brew tap subsquid/cli
+brew install sqd
+```
+
+Generate data models
+```bash
+sqd codegen
+```
+
 
 ### Squid Archive
 
@@ -175,23 +196,34 @@ A `.env` file is required per chain. It is recommended to name it as `.env.<chai
 
 #### 5. Run the processor
 
+
+1. Build the project
 ```bash
-# 1. Build the project
 npm ci
+```
 
-#2 Build squid files
+2. Build squid files
+```bash
 sqd build
+```
 
-#3 Start squid DB
+3. Start squid DB
+```bash
 sqd up
+```
 
-#4 Generate DB schema (If it hasn't been created before)
+4. Generate DB schema (If it hasn't been created before)
+```bash
 sqd migration:generate
+```
 
-#5 Start squid process (should begin to ingest blocks)
+5. Start squid process (should begin to ingest blocks)
+```bash
 sqd process 
+```
 
-# 6. To start the graphql server open the separate terminal and run
+6. To start the graphql server open the separate terminal and run
+```bash
 sqd serve
 ```
 
