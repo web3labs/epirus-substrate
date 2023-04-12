@@ -48,28 +48,38 @@ x-environment: &envs
   BALANCES_STORE: system
 
 services:
-  db:
-    image: postgres:12
+  squid-db:
+    container_name: squid-db
+    image: postgres:15
+    restart: on-failure
+    volumes:
+      - /var/lib/postgresql/data
     environment:
-      POSTGRES_DB: squid
-      POSTGRES_PASSWORD: squid
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "${DB_PORT}:5432"
 
   processor:
-    image: ghcr.io/web3labs/squid-ink-epirus:latest
+    container_name: processor
+    image: squid-local:0.0.15
     environment: *envs
-    command: npm run processor:start
+    command: sh -c "(npx squid-typeorm-migration generate); sleep 5 && npx sqd process"
     depends_on:
-      - "db"
+      - squid-db
 
   query:
-    image: ghcr.io/web3labs/squid-ink-epirus:latest
+    container_name: query
+    image: squid-local:0.0.15
+    restart: on-failure
     environment: *envs
     ports:
-      - "4000:4000"
-      - "3000:3000"
+      - "4351:4350"
+      - "5005:5000"
     depends_on:
-      - "db"
-      - "processor"
+      - processor
+      - squid-db
 ```
 
 #### Bootstrapping the Database
