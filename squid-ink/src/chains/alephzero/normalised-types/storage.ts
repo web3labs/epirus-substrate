@@ -9,7 +9,7 @@ import {
   ContractsOwnerInfoOfStorage,
   SystemAccountStorage,
 } from "../types/storage";
-import { AccountData, AccountInfo } from "../types/v12"
+import { AccountData, AccountInfo } from "../types/v12";
 import { ss58Format } from "../../../chain-config";
 import { OwnerInfo, PrefabWasmModule } from "../types/v20";
 

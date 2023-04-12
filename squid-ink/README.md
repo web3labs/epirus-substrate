@@ -48,28 +48,38 @@ x-environment: &envs
   BALANCES_STORE: system
 
 services:
-  db:
-    image: postgres:12
+  squid-db:
+    container_name: squid-db
+    image: postgres:15
+    restart: on-failure
+    volumes:
+      - /var/lib/postgresql/data
     environment:
-      POSTGRES_DB: squid
-      POSTGRES_PASSWORD: squid
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "${DB_PORT}:5432"
 
   processor:
-    image: ghcr.io/web3labs/squid-ink-epirus:latest
+    container_name: processor
+    image: squid-local:0.0.15
     environment: *envs
-    command: npm run processor:start
+    command: sh -c "(npx squid-typeorm-migration generate); sleep 5 && npx sqd process"
     depends_on:
-      - "db"
+      - squid-db
 
   query:
-    image: ghcr.io/web3labs/squid-ink-epirus:latest
+    container_name: query
+    image: squid-local:0.0.15
+    restart: on-failure
     environment: *envs
     ports:
-      - "4000:4000"
-      - "3000:3000"
+      - "4351:4350"
+      - "5005:5000"
     depends_on:
-      - "db"
-      - "processor"
+      - processor
+      - squid-db
 ```
 
 #### Bootstrapping the Database
@@ -77,11 +87,23 @@ services:
 Before you running the service you need to create the initial database model.
 At this moment the migrations are not pushed neither in the git repository nor the image.
 
-```sh
-docker-compose run processor /bin/sh
-npx sqd db create-migration Init
-npx sqd db migrate
+
+Start squid DB
+```bash
+sqd up
 ```
+
+Generate DB schema (If it hasn't been created before)
+```bash
+sqd migration:generate
+```
+
+Apply DB schema
+```bash
+sqd migration:apply
+```
+
+
 
 ## Testing
 To run the unit tests, use the command
@@ -100,13 +122,22 @@ npm run test:coverage
 
 ### Project Setup
 
-```bash
-# Install dependencies
-npm ci
+Install Squid CLI
 
-# Generate data models
-npx sqd codegen
+```bash
+npm i -g @subsquid/cli@latest
 ```
+or
+```bash
+brew tap subsquid/cli
+brew install sqd
+```
+
+Generate data models
+```bash
+sqd codegen
+```
+
 
 ### Squid Archive
 
@@ -175,31 +206,35 @@ A `.env` file is required per chain. It is recommended to name it as `.env.<chai
 
 #### 5. Run the processor
 
+
+1. Build the project
 ```bash
-# 1. Compile typescript files
-npm run build
+npm ci
+```
 
-# 2. Start target Postgres database (use -d to run in background)
-docker compose up
+2. Build squid files
+```bash
+sqd build
+```
 
-# 3.1. If it's the first time running, create the database first
-npx sqd db create
-npx sqd db create-migration Init
-npx sqd db migrate
+3. Start squid DB
+```bash
+sqd up
+```
 
-#3.2 For subsequent runs, if a clean db is needed, use the script
-npm run schema:reset
+4. Generate DB schema (If it hasn't been created before)
+```bash
+sqd migration:generate
+```
 
-# 5. Now start the processor
-ENV=/path/to/.env npm run processor:start
+5. Start squid process (should begin to ingest blocks)
+```bash
+sqd process 
+```
 
-# 6. The above command will block the terminal
-#    being busy with fetching the chain data, 
-#    transforming and storing it in the target database.
-#
-#    To start the graphql server open the separate terminal
-#    and run
-npx squid-graphql-server
+6. To start the graphql server open the separate terminal and run
+```bash
+sqd serve
 ```
 
 ### Types bundle
