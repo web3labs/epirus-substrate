@@ -5,7 +5,7 @@
 const names = [
   {
     chain: "aleph zero",
-    endpoint: "aleph"
+    endpoint: "aleph-testnet"
   },
   {
     chain: "contracts on rococo",
