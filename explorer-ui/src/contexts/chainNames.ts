@@ -4,6 +4,10 @@
  */
 const names = [
   {
+    chain: "aleph zero",
+    endpoint: "aleph"
+  },
+  {
     chain: "contracts on rococo",
     endpoint: "rococoContracts"
   },
