@@ -25,6 +25,9 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: squid-db
+    ports:
+      - "5433:5432"
+
 
   processor:
     container_name: subsquid-processor

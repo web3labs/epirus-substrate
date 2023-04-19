@@ -27,4 +27,5 @@ export interface Ctx {
   store: any;
   log: any;
   blocks: any;
+  isHead: any;
 }
