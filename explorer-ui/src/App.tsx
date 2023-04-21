@@ -50,17 +50,17 @@ function App () {
         datepickerZIndex: 10
       }
     }}>
-      <Provider value={client}>
-        <Router>
-          <ChainContextProvider>
-            <Toaster position="bottom-right"/>
-            <div className="min-h-screen bg-page overflow-hidden">
-              <div className="relative header pt-3 md:pb-3 md:pt-6">
-                <div className="max-w-7xl mx-auto md:px-2">
-                  <MainNav />
+      <div className="min-h-screen bg-page overflow-hidden">
+        <main className="max-w-7xl mx-auto z-10">
+          <Provider value={client}>
+            <Router>
+              <ChainContextProvider>
+                <Toaster position="bottom-right"/>
+                <div className="relative header pt-3 md:pb-3 md:pt-6">
+                  <div className="max-w-7xl mx-auto md:px-2">
+                    <MainNav />
+                  </div>
                 </div>
-              </div>
-              <main className="max-w-7xl mx-auto z-10">
                 <Routes>
                   <Route index element={<HomePage/>}/>
                   <Route path="accounts" element={<AccountsPage/>} />
@@ -71,22 +71,22 @@ function App () {
                   <Route path="codes/:id/*" element={<CodePage/>} />
                   <Route path="activities" element={<ActivitiesPage/>} />
                 </Routes>
-              </main>
-            </div>
-          </ChainContextProvider>
-        </Router>
-      </Provider>
-      <Provider value={archiveClient}>
-        <Router>
-          <ChainContextProvider>
-            <Routes>
-              <Route path="extrinsic/:id/*" element={<ExtrinsicPage/>} />
-              <Route path="blocks" element={<BlocksPage/>} />
-              <Route path="blocks/:id/*" element={<BlockPage/>} />
-            </Routes>
-          </ChainContextProvider>
-        </Router>
-      </Provider>
+              </ChainContextProvider>
+            </Router>
+          </Provider>
+          <Provider value={archiveClient}>
+            <Router>
+              <ChainContextProvider>
+                <Routes>
+                  <Route path="extrinsic/:id/*" element={<ExtrinsicPage/>} />
+                  <Route path="blocks" element={<BlocksPage/>} />
+                  <Route path="blocks/:id/*" element={<BlockPage/>} />
+                </Routes>
+              </ChainContextProvider>
+            </Router>
+          </Provider>
+        </main>
+      </div>
     </ThemeProvider>
   )
 }
