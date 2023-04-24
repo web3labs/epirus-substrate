@@ -20,12 +20,13 @@ export default function ExtrinsicRow ({
             <Label className="text-xs">{obj.id}</Label>
           </div>
         }
+        isCol={false}
       >
         <div className="flex gap-2 text-sm">
-          <Label>Hash {obj.hash}</Label>
+          <Label>{obj.hash}</Label>
         </div>
-        <div className="flex gap-2 text-sm">
-          <Label>Result {obj.success ? "Success" : "Fail"}</Label>
+        <div className="flex gap-2 text-sm" style={{ display: "inline" }}>
+          <Label>{obj.success ? "Success" : "Fail"}</Label>
         </div>
       </Lane>
     </Row>

@@ -62,7 +62,7 @@ function App () {
                   </div>
                 </div>
                 <Routes>
-                  <Route index element={<HomePage/>}/>
+                  <Route index element={<HomePage/>} />
                   <Route path="accounts" element={<AccountsPage/>} />
                   <Route path="accounts/:id/*" element={<AccountPage/>} />
                   <Route path="contracts" element={<ContractsPage/>} />
