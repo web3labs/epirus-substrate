@@ -7,6 +7,8 @@ import { Label } from "../commons/Label"
 import { LightExtrinsic } from "../../types/extrinsic"
 import ExtrinsicLink from "./ExtrinsicLink"
 // import { shortDate } from "../../formats/time"
+import CheckBadge from "../badges/CheckBadge"
+import CrossBadge from "../badges/CrossBadge"
 
 export default function ExtrinsicRow ({
   obj,
@@ -27,7 +29,7 @@ export default function ExtrinsicRow ({
           <Label className="text-xs">{obj.hash}</Label>
         </div>
         <div className="flex gap-2 text-sm" style={{ display: "inline" }}>
-          <Label>{obj.success ? "Success" : "Fail"}</Label>
+          <Label>{obj.success ? <CheckBadge/> : <CrossBadge/>}</Label>
         </div>
       </Lane>
     </Row>

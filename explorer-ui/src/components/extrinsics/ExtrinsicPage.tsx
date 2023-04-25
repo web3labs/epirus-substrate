@@ -18,6 +18,8 @@ import Copy from "../commons/Copy"
 import { longDateTime } from "../../formats/time"
 import { PageLoading } from "../loading/Loading"
 import { ExtrinsicPageType } from "../../types/extrinsic"
+import CheckBadge from "../badges/CheckBadge"
+import CrossBadge from "../badges/CrossBadge"
 
 const QUERY = `
 query($id: String!) {
@@ -125,11 +127,11 @@ export default function ExtrinsicPage () {
                 />
                 <Definition
                   label="Status"
-                  term={<span>{success ? "success" : "fail"}</span>}
+                  term={<span>{success ? <CheckBadge/> : <CrossBadge/>}</span>}
                 />
                 <Definition label="Hash" term={<span>{hash}</span>} />
-                <Definition label="Fee" term={<span>{fee}</span>} />
-                <Definition label="Tip" term={<span>{tip}</span>} />
+                <Definition label="Fee" term={<span>{fee ? fee.toString() : "-"}</span>} />
+                <Definition label="Tip" term={<span>{tip ? tip.toString() : "-"}</span>} />
                 <Definition label="Action" term={<span>{call.name}</span>} />
               </DefinitionList>
             </Segment>
