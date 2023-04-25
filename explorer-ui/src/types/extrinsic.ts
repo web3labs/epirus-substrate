@@ -33,9 +33,25 @@ export interface LightExtrinsic {
 
 export interface CallRef {
   name: string
+  args?: Args
 }
 
 export interface ExtrinsicForEvent {
   id: string, 
   call: CallRef
+}
+
+export interface BlockRef {
+  id: string,
+  timestamp: Date
+}
+
+export interface ExtrinsicPageType {
+  id:string
+  tip:string
+  success:boolean
+  fee: number
+  block: BlockRef
+  call: CallRef
+  hash: string
 }

@@ -1,7 +1,7 @@
-import React, { useMemo } from "react"
+import React /*, { useMemo } */ from "react"
 import { useParams } from "react-router-dom"
 // import { useChainProperties } from "../../contexts/ChainContext
-// import useSquid from "../../hooks/useSquid
+import useSquid from "../../hooks/useSquid"
 import CodeBadge from "../badges/CodeBadge"
 import Box, { BoxHead } from "../commons/Box"
 import Segment from "../commons/Segment"
@@ -9,43 +9,39 @@ import Breadcrumbs from "../navigation/Breadcrumbs"
 // import { Account } from "../../types/accounts
 import AccountAddress from "../accounts/AccountAddress"
 import Tag from "../commons/Tag"
-import Tabs, { TabItem } from "../navigation/Tabs"
+// import Tabs, { TabItem } from "../navigation/Tabs"
 import { Definition, DefinitionList } from "../commons/Definitions"
-import EventsTab, { eventsByExtrinsicId } from "./EventsTab"
+// import EventsTab, { eventsByExtrinsicId } from "./EventsTab"
 // import { Extrinsic } from "../../types/extrinsic
 import Copy from "../commons/Copy"
 // import { AccountUnit } from "../commons/Text
 import { longDateTime } from "../../formats/time"
-// import { PageLoading } from "../loading/Loading"
+import { PageLoading } from "../loading/Loading"
+import { ExtrinsicPageType } from "../../types/extrinsic"
 
-/*
 const QUERY = `
 query($id: String!) {
-  accounts(where: {id_eq: $id}) {
+  extrinsics(where: {id_eq: $id}) {
     id
-    tags
-    codesOwned {
+    tip
+    success
+    hash
+    fee
+    block {
       id
+      timestamp
     }
-    contractsDeployed {
-      id
+    call {
+      name
+      args
     }
-    balance {
-      free
-      reserved
-      feeFrozen
-    }
-    contract {
-      id
-    }
-    createdAt
   }
 }
 `
-*/
 export default function ExtrinsicPage () {
   const params = useParams()
 
+  /*
   const tabs: TabItem[] = useMemo(() => {
     if (params.id) {
       return [
@@ -73,6 +69,32 @@ export default function ExtrinsicPage () {
   }
 
   const createdAt = new Date()
+  */
+
+  const [result] = useSquid({
+    query: QUERY,
+    variables: { id: params.id }
+  })
+
+  const { data, fetching } = result
+
+  if (fetching) {
+    return <PageLoading loading={fetching} />
+  }
+
+  if (data?.extrinsics[0] === undefined) {
+    return <div className="m-3">Block not found.</div>
+  }
+
+  const {
+    id,
+    tip,
+    success,
+    fee,
+    block,
+    call,
+    hash
+  } = data?.extrinsics[0] as ExtrinsicPageType
 
   return (
     <>
@@ -82,8 +104,8 @@ export default function ExtrinsicPage () {
           <Box className="col-span-2 divide-y">
             <BoxHead
               title={
-                <Copy text={result.id}>
-                  <AccountAddress address={result.id}>
+                <Copy text={id}>
+                  <AccountAddress address={id}>
                     {<CodeBadge />}
                   </AccountAddress>
                 </Copy>
@@ -95,30 +117,30 @@ export default function ExtrinsicPage () {
               <DefinitionList>
                 <Definition
                   label="Timestamp"
-                  term={<span>{longDateTime(createdAt)}</span>}
+                  term={<span>{longDateTime(block.timestamp)}</span>}
                 />
                 <Definition
                   label="Block"
-                  term={<span>{result.blockNumber}</span>}
+                  term={<span>{block.id}</span>}
                 />
                 <Definition
-                  label="LifeTime"
-                  term={<span>some lifetime</span>}
+                  label="Status"
+                  term={<span>{success ? "success" : "fail"}</span>}
                 />
-                <Definition label="Hash" term={<span>some hash</span>} />
-                <Definition label="From" term={<span>some from</span>} />
-                <Definition label="Fee" term={<span>some fee</span>} />
-                <Definition label="Tip" term={<span>some tip</span>} />
-                <Definition label="Nonce" term={<span>some nonce</span>} />
-                <Definition label="Action" term={<span>some action</span>} />
+                <Definition label="Hash" term={<span>{hash}</span>} />
+                <Definition label="Fee" term={<span>{fee}</span>} />
+                <Definition label="Tip" term={<span>{tip}</span>} />
+                <Definition label="Action" term={<span>{call.name}</span>} />
               </DefinitionList>
             </Segment>
           </Box>
         </div>
 
+        {/*
         <Box className="mt-2">
           <Tabs items={tabs} />
         </Box>
+        */}
       </div>
     </>
   )
