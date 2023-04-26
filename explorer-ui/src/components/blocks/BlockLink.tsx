@@ -1,7 +1,7 @@
 import React from "react"
 import { NavLink } from "react-router-dom"
 import { LightBlock } from "../../types/blocks"
-import CodeBadge from "../badges/CodeBadge"
+import BlockBadge from "../badges/BlockBadge"
 import BlockId from "./BlockId"
 
 export default function BlockLink ({
@@ -29,7 +29,7 @@ export default function BlockLink ({
         className={className}
         size={size}
       >
-        {<CodeBadge size={badgeSize} />}
+        {<BlockBadge size={badgeSize} />}
       </BlockId>
     )
   }
@@ -42,7 +42,7 @@ export default function BlockLink ({
         className={className}
         size={size}
       >
-        {<CodeBadge size={badgeSize} />}
+        {<BlockBadge size={badgeSize} />}
       </BlockId>
     </NavLink>
   )

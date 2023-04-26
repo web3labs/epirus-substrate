@@ -14,7 +14,6 @@ export default function BlockRow ({
 }: TypedRow<LightBlock>) {
   // eslint-disable-next-line no-unused-vars
   const { id, height, timestamp } = obj
-  console.log("timestamp is " + id)
   return (
     <Row key={String(obj.id)}>
       <Lane
