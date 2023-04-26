@@ -1,4 +1,4 @@
-import React /*, { useMemo } */ from "react"
+import React, { useMemo } from "react"
 import { useParams } from "react-router-dom"
 // import { useChainProperties } from "../../contexts/ChainContext
 import useSquid from "../../hooks/useSquid"
@@ -9,9 +9,9 @@ import Breadcrumbs from "../navigation/Breadcrumbs"
 // import { Account } from "../../types/accounts
 import AccountAddress from "../accounts/AccountAddress"
 import Tag from "../commons/Tag"
-// import Tabs, { TabItem } from "../navigation/Tabs"
+import Tabs, { TabItem } from "../navigation/Tabs"
 import { Definition, DefinitionList } from "../commons/Definitions"
-// import EventsTab, { eventsByExtrinsicId } from "./EventsTab"
+import EventsTab, { eventsByExtrinsicId } from "./EventsTab"
 // import { Extrinsic } from "../../types/extrinsic
 import Copy from "../commons/Copy"
 // import { AccountUnit } from "../commons/Text
@@ -43,7 +43,6 @@ query($id: String!) {
 export default function ExtrinsicPage () {
   const params = useParams()
 
-  /*
   const tabs: TabItem[] = useMemo(() => {
     if (params.id) {
       return [
@@ -62,6 +61,7 @@ export default function ExtrinsicPage () {
     return []
   }, [params.id])
 
+  /*
   const result = {
     id: "1",
     createdAt: new Date(),
@@ -85,7 +85,7 @@ export default function ExtrinsicPage () {
   }
 
   if (data?.extrinsics[0] === undefined) {
-    return <div className="m-3">Block not found.</div>
+    return <div className="m-3">Extrinsic not found.</div>
   }
 
   const {
@@ -138,11 +138,9 @@ export default function ExtrinsicPage () {
           </Box>
         </div>
 
-        {/*
         <Box className="mt-2">
           <Tabs items={tabs} />
         </Box>
-        */}
       </div>
     </>
   )

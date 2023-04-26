@@ -46,6 +46,11 @@ export interface BlockRef {
   timestamp: Date
 }
 
+export interface EventRef {
+  id: string,
+  name: string
+}
+
 export interface ExtrinsicPageType {
   id:string
   tip:string
