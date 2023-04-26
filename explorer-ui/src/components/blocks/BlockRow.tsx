@@ -1,5 +1,5 @@
 import React from "react"
-// import { shortDate } from "../../formats/time"
+import { shortDate } from "../../formats/time"
 import { LightBlock } from "../../types/blocks"
 import BlockLink from "./BlockLink"
 import Lane from "../commons/Lane"
@@ -21,7 +21,7 @@ export default function BlockRow ({
         head={
           <div className="flex flex-col gap-1">
             <BlockLink block={obj} currentId={currentId} short={short} />
-            <Label className="text-xs">{timestamp.toString()}</Label>
+            <Label className="text-xs">{shortDate(timestamp)}</Label>
           </div>
         }
       />

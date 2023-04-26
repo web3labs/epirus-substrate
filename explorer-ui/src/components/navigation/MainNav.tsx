@@ -6,7 +6,7 @@ import {
   XMarkIcon,
   CalendarIcon
 } from "@heroicons/react/24/outline"
-import { ChevronDownIcon, ChevronUpIcon, CodeBracketIcon, UsersIcon } from "@heroicons/react/24/solid"
+import { ChevronDownIcon, ChevronUpIcon, CodeBracketIcon, Square3Stack3DIcon, UsersIcon } from "@heroicons/react/24/solid"
 
 import Logo from "../../logo.svg"
 import SearchBox from "../query/search/SearchBox"
@@ -42,6 +42,12 @@ const menuBlockchain = [
     description: "Accounts on the chain",
     to: "/accounts",
     icon: UsersIcon
+  },
+  {
+    name: "Blocks",
+    description: "Blocks on the chain",
+    to: "/blocks",
+    icon: Square3Stack3DIcon
   }
 ]
 
