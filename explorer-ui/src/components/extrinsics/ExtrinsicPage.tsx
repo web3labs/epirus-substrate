@@ -21,6 +21,7 @@ import { ExtrinsicPageType } from "../../types/extrinsic"
 import CheckBadge from "../badges/CheckBadge"
 import CrossBadge from "../badges/CrossBadge"
 // import { getArgValue } from "../../utils/args"
+import SyntaxHighlighter from "react-syntax-highlighter"
 
 const QUERY = `
 query($id: String!) {
@@ -98,7 +99,6 @@ export default function ExtrinsicPage () {
     call,
     hash
   } = data?.extrinsics[0] as ExtrinsicPageType
-
   return (
     <>
       <Breadcrumbs />
@@ -134,7 +134,12 @@ export default function ExtrinsicPage () {
                 <Definition label="Fee" term={<span>{fee ? fee.toString() : "-"}</span>} />
                 <Definition label="Tip" term={<span>{tip ? tip.toString() : "-"}</span>} />
                 <Definition label="Action" term={<span>{call.name}</span>} />
-                <Definition label="Params" term={<span>{call.args ? JSON.stringify(call.args, null, 4) : ""}</span>} />
+                <Definition label="Action" term={<span>{call.name}</span>} />
+                <Definition label="Params" term={
+                  <SyntaxHighlighter language="javascript">
+                    { JSON.stringify(call.args ? call.args : "", null, 4) }
+                  </SyntaxHighlighter>
+                }/>
 
               </DefinitionList>
             </Segment>
