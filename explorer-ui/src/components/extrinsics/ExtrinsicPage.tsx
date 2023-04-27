@@ -134,7 +134,7 @@ export default function ExtrinsicPage () {
                 <Definition label="Fee" term={<span>{fee ? fee.toString() : "-"}</span>} />
                 <Definition label="Tip" term={<span>{tip ? tip.toString() : "-"}</span>} />
                 <Definition label="Action" term={<span>{call.name}</span>} />
-                <Definition label="Params" term={<span>{call.args ? JSON.stringify(call.args) : ""}</span>} />
+                <Definition label="Params" term={<span>{call.args ? JSON.stringify(call.args, null, 4) : ""}</span>} />
 
               </DefinitionList>
             </Segment>
