@@ -20,6 +20,7 @@ import { PageLoading } from "../loading/Loading"
 import { ExtrinsicPageType } from "../../types/extrinsic"
 import CheckBadge from "../badges/CheckBadge"
 import CrossBadge from "../badges/CrossBadge"
+// import { getArgValue } from "../../utils/args"
 
 const QUERY = `
 query($id: String!) {
@@ -133,6 +134,8 @@ export default function ExtrinsicPage () {
                 <Definition label="Fee" term={<span>{fee ? fee.toString() : "-"}</span>} />
                 <Definition label="Tip" term={<span>{tip ? tip.toString() : "-"}</span>} />
                 <Definition label="Action" term={<span>{call.name}</span>} />
+                <Definition label="Params" term={<span>{call.args ? JSON.stringify(call.args) : ""}</span>} />
+
               </DefinitionList>
             </Segment>
           </Box>
