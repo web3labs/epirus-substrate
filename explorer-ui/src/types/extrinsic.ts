@@ -1,3 +1,4 @@
+import { LightBlock } from "./blocks"
 export type Args = Record<string, string> | Record<string, number> | Record<string, undefined>;
 
 export interface ExtrinsicError {
@@ -41,11 +42,6 @@ export interface ExtrinsicForEvent {
   call: CallRef
 }
 
-export interface BlockRef {
-  id: string,
-  timestamp: Date
-}
-
 export interface EventRef {
   id: string,
   name: string
@@ -56,7 +52,7 @@ export interface ExtrinsicPageType {
   tip:string
   success:boolean
   fee: number
-  block: BlockRef
+  block: LightBlock
   call: CallRef
   hash: string
 }

@@ -9,18 +9,21 @@ export default function BlockLink ({
   currentId,
   className = "",
   short,
-  size
+  size,
+  showBadge = true
 }: {
   block: LightBlock;
-  currentId?: string;
+  currentId?: String;
   className?: string;
   short?: boolean;
   size?: number;
+  showBadge?: boolean;
 }) {
   // eslint-disable-next-line no-unused-vars
   const { id, height, ..._ } = block
   const badgeSize = size ? size / 3 + 2 : undefined
 
+  /*
   if (id === currentId) {
     return (
       <BlockId
@@ -33,6 +36,7 @@ export default function BlockLink ({
       </BlockId>
     )
   }
+  */
 
   return (
     <NavLink to={`/blocks/${id}`} className="link">
@@ -41,8 +45,9 @@ export default function BlockLink ({
         short={short}
         className={className}
         size={size}
+        showBadge={showBadge}
       >
-        {<BlockBadge size={badgeSize} />}
+        <>{ showBadge === true && <BlockBadge size={badgeSize} /> }</>
       </BlockId>
     </NavLink>
   )

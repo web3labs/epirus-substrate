@@ -22,6 +22,7 @@ import CheckBadge from "../badges/CheckBadge"
 import CrossBadge from "../badges/CrossBadge"
 // import { getArgValue } from "../../utils/args"
 import SyntaxHighlighter from "react-syntax-highlighter"
+import BlockLink from "../blocks/BlockLink"
 
 const QUERY = `
 query($id: String!) {
@@ -33,6 +34,7 @@ query($id: String!) {
     fee
     block {
       id
+      height
       timestamp
     }
     call {
@@ -123,8 +125,8 @@ export default function ExtrinsicPage () {
                   term={<span>{longDateTime(block.timestamp)}</span>}
                 />
                 <Definition
-                  label="Block"
-                  term={<span>{block.id}</span>}
+                  label="Block#"
+                  term={<span>{<BlockLink block={block} currentId={block.id} short={false} showBadge={false} />}</span>}
                 />
                 <Definition
                   label="Status"
@@ -133,7 +135,6 @@ export default function ExtrinsicPage () {
                 <Definition label="Hash" term={<span>{hash}</span>} />
                 <Definition label="Fee" term={<span>{fee ? fee.toString() : "-"}</span>} />
                 <Definition label="Tip" term={<span>{tip ? tip.toString() : "-"}</span>} />
-                <Definition label="Action" term={<span>{call.name}</span>} />
                 <Definition label="Action" term={<span>{call.name}</span>} />
                 <Definition label="Params" term={
                   <SyntaxHighlighter language="javascript">

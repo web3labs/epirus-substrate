@@ -11,6 +11,7 @@ interface Props {
   children?: JSX.Element | null;
   className?: string;
   size?: number;
+  showBadge?: boolean;
 }
 
 export default function BlockId ({
@@ -18,17 +19,20 @@ export default function BlockId ({
   short = true,
   children,
   className = "",
-  size = 32
+  size = 32,
+  showBadge = true
 }: Props) {
   if (blockId) {
     return (
       <div
         className={classNames("flex flex-wrap items-center gap-x-2", className)}
       >
+        <>{ showBadge &&
         <div className="relative">
           <Identicon value={blockId} size={size} theme="polkadot" />
           {children}
         </div>
+        }</>
         <Mobile>
           <div className="overflow-hidden text-ellipsis">
             <AddressText address={blockId} />
