@@ -53,8 +53,8 @@ function App () {
     }}>
       <div className="min-h-screen bg-page overflow-hidden">
         <main className="max-w-7xl mx-auto z-10">
-          <Provider value={client}>
-            <Router>
+          <Router>
+            <Provider value={client}>
               <ChainContextProvider>
                 <Toaster position="bottom-right"/>
                 <div className="relative header pt-3 md:pb-3 md:pt-6">
@@ -73,10 +73,8 @@ function App () {
                   <Route path="activities" element={<ActivitiesPage/>} />
                 </Routes>
               </ChainContextProvider>
-            </Router>
-          </Provider>
-          <Provider value={archiveClient}>
-            <Router>
+            </Provider>
+            <Provider value={archiveClient}>
               <ChainContextProvider>
                 <Routes>
                   <Route index element={<BlocksHomePage/>} />
@@ -85,8 +83,8 @@ function App () {
                   <Route path="blocks/:id/*" element={<BlockPage/>} />
                 </Routes>
               </ChainContextProvider>
-            </Router>
-          </Provider>
+            </Provider>
+          </Router>
         </main>
       </div>
     </ThemeProvider>
