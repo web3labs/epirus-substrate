@@ -12,7 +12,7 @@ import { useParams } from "react-router-dom"
 import { longDateTime } from "../../formats/time"
 import Tabs, { TabItem } from "../navigation/Tabs"
 import EventsTab, { eventsByBlockId } from "./EventsTab"
-import LogTab, { logByAccount } from "./LogTab"
+// import LogTab, { logByAccount } from "./LogTab"
 import ExtrinsicsTab, {
   extrinsicsByBlockId
 } from "../extrinsics/ExtrinsicsTab"
@@ -101,13 +101,6 @@ export default function BlockPage () {
               currentId={params.id}
               where={eventsByBlockId(params.id)}
             />
-          )
-        },
-        {
-          label: "Log",
-          to: "codes",
-          element: (
-            <LogTab currentId={params.id} where={logByAccount(params.id)} />
           )
         }
       ]
