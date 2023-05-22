@@ -1,5 +1,5 @@
 import React from "react"
-import { TabQuery } from "../navigation/Tabs"
+import { TabQuery } from "../../navigation/Tabs"
 import EventList from "./EventList"
 
 export function eventsByBlockId (id: string) {

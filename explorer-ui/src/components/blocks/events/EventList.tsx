@@ -1,12 +1,12 @@
 import React from "react"
-import { Edge, Page } from "../../types/pagination"
-import { Event } from "../../types/blocks"
-import List, { ListProps } from "../commons/List"
+import { Edge, Page } from "../../../types/pagination"
+import { Event } from "../../../types/blocks"
+import List, { ListProps } from "../../commons/List"
 import EventRow from "./EventRow"
-import ListQuery, { UpdateMode } from "../query/ListQuery"
-import SortBy from "../query/SortBy"
-import Filters from "../query/Filters"
-import Pagination from "../navigation/Pagination"
+import ListQuery, { UpdateMode } from "../../query/ListQuery"
+import SortBy from "../../query/SortBy"
+import Filters from "../../query/Filters"
+import Pagination from "../../navigation/Pagination"
 
 export const EVENT_SORT_OPTIONS = [
   {
