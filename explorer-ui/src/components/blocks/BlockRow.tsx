@@ -23,6 +23,12 @@ export default function BlockRow ({
             <Label className="text-xs">{shortDate(timestamp)}</Label>
           </div>
         }
+        tail={
+          <div className="flex gap-2 text-sm">
+            <Label>Id</Label>
+            <Label >{obj.id}</Label>
+          </div>
+        }
       />
     </Row>
   )
