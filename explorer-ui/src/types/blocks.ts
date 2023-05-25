@@ -6,6 +6,12 @@ export type LightBlock = {
   height: number;
   // is this the block creation time
   timestamp: Date;
+  events?: [{
+    id: string
+  }]
+  extrinsics?: [{
+    id: string
+  }]
 };
 
 export interface Spec {

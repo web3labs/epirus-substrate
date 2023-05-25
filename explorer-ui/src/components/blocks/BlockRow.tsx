@@ -24,9 +24,17 @@ export default function BlockRow ({
           </div>
         }
         tail={
-          <div className="flex gap-2 text-sm">
-            <Label>Id</Label>
-            <Label >{obj.id}</Label>
+          <div>
+            <div className="flex gap-2 text-sm">
+              <Label>Id:</Label>
+              <Label >{obj.id}</Label>
+            </div>
+            <div className="flex gap-2 text-sm">
+              <Label>Events:</Label>
+              <Label >{obj.events ? obj.events.length : 0}</Label>
+              <Label>Extrinsics:</Label>
+              <Label >{obj.extrinsics ? obj.extrinsics.length : 0}</Label>
+            </div>
           </div>
         }
       />

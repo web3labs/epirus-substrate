@@ -53,6 +53,12 @@ query($where: BlockWhereInput = {}, $first: Int!, $after: String = null, $orderB
         id
         height
         timestamp
+        events {
+          id
+        }
+        extrinsics {
+          id
+        }
       }
     }
   }
