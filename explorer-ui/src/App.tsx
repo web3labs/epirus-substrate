@@ -15,7 +15,7 @@ import ChainContextProvider from "./contexts/ChainContext"
 import AccountsPage from "./components/accounts/AccountsPage"
 import AccountPage from "./components/accounts/AccountPage"
 import HomePage from "./components/HomePage"
-import BlocksHomePage from "./components/BlocksHomePage"
+// import BlocksHomePage from "./components/BlocksHomePage"
 import { Toaster } from "react-hot-toast"
 import CodePage from "./components/codes/CodePage"
 import CodesPage from "./components/codes/CodesPage"
@@ -77,7 +77,6 @@ function App () {
             <Provider value={archiveClient}>
               <ChainContextProvider>
                 <Routes>
-                  <Route index element={<BlocksHomePage/>} />
                   <Route path="extrinsic/:id/*" element={<ExtrinsicPage/>} />
                   <Route path="blocks" element={<BlocksPage/>} />
                   <Route path="blocks/:id/*" element={<BlockPage/>} />
