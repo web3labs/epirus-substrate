@@ -6,6 +6,7 @@ import Lane from "../commons/Lane"
 import { Row, TypedRow } from "../commons/List"
 // import CodeLink from "../codes/CodeLink
 import { Label } from "../commons/Label"
+import { NavLink } from "react-router-dom"
 
 export default function BlockRow ({
   obj,
@@ -23,21 +24,20 @@ export default function BlockRow ({
             <Label className="text-xs">{shortDate(timestamp)}</Label>
           </div>
         }
-        tail={
-          <div>
-            <div className="flex gap-2 text-sm">
-              <Label>Id:</Label>
-              <Label >{obj.id}</Label>
-            </div>
-            <div className="flex gap-2 text-sm">
-              <Label>Events:</Label>
-              <Label >{obj.events ? obj.events.length : 0}</Label>
-              <Label>Extrinsics:</Label>
-              <Label >{obj.extrinsics ? obj.extrinsics.length : 0}</Label>
-            </div>
+      >
+        <div>
+          <div className="flex gap-2 text-sm">
+            <Label>Id:</Label>
+            <Label >{obj.id}</Label>
           </div>
-        }
-      />
+          <div className="flex gap-2 text-sm">
+            <Label>Extrinsics:</Label>
+            <Label><NavLink to={`/blocks/${obj.id}`} className="link">{obj.events ? obj.events.length : 0}</NavLink></Label>
+            <Label>Events:</Label>
+            <Label><NavLink to={`/blocks/${obj.id}/events`} className="link">{obj.extrinsics ? obj.extrinsics.length : 0}</NavLink></Label>
+          </div>
+        </div>
+      </Lane>
     </Row>
   )
 }

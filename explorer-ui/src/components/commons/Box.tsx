@@ -3,7 +3,8 @@ import { classNames } from "../../utils/strings"
 
 interface BoxProps {
     children: JSX.Element | JSX.Element[],
-    className?: string
+    className?: string,
+    isContainer?: boolean
 }
 
 interface HeadProps {
@@ -24,10 +25,11 @@ export function BoxHead ({ title, tag }: HeadProps) {
   )
 }
 
-export default function Box ({ children, className = "" }: BoxProps) {
+export default function Box ({ children, className = "", isContainer = true }: BoxProps) {
   return (
     <div className={classNames(
-      "flex flex-col container w-full items-start justify-start bg-over shadow",
+      "flex flex-col items-start justify-start bg-over shadow",
+      isContainer ? "container w-full " : "",
       className
     )}>
       {children}

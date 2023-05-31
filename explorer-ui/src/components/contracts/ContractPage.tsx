@@ -24,6 +24,7 @@ import ContractUpgrades from "./ContractUpgrade"
 import { ContractTermination } from "./ContractTermination"
 import { DefinitionList, Definition } from "../commons/Definitions"
 import { getArg } from "../../utils/args"
+import SideBar from "../SideBar"
 
 const QUERY = `
 query($id: String!, $codeHashChangeOrderBy: [CodeHashChangeOrderByInput!] ) {
@@ -160,98 +161,101 @@ export default function ContractPage () {
   return (
     <>
       <Breadcrumbs/>
-      <div className="content">
+      <div className="flex flex-row gap-2">
+        <SideBar highlight={6}/>
+        <div className="content w-full">
 
-        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-2">
-          <Box className="col-span-2 divide-y">
-            <BoxHead
-              title={
-                <Copy text={id}>
-                  <AccountAddress address={id}>
-                    <CodeBadge/>
-                  </AccountAddress>
-                </Copy>
-              }
-              tag={
-                <>
-                  <Tag label="wasm" />
-                  {isUpgraded && <Tag label="upgraded" />}
-                  {terminatedAt && <Tag label="terminated" />}
-                </>
-              }
-            />
-            <Segment>
-              <DefinitionList>
-                <Definition label="Created on" term={
-                  <span>{longDateTime(createdAt)}</span>
-                }/>
-                <Definition label="Deployer" term={
-                  <AccountLink account={deployer} size={21} />
-                } />
-                <Definition label="Code Hash" term={
-                  <CodeLink id={contractCode.id} />
-                }/>
-                {typeof salt === "string" && (salt as string).length > 2 &&
-                  <Definition label="Salt" term={
-                    <HexText short={true}>{salt}</HexText>
-                  }/>
+          <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-2">
+            <Box className="col-span-2 divide-y">
+              <BoxHead
+                title={
+                  <Copy text={id}>
+                    <AccountAddress address={id}>
+                      <CodeBadge/>
+                    </AccountAddress>
+                  </Copy>
                 }
-              </DefinitionList>
-            </Segment>
+                tag={
+                  <>
+                    <Tag label="wasm" />
+                    {isUpgraded && <Tag label="upgraded" />}
+                    {terminatedAt && <Tag label="terminated" />}
+                  </>
+                }
+              />
+              <Segment>
+                <DefinitionList>
+                  <Definition label="Created on" term={
+                    <span>{longDateTime(createdAt)}</span>
+                  }/>
+                  <Definition label="Deployer" term={
+                    <AccountLink account={deployer} size={21} />
+                  } />
+                  <Definition label="Code Hash" term={
+                    <CodeLink id={contractCode.id} />
+                  }/>
+                  {typeof salt === "string" && (salt as string).length > 2 &&
+                    <Definition label="Salt" term={
+                      <HexText short={true}>{salt}</HexText>
+                    }/>
+                  }
+                </DefinitionList>
+              </Segment>
 
-            <ExtrinsicSummary
-              title="Creation Details"
-              extrinsic={createdFrom}
-              token={token}
-              isOpen={false}
-            />
-            <>
-              {terminatedFrom && <ContractTermination
-                title="Termination Details"
-                extrinsic={terminatedFrom}
-                beneficiary={terminationBeneficiary}
+              <ExtrinsicSummary
+                title="Creation Details"
+                extrinsic={createdFrom}
+                token={token}
                 isOpen={false}
-              />}
-            </>
-            <>
-              {isUpgraded && <ContractUpgrades codeHashChanges={codeHashChanges}/>}
-            </>
-          </Box>
-          <Box className="divide-y">
-            <Segment title="Balance">
-              <DefinitionList>
-                <Definition
-                  className="justify-between"
-                  label="Free"
-                  term={<AccountUnit amount={balance?.free} token={token} />}
-                />
-                <Definition
-                  className="justify-between"
-                  label="Reserved"
-                  term={<AccountUnit amount={balance?.reserved} token={token} />}
-                />
-              </DefinitionList>
-            </Segment>
-            { storageInfo &&
-            <Segment title="Storage">
-              <DefinitionList>
-                <Definition
-                  className="justify-between"
-                  label="Base"
-                  term={<AccountUnit
-                    amount={storageInfo.storageBaseDeposit}
-                    token={token}
-                  />}
-                />
-              </DefinitionList>
-            </Segment>
-            }
+              />
+              <>
+                {terminatedFrom && <ContractTermination
+                  title="Termination Details"
+                  extrinsic={terminatedFrom}
+                  beneficiary={terminationBeneficiary}
+                  isOpen={false}
+                />}
+              </>
+              <>
+                {isUpgraded && <ContractUpgrades codeHashChanges={codeHashChanges}/>}
+              </>
+            </Box>
+            <Box className="divide-y">
+              <Segment title="Balance">
+                <DefinitionList>
+                  <Definition
+                    className="justify-between"
+                    label="Free"
+                    term={<AccountUnit amount={balance?.free} token={token} />}
+                  />
+                  <Definition
+                    className="justify-between"
+                    label="Reserved"
+                    term={<AccountUnit amount={balance?.reserved} token={token} />}
+                  />
+                </DefinitionList>
+              </Segment>
+              { storageInfo &&
+              <Segment title="Storage">
+                <DefinitionList>
+                  <Definition
+                    className="justify-between"
+                    label="Base"
+                    term={<AccountUnit
+                      amount={storageInfo.storageBaseDeposit}
+                      token={token}
+                    />}
+                  />
+                </DefinitionList>
+              </Segment>
+              }
+            </Box>
+          </div>
+
+          <Box className="mt-2">
+            <Tabs items={tabs} />
           </Box>
         </div>
-
-        <Box className="mt-2">
-          <Tabs items={tabs} />
-        </Box>
       </div>
     </>
   )

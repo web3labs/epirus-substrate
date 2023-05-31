@@ -23,6 +23,7 @@ import CrossBadge from "../badges/CrossBadge"
 // import { getArgValue } from "../../utils/args"
 import SyntaxHighlighter from "react-syntax-highlighter"
 import BlockLink from "../blocks/BlockLink"
+import SideBar from "../SideBar"
 
 const QUERY = `
 query($id: String!) {
@@ -104,52 +105,55 @@ export default function ExtrinsicPage () {
   return (
     <>
       <Breadcrumbs />
-      <div className="content">
-        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-2">
-          <Box className="col-span-2 divide-y">
-            <BoxHead
-              title={
-                <Copy text={id}>
-                  <AccountAddress address={id}>
-                    {<CodeBadge />}
-                  </AccountAddress>
-                </Copy>
-              }
-              tag={<Tag label="success" />}
-            />
+      <div className="flex flex-row gap-2">
+        <SideBar highlight={4} />
+        <div className="content w-full">
+          <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-2">
+            <Box className="col-span-2 divide-y">
+              <BoxHead
+                title={
+                  <Copy text={id}>
+                    <AccountAddress address={id}>
+                      {<CodeBadge />}
+                    </AccountAddress>
+                  </Copy>
+                }
+                tag={<Tag label="success" />}
+              />
 
-            <Segment>
-              <DefinitionList>
-                <Definition
-                  label="Timestamp"
-                  term={<span>{longDateTime(block.timestamp)}</span>}
-                />
-                <Definition
-                  label="Block#"
-                  term={<span>{<BlockLink block={block} currentId={block.id} short={false} showBadge={false} />}</span>}
-                />
-                <Definition
-                  label="Status"
-                  term={<span>{success ? <CheckBadge/> : <CrossBadge/>}</span>}
-                />
-                <Definition label="Hash" term={<span>{hash}</span>} />
-                <Definition label="Fee" term={<span>{fee ? fee.toString() : "-"}</span>} />
-                <Definition label="Tip" term={<span>{tip ? tip.toString() : "-"}</span>} />
-                <Definition label="Action" term={<span>{call.name}</span>} />
-                <Definition label="Params" term={
-                  <SyntaxHighlighter language="javascript">
-                    { JSON.stringify(call.args ? call.args : "", null, 4) }
-                  </SyntaxHighlighter>
-                }/>
+              <Segment>
+                <DefinitionList>
+                  <Definition
+                    label="Timestamp"
+                    term={<span>{longDateTime(block.timestamp)}</span>}
+                  />
+                  <Definition
+                    label="Block#"
+                    term={<span>{<BlockLink block={block} currentId={block.id} short={false} showBadge={false} />}</span>}
+                  />
+                  <Definition
+                    label="Status"
+                    term={<span>{success ? <CheckBadge/> : <CrossBadge/>}</span>}
+                  />
+                  <Definition label="Hash" term={<span>{hash}</span>} />
+                  <Definition label="Fee" term={<span>{fee ? fee.toString() : "-"}</span>} />
+                  <Definition label="Tip" term={<span>{tip ? tip.toString() : "-"}</span>} />
+                  <Definition label="Action" term={<span>{call.name}</span>} />
+                  <Definition label="Params" term={
+                    <SyntaxHighlighter language="javascript">
+                      { JSON.stringify(call.args ? call.args : "", null, 4) }
+                    </SyntaxHighlighter>
+                  }/>
 
-              </DefinitionList>
-            </Segment>
+                </DefinitionList>
+              </Segment>
+            </Box>
+          </div>
+
+          <Box className="mt-2">
+            <Tabs items={tabs} />
           </Box>
         </div>
-
-        <Box className="mt-2">
-          <Tabs items={tabs} />
-        </Box>
       </div>
     </>
   )

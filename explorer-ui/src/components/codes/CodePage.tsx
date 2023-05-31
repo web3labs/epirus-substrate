@@ -20,6 +20,7 @@ import { longDateTime } from "../../formats/time"
 import CodeHash from "./CodeHash"
 import { PageLoading } from "../loading/Loading"
 import SourceTab from "./sources/SourceTab"
+import SideBar from "../SideBar"
 
 const SOURCE_CODE_ENABLED = (
   window.__RUNTIME_CONFIG__?.REACT_APP_SOURCE_CODE_ENABLED ||
@@ -115,51 +116,54 @@ export default function CodePage () {
   return (
     <>
       <Breadcrumbs/>
-      <div className="content">
-        <Box className="divide-y">
-          <BoxHead
-            title={
-              <Copy text={id}>
-                <CodeHash hash={id} size={21} />
-              </Copy>
-            }
-            tag={<Tag label="wasm" />}
-          />
-          <Segment>
-            <DefinitionList>
-              <Definition label="Created on" term={
-                <span>{longDateTime(createdAt)}</span>
-              }/>
-              <Definition label="Owner" term={
-                <AccountLink account={owner} size={21} />
-              }/>
-              <Definition label="Deposit" term={
-                <span className="font-mono">
-                  {depositLimit || "unlimited"}
-                </span>
-              }/>
-            </DefinitionList>
-          </Segment>
+      <div className="flex flex-row gap-2">
+        <SideBar highlight={5} />
+        <div className="content w-full">
+          <Box className="divide-y">
+            <BoxHead
+              title={
+                <Copy text={id}>
+                  <CodeHash hash={id} size={21} />
+                </Copy>
+              }
+              tag={<Tag label="wasm" />}
+            />
+            <Segment>
+              <DefinitionList>
+                <Definition label="Created on" term={
+                  <span>{longDateTime(createdAt)}</span>
+                }/>
+                <Definition label="Owner" term={
+                  <AccountLink account={owner} size={21} />
+                }/>
+                <Definition label="Deposit" term={
+                  <span className="font-mono">
+                    {depositLimit || "unlimited"}
+                  </span>
+                }/>
+              </DefinitionList>
+            </Segment>
 
-          <ExtrinsicSummary
-            title="Creation Details"
-            extrinsic={createdFrom}
-            token={token}
-            isOpen={false}
-          />
-          <>
-            {removedFrom && <ExtrinsicSummary
-              title="Removal Details"
-              extrinsic={removedFrom}
+            <ExtrinsicSummary
+              title="Creation Details"
+              extrinsic={createdFrom}
               token={token}
               isOpen={false}
-            />}
-          </>
-        </Box>
+            />
+            <>
+              {removedFrom && <ExtrinsicSummary
+                title="Removal Details"
+                extrinsic={removedFrom}
+                token={token}
+                isOpen={false}
+              />}
+            </>
+          </Box>
 
-        <Box className="mt-2">
-          <Tabs items={tabs} />
-        </Box>
+          <Box className="mt-2">
+            <Tabs items={tabs} />
+          </Box>
+        </div>
       </div>
     </>
   )

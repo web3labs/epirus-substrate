@@ -52,13 +52,13 @@ function App () {
       }
     }}>
       <div className="min-h-screen bg-page overflow-hidden">
-        <main className="max-w-7xl mx-auto z-10">
+        <main className="ml-2 mr-2 z-10">
           <Router>
             <Provider value={client}>
               <ChainContextProvider>
                 <Toaster position="bottom-right"/>
                 <div className="relative header pt-3 md:pb-3 md:pt-6">
-                  <div className="max-w-7xl mx-auto md:px-2">
+                  <div className="mx-auto md:px-2">
                     <MainNav />
                   </div>
                 </div>
