@@ -10,9 +10,9 @@ export default function CodesPage () {
   return (
     <>
       <Breadcrumbs/>
-      <div className="flex flex-row gap-2">
-        <SideBar highlight={5}/>
-        <Box className="content">
+      <div className="flex flex-row gap-2 mt-2">
+        <SideBar highlight={4}/>
+        <Box>
           <CodeList
             pageQuery={{
               first: 15,

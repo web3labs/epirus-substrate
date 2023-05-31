@@ -31,9 +31,9 @@ export default function ActivitiesPage () {
   return (
     <>
       <Breadcrumbs/>
-      <div className="flex flex-row gap-2">
-        <SideBar highlight={3}/>
-        <Box className="content">
+      <div className="flex flex-row gap-2 mt-2">
+        <SideBar highlight={2}/>
+        <Box>
           <ActivityList
             pageQuery={{
               first: 15,

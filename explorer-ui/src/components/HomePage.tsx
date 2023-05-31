@@ -9,7 +9,7 @@ import SideBar from "./SideBar"
 export default function HomePage () {
   return (
     <div className="content flex flex-row space-y-4 md:space-y-0 md:gap-2">
-      <SideBar highlight={1}/>
+      <SideBar highlight={0}/>
       <Box isContainer={false} >
         <ActivityList
           short={true}

@@ -10,9 +10,9 @@ export default function ContractsPage () {
   return (
     <>
       <Breadcrumbs/>
-      <div className="flex flex-row gap-2">
-        <SideBar highlight={6}/>
-        <Box className="content">
+      <div className="flex flex-row gap-2 mt-2">
+        <SideBar highlight={5}/>
+        <Box>
           <ContractList
             pageQuery={{
               first: 15,

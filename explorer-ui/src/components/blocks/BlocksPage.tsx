@@ -9,8 +9,8 @@ export default function BlocksPage () {
   return (
     <>
       <Breadcrumbs/>
-      <div className="flex flex-row gap-2">
-        <SideBar highlight={4}/>
+      <div className="flex flex-row gap-2 mt-2">
+        <SideBar highlight={3}/>
         <Box>
           <BlockList
             short={true}
