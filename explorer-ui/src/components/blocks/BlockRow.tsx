@@ -29,6 +29,8 @@ export default function BlockRow ({
           <div className="flex gap-2 text-sm">
             <Label>Id:</Label>
             <Label >{obj.id}</Label>
+            <Label>Hash:</Label>
+            <Label >{obj.hash}</Label>
           </div>
           <div className="flex gap-2 text-sm">
             <Label>Extrinsics:</Label>

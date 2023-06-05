@@ -105,50 +105,48 @@ export default function ExtrinsicPage () {
   return (
     <>
       <Breadcrumbs />
-      <div className="flex flex-row gap-2">
-        <SideBar highlight={4} />
-        <div className="content w-full">
-          <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-2">
-            <Box className="col-span-2 divide-y">
-              <BoxHead
-                title={
-                  <Copy text={id}>
-                    <AccountAddress address={id}>
-                      {<CodeBadge />}
-                    </AccountAddress>
-                  </Copy>
-                }
-                tag={<Tag label="success" />}
-              />
+      <div className="flex flex-row gap-2 mt-2">
+        <SideBar highlight={1} />
+        <div className="flex flex-col container">
+          <Box className="col-span-2 divide-y">
+            <BoxHead
+              title={
+                <Copy text={id}>
+                  <AccountAddress address={id}>
+                    {<CodeBadge />}
+                  </AccountAddress>
+                </Copy>
+              }
+              tag={<Tag label="success" />}
+            />
 
-              <Segment>
-                <DefinitionList>
-                  <Definition
-                    label="Timestamp"
-                    term={<span>{longDateTime(block.timestamp)}</span>}
-                  />
-                  <Definition
-                    label="Block#"
-                    term={<span>{<BlockLink block={block} currentId={block.id} short={false} showBadge={false} />}</span>}
-                  />
-                  <Definition
-                    label="Status"
-                    term={<span>{success ? <CheckBadge/> : <CrossBadge/>}</span>}
-                  />
-                  <Definition label="Hash" term={<span>{hash}</span>} />
-                  <Definition label="Fee" term={<span>{fee ? fee.toString() : "-"}</span>} />
-                  <Definition label="Tip" term={<span>{tip ? tip.toString() : "-"}</span>} />
-                  <Definition label="Action" term={<span>{call.name}</span>} />
-                  <Definition label="Params" term={
-                    <SyntaxHighlighter language="javascript">
-                      { JSON.stringify(call.args ? call.args : "", null, 4) }
-                    </SyntaxHighlighter>
-                  }/>
+            <Segment>
+              <DefinitionList>
+                <Definition
+                  label="Timestamp"
+                  term={<span>{longDateTime(block.timestamp)}</span>}
+                />
+                <Definition
+                  label="Block#"
+                  term={<span>{<BlockLink block={block} currentId={block.id} short={false} showBadge={false} />}</span>}
+                />
+                <Definition
+                  label="Status"
+                  term={<span>{success ? <CheckBadge/> : <CrossBadge/>}</span>}
+                />
+                <Definition label="Hash" term={<span>{hash}</span>} />
+                <Definition label="Fee" term={<span>{fee ? fee.toString() : "-"}</span>} />
+                <Definition label="Tip" term={<span>{tip ? tip.toString() : "-"}</span>} />
+                <Definition label="Action" term={<span>{call.name}</span>} />
+                <Definition label="Params" term={
+                  <SyntaxHighlighter language="javascript">
+                    { JSON.stringify(call.args ? call.args : "", null, 4) }
+                  </SyntaxHighlighter>
+                }/>
 
-                </DefinitionList>
-              </Segment>
-            </Box>
-          </div>
+              </DefinitionList>
+            </Segment>
+          </Box>
 
           <Box className="mt-2">
             <Tabs items={tabs} />

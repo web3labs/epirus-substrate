@@ -52,6 +52,7 @@ query($where: BlockWhereInput = {}, $first: Int!, $after: String = null, $orderB
       node {
         id
         height
+        hash
         timestamp
         events {
           id

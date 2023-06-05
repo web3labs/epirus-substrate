@@ -102,64 +102,61 @@ export default function AccountPage () {
   return (
     <>
       <Breadcrumbs/>
-      <div className="flex flex-row gap-2">
-        <SideBar highlight={2} />
-        <div className="content w-full">
+      <div className="flex flex-row gap-2 mt-2">
+        <SideBar highlight={1} />
+        <div className="flex flex-col container">
+          <Box>
+            <BoxHead
+              title={
+                <Copy text={id}>
+                  <AccountAddress address={id}>
+                    {contract && <CodeBadge/>}
+                  </AccountAddress>
+                </Copy>
+              }
+              tag={
+                <Tag label={contract ? "contract" : "EOA"} />
+              }
+            />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-2">
-            <Box className="col-span-2 divide-y">
-              <BoxHead
-                title={
-                  <Copy text={id}>
-                    <AccountAddress address={id}>
-                      {contract && <CodeBadge/>}
-                    </AccountAddress>
-                  </Copy>
-                }
-                tag={
-                  <Tag label={contract ? "contract" : "EOA"} />
-                }
-              />
-
-              <Segment>
-                <DefinitionList>
-                  <Definition label="Created on" term={
-                    <span>{longDateTime(createdAt)}</span>
-                  }/>
-                </DefinitionList>
-              </Segment>
-            </Box>
-            <Box>
-              <Segment title="Balance">
-                <DefinitionList>
-                  <Definition
-                    className="justify-between"
-                    label="Free"
-                    term={<AccountUnit amount={balance?.free} token={token} />}
-                  />
-                  <Definition
-                    className="justify-between"
-                    label="Reserved"
-                    term={<AccountUnit amount={balance?.reserved} token={token} />}
-                  />
-                </DefinitionList>
-              </Segment>
-              <Segment>
-                <DefinitionList>
-                  <Definition
-                    className="justify-between"
-                    label="Fee Frozen"
-                    term={<AccountUnit amount={balance?.feeFrozen} token={token} />}
-                  />
-                  <Definition
-                    className="justify-between"
-                    label="Misc Frozen"
-                    term={<AccountUnit amount={balance?.miscFrozen} token={token} />}
-                  />
-                </DefinitionList>
-              </Segment>
-            </Box>
-          </div>
+            <Segment>
+              <DefinitionList>
+                <Definition label="Created on" term={
+                  <span>{longDateTime(createdAt)}</span>
+                }/>
+              </DefinitionList>
+            </Segment>
+          </Box>
+          <Box>
+            <Segment title="Balance">
+              <DefinitionList>
+                <Definition
+                  className="justify-between"
+                  label="Free"
+                  term={<AccountUnit amount={balance?.free} token={token} />}
+                />
+                <Definition
+                  className="justify-between"
+                  label="Reserved"
+                  term={<AccountUnit amount={balance?.reserved} token={token} />}
+                />
+              </DefinitionList>
+            </Segment>
+            <Segment>
+              <DefinitionList>
+                <Definition
+                  className="justify-between"
+                  label="Fee Frozen"
+                  term={<AccountUnit amount={balance?.feeFrozen} token={token} />}
+                />
+                <Definition
+                  className="justify-between"
+                  label="Misc Frozen"
+                  term={<AccountUnit amount={balance?.miscFrozen} token={token} />}
+                />
+              </DefinitionList>
+            </Segment>
+          </Box>
 
           <Box className="mt-2">
             <Tabs items={tabs} />

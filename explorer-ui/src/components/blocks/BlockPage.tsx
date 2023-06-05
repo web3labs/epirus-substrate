@@ -138,52 +138,50 @@ export default function BlockPage () {
   return (
     <>
       <Breadcrumbs />
-      <div className="flex flex-row gap-2">
-        <SideBar highlight={4} />
-        <div className="content w-full">
-          <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-2">
-            <Box className="col-span-2 divide-y">
-              <BoxHead
-                title={
-                  <>
-                    <Tag label={"Block#" + String(height)} />
-                  </>
-                }
-              />
-              <Segment>
-                <DefinitionList>
-                  <Definition
-                    label="Block Id"
-                    term={<span>{id}</span>}
-                  />
-                  <Definition
-                    label="Created"
-                    term={<span>{longDateTime(timestamp)}</span>}
-                  />
-                  <Definition
-                    label="Hash"
-                    term={<span>{hash}</span>}
-                  />
-                  <Definition
-                    label="Parent Hash"
-                    term={<span>{parentHash}</span>}
-                  />
-                  <Definition
-                    label="State root"
-                    term={<span>{stateRoot}</span>}
-                  />
-                  <Definition
-                    label="Extrinsics root"
-                    term={<span>{extrinsicsRoot}</span>}
-                  />
-                  <Definition
-                    label="specVersion"
-                    term={<span>{spec.specVersion}</span>}
-                  />
-                </DefinitionList>
-              </Segment>
-            </Box>
-          </div>
+      <div className="flex flex-row gap-2 mt-2">
+        <SideBar highlight={3} />
+        <div className="flex flex-col container">
+          <Box>
+            <BoxHead
+              title={
+                <>
+                  <Tag label={"Block#" + String(height)} />
+                </>
+              }
+            />
+            <Segment>
+              <DefinitionList>
+                <Definition
+                  label="Block Id"
+                  term={<span>{id}</span>}
+                />
+                <Definition
+                  label="Created"
+                  term={<span>{longDateTime(timestamp)}</span>}
+                />
+                <Definition
+                  label="Hash"
+                  term={<span>{hash}</span>}
+                />
+                <Definition
+                  label="Parent Hash"
+                  term={<span>{parentHash}</span>}
+                />
+                <Definition
+                  label="State root"
+                  term={<span>{stateRoot}</span>}
+                />
+                <Definition
+                  label="Extrinsics root"
+                  term={<span>{extrinsicsRoot}</span>}
+                />
+                <Definition
+                  label="specVersion"
+                  term={<span>{spec.specVersion}</span>}
+                />
+              </DefinitionList>
+            </Segment>
+          </Box>
           <Box className="mt-2">
             <Tabs items={tabs} />
           </Box>

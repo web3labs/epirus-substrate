@@ -4,6 +4,7 @@ import { ExtrinsicForEvent } from "../types/extrinsic"
 export type LightBlock = {
   id: String;
   height: number;
+  hash: String;
   // is this the block creation time
   timestamp: Date;
   events?: [{

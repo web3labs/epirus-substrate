@@ -161,10 +161,9 @@ export default function ContractPage () {
   return (
     <>
       <Breadcrumbs/>
-      <div className="flex flex-row gap-2">
-        <SideBar highlight={6}/>
-        <div className="content w-full">
-
+      <div className="flex flex-row gap-2 mt-2">
+        <SideBar highlight={5}/>
+        <div className="flex flex-col container">
           <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-2">
             <Box className="col-span-2 divide-y">
               <BoxHead
