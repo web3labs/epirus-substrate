@@ -2,8 +2,8 @@ import React from "react"
 import { TabQuery } from "../navigation/Tabs"
 import ExtrinsicsList from "./ExtrinsicsList"
 
-export function extrinsicsByBlockId (id: string) {
-  return { block: { id_eq: id } }
+export function extrinsicsByBlockId (hash: string) {
+  return { block: { hash_eq: hash } }
 }
 
 export default function ExtrinsicsTab ({ currentId, where }: TabQuery) {

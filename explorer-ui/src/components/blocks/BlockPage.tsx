@@ -8,7 +8,7 @@ import Tag from "../commons/Tag"
 import { DefinitionList, Definition } from "../commons/Definitions"
 import { Block } from "../../types/blocks"
 import { Edge /* , Page */ } from "../../types/pagination"
-import { useParams } from "react-router-dom"
+import { NavLink, useParams } from "react-router-dom"
 import { longDateTime } from "../../formats/time"
 import Tabs, { TabItem } from "../navigation/Tabs"
 import EventsTab, { eventsByBlockId } from "./events/EventsTab"
@@ -51,8 +51,8 @@ export const mockBlockEdges = buildArrayOf(5, (i) => ({
 })) as Edge<Block>[]
 
 const QUERY = `
-query($id: String!) {
-  blocks(where: {id_eq: $id}) {
+query($hash: String!) {
+  blocks(where: {hash_eq: $hash}) {
     id
     height
     hash
@@ -82,15 +82,15 @@ export default function BlockPage () {
     result === undefined ? ({ node: mockBlock(1) } as Edge<Block>) : result
   */
   const tabs: TabItem[] = useMemo(() => {
-    if (params.id) {
+    if (params.hash) {
       return [
         {
           label: "Extrinsics",
           to: "",
           element: (
             <ExtrinsicsTab
-              currentId={params.id}
-              where={extrinsicsByBlockId(params.id)}
+              currentId={params.hash}
+              where={extrinsicsByBlockId(params.hash)}
             />
           )
         },
@@ -100,18 +100,18 @@ export default function BlockPage () {
           element: (
             <EventsTab
               currentId={params.id}
-              where={eventsByBlockId(params.id)}
+              where={eventsByBlockId(params.hash)}
             />
           )
         }
       ]
     }
     return []
-  }, [params.id])
+  }, [params.hash])
 
   const [result] = useSquid({
     query: QUERY,
-    variables: { id: params.id }
+    variables: { hash: params.hash }
   })
 
   const { data, fetching } = result
@@ -165,7 +165,7 @@ export default function BlockPage () {
                 />
                 <Definition
                   label="Parent Hash"
-                  term={<span>{parentHash}</span>}
+                  term={<span> {height === 0 ? parentHash : <NavLink to={`/blocks/${parentHash}`} className="link">{parentHash}</NavLink> } </span>}
                 />
                 <Definition
                   label="State root"

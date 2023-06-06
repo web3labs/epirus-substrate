@@ -106,7 +106,7 @@ export default function ExtrinsicPage () {
     <>
       <Breadcrumbs />
       <div className="flex flex-row gap-2 mt-2">
-        <SideBar highlight={1} />
+        <SideBar highlight={3} />
         <div className="flex flex-col container">
           <Box className="col-span-2 divide-y">
             <BoxHead

@@ -18,16 +18,17 @@ import {
 } from "@heroicons/react/24/outline"
 
 const navigation = [
-  { name: "Home", href: "/", icon: HomeIcon, count: "5", current: false },
+  { name: "Home", href: "/", icon: HomeIcon, current: false },
   { name: "Accounts", href: "/accounts", icon: UsersIcon, current: false },
-  { name: "Activities", href: "/activities", icon: ArrowTrendingUpIcon, count: "12", current: false },
-  { name: "Blocks", href: "/blocks", icon: Square3Stack3DIcon, count: "20+", current: false },
+  { name: "Activities", href: "/activities", icon: ArrowTrendingUpIcon, current: false },
+  { name: "Blocks", href: "/blocks", icon: Square3Stack3DIcon, current: false },
   { name: "Codes", href: "/codes", icon: CodeBracketIcon, current: false },
   { name: "Contracts", href: "/contracts", icon: DocumentDuplicateIcon, current: false }
 ]
 
 export default function SideBar ({ highlight }: {highlight: number}) {
   if (highlight >= 0 && highlight <= 5) {
+    navigation.forEach((e) => { e.current = false })
     navigation[highlight].current = true
   }
   return (

@@ -79,7 +79,7 @@ function App () {
                 <Routes>
                   <Route path="extrinsic/:id/*" element={<ExtrinsicPage/>} />
                   <Route path="blocks" element={<BlocksPage/>} />
-                  <Route path="blocks/:id/*" element={<BlockPage/>} />
+                  <Route path="blocks/:hash/*" element={<BlockPage/>} />
                 </Routes>
               </ChainContextProvider>
             </Provider>
