@@ -20,7 +20,7 @@ import { longDateTime } from "../../formats/time"
 import CodeHash from "./CodeHash"
 import { PageLoading } from "../loading/Loading"
 import SourceTab from "./sources/SourceTab"
-import SideBar from "../SideBar"
+import SideBar from "../navigation/SideBar"
 
 const SOURCE_CODE_ENABLED = (
   window.__RUNTIME_CONFIG__?.REACT_APP_SOURCE_CODE_ENABLED ||

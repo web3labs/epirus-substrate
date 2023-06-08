@@ -1,13 +1,5 @@
 import React from "react"
-// import { NavLink } from "react-router-dom"
-// import AccountsBadge from "./badges/AccountsBadge"
-// import ActivitiesBadge from "./badges/ActivitiesBadge"
-// import BlocksMenuBadge from "./badges/BlocksMenuBadge"
-// import CodesMenuBadge from "./badges/CodesMenuBadge"
-// import ContractsMenuBadge from "./badges/ContractsMenuBadge"
-// import { classNames } from "../utils/strings"
-// import HomeBadge from "./badges/HomeBadge"
-import { classNames } from "../utils/strings"
+import { classNames } from "../../utils/strings"
 import {
   ArrowTrendingUpIcon,
   Square3Stack3DIcon,
@@ -38,7 +30,7 @@ export default function SideBar ({ highlight }: {highlight: number}) {
           <li>
             <ul role="list" className="-mx-2 space-y-1">
               {navigation.map((item) => (
-                <li key={item.name}>
+                <li key={item.name} data-testid={item.name}>
                   <a
                     href={item.href}
                     className={classNames(

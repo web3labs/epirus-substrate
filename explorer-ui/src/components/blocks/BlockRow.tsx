@@ -4,7 +4,6 @@ import { LightBlock } from "../../types/blocks"
 import BlockLink from "./BlockLink"
 import Lane from "../commons/Lane"
 import { Row, TypedRow } from "../commons/List"
-// import CodeLink from "../codes/CodeLink
 import { Label } from "../commons/Label"
 import { NavLink } from "react-router-dom"
 

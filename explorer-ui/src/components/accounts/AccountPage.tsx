@@ -19,7 +19,7 @@ import Copy from "../commons/Copy"
 import { AccountUnit } from "../commons/Text"
 import { longDateTime } from "../../formats/time"
 import { PageLoading } from "../loading/Loading"
-import SideBar from "../SideBar"
+import SideBar from "../navigation/SideBar"
 
 const QUERY = `
 query($id: String!) {

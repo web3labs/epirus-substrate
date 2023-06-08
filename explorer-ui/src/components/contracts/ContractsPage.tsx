@@ -4,7 +4,7 @@ import Breadcrumbs from "../navigation/Breadcrumbs"
 import ContractList, { CONTRACT_SORT_OPTIONS } from "../contracts/ContractList"
 import DateRangeFilter from "../query/filters/DateRangeFilter"
 import { textFilterOf } from "../query/filters/TextFilter"
-import SideBar from "../SideBar"
+import SideBar from "../navigation/SideBar"
 
 export default function ContractsPage () {
   return (

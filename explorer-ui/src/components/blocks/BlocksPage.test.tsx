@@ -5,7 +5,7 @@ import { Provider } from "urql";
 import { createMockClient } from "../../_mocks/mockClient";
 import BlocksPage from "./BlocksPage";
 import { mockPageOf } from "../../_mocks/utils";
-import { Edge /* , Page */ } from "../../types/pagination";
+import { Edge } from "../../types/pagination";
 import { LightBlock, Block } from "../../types/blocks";
 
 export function buildArrayOf(n: number, f: (index: number) => Object) {
@@ -15,9 +15,7 @@ export function buildArrayOf(n: number, f: (index: number) => Object) {
 export function mockBlock(i: number) {
   return {
     id: i,
-    timeStamp: new Date(),
-    // this changes as time goes by - e.g., 22 hrs 23 mins ago
-    blockTime: new Date(),
+    timestamp: new Date(),
     // TODO: abhi - this should be an ... enum type with variants like Finalized, NotFinalized, etc.
     status: "Finalized",
     // TODO: abhi - should be a hash type?
@@ -28,8 +26,6 @@ export function mockBlock(i: number) {
     stateRoot: "0x123",
     // TODO: abhi - should be a hash type?
     extrinsicsRoot: "0x123",
-    // TODO: abhi - should be an account type?
-    collator: "n123p3455",
     specVersion: 53,
   } as unknown as Block;
 }

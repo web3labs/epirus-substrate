@@ -1,12 +1,9 @@
 import React from "react"
-// import { shortDate } from "../../formats/time"
 import Lane from "../commons/Lane"
 import { Row, TypedRow } from "../commons/List"
-// import CodeLink from "../codes/CodeLink
 import { Label } from "../commons/Label"
 import { LightExtrinsic } from "../../types/extrinsic"
 import ExtrinsicLink from "./ExtrinsicLink"
-// import { shortDate } from "../../formats/time"
 import CheckBadge from "../badges/CheckBadge"
 import CrossBadge from "../badges/CrossBadge"
 

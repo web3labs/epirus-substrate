@@ -4,7 +4,7 @@ import Breadcrumbs from "../navigation/Breadcrumbs"
 import CodeList, { CODE_SORT_OPTIONS } from "../codes/CodeList"
 import DateRangeFilter from "../query/filters/DateRangeFilter"
 import { textFilterOf } from "../query/filters/TextFilter"
-import SideBar from "../SideBar"
+import SideBar from "../navigation/SideBar"
 
 export default function CodesPage () {
   return (

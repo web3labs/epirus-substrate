@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom"
 import ActivityList from "./activities/ActivityList"
 import Box from "./commons/Box"
 import ContractList from "./contracts/ContractList"
-import SideBar from "./SideBar"
+import SideBar from "./navigation/SideBar"
 
 export default function HomePage () {
   return (

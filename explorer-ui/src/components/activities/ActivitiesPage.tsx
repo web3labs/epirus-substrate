@@ -6,7 +6,7 @@ import DateRangeFilter from "../query/filters/DateRangeFilter"
 import { enumTypeFilterOf, SelectionInput } from "../query/filters/EnumTypeFilter"
 import { activityMethodFilter, textFilterOf } from "../query/filters/TextFilter"
 import ActivityList, { ACTIVITY_SORT_OPTIONS } from "./ActivityList"
-import SideBar from "../SideBar"
+import SideBar from "../navigation/SideBar"
 
 export default function ActivitiesPage () {
   const activityTypes: SelectionInput[] = Object.values(ActivityType).map(type => {

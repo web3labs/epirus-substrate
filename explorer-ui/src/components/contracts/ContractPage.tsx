@@ -24,7 +24,7 @@ import ContractUpgrades from "./ContractUpgrade"
 import { ContractTermination } from "./ContractTermination"
 import { DefinitionList, Definition } from "../commons/Definitions"
 import { getArg } from "../../utils/args"
-import SideBar from "../SideBar"
+import SideBar from "../navigation/SideBar"
 
 const QUERY = `
 query($id: String!, $codeHashChangeOrderBy: [CodeHashChangeOrderByInput!] ) {

@@ -1,7 +1,6 @@
 import React from "react"
 import { NavLink } from "react-router-dom"
 import { LightExtrinsic } from "../../types/extrinsic"
-// import CodeBadge from "../badges/CodeBadge"
 import ExtrinsicId from "./ExtrinsicId"
 
 export default function ExtrinsicLink ({

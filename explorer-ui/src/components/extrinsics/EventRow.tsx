@@ -1,10 +1,7 @@
 import React from "react"
-// import { shortDate } from "../../formats/time"
 import { Event } from "../../types/blocks"
 import { Definition, DefinitionList } from "../commons/Definitions"
 import { Row, TypedRow } from "../commons/List"
-// import DataView from "../../components/contracts/DataView"
-// import { classNames } from "../../utils/strings"
 
 export default function EventRow ({ obj, currentId, short }: TypedRow<Event>) {
   const {

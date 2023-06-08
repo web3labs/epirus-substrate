@@ -7,19 +7,16 @@ import Segment from "../commons/Segment"
 import Tag from "../commons/Tag"
 import { DefinitionList, Definition } from "../commons/Definitions"
 import { Block } from "../../types/blocks"
-import { Edge /* , Page */ } from "../../types/pagination"
+import { Edge } from "../../types/pagination"
 import { NavLink, useParams } from "react-router-dom"
 import { longDateTime } from "../../formats/time"
 import Tabs, { TabItem } from "../navigation/Tabs"
 import EventsTab, { eventsByBlockId } from "./events/EventsTab"
-// import LogTab, { logByAccount } from "./LogTab"
 import ExtrinsicsTab, {
   extrinsicsByBlockId
 } from "../extrinsics/ExtrinsicsTab"
-import SideBar from "../SideBar"
-// import BlockList from "./BlockList"
-// import Box from "../commons/Box"
-// import { NavLink } from "react-router-dom"
+import SideBar from "../navigation/SideBar"
+
 export function buildArrayOf (n: number, f: (index: number) => Object) {
   return [...Array(n)].map((_, i) => f(i))
 }
@@ -28,19 +25,12 @@ export function mockBlock (i: number) {
   return {
     id: i,
     timeStamp: new Date(),
-    // this changes as time goes by - e.g., 22 hrs 23 mins ago
     blockTime: new Date(),
-    // TODO: abhi - this should be an ... enum type with variants like Finalized, NotFinalized, etc.
     status: "Finalized",
-    // TODO: abhi - should be a hash type?
     hash: "0x123",
-    // TODO: abhi - should be a hash type?
     parentHash: "0x123",
-    // TODO: abhi - should be a hash type?
     stateRoot: "0x123",
-    // TODO: abhi - should be a hash type?
     extrinsicsRoot: "0x123",
-    // TODO: abhi - should be an account type?
     collator: "n123p3455",
     specVersion: 53
   } as unknown as Block

@@ -1,29 +1,24 @@
 import React, { useMemo } from "react"
 import { useParams } from "react-router-dom"
-// import { useChainProperties } from "../../contexts/ChainContext
 import useSquid from "../../hooks/useSquid"
 import CodeBadge from "../badges/CodeBadge"
 import Box, { BoxHead } from "../commons/Box"
 import Segment from "../commons/Segment"
 import Breadcrumbs from "../navigation/Breadcrumbs"
-// import { Account } from "../../types/accounts
 import AccountAddress from "../accounts/AccountAddress"
 import Tag from "../commons/Tag"
 import Tabs, { TabItem } from "../navigation/Tabs"
 import { Definition, DefinitionList } from "../commons/Definitions"
 import EventsTab, { eventsByExtrinsicId } from "./EventsTab"
-// import { Extrinsic } from "../../types/extrinsic
 import Copy from "../commons/Copy"
-// import { AccountUnit } from "../commons/Text
 import { longDateTime } from "../../formats/time"
 import { PageLoading } from "../loading/Loading"
 import { ExtrinsicPageType } from "../../types/extrinsic"
 import CheckBadge from "../badges/CheckBadge"
 import CrossBadge from "../badges/CrossBadge"
-// import { getArgValue } from "../../utils/args"
 import SyntaxHighlighter from "react-syntax-highlighter"
 import BlockLink from "../blocks/BlockLink"
-import SideBar from "../SideBar"
+import SideBar from "../navigation/SideBar"
 
 const QUERY = `
 query($id: String!) {
