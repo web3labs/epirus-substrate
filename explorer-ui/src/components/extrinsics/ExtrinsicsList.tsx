@@ -4,33 +4,9 @@ import ListQuery, { UpdateMode } from "../query/ListQuery"
 import List, { ListProps } from "../commons/List"
 import ExtrinsicRow from "./ExtrinsicRow"
 import SortBy from "../query/SortBy"
-import { Extrinsic, LightExtrinsic } from "../../types/extrinsic"
+import { LightExtrinsic } from "../../types/extrinsic"
 import Filters from "../query/Filters"
 import Pagination from "../navigation/Pagination"
-
-export function buildArrayOf (n: number, f: (index: number) => Object) {
-  return [...Array(n)].map((_, i) => f(i))
-}
-
-export function mockExtrinsic (i: number) {
-  return {
-    id: String(i),
-    blockNumber: "727898",
-    indexInBlock: "2",
-    success: true,
-    createdAt: new Date(),
-    name: "module.call",
-    hash: "0x123",
-    args: {
-      data: "0x123",
-      storageDepositLimit: ""
-    }
-  }
-}
-
-export const mockExtrinsicEdges = buildArrayOf(5, (i) => ({
-  node: mockExtrinsic(i)
-})) as Edge<Extrinsic>[]
 
 const QUERY = `
 query($where: ExtrinsicWhereInput = {} ,$first: Int = 5, $after: String = null, $orderBy: [ExtrinsicOrderByInput!]! = [id_ASC]) {
@@ -62,7 +38,6 @@ export default function ExtrinsicsList ({
   filterTypes,
   currentId
 }: ListProps) {
-  // const data = mockExtrinsicEdges
   return <ListQuery
     pageQuery={pageQuery}
     query={QUERY}

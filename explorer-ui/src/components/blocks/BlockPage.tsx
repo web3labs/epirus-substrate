@@ -7,7 +7,6 @@ import Segment from "../commons/Segment"
 import Tag from "../commons/Tag"
 import { DefinitionList, Definition } from "../commons/Definitions"
 import { Block } from "../../types/blocks"
-import { Edge } from "../../types/pagination"
 import { NavLink, useParams } from "react-router-dom"
 import { longDateTime } from "../../formats/time"
 import Tabs, { TabItem } from "../navigation/Tabs"
@@ -16,29 +15,6 @@ import ExtrinsicsTab, {
   extrinsicsByBlockId
 } from "../extrinsics/ExtrinsicsTab"
 import SideBar from "../navigation/SideBar"
-
-export function buildArrayOf (n: number, f: (index: number) => Object) {
-  return [...Array(n)].map((_, i) => f(i))
-}
-
-export function mockBlock (i: number) {
-  return {
-    id: i,
-    timeStamp: new Date(),
-    blockTime: new Date(),
-    status: "Finalized",
-    hash: "0x123",
-    parentHash: "0x123",
-    stateRoot: "0x123",
-    extrinsicsRoot: "0x123",
-    collator: "n123p3455",
-    specVersion: 53
-  } as unknown as Block
-}
-
-export const mockBlockEdges = buildArrayOf(5, (i) => ({
-  node: mockBlock(i)
-})) as Edge<Block>[]
 
 const QUERY = `
 query($hash: String!) {
@@ -64,13 +40,7 @@ query($hash: String!) {
 
 export default function BlockPage () {
   const params = useParams()
-  /*
-  const result = mockBlockEdges.find(
-    ({ node }: Edge<Block>) => String(node.id) === params.id
-  )
-  const block =
-    result === undefined ? ({ node: mockBlock(1) } as Edge<Block>) : result
-  */
+
   const tabs: TabItem[] = useMemo(() => {
     if (params.hash) {
       return [

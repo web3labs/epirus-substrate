@@ -7,6 +7,7 @@ import BlocksPage from "./BlocksPage";
 import { mockPageOf } from "../../_mocks/utils";
 import { Edge } from "../../types/pagination";
 import { LightBlock, Block } from "../../types/blocks";
+import { mockBlockEdges } from "../../_mocks/data"
 
 export function buildArrayOf(n: number, f: (index: number) => Object) {
   return [...Array(n)].map((_, i) => f(i));
@@ -16,23 +17,15 @@ export function mockBlock(i: number) {
   return {
     id: i,
     timestamp: new Date(),
-    // TODO: abhi - this should be an ... enum type with variants like Finalized, NotFinalized, etc.
     status: "Finalized",
-    // TODO: abhi - should be a hash type?
     hash: "0x123",
-    // TODO: abhi - should be a hash type?
     parentHash: "0x123",
-    // TODO: abhi - should be a hash type?
     stateRoot: "0x123",
-    // TODO: abhi - should be a hash type?
     extrinsicsRoot: "0x123",
     specVersion: 53,
   } as unknown as Block;
 }
 
-export const mockBlockEdges = buildArrayOf(5, (i) => ({
-  node: mockBlock(i),
-})) as Edge<LightBlock>[];
 test("Blocks page", () => {
   const mockClient = createMockClient({
     blocksConnection: mockPageOf(mockBlockEdges),

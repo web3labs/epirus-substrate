@@ -19,37 +19,6 @@ export const EVENT_SORT_OPTIONS = [
   }
 ]
 
-export function buildArrayOf (n: number, f: (index: number) => Object) {
-  return [...Array(n)].map((_, i) => f(i))
-}
-
-export function mockExtrinsic (i: number) {
-  return {
-    id: String(i),
-    blockNumber: "727898",
-    indexInBlock: "2",
-    success: true,
-    createdAt: new Date(),
-    name: "module.call",
-    args: {
-      data: "0x123",
-      storageDepositLimit: ""
-    }
-  }
-}
-
-export const mockEventEdges = buildArrayOf(5, (i) => ({
-  node: {
-    id: String(i),
-    blockNumber: 10,
-    indexInBlock: 1,
-    contractAddress: "nlsslksdjflwkj",
-    createdAt: new Date(),
-    data: "0x123",
-    extrinsic: mockExtrinsic(i)
-  }
-})) as Edge<Event>[]
-
 const QUERY = `
 query($where: EventWhereInput = {} ,$first: Int = 5, $after: String = null, $orderBy: [EventOrderByInput!]! = [id_ASC]) {
   eventsConnection(where: $where, orderBy: $orderBy, after: $after, first: $first) {
@@ -121,7 +90,7 @@ export default function EventList ({
                 setQuery={setQueryInState}
               />
             }
-            emptyMessage="No extrinsics to show"
+            emptyMessage="No events to show"
           >
             {page?.edges.map(({ node }: Edge<Event>) => (
               <EventRow

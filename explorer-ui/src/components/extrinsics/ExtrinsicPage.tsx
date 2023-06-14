@@ -16,7 +16,8 @@ import { PageLoading } from "../loading/Loading"
 import { ExtrinsicPageType } from "../../types/extrinsic"
 import CheckBadge from "../badges/CheckBadge"
 import CrossBadge from "../badges/CrossBadge"
-import SyntaxHighlighter from "react-syntax-highlighter"
+// import SyntaxHighlighter from "react-syntax-highlighter"
+import ReactJson from "react-json-view"
 import BlockLink from "../blocks/BlockLink"
 import SideBar from "../navigation/SideBar"
 
@@ -134,9 +135,7 @@ export default function ExtrinsicPage () {
                 <Definition label="Tip" term={<span>{tip ? tip.toString() : "-"}</span>} />
                 <Definition label="Action" term={<span>{call.name}</span>} />
                 <Definition label="Params" term={
-                  <SyntaxHighlighter language="javascript">
-                    { JSON.stringify(call.args ? call.args : "", null, 4) }
-                  </SyntaxHighlighter>
+                  <ReactJson src={ call.args ? call.args : {} } name={false} />
                 }/>
 
               </DefinitionList>
