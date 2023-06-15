@@ -5,6 +5,7 @@ ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json ./
 COPY package-lock.json ./
 RUN npm install -g npm@9.7.1 --silent
+RUN npm i -D @craco/craco --silent
 RUN npm i react-scripts@5.0.1 -g --silent
 COPY . ./
 RUN npm run build
