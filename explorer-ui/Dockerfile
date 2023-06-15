@@ -4,8 +4,7 @@ WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json ./
 COPY package-lock.json ./
-RUN npm config set loglevel error
-RUN npm i --silent
+RUN npm config set loglevel error && npm i --silent
 RUN npm i react-scripts@5.0.1 -g --silent
 COPY . ./
 RUN npm run build
