@@ -4,11 +4,13 @@ import { NavLink } from "react-router-dom"
 import ActivityList from "./activities/ActivityList"
 import Box from "./commons/Box"
 import ContractList from "./contracts/ContractList"
+import SideBar from "./navigation/SideBar"
 
 export default function HomePage () {
   return (
-    <div className="content flex flex-col space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-2">
-      <Box>
+    <div className="content flex flex-row space-y-4 md:space-y-0 md:gap-2">
+      <SideBar highlight={0}/>
+      <Box isContainer={false} >
         <ActivityList
           short={true}
           title={
@@ -19,7 +21,7 @@ export default function HomePage () {
           description="Contract related activities"
         />
       </Box>
-      <Box>
+      <Box isContainer={false}>
         <ContractList
           short={true}
           title={

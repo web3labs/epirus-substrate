@@ -19,6 +19,7 @@ import Copy from "../commons/Copy"
 import { AccountUnit } from "../commons/Text"
 import { longDateTime } from "../../formats/time"
 import { PageLoading } from "../loading/Loading"
+import SideBar from "../navigation/SideBar"
 
 const QUERY = `
 query($id: String!) {
@@ -101,10 +102,10 @@ export default function AccountPage () {
   return (
     <>
       <Breadcrumbs/>
-      <div className="content">
-
-        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-2">
-          <Box className="col-span-2 divide-y">
+      <div className="flex flex-row gap-2 mt-2">
+        <SideBar highlight={1} />
+        <div className="flex flex-col container">
+          <Box>
             <BoxHead
               title={
                 <Copy text={id}>
@@ -156,11 +157,11 @@ export default function AccountPage () {
               </DefinitionList>
             </Segment>
           </Box>
-        </div>
 
-        <Box className="mt-2">
-          <Tabs items={tabs} />
-        </Box>
+          <Box className="mt-2">
+            <Tabs items={tabs} />
+          </Box>
+        </div>
       </div>
     </>
   )

@@ -6,6 +6,7 @@ import DateRangeFilter from "../query/filters/DateRangeFilter"
 import { enumTypeFilterOf, SelectionInput } from "../query/filters/EnumTypeFilter"
 import { activityMethodFilter, textFilterOf } from "../query/filters/TextFilter"
 import ActivityList, { ACTIVITY_SORT_OPTIONS } from "./ActivityList"
+import SideBar from "../navigation/SideBar"
 
 export default function ActivitiesPage () {
   const activityTypes: SelectionInput[] = Object.values(ActivityType).map(type => {
@@ -30,40 +31,43 @@ export default function ActivitiesPage () {
   return (
     <>
       <Breadcrumbs/>
-      <Box className="content">
-        <ActivityList
-          pageQuery={{
-            first: 15,
-            orderBy: "createdAt_DESC"
-          }}
-          sortOptions={ACTIVITY_SORT_OPTIONS}
-          filterTypes={[
-            DateRangeFilter,
-            textFilterOf(
-              {
-                selector: "from",
-                label: "From",
-                template: value => (
-                  { from: { id_eq: value } }
-                ),
-                placeholder: "Address..."
-              }
-            ),
-            enumTypeFilterOf(
-              {
-                selector: "type",
-                label: "Type",
-                template: value => (
-                  { type_eq: value }
-                ),
-                inputValues: activityTypes
-              }
-            ),
-            activityMethodFilter
-          ]}
-          title="Activities"
-        />
-      </Box>
+      <div className="flex flex-row gap-2 mt-2">
+        <SideBar highlight={2}/>
+        <Box>
+          <ActivityList
+            pageQuery={{
+              first: 15,
+              orderBy: "createdAt_DESC"
+            }}
+            sortOptions={ACTIVITY_SORT_OPTIONS}
+            filterTypes={[
+              DateRangeFilter,
+              textFilterOf(
+                {
+                  selector: "from",
+                  label: "From",
+                  template: value => (
+                    { from: { id_eq: value } }
+                  ),
+                  placeholder: "Address..."
+                }
+              ),
+              enumTypeFilterOf(
+                {
+                  selector: "type",
+                  label: "Type",
+                  template: value => (
+                    { type_eq: value }
+                  ),
+                  inputValues: activityTypes
+                }
+              ),
+              activityMethodFilter
+            ]}
+            title="Activities"
+          />
+        </Box>
+      </div>
     </>
   )
 }

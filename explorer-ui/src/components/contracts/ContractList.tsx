@@ -104,7 +104,7 @@ export default function ContractList ({
                 setQuery={setQueryInState}
               />
             }
-            emptyMessage="No contracts to show"
+            emptyMessage="No blocks to show"
           >
             {page?.edges.map(({ node } : Edge<LightContract>) => (
               <ContractRow

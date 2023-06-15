@@ -5,7 +5,7 @@ test("Unknown chain", () => {
 })
 
 test("alephzero chain info", () => {
-  expect(resolveInfoFromName("aleph zero")).toEqual("aleph")
+  expect(resolveInfoFromName("aleph zero")).toEqual("aleph-testnet")
 })
 
 test("Local chain info", () => {

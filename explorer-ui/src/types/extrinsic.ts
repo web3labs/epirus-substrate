@@ -1,3 +1,4 @@
+import { LightBlock } from "./blocks"
 export type Args = Record<string, string> | Record<string, number> | Record<string, undefined>;
 
 export interface ExtrinsicError {
@@ -23,4 +24,35 @@ export interface Extrinsic {
   tip?:string
   versionInfo?:string
   error?: ExtrinsicError
+}
+
+export interface LightExtrinsic {
+  id: String,
+  success: boolean,
+  hash: String
+}
+
+export interface CallRef {
+  name: string
+  args?: Args
+}
+
+export interface ExtrinsicForEvent {
+  id: string, 
+  call: CallRef
+}
+
+export interface EventRef {
+  id: string,
+  name: string
+}
+
+export interface ExtrinsicPageType {
+  id:string
+  tip:string
+  success:boolean
+  fee: number
+  block: LightBlock
+  call: CallRef
+  hash: string
 }

@@ -15,15 +15,25 @@ import ChainContextProvider from "./contexts/ChainContext"
 import AccountsPage from "./components/accounts/AccountsPage"
 import AccountPage from "./components/accounts/AccountPage"
 import HomePage from "./components/HomePage"
+// import BlocksHomePage from "./components/BlocksHomePage"
 import { Toaster } from "react-hot-toast"
 import CodePage from "./components/codes/CodePage"
 import CodesPage from "./components/codes/CodesPage"
 import ActivitiesPage from "./components/activities/ActivitiesPage"
+import BlocksPage from "./components/blocks/BlocksPage"
+import BlockPage from "./components/blocks/BlockPage"
+import ExtrinsicPage from "./components/extrinsics/ExtrinsicPage"
 
 const client = createClient({
   url: window.__RUNTIME_CONFIG__?.REACT_APP_SQUID_ENDPOINT ||
     process.env.REACT_APP_SQUID_ENDPOINT ||
     "http://localhost:4350/graphql"
+})
+
+const archiveClient = createClient({
+  url: window.__RUNTIME_CONFIG__?.REACT_APP_SQUID_ARCHIVE_ENDPOINT ||
+    process.env.REACT_APP_SQUID_ARCHIVE_ENDPOINT ||
+    "http://localhost:4444/graphql"
 })
 
 function App () {
@@ -41,19 +51,19 @@ function App () {
         datepickerZIndex: 10
       }
     }}>
-      <Provider value={client}>
-        <Router>
-          <ChainContextProvider>
-            <Toaster position="bottom-right"/>
-            <div className="min-h-screen bg-page overflow-hidden">
-              <div className="relative header pt-3 md:pb-3 md:pt-6">
-                <div className="max-w-7xl mx-auto md:px-2">
-                  <MainNav />
+      <div className="min-h-screen bg-page overflow-hidden">
+        <main className="ml-2 mr-2 z-10">
+          <Router>
+            <Provider value={client}>
+              <ChainContextProvider>
+                <Toaster position="bottom-right"/>
+                <div className="relative header pt-3 md:pb-3 md:pt-6">
+                  <div className="mx-auto md:px-2">
+                    <MainNav />
+                  </div>
                 </div>
-              </div>
-              <main className="max-w-7xl mx-auto z-10">
                 <Routes>
-                  <Route index element={<HomePage/>}/>
+                  <Route index element={<HomePage/>} />
                   <Route path="accounts" element={<AccountsPage/>} />
                   <Route path="accounts/:id/*" element={<AccountPage/>} />
                   <Route path="contracts" element={<ContractsPage/>} />
@@ -62,11 +72,20 @@ function App () {
                   <Route path="codes/:id/*" element={<CodePage/>} />
                   <Route path="activities" element={<ActivitiesPage/>} />
                 </Routes>
-              </main>
-            </div>
-          </ChainContextProvider>
-        </Router>
-      </Provider>
+              </ChainContextProvider>
+            </Provider>
+            <Provider value={archiveClient}>
+              <ChainContextProvider>
+                <Routes>
+                  <Route path="extrinsic/:id/*" element={<ExtrinsicPage/>} />
+                  <Route path="blocks" element={<BlocksPage/>} />
+                  <Route path="blocks/:hash/*" element={<BlockPage/>} />
+                </Routes>
+              </ChainContextProvider>
+            </Provider>
+          </Router>
+        </main>
+      </div>
     </ThemeProvider>
   )
 }

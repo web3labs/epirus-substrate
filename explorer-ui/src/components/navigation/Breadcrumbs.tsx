@@ -12,7 +12,8 @@ function ShortBreadcrumb ({ match }: {match: BreadcrumbMatch<string>}) {
 const routes = [
   { path: "accounts/:id", breadcrumb: ShortBreadcrumb },
   { path: "contracts/:id", breadcrumb: ShortBreadcrumb },
-  { path: "codes/:id", breadcrumb: ShortBreadcrumb }
+  { path: "codes/:id", breadcrumb: ShortBreadcrumb },
+  { path: "blocks/:id", breadcrumb: ShortBreadcrumb }
 ]
 
 export default function Breadcrumbs () {

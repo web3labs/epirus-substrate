@@ -1,4 +1,6 @@
 import { Account } from "../types/accounts"
+import { LightBlock, Block, Event as BlockEvent } from "../types/blocks"
+import { LightExtrinsic } from "../types/extrinsic"
 import { ContractCode } from "../types/codes"
 import { Activity, ActivityType, Contract, DecodedElement, Event } from "../types/contracts"
 import { Edge } from "../types/pagination"
@@ -207,3 +209,70 @@ export const mockEventEdges = buildArrayOf(5, () => ({
     extrinsic: mockExtrinsic
   }
 })) as Edge<Event>[]
+
+export function mockBlock(i: number) {
+  return {
+    id: i,
+    height: 1,
+    spec: { specVersion: 52},
+    timestamp: new Date(),
+    status: "Finalized",
+    hash: "0x123",
+    parentHash: "0x123",
+    stateRoot: "0x123",
+    extrinsicsRoot: "0x123",
+    specVersion: 53,
+  } as unknown as Block;
+}
+
+export const mockBlockEdges = buildArrayOf(5, (i) => ({
+  node: mockBlock(i),
+})) as Edge<LightBlock>[];
+
+export function mockLightExtrinsic(i: number) {
+  return {
+    id: i,
+    success: true,
+    hash: "0x123"
+  }
+}
+
+export const mockLightExtrinsicEdges = buildArrayOf(5, (i) => ({
+  node: mockLightExtrinsic(i),
+})) as Edge<LightExtrinsic>[];
+
+export function mockBlockEvent(i: number) {
+  return {
+    id: i,
+    name: "test event",
+    extrinsic: {
+      id: "0000", 
+      call: {
+        name: "test call"
+      }
+    }
+  } as unknown as BlockEvent;
+}
+
+export const mockBlockEventEdges = buildArrayOf(5, (i) => ({
+  node: mockBlockEvent(i),
+})) as Edge<BlockEvent>[];
+
+export function mockExtrinsicPageType() {
+  return {
+    id:1,
+    tip: "tip",
+    success: true,
+    fee: 1,
+    block: { 
+      id: 1,
+      height: 1,
+      timestamp: new Date(),
+      hash: "0x123",
+    },
+    call: {
+      name: "call"
+    },
+    hash: "0x5454"
+  }
+}

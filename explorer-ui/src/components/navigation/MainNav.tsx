@@ -6,14 +6,14 @@ import {
   XMarkIcon,
   CalendarIcon
 } from "@heroicons/react/24/outline"
-import { ChevronDownIcon, ChevronUpIcon, CodeBracketIcon, UsersIcon } from "@heroicons/react/24/solid"
+import { ChevronDownIcon, ChevronUpIcon, CodeBracketIcon, Square3Stack3DIcon, UsersIcon } from "@heroicons/react/24/solid"
 
 import Logo from "../../logo.svg"
 import SearchBox from "../query/search/SearchBox"
 import { Link, NavLink } from "react-router-dom"
 import { useChainProperties } from "../../contexts/ChainContext"
 import { classNames } from "../../utils/strings"
-import { Default, Mobile } from "../responsive/Media"
+import { /* Default, */ Mobile } from "../responsive/Media"
 
 const menuContracts = [
   {
@@ -42,14 +42,21 @@ const menuBlockchain = [
     description: "Accounts on the chain",
     to: "/accounts",
     icon: UsersIcon
+  },
+  {
+    name: "Blocks",
+    description: "Blocks on the chain",
+    to: "/blocks",
+    icon: Square3Stack3DIcon
   }
 ]
 
+/*
 type SubNavProps = {
   title: string,
   entries: any[]
 }
-
+*/
 function CollapsibleNavItem ({
   children,
   uncollapsedItem,
@@ -124,6 +131,7 @@ function SubNavMobile ({
   )
 }
 
+/*
 function SubNavPopover ({
   title,
   entries
@@ -184,6 +192,7 @@ function SubNavPopover ({
     )}
   </Popover>)
 }
+*/
 
 export default function MainNav () {
   const { name } = useChainProperties()
@@ -233,6 +242,8 @@ export default function MainNav () {
             </div>
           </div>
 
+          {
+          /*
           <Default>
             <div className="hidden md:flex space-x-10 items-center justify-end w-full">
               { name &&
@@ -257,9 +268,11 @@ export default function MainNav () {
             <a href="#" className="nav-link">
               Tokens
             </a>
-             */}
+             }
             </div>
           </Default>
+            */
+          }
 
         </Popover.Group>
       </div>
