@@ -25,12 +25,14 @@ import BlockPage from "./components/blocks/BlockPage"
 import ExtrinsicPage from "./components/extrinsics/ExtrinsicPage"
 
 const client = createClient({
-  url: process.env.REACT_APP_SQUID_ENDPOINT ||
+  url: window.__RUNTIME_CONFIG__?.REACT_APP_SQUID_ENDPOINT ||
+    process.env.REACT_APP_SQUID_ENDPOINT ||
     "http://localhost:4350/graphql"
 })
 
 const archiveClient = createClient({
-  url: process.env.REACT_APP_SQUID_ARCHIVE_ENDPOINT ||
+  url: window.__RUNTIME_CONFIG__?.REACT_APP_SQUID_ARCHIVE_ENDPOINT ||
+    process.env.REACT_APP_SQUID_ARCHIVE_ENDPOINT ||
     "http://localhost:4444/graphql"
 })
 
