@@ -21,7 +21,8 @@ PORT=3300
 
 # Epirus Squid Ink query service endpoint
 REACT_APP_SQUID_ENDPOINT=http://localhost:4350/graphql
-
+# Epirus Squid Archive query service endpoint
+REACT_APP_SQUID_ARCHIVE_ENDPOINT=http://localhost:4445/graphql
 # Source code verification
 REACT_APP_SOURCE_CODE_ENABLED=false
 REACT_APP_VERIFIER_ENDPOINT=http://127.0.0.1:3001
