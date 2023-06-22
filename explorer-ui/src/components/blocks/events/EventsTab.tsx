@@ -2,8 +2,8 @@ import React from "react"
 import { TabQuery } from "../../navigation/Tabs"
 import EventList from "./EventList"
 
-export function eventsByBlockId (id: string) {
-  return { block: { id_eq: id } }
+export function eventsByHash (hash: string) {
+  return { block: { hash_eq: hash } }
 }
 
 export const EVENT_SORT_OPTIONS = [

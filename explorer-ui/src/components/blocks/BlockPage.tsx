@@ -10,10 +10,8 @@ import { Block } from "../../types/blocks"
 import { NavLink, useParams } from "react-router-dom"
 import { longDateTime } from "../../formats/time"
 import Tabs, { TabItem } from "../navigation/Tabs"
-import EventsTab, { eventsByBlockId } from "./events/EventsTab"
-import ExtrinsicsTab, {
-  extrinsicsByBlockId
-} from "../extrinsics/ExtrinsicsTab"
+import EventsTab, { eventsByHash } from "./events/EventsTab"
+import ExtrinsicsTab, { extrinsicsByBlockHash } from "../extrinsics/ExtrinsicsTab"
 import SideBar from "../navigation/SideBar"
 
 const QUERY = `
@@ -50,7 +48,7 @@ export default function BlockPage () {
           element: (
             <ExtrinsicsTab
               currentId={params.hash}
-              where={extrinsicsByBlockId(params.hash)}
+              where={extrinsicsByBlockHash(params.hash)}
             />
           )
         },
@@ -60,7 +58,7 @@ export default function BlockPage () {
           element: (
             <EventsTab
               currentId={params.id}
-              where={eventsByBlockId(params.hash)}
+              where={eventsByHash(params.hash)}
             />
           )
         }

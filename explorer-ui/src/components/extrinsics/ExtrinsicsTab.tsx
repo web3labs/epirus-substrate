@@ -2,7 +2,7 @@ import React from "react"
 import { TabQuery } from "../navigation/Tabs"
 import ExtrinsicsList from "./ExtrinsicsList"
 
-export function extrinsicsByBlockId (hash: string) {
+export function extrinsicsByBlockHash (hash: string) {
   return { block: { hash_eq: hash } }
 }
 
