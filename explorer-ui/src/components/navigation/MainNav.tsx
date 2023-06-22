@@ -215,6 +215,15 @@ export default function MainNav () {
                     <span className="font-normal">substrate</span>
                   </span>
                 </div>
+                <div className="hidden md:flex space-x-10 items-center justify-end w-full">
+                  { name &&
+                    <div className="mr-auto">
+                      <span className="tag chain text-xs mr-2 px-1.5 py-1 rounded">
+                        {name}
+                      </span>
+                    </div>
+                  }
+                </div>
               </Link>
               <Mobile>
                 <div className="flex flex-row w-full justify-between">
@@ -241,39 +250,6 @@ export default function MainNav () {
               <SearchBox />
             </div>
           </div>
-
-          {
-          /*
-          <Default>
-            <div className="hidden md:flex space-x-10 items-center justify-end w-full">
-              { name &&
-                <div className="mr-auto">
-                  <span className="tag chain text-xs mr-2 px-1.5 py-1 rounded">
-                    {name}
-                  </span>
-                </div>
-              }
-
-              <NavLink to="/" className={({ isActive }) =>
-                isActive ? "nav-link active" : "nav-link"
-              }>
-              Home
-              </NavLink>
-
-              <SubNavPopover title="Blockchain" entries={menuBlockchain} />
-
-              <SubNavPopover title="Contracts" entries={menuContracts} />
-
-              {/*
-            <a href="#" className="nav-link">
-              Tokens
-            </a>
-             }
-            </div>
-          </Default>
-            */
-          }
-
         </Popover.Group>
       </div>
 
