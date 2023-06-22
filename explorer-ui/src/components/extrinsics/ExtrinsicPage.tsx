@@ -32,6 +32,7 @@ query($id: String!) {
     block {
       id
       height
+      hash
       timestamp
     }
     call {
