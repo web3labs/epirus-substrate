@@ -6,6 +6,7 @@ services:
     image: ghcr.io/web3labs/epirus-substrate-ui
     environment:
       - REACT_APP_SQUID_ENDPOINT=http://localhost:4000/graphql
+      - REACT_APP_SQUID_ARCHIVE_ENDPOINT=http://localhost:4445/graphql
       - REACT_APP_SOURCE_CODE_ENABLED=true
       - REACT_APP_VERIFIER_ENDPOINT=http://127.0.0.1:3001
       - REACT_APP_VERIFIER_WS_ENDPOINT=ws://127.0.0.1:3001
