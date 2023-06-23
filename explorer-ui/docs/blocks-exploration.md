@@ -19,8 +19,8 @@ services:
 2. start the ui container with `docker-compose up -d`
 3. navigate to `http://localhost:8080`
 4. click on the `Blocks` menu item to show list of latest blocks:
-![blocks list](https://drive.google.com/file/d/1T7t5MYVio1wO3eT10OT0hjwO55RCBZVt/view?usp=sharing)
+![blocks list](https://drive.google.com/uc?export=view&id=1XynoH-BqCmEzG3rIbDrg4RF0r7lWHFQw)
 5. click on any block height link to show that block data:
-![block data](https://drive.google.com/file/d/1XynoH-BqCmEzG3rIbDrg4RF0r7lWHFQw/view?usp=sharing)
-5. click on any extrinsic id link to show that extrinsic data:
+![block data](https://drive.google.com/uc?export=view&id=1l7x8Q5Pmlzl7ZxS2d_LrKNmNFCm5m539)
+6. click on any extrinsic id link to show that extrinsic data:
 ![extrinsic data](https://drive.google.com/uc?export=view&id=1T7t5MYVio1wO3eT10OT0hjwO55RCBZVt)
