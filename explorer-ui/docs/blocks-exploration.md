@@ -1,5 +1,11 @@
 # How to run the UI service and view blocks data?
 
+**Table of Contents**
+
+- [**Prerequisites**](#prerequisites)
+- [**Launching the UI app**](#launching-the-ui-app)
+- [**Exploring blocks data**](#exploring-blocks-data)
+
 ### **Prerequisites**
 
 You will need the following software installed in your machine:
