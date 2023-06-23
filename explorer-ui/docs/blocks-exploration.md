@@ -1,5 +1,14 @@
-how to run the ui service?
-1. create a docker-compose.yml with the following contents:
+# How to run the UI service and view blocks data?
+
+### **Prerequisites**
+
+You will need the following software installed in your machine:
+- Docker >= 20.10.21
+- Docker Compose >= 1.29.2
+
+### **Launching the UI app**
+
+1. Create a `docker-compose.yml` with the following contents in some directory:
 ```
 version: "3.5"
 
@@ -16,11 +25,23 @@ services:
     ports:
       - "8080:80"
 ```
-2. start the ui container with `docker-compose up -d`
-3. navigate to `http://localhost:8080`
-4. click on the `Blocks` menu item to show list of latest blocks:
+2. Start the UI container by running this command from the directory where you created the above file:
+```
+> docker-compose up -d`
+```
+
+### **Exploring blocks data**
+
+You can now navigate to `http://localhost:8080` and start browsing the blocks data.
+
+Click on the `Blocks` menu item to show list of latest blocks:
+
 ![blocks list](https://drive.google.com/uc?export=view&id=1XynoH-BqCmEzG3rIbDrg4RF0r7lWHFQw)
-5. click on any block height link to show that block data:
+
+Click on any block height link to show that block data on the above page:
+
 ![block data](https://drive.google.com/uc?export=view&id=1l7x8Q5Pmlzl7ZxS2d_LrKNmNFCm5m539)
-6. click on any extrinsic id link to show that extrinsic data:
+
+Click on any extrinsic id link to show that extrinsic data on the above page:
+
 ![extrinsic data](https://drive.google.com/uc?export=view&id=1T7t5MYVio1wO3eT10OT0hjwO55RCBZVt)
