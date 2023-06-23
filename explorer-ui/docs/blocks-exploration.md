@@ -1,10 +1,10 @@
-# How to run the UI service and view blocks data?
+# How to run the UI service and view blocks and extrinsics data?
 
 **Table of Contents**
 
 - [**Prerequisites**](#prerequisites)
 - [**Launching the UI app**](#launching-the-ui-app)
-- [**Exploring blocks data**](#exploring-blocks-data)
+- [**Exploring blocks and extrinsics data**](#exploring-blocks-and-extrinsics-data)
 
 ### **Prerequisites**
 
@@ -36,9 +36,9 @@ services:
 > docker-compose up -d`
 ```
 
-### **Exploring blocks data**
+### **Exploring blocks and extrinsics data**
 
-You can now navigate to `http://localhost:8080` and start browsing the blocks data.
+You can now navigate to `http://localhost:8080` and start browsing the blocks and extrinsics data.
 
 Click on the `Blocks` menu item to show list of latest blocks:
 
