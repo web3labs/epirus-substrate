@@ -28,7 +28,7 @@ You can find examples of docker compose configurations in the [local-testnet](ht
 
 ![Epirus UI](https://img.shields.io/website?label=Epirus%20UI&url=https%3A%2F%2Fepirus-sub.netlify.app%2F) ![Squid Ink API](https://img.shields.io/website?label=Squid%20Ink%20API&url=https%3A%2F%2Fsuba.epirus.io%2Fsquid%2Fgraphql)
 
-1. We host a public Squid Ink GraphQL endpoint for Rococo Canvas at [https://suba.epirus.io/squid/graphql](https://suba.epirus.io/squid/graphql)
+1. We host a public Squid Ink GraphQL endpoint for Rococo Canvas at [https://substrate.sirato.xyz/squid/graphql](https://substrate.sirato.xyz/squid/graphql)
 2. A development instance of the Explorer UI [https://substrate.sirato.xyz/](https://substrate.sirato.xyz/)
 
 [^note]: Provided "as is" without any availability guarantee.
