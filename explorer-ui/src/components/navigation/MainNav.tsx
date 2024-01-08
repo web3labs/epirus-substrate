@@ -8,7 +8,7 @@ import {
 } from "@heroicons/react/24/outline"
 import { ChevronDownIcon, ChevronUpIcon, CodeBracketIcon, Square3Stack3DIcon, UsersIcon } from "@heroicons/react/24/solid"
 
-import Logo from "../../logo.svg"
+import Logo from "../../watr_logo.svg"
 import SearchBox from "../query/search/SearchBox"
 import { Link, NavLink } from "react-router-dom"
 import { useChainProperties } from "../../contexts/ChainContext"
@@ -211,8 +211,8 @@ export default function MainNav () {
                     alt=""
                   />
                   <span className="hidden leading-tight md:block">
-                    <span className="font-semibold">Sirato</span><br/>
-                    <span className="font-normal">substrate</span>
+                    <span className="font-semibold">Chainlens</span><br/>
+                    <span className="font-normal">Substrate</span>
                   </span>
                 </div>
                 <div className="hidden md:flex space-x-10 items-center justify-end w-full">
