@@ -28,7 +28,7 @@ export function BoxHead ({ title, tag }: HeadProps) {
 export default function Box ({ children, className = "", isContainer = true }: BoxProps) {
   return (
     <div className={classNames(
-      "flex flex-col items-start justify-start bg-over shadow",
+      "flex flex-col grow items-start justify-start bg-over shadow",
       isContainer ? "container w-full " : "",
       className
     )}>
