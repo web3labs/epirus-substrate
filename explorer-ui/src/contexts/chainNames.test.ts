@@ -19,3 +19,7 @@ test("Rococo chain info", () => {
 test("Shibuya chain info", () => {
   expect(resolveInfoFromName("shibuya testnet")).toEqual("shibuya")
 })
+
+test("watr testnet chain info", () => {
+  expect(resolveInfoFromName("watr network testnet")).toEqual("rococoWatr")
+})

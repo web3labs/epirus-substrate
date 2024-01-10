@@ -20,6 +20,10 @@ const names = [
     endpoint: "watr"
   },
   {
+    chain: "watr network testnet",
+    endpoint: "rococoWatr"
+  },
+  {
     chain: "local contracts chain",
     endpoint: "local"
   }
