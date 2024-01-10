@@ -44,6 +44,14 @@ const chainConfig: Record<string, ChainConfig> = {
       tokenSymbol: "WATRD",
     },
   },
+  watr_test: {
+    name: "Watr Network Testnet",
+    ss58Format: 19,
+    token: {
+      tokenDecimals: 18,
+      tokenSymbol: "WATRD",
+    },
+  },
   alephzero: {
     name: "Aleph Zero",
     ss58Format: 5,
