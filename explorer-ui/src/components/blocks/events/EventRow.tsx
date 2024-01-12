@@ -29,17 +29,19 @@ export default function EventRow ({ obj, currentId, short }: TypedRow<Event>) {
             </span>
           }
         />
-        <Definition
-          label="Extrinsic"
-          term={
-            <div className="flex gap-2">
-              <span className="font-mono">
-                {extrinsic.id}
-              </span>
-              <span>{extrinsic.call.name}</span>
-            </div>
-          }
-        />
+        { extrinsic != null &&
+          <Definition
+            label="Extrinsic"
+            term={
+              <div className="flex gap-2">
+                <span className="font-mono">
+                  {extrinsic.id}
+                </span>
+                <span>{extrinsic.call.name}</span>
+              </div>
+            }
+          />
+        }
       </DefinitionList>
     </Row>
   )

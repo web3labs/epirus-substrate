@@ -32,10 +32,10 @@ export default function BlockRow ({
             <Label >{obj.hash}</Label>
           </div>
           <div className="flex gap-2 text-sm">
-            <Label>Extrinsics:</Label>
-            <Label><NavLink to={`/blocks/${obj.hash}`} className="link">{obj.events ? obj.events.length : 0}</NavLink></Label>
             <Label>Events:</Label>
-            <Label><NavLink to={`/blocks/${obj.hash}/events`} className="link">{obj.extrinsics ? obj.extrinsics.length : 0}</NavLink></Label>
+            <Label><NavLink to={`/blocks/${obj.hash}/events`} className="link">{obj.events ? obj.events.length : 0}</NavLink></Label>
+            <Label>Extrinsics:</Label>
+            <Label><NavLink to={`/blocks/${obj.hash}`} className="link">{obj.extrinsics ? obj.extrinsics.length : 0}</NavLink></Label>
           </div>
         </div>
       </Lane>
