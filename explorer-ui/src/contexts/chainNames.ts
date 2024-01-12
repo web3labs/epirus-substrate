@@ -20,7 +20,7 @@ const names = [
     endpoint: "watr"
   },
   {
-    chain: "watr network testnet",
+    chain: "watr testnet",
     endpoint: "rococoWatr"
   },
   {

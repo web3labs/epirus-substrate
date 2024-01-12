@@ -41,11 +41,11 @@ const chainConfig: Record<string, ChainConfig> = {
     ss58Format: 19,
     token: {
       tokenDecimals: 18,
-      tokenSymbol: "WATRD",
+      tokenSymbol: "WATR",
     },
   },
   watr_test: {
-    name: "Watr Network Testnet",
+    name: "Watr Testnet",
     ss58Format: 19,
     token: {
       tokenDecimals: 18,
