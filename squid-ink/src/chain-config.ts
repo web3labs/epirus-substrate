@@ -44,7 +44,7 @@ const chainConfig: Record<string, ChainConfig> = {
       tokenSymbol: "WATR",
     },
   },
-  watr_test: {
+  watrtestnet: {
     name: "Watr Testnet",
     ss58Format: 19,
     token: {
